@@ -7,4 +7,5 @@ __pycache__/
 *.c
 *.cc
 *.h
+.idea/
 .DS_Store
