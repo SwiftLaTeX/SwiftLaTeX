@@ -54,6 +54,7 @@ Formulas are absolute positioned, therefore, the correct display only comes afte
 2. Slow Upload to Google
 Our system abstracts your cloud storage as a POSIX-like file system to simplify user interface implementation at the cost of a little bit performance. We are working hard to improve our implementation to reduce the network turn around time.
 3. Sharing Files only works on Google
+4. Checkpointing breaks certain projects.
 
 ### Pending Features
 1. Vertical Spilt View
@@ -61,9 +62,17 @@ Our system abstracts your cloud storage as a POSIX-like file system to simplify 
 3. Tidy-up all the JS files.
 4. Add Github and S3 storage support.
 
+## Participate
+As an open source project SwiftLaTeX strongly benefits from an active community. It is a good idea to announce your plans on the issue list. So everybody knows what's going on and there is no duplicate work.
 
-## Contributor License Agreement
-Before we can accept any contributions of code, we need you to agree to our Contributor License Agreement https://www.swiftlatex.com/contribute.html. This is to ensure that you own the copyright of your contribution, and that you agree to give us a license to use it in both the open source version, and the version of SwiftLaTeX running at www.swiftlatex.com, which may include additional changes.
+### Spread the word
+The easiest way to help on the development with SwiftLaTeX is to use it! Furthermore, if you like SwiftLaTeX, tell all your friends and colleagues about it.
+
+### Bug Reports
+User feedback is highly welcome. If you wanna report bugs regarding some TeX documentations not compiling. Please attach the snippets so that we can look into it.
+
+### Contributon and Copyright
+If you are sending PR requests, you own the copyright of your contribution, and that you must agree to give us a license to use it in both the open source version, and the version of SwiftLaTeX running at www.swiftlatex.com, which may include additional changes. For more details, you can see https://www.swiftlatex.com/contribute.html. 
 
 ## Research Paper
 If you are interested in reading tech jargons, you could have a look at https://dl.acm.org/citation.cfm?id=3209522&dl=ACM&coll=DL
