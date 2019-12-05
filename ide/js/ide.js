@@ -94,7 +94,7 @@ let menuData = [
             {
                 'item': 'Submit a bug report',
                 'id': 'submitbugbtn',
-                'href': 'https://github.com/SwiftLaTeX/BugTracker/issues'
+                'href': 'https://github.com/SwiftLaTeX/SwiftLaTeX/issues'
             },
             {'item': 'About', 'id': 'aboutusbtn', 'href': '/contact.html'}
         ]
