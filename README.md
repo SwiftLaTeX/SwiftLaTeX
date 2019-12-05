@@ -32,6 +32,10 @@ SwiftLaTeX is a Web-browser based editor to create PDF documents such as reports
 1. You first need to be a Google API Developer to retrieve a Google API Client ID and Secret. See here (https://developers.google.com/identity/protocols/OAuth2)
 2. Edit config.py and put your Client ID and Secret Inside. (You can use environment variables instead.)
 
+## About LaTeX packages
+All packages are dynamically loaded from our file server and cached locally. Our file server has almost all the packages. 
+If you want to host the file server by yourself, you can checkout another repo: https://github.com/elliott-wen/texlive-server
+
 ## Known bug lists
 
 1. WYSIWYG
