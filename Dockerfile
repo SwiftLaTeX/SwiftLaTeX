@@ -1,10 +1,7 @@
-FROM ubuntu:18.04
-RUN   apt-get update && apt-get install -q -y \
-    python3 \
-    python3-pip \
-    git
+FROM python:3.8-alpine
+RUN apk add --no-cache git gcc libc-dev linux-headers
 
-RUN git clone git@github.com:SwiftLaTeX/SwiftLaTeX.git /app && \
+RUN git clone https://github.com/SwiftLaTeX/SwiftLaTeX.git /app && \
     pip3 install -r /app/requirements.txt && echo "0.1"
 
 WORKDIR /app
