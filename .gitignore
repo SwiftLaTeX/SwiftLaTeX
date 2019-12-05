@@ -7,5 +7,6 @@ __pycache__/
 *.c
 *.cc
 *.h
+*.bak.js
 .idea/
 .DS_Store
