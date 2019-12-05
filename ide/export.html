@@ -1,0 +1,53 @@
+
+
+<html>
+<head>
+    <title>SwiftLaTeX Exporter</title>
+    <link href="css/thirdpartys/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/thirdpartys/font-awesome.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/thirdpartys/nprogress.min.css">
+
+</head>
+<body>
+<div class="container">
+    <a href="#" id="downloadlink">Exporting PDF, Please Wait</a>
+    <p id="logconsole">
+
+    </p>
+</div>
+
+<div id="alert-modal" class="modal fade">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Oops! Fatal Error Detected!</h4>
+            </div>
+            <div id="alert-modal-body" class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="window.location.reload();">
+                    Refresh?
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+<script src="js/thirdpartys/jquery-3.4.1.min.js"></script>
+<script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
+<script src="https://apis.google.com/js/api.js"></script>
+<script src="js/thirdpartys/bootstrap.min.js"></script>
+<script src="js/thirdpartys/nprogress.min.js"></script>
+<script src="js/thirdpartys/Dropbox-sdk.min.js"></script>
+<script src="js/thirdpartys/localforage.min.js"></script>
+
+<script src="js/logparser/latexlogparser.js"></script>
+<script src="js/storage/googlebackend.js"></script>
+<script src="js/storage/localbackend.js"></script>
+<script src="js/storage/swiftfilesystem.js"></script>
+<script src="js/pathutils.js"></script>
+<script src="js/pdflatexclient.js"></script>
+<script src="js/export.js"></script>
+</html>

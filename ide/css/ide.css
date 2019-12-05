@@ -1,0 +1,69 @@
+
+body {
+    overflow: hidden;
+
+}
+
+
+ .container-fluid{
+    height: 100%;
+}
+
+.grid{
+    height: 93%;
+
+}
+
+
+
+#statusBar{
+    margin: 0;
+    padding: 0;
+    width:100%;
+}
+
+#systemStatus {
+    float: right;
+}
+
+#fileStatus {
+    float: right;
+}
+
+#errorStatus {
+    float: left;
+}
+
+#fileTreeView{
+    position: absolute;
+    background-color: whitesmoke;
+    left: 0;
+    z-index: 10;
+    height: 100%;
+}
+
+#historyView{
+    position: absolute;
+    background-color: whitesmoke;
+    right: 0;
+    width: 5%;
+    z-index: 10;
+    height: 100%;
+    display: none;
+}
+
+.gutter {
+    background-color: #808080;
+
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+
+.gutter.gutter-vertical {
+    background-image:  url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
+
+}
+
+
+
+.navbar {padding-top:0px !important; padding-bottom:0px !important;}
