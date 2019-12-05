@@ -40,9 +40,6 @@ If you want to host the file server by yourself, you can checkout another repo: 
 Currently, this engines are built atop pdftex. So no unicode supported. 
 We are working to port xetex in future release.
 
-The source code of engine can be found in https://github.com/SwiftLaTeX/PdfTeXLite (not complete, WIP).
-The source code of bibtex can be found in https://github.com/SwiftLaTeX/BibTeXLite
-However, it is still quite messy and missing some functionalties. We will get our hands on it soon.
 
 
 ## Known bug lists
