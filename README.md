@@ -39,7 +39,8 @@ If you want to host the file server by yourself, you can checkout another repo: 
 ## About Engines
 Currently, this engines are built atop pdftex. So no unicode supported. 
 We are working to port xetex in future release.
-
+The engine source code is hosted in https://github.com/SwiftLaTeX/PdfTeXLite.
+It is unusable so far as we need more time to upload and tidy up the source codes. Stay tuned.
 
 
 ## Known bug lists
