@@ -36,6 +36,14 @@ SwiftLaTeX is a Web-browser based editor to create PDF documents such as reports
 All packages are dynamically loaded from our file server and cached locally. Our file server has almost all the packages. 
 If you want to host the file server by yourself, you can checkout another repo: https://github.com/elliott-wen/texlive-server
 
+## About Engines
+Currently, this engines are built atop pdftex. So no unicode supported. 
+We are working to port xetex in future release.
+
+The source code of engine can be found in https://github.com/SwiftLaTeX/PdfTeXLite (not complete, WIP)
+However, it is still quite messy and missing some functionalties. We will get our hands on it soon.
+
+
 ## Known bug lists
 
 1. WYSIWYG
@@ -50,11 +58,5 @@ Our system abstracts your cloud storage as a POSIX-like file system to simplify 
 Before we can accept any contributions of code, we need you to agree to our Contributor License Agreement https://www.swiftlatex.com/contribute.html. This is to ensure that you own the copyright of your contribution, and that you agree to give us a license to use it in both the open source version, and the version of SwiftLaTeX running at www.swiftlatex.com, which may include additional changes.
 
 ## Research Paper
-@inproceedings{wen2018swiftlatex,
-  title={SwiftLaTeX: Exploring Web-based True WYSIWYG Editing for Digital Publishing},
-  author={Wen, Elliott and Weber, Gerald},
-  booktitle={Proceedings of the ACM Symposium on Document Engineering 2018},
-  pages={8},
-  year={2018},
-  organization={ACM}
-}
+If you are interested in tech jargons, you could have a look at https://dl.acm.org/citation.cfm?id=3209522&dl=ACM&coll=DL
+(Though some stuff in the paper has been outdated.)
