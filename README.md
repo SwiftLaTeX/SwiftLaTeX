@@ -48,3 +48,13 @@ Our system abstracts your cloud storage as a POSIX-like file system to simplify 
 
 ## Contributor License Agreement
 Before we can accept any contributions of code, we need you to agree to our Contributor License Agreement https://www.swiftlatex.com/contribute.html. This is to ensure that you own the copyright of your contribution, and that you agree to give us a license to use it in both the open source version, and the version of SwiftLaTeX running at www.swiftlatex.com, which may include additional changes.
+
+## Research Paper
+@inproceedings{wen2018swiftlatex,
+  title={SwiftLaTeX: Exploring Web-based True WYSIWYG Editing for Digital Publishing},
+  author={Wen, Elliott and Weber, Gerald},
+  booktitle={Proceedings of the ACM Symposium on Document Engineering 2018},
+  pages={8},
+  year={2018},
+  organization={ACM}
+}
