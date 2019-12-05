@@ -7,5 +7,5 @@ services:
         ports:
             - 80:3000
         environment:
-          - OAUTH_REDIRECT_URI=https://localhost:3000/oauth/login_cb
+          - OAUTH_REDIRECT_URI=http://localhost/oauth/login_cb
           
