@@ -47,4 +47,4 @@ Formulas are absolute positioned, therefore, the correct display only comes afte
 Our system abstracts your cloud storage as a POSIX-like file system to simplify user interface implementation at the cost of a little bit performance. We are working hard to improve our implementation to reduce the network turn around time.
 
 ## Contributor License Agreement
-Before we can accept any contributions of code, we need you to agree to our Contributor License Agreement. This is to ensure that you own the copyright of your contribution, and that you agree to give us a license to use it in both the open source version, and the version of SwiftLaTeX running at www.swiftlatex.com, which may include additional changes.
+Before we can accept any contributions of code, we need you to agree to our Contributor License Agreement https://www.swiftlatex.com/contribute.html. This is to ensure that you own the copyright of your contribution, and that you agree to give us a license to use it in both the open source version, and the version of SwiftLaTeX running at www.swiftlatex.com, which may include additional changes.
