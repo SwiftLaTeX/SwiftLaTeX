@@ -259,6 +259,7 @@ async function requestCreateProject() //Too lazy to rewrite it as a promise
     let isthere = await localFS.exists("/" + tbName);
     if (isthere) {
         console.log("already exists");
+        alert("This project already exists!");
         return;
     }
     status = "busy";
