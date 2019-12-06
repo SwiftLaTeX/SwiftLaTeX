@@ -75,6 +75,8 @@ User feedback is highly welcome. If you wanna report bugs regarding some TeX doc
 ### Contributon and Copyright
 If you are sending PR requests, you own the copyright of your contribution, and that you must agree to give us a license to use it in both the open source version, and the version of SwiftLaTeX running at www.swiftlatex.com, which may include additional changes. For more details, you can see https://www.swiftlatex.com/contribute.html. 
 
+We are currently overwhelmed by our daily jobs at uni. But we will try to squeeze some time every day to monitor this repo and keep improving the code. Really appreciate your patience and hope you enjoy this holiday season too~
+
 ## Research Paper
 If you are interested in reading tech jargons, you could have a look at https://dl.acm.org/citation.cfm?id=3209522&dl=ACM&coll=DL
 (Though some stuff in the paper is outdated.)
