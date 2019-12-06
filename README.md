@@ -40,7 +40,7 @@ All packages are dynamically loaded from our file server and cached locally. Our
 If you want to host the file server by yourself, you can checkout another repo: https://github.com/elliott-wen/texlive-server
 
 ### About Engines
-Currently, this engines are built atop pdftex. So no unicode supported. 
+Currently, this engine is built atop pdftex. So no unicode supported. 
 We are working to port xetex in future release.
 The engine source code is hosted in https://github.com/SwiftLaTeX/PdfTeXLite.
 It is unusable so far as we need more time to upload and tidy up the source codes. Stay tuned.
@@ -70,6 +70,7 @@ The easiest way to help on the development with SwiftLaTeX is to use it! Further
 
 ### Bug Reports
 User feedback is highly welcome. If you wanna report bugs regarding some TeX documentations not compiling. Please attach the snippets so that we can look into it.
+
 
 ### Contributon and Copyright
 If you are sending PR requests, you own the copyright of your contribution, and that you must agree to give us a license to use it in both the open source version, and the version of SwiftLaTeX running at www.swiftlatex.com, which may include additional changes. For more details, you can see https://www.swiftlatex.com/contribute.html. 
