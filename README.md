@@ -14,9 +14,9 @@ Try it here: https://www.swiftlatex.com/oauth/login_oauth?type=sandbox
 SwiftLaTeX is a Web-browser based editor to create PDF documents such as reports, term projects, slide decks, in the typesetting system LaTeX. In contrast to other web-based editors SwiftLaTeX is true WYSIWYG, What-you-see-is-what-you-get: You edit directly in a representation of the print output. You can import a LaTeX document at any stage of completeness into SwiftLaTeX. You can start a new document with SwiftLaTeX, or you can use SwiftLaTeX for final copy-editing. For advanced operation you can edit the so-called LaTeX source code, which gives you more fine-grained control. SwiftLaTeX is collaborative; you can share your project with others and work on it at the same time. SwiftLaTeX stores your data in the cloud under your account; currently it supports Google Drive and DropBox.
 
 ## Software Architecture
-This software consists of three main repos.
-1. HTML and Javascript files in this repo (python files for a simple webserver and OAuth for Google and Dropbox integration)
-2. TeX engines. Currently we are migrating from Pdftex to Xetex, and gonna take some time for that (https://github.com/SwiftLaTeX/XeTeXLite)
+This software consists of three main components.
+1. HTML and Javascript files under ide directory. (The python files are used as a simple webserver and OAuth for Google and Dropbox integration.)
+2. TeX engine under engine directory.
 3. Texlive File Server used to dynamically serve LaTeX packages. (https://github.com/SwiftLaTeX/TeXLiveFileServer)
 4. Optionally, a collaborative editing server (https://github.com/SwiftLaTeX/collaborative-editing) built on top of sharedb. Note that collaborative editing only works with Google integration now, which is still at alpha stage.
 

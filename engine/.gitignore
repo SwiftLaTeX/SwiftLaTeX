@@ -1,0 +1,6 @@
+*.o
+*.fmt
+*.xdv
+*.log
+*.aux
+test/

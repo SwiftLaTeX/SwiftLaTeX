@@ -4,9 +4,14 @@ __pycache__/
 .hg
 *.bak
 *.orig
-*.c
-*.cc
-*.h
+*.o
+*.fmt
+engine/test/
 *.bak.js
 .idea/
+*.bc
+*.xdv
+*.log
+*.aux
+wasmtex
 .DS_Store
