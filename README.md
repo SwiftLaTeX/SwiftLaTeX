@@ -7,7 +7,7 @@ A Browser-based Fast LaTeX Visual Editor.
 2. Fast compilation thanks to LaTeX checkpointing
 3. Cloud file storage
 
-Try it here: https://www.swiftlatex.com/oauth/login_oauth?type=sandbo
+Try it here: https://www.swiftlatex.com/oauth/login_oauth?type=sandbox
 
 ## Short Introduction
 
