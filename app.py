@@ -1,4 +1,4 @@
-from flask import Flask, session, request, redirect, abort, send_from_directory
+from flask import Flask, session, request, redirect, abort, render_template, send_from_directory
 import sandbox_auth
 import google_auth
 import dropbox_auth
@@ -10,6 +10,7 @@ app = Flask(__name__)
 app.secret_key = b'abcdefghijklmnopqrstuvwxyz/'
 
 
+## It is designed to authenticate with collabrative server. Useless right now.
 def generate_jwt_token(username, access_token, expiry):
     tmp = username + config.JWT_SIGNKEY + access_token + config.JWT_SIGNKEY + str(expiry) + config.JWT_SIGNKEY
     sha256_hash = hashlib.sha256()
@@ -152,15 +153,7 @@ def after_request(response):
 
 @app.route('/')
 def index():
-    return send_from_directory('portal', "index.html")
-
-
-@app.route('/<path:path>')
-def send_portal(path):
-    if path == "":
-        path = "index.html"
-    return send_from_directory('portal', path)
-
+    return render_template("index.html")
 
 @app.route('/ide/<path:path>')
 def send_editor(path):
