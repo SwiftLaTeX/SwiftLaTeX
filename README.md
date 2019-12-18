@@ -17,7 +17,7 @@ SwiftLaTeX is a Web-browser based editor to create PDF documents such as reports
 This software consists of three main components.
 1. HTML and Javascript files under ide directory. (The python files are used as a simple webserver and OAuth for Google and Dropbox integration.)
 2. TeX engine under engine directory.
-3. Texlive File Server used to dynamically serve LaTeX packages. (https://github.com/SwiftLaTeX/TeXLiveFileServer)
+3. Texlive File Server used to dynamically serve LaTeX packages under texlive directory.
 4. Optionally, a collaborative editing server (https://github.com/SwiftLaTeX/collaborative-editing) built on top of sharedb. Note that collaborative editing only works with Google integration now, which is still at alpha stage.
 
 

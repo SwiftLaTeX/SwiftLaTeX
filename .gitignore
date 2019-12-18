@@ -1,7 +1,8 @@
 *.pyc
 venv/
+texlive/venv/
+texlive/__pycache__/
 __pycache__/
-.hg
 *.bak
 *.orig
 *.o
