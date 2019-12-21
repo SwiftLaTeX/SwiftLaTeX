@@ -331,7 +331,7 @@ PyInit_pykpathsea(void)
 
   kpse = kpathsea_new();
 
-  kpathsea_set_program_name (kpse, "xetex", "xetex");
+  kpathsea_set_program_name (kpse, "xelatex", "xelatex");
 
   kpathsea_set_program_enabled (kpse, kpse_pk_format, true, kpse_src_cmdline - 1);
 

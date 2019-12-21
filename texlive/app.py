@@ -53,12 +53,6 @@ def fast_search_file(name):
         cache_db[name] = res
         return 0
 
-# @cross_origin()
-# @app.route('/upload', methods=['POST'])
-# def upload():
-#     f = open("test.fmt", "wb")
-#     f.write(request.data)
-#     f.close()
-#     return "/"
+
 
 
