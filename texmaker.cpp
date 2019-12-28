@@ -2142,22 +2142,22 @@ ViewLogPanelAct->setChecked(showoutputview);
 connect(ViewLogPanelAct, SIGNAL(triggered()), this, SLOT(ToggleLogPanel()));
 viewMenu->addAction(ViewLogPanelAct);
 
-ViewPdfPanelAct = new QAction(tr("Pdf Viewer"), this);
-ViewPdfPanelAct->setCheckable(true);
-ViewPdfPanelAct->setChecked(showpdfview);
-connect(ViewPdfPanelAct, SIGNAL(triggered()), this, SLOT(TogglePdfPanel()));
-if (embedinternalpdf) 
-  {
-  viewMenu->addAction(ViewPdfPanelAct);
-  if (builtinpdfview) ViewPdfPanelAct->setEnabled(true);
-  else ViewPdfPanelAct->setEnabled(false);
-  }
+// ViewPdfPanelAct = new QAction(tr("Pdf Viewer"), this);
+// ViewPdfPanelAct->setCheckable(true);
+// ViewPdfPanelAct->setChecked(showpdfview);
+// connect(ViewPdfPanelAct, SIGNAL(triggered()), this, SLOT(TogglePdfPanel()));
+// if (embedinternalpdf) 
+//   {
+//   viewMenu->addAction(ViewPdfPanelAct);
+//   if (builtinpdfview) ViewPdfPanelAct->setEnabled(true);
+//   else ViewPdfPanelAct->setEnabled(false);
+//   }
 
-ViewSourcePanelAct = new QAction("Source Viewer", this);
-ViewSourcePanelAct->setCheckable(true);
-ViewSourcePanelAct->setChecked(showsourceview);
-connect(ViewSourcePanelAct, SIGNAL(triggered()), this, SLOT(ToggleSourcePanel()));
-viewMenu->addAction(ViewSourcePanelAct);
+// ViewSourcePanelAct = new QAction("Source Viewer", this);
+// ViewSourcePanelAct->setCheckable(true);
+// ViewSourcePanelAct->setChecked(showsourceview);
+// connect(ViewSourcePanelAct, SIGNAL(triggered()), this, SLOT(ToggleSourcePanel()));
+// viewMenu->addAction(ViewSourcePanelAct);
 
 ViewOpenedFilesPanelAct= new QAction(tr("List of opened files"), this);
 ViewOpenedFilesPanelAct->setCheckable(true);
@@ -2235,41 +2235,8 @@ connect(Act, SIGNAL(triggered()), this, SLOT(ReplaceSettings()));
 settingsMenu->addAction(Act);
 	
 helpMenu = menuBar()->addMenu(tr("&Help"));
-if (gtkEnv) Act = new QAction(QIcon::fromTheme("help-contents", QIcon(":/images/help.png")), tr("LaTeX Reference"), this);
-else Act = new QAction(getIcon(":/images/help.png"), tr("LaTeX Reference"), this);
-connect(Act, SIGNAL(triggered()), this, SLOT(LatexHelp()));
-helpMenu->addAction(Act);
-if (gtkEnv) Act = new QAction(QIcon::fromTheme("help-contents", QIcon(":/images/help.png")), tr("User Manual"), this);
-else Act = new QAction(getIcon(":/images/help.png"), tr("User Manual"), this);
-connect(Act, SIGNAL(triggered()), this, SLOT(UserManualHelp()));
-helpMenu->addAction(Act);
-helpMenu->addSeparator();
-if (gtkEnv) Act = new QAction(QIcon::fromTheme("help-contents", QIcon(":/images/help.png")), "TexDoc [selection]", this);
-else Act = new QAction(getIcon(":/images/help.png"), "TexDoc [selection]", this);
-connect(Act, SIGNAL(triggered()), this, SLOT(TexDocHelp()));
-helpMenu->addAction(Act);
 
 
-// QString locale = QString(QLocale::system().name()).left(2);
-// if (locale=="fr")
-// {
-// if (gtkEnv) Act = new QAction(QIcon::fromTheme("help-contents", QIcon(":/images/help.png")), QString::fromUtf8("Documentation LaTeX/Texmaker en ligne"), this); 
-// else Act = new QAction(getIcon(":/images/help.png"), QString::fromUtf8("Documentation LaTeX/Texmaker en ligne"), this);
-// connect(Act, SIGNAL(triggered()), this, SLOT(Docufrlatex()));
-// helpMenu->addAction(Act);  
-// }
-// else
-// {
-if (gtkEnv) Act = new QAction(QIcon::fromTheme("help-contents", QIcon(":/images/help.png")), QString::fromUtf8("LaTeX wikibook"), this); 
-else Act = new QAction(getIcon(":/images/help.png"), QString::fromUtf8("LaTeX wikibook"), this);
-connect(Act, SIGNAL(triggered()), this, SLOT(Doculatex()));
-helpMenu->addAction(Act);  
-//}  
-
-helpMenu->addSeparator();
-Act = new QAction( tr("Check for Update"), this);
-connect(Act, SIGNAL(triggered()), this, SLOT(CheckVersion()));
-helpMenu->addAction(Act);
 
 helpMenu->addSeparator();
 Act = new QAction(getIcon(":/images/appicon.png"), tr("About Texmaker"), this);
@@ -2511,25 +2478,10 @@ viewMenu->addAction(runToolBar->toggleViewAction());
 
 void Texmaker::createStatusBar()
 {
-toggleStructureButton=new PlayerButton(statusBar());
-toggleStructureButton->setImages("structure_button");
-connect(toggleStructureButton, SIGNAL( clicked() ), this, SLOT(ToggleStructurePanel() ) );
-statusBar()->addPermanentWidget(toggleStructureButton,0);
-toggleLogButton=new PlayerButton(statusBar());
-toggleLogButton->setImages("log_button");
-connect(toggleLogButton, SIGNAL( clicked() ), this, SLOT(ToggleLogPanel() ) );
-statusBar()->addPermanentWidget(toggleLogButton,0);
-togglePdfButton=new PlayerButton(statusBar());
-togglePdfButton->setImages("pdf_button");
-connect(togglePdfButton, SIGNAL( clicked() ), this, SLOT(TogglePdfPanel() ) );
-statusBar()->addPermanentWidget(togglePdfButton,0);
-toggleSourceButton=new PlayerButton(statusBar());
-toggleSourceButton->setImages("source_button");
-connect(toggleSourceButton, SIGNAL( clicked() ), this, SLOT(ToggleSourcePanel() ) );
-statusBar()->addPermanentWidget(toggleSourceButton,0);
 
-if (embedinternalpdf && builtinpdfview) togglePdfButton->show();
-else togglePdfButton->hide();
+
+
+
 
 stat2=new DropShadowLabel("Ready",statusBar());
 stat2->setColor(Theme::grayColor);
@@ -2567,10 +2519,9 @@ pal.setColor(QPalette::Background, Theme::lightbackgroundColor);
 statusBar()->setPalette( pal );
 //statusBar()->setStyleSheet("QWidget {background-color:#6F6F6F;}");
 
-toggleStructureButton->setEnabled(showstructview);
-toggleLogButton->setEnabled(showoutputview);
-togglePdfButton->setEnabled(showpdfview);
-toggleSourceButton->setEnabled(showsourceview);
+
+
+
 }
 
 void Texmaker::UpdateCaption()
@@ -9650,97 +9601,17 @@ if (logpresent && onlyErrorList.isEmpty())
 //////////////// HELP /////////////////
 void Texmaker::LatexHelp()
 {
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
 
-#ifdef USB_VERSION
-QString docfile=QCoreApplication::applicationDirPath() + "/latexhelp.html";
-#else
-QString docfile=PREFIX"/share/texmaker/latexhelp.html";
-#endif
-
-#endif
-#if defined(Q_OS_MAC)
-QString docfile=QCoreApplication::applicationDirPath() + "/../Resources/latexhelp.html";
-#endif
-#if defined(Q_OS_WIN32)
-QString docfile=QCoreApplication::applicationDirPath() + "/latexhelp.html";
-#endif
-QFileInfo fic(docfile);
-if (fic.exists() && fic.isReadable() )
-	{
-#ifdef INTERNAL_BROWSER
-        if (browserWindow)
-          {
-          browserWindow->close();
-          }
-	browserWindow=new Browser("file:///"+docfile,true, 0);
-	browserWindow->raise();
-	browserWindow->show();
-#else
-QDesktopServices::openUrl("file:///"+docfile);
-#endif
-	}
-else { QMessageBox::warning( this,tr("Error"),tr("File not found"));}
 }
 
 void Texmaker::UserManualHelp()
 {
-QString locale = QString(QLocale::system().name()).left(2);
-if ( locale.length() < 2 || (locale!="fr" /*&& locale!="hu" && locale!="ru"*/) ) locale = "en";
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
 
-#ifdef USB_VERSION
-QString docfile=QCoreApplication::applicationDirPath() + "/usermanual_"+locale+".html";
-#else
-QString docfile=PREFIX"/share/texmaker/usermanual_"+locale+".html";
-#endif
-
-#endif
-#if defined(Q_OS_MAC)
-QString docfile=QCoreApplication::applicationDirPath() + "/../Resources/usermanual_"+locale+".html";
-#endif
-#if defined(Q_OS_WIN32)
-QString docfile=QCoreApplication::applicationDirPath() + "/usermanual_"+locale+".html";
-#endif
-QFileInfo fic(docfile);
-if (fic.exists() && fic.isReadable() )
-	{
-#ifdef INTERNAL_BROWSER
-        if (browserWindow)
-          {
-          browserWindow->close();
-          }
-	browserWindow=new Browser("file:///"+docfile,true, 0);
-	browserWindow->raise();
-	browserWindow->show();
-#else
-QDesktopServices::openUrl("file:///"+docfile);
-#endif
-	}
-else { QMessageBox::warning( this,tr("Error"),tr("File not found"));}
 }
 
 void Texmaker::TexDocHelp()
 {
-QString text="";
-QString item="";
-TexdocDialog *texdocDlg = new TexdocDialog(this);
-texdocDlg->ui.lineEditCommand->setText(texdoc_command);
-if (currentEditorView())
-  {
-  if (currentEditorView()->editor->textCursor().hasSelection()) item=currentEditorView()->editor->textCursor().selectedText();
-  }
-texdocDlg->ui.lineEdit->setText(item);
-if (texdocDlg->exec())
-	{
-	text =texdocDlg->ui.lineEdit->text();
-	texdoc_command=texdocDlg->ui.lineEditCommand->text();
-	}
-if (!text.isEmpty())
-  {
-  QProcess* texdocprocess=new QProcess();
-  if (!texdocprocess->startDetached(QString("texdoc ")+text)) QMessageBox::warning( this,tr("Error"),tr("Could not start the command.")+"\n texdoc");
-  }
+
 }
 
 void Texmaker::HelpAbout()
@@ -9751,8 +9622,7 @@ void Texmaker::HelpAbout()
 
 void Texmaker::CheckVersion()
 {
- VersionDialog *verDlg = new VersionDialog(this);
- verDlg->exec();
+
 }
 
 
@@ -9764,7 +9634,6 @@ void Texmaker::CheckVersion()
 
 void Texmaker::Doculatex()
 {
-QDesktopServices::openUrl(QUrl("http://en.wikibooks.org/wiki/LaTeX"));
 }
 
 ////////////// OPTIONS //////////////////////////////////////
@@ -9985,7 +9854,7 @@ if (confDlg->exec())
 	  
 	  
 	  ViewPdfPanelAct->setEnabled(false);
-	  togglePdfButton->hide();
+	
 	  StackedViewers->hide();
 	  
 	singleviewerinstance=confDlg->ui.checkBoxSingleInstanceViewer->isChecked();
@@ -10909,7 +10778,7 @@ else
       }
    }
 ViewStructurePanelAct->setChecked(showstructview);
-toggleStructureButton->setEnabled(showstructview);
+
 }
 
 void Texmaker::ShowOutputView(bool change)
@@ -10926,7 +10795,7 @@ else
    Outputframe->hide();
    }
 ViewLogPanelAct->setChecked(showoutputview);
-toggleLogButton->setEnabled(showoutputview);
+
 }
 
 void Texmaker::ShowPdfView(bool change)

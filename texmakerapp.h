@@ -15,9 +15,9 @@
 
 #include <QTranslator>
 #include "texmaker.h"
-#include "singleapp/qtsingleapplication.h"
 
-class TexmakerApp : public QtSingleApplication
+
+class TexmakerApp : public QApplication
 {
 public:
     TexmakerApp(const QString &id, int & argc, char ** argv );

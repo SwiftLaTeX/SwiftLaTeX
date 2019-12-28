@@ -22,7 +22,7 @@
 
 TexmakerApp *TexmakerApp::theAppInstance = NULL;
 
-TexmakerApp::TexmakerApp(const QString &appId, int & argc, char ** argv ) : QtSingleApplication (appId, argc, argv )
+TexmakerApp::TexmakerApp(const QString &appId, int & argc, char ** argv ) : QApplication(argc, argv)
 {
 mw = NULL;
 theAppInstance = this;

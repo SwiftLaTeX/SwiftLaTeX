@@ -13,7 +13,7 @@ DEFINES += TEXMAKERVERSION=$${TEXMAKERVERSION}
 
 
 equals(QT_MAJOR_VERSION, 5):greaterThan(QT_MINOR_VERSION, 6) {
-QT += core gui widgets xml network printsupport concurrent 
+QT += core gui widgets xml printsupport concurrent 
 equals(INTERNALBROWSER,yes){
 QT += webenginewidgets
 }  
@@ -95,7 +95,6 @@ HEADERS	+= texmaker.h \
 	exportdialog.h \
 	usertagslistwidget.h \
 	addtagdialog.h \
-	versiondialog.h \
 	unicodedialog.h \
 	unicodeview.h \
 	svnhelper.h \
@@ -119,10 +118,7 @@ HEADERS	+= texmaker.h \
 	hunspell/hunzip.hxx \
 	hunspell/replist.hxx \
 	hunspell/w_char.hxx \
-	singleapp/qtlocalpeer.h \
-	singleapp/qtlockedfile.h \
-	singleapp/qtsingleapplication.h \
-	singleapp/qtsinglecoreapplication.h \
+	
 	
 SOURCES	+= main.cpp \
     dropshadowlabel.cpp \
@@ -174,7 +170,6 @@ SOURCES	+= main.cpp \
 	exportdialog.cpp \
 	usertagslistwidget.cpp \
 	addtagdialog.cpp \
-	versiondialog.cpp \
 	unicodedialog.cpp \
 	unicodeview.cpp \
 	quickbeamerdialog.cpp \
@@ -191,10 +186,7 @@ SOURCES	+= main.cpp \
 	hunspell/filemgr.cxx \
 	hunspell/replist.cxx \
 	hunspell/hunzip.cxx \
-	singleapp/qtlocalpeer.cpp \
-	singleapp/qtlockedfile.cpp \
-	singleapp/qtsingleapplication.cpp \
-	singleapp/qtsinglecoreapplication.cpp \
+	
 	
 equals(INTERNALBROWSER,yes){
 DEFINES += INTERNAL_BROWSER
@@ -230,7 +222,6 @@ FORMS   += findwidget.ui\
 	scandialog.ui \
 	exportdialog.ui \
 	addtagdialog.ui \
-	versiondialog.ui \
 	unicodedialog.ui \
 	quickbeamerdialog.ui 
 TRANSLATIONS += trans/texmaker_fr.ts \
@@ -295,8 +286,7 @@ metainfo.path = $${METAINFODIR}
 
 INSTALLS = target
 HEADERS	+= x11fontdialog.h 
-SOURCES	+= x11fontdialog.cpp \
-	  singleapp/qtlockedfile_unix.cpp
+SOURCES	+= x11fontdialog.cpp 
 FORMS += x11fontdialog.ui
 
 utilities.files = doc/doc10.png \

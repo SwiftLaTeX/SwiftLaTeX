@@ -67,19 +67,9 @@ QApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
 
 
 
-if ( app.isRunning() && !args.contains("-n")) 
-    {
-    QString msg;
-    msg = args.join("#!#");
-    msg += "#!#";
-    app.sendMessage( msg );
-    return 0;
-    }
 
 app.init(args); // Initialization takes place only if there is no other instance running.
 
-QObject::connect( &app, SIGNAL( messageReceived(const QString &) ), 
-                  app.mw,   SLOT( onOtherInstanceMessage(const QString &) ) );
 
 return app.exec();
 }
