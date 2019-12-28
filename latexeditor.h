@@ -21,7 +21,7 @@
 #include <QMutex>
 #include <QPlainTextEdit>
 #include <QQueue>
-#include <QSemaphore>
+
 #include <QString>
 #include <QTextBlock>
 #include <QTextCursor>

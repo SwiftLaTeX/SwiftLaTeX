@@ -21,7 +21,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QFileInfo>
-#include <QFuture>
+
 #include <QKeyEvent>
 #include <QMenu>
 #include <QMessageBox>

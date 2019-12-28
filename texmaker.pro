@@ -13,13 +13,14 @@ DEFINES += TEXMAKERVERSION=$${TEXMAKERVERSION}
 
 
 equals(QT_MAJOR_VERSION, 5):greaterThan(QT_MINOR_VERSION, 6) {
-QT += core gui widgets xml 
+QT += core widgets xml 
 equals(INTERNALBROWSER,yes){
 QT += webenginewidgets
 }  
 } else {
 message("Qt>=5.7 is required.")
 }
+
 
 
 CONFIG	+= qt hide_symbols warn_off rtti_off exceptions_off c++11 release
