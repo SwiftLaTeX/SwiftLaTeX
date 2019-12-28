@@ -50,7 +50,6 @@
 #include "xmltagslistwidget.h"
 #include "logeditor.h"
 #include "hunspell/hunspell.hxx"
-#include "sourceview.h"
 #include "encodingprober/qencodingprober.h"
 #include "scandialog.h"
 #include "dropshadowlabel.h"
@@ -205,7 +204,7 @@ QPointer<ScanDialog> scanDialog;
 QPointer<Browser> browserWindow, diffWindow;
 #endif
 
-SourceView* sourceviewerWidget;
+
 //tools
 QProcess *proc;
 bool FINPROCESS, ERRPROCESS, STOPPROCESS;

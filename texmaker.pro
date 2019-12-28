@@ -60,7 +60,6 @@ HEADERS	+= texmaker.h \
 	lightlatexeditor.h \
 	lightlatexhighlighter.h \
 	lightlinenumberwidget.h \
-	sourceview.h \
 	logeditor.h \
 	loghighlighter.h \
 	findwidget.h \
@@ -141,7 +140,6 @@ SOURCES	+= main.cpp \
 	lightlatexeditor.cpp \
 	lightlatexhighlighter.cpp \
 	lightlinenumberwidget.cpp \
-	sourceview.cpp \
 	logeditor.cpp \
 	loghighlighter.cpp \
 	findwidget.cpp \
