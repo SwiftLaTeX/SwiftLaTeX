@@ -84,12 +84,10 @@
 #include "refdialog.h"
 #include "spellerdialog.h"
 #include "structdialog.h"
-#include "svnhelper.h"
 #include "tabbingdialog.h"
 #include "tabdialog.h"
 #include "texdocdialog.h"
 #include "theme.h"
-#include "unicodedialog.h"
 #include "usercompletiondialog.h"
 #include "usermenudialog.h"
 #include "usertooldialog.h"
@@ -3063,11 +3061,7 @@ void Texmaker::load(const QString &f) {
   filenames.insert(edit, f);
 
   edit->editor->resetRevisions();
-  if (svnEnable) {
-    connect(new SvnHelper(f, svnPath), SIGNAL(uncommittedLines(QList<int>)),
-            edit->editor, SLOT(setUncommittedLines(QList<int>)));
-    edit->editor->viewport()->update();
-  }
+
 
   edit->editor->document()->setModified(false);
   connect(edit->editor->document(), SIGNAL(modificationChanged(bool)), this,
@@ -4580,7 +4574,7 @@ void Texmaker::ReadSettings() {
   completion = config->value("Editor/Completion", true).toBool();
   userCompletionList =
       config->value("Editor/UserCompletion", true).toStringList();
-  svnEnable = config->value("Editor/SvnEnable", false).toBool();
+  svnEnable = false;
   svnPath = config->value("Editor/SvnPath", "").toString();
   shortcuts.clear();
   QStringList data, shortcut;

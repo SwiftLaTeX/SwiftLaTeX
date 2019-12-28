@@ -90,7 +90,6 @@ HEADERS	+= texmaker.h \
 	scandialog.h \
 	usertagslistwidget.h \
 	addtagdialog.h \
-	svnhelper.h \
 	quickbeamerdialog.h \
 	hunspell/affentry.hxx \
 	hunspell/affixmgr.hxx \
@@ -163,7 +162,6 @@ SOURCES	+= main.cpp \
 	usertagslistwidget.cpp \
 	addtagdialog.cpp \
 	quickbeamerdialog.cpp \
-	svnhelper.cpp \
 	hunspell/affentry.cxx \
 	hunspell/affixmgr.cxx \
 	hunspell/csutil.cxx \
@@ -212,7 +210,6 @@ FORMS   += findwidget.ui\
 	scandialog.ui \
 	exportdialog.ui \
 	addtagdialog.ui \
-	unicodedialog.ui \
 	quickbeamerdialog.ui 
 TRANSLATIONS += trans/texmaker_fr.ts \
 	trans/texmaker_de.ts \
