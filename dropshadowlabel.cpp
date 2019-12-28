@@ -9,59 +9,46 @@
  *                                                                         *
  ***************************************************************************/
 
-
-#include <QPainter>
-#include <QFont>
-#include <QApplication>
 #include "dropshadowlabel.h"
+#include <QApplication>
+#include <QFont>
+#include <QPainter>
 
-DropShadowLabel::DropShadowLabel(const QString &text,QWidget* parent) :
-	QLabel(text,parent)
-{ 
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+DropShadowLabel::DropShadowLabel(const QString &text, QWidget *parent)
+    : QLabel(text, parent) {
+  setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
-    setFont(QFont("DejaVu Sans Condensed",qApp->font().pointSize()));
+  setFont(QFont("DejaVu Sans Condensed", qApp->font().pointSize()));
 }
- 
-void DropShadowLabel::drawText(QPainter *painter,
-								 QPoint offset)
-{
-	Q_ASSERT(painter != 0);
 
-	// Draw shadow.
-	painter->setPen(QPen(textColor));
-	painter->drawText(rect().translated(offset),
-					  alignment(), text());
-}
-void DropShadowLabel::drawTextEffect(QPainter *painter,
-								 QPoint offset)
-{
-	Q_ASSERT(painter != 0);
- 
-	// Draw shadow.
-	painter->setPen(QPen(dropShadowColor));
-	painter->drawText(rect().translated(offset),
-					  alignment(), text());
-}
- 
-void DropShadowLabel::paintEvent(QPaintEvent *event)
-{
-	Q_UNUSED(event);
+void DropShadowLabel::drawText(QPainter *painter, QPoint offset) {
+  Q_ASSERT(painter != 0);
 
-	QPainter painter(this);
-	painter.setFont(font());
+  // Draw shadow.
+  painter->setPen(QPen(textColor));
+  painter->drawText(rect().translated(offset), alignment(), text());
+}
+void DropShadowLabel::drawTextEffect(QPainter *painter, QPoint offset) {
+  Q_ASSERT(painter != 0);
+
+  // Draw shadow.
+  painter->setPen(QPen(dropShadowColor));
+  painter->drawText(rect().translated(offset), alignment(), text());
+}
+
+void DropShadowLabel::paintEvent(QPaintEvent *event) {
+  Q_UNUSED(event);
+
+  QPainter painter(this);
+  painter.setFont(font());
 #ifndef Q_OS_MAC
-	drawTextEffect(&painter, QPoint(contentsMargins().left(), 1));
+  drawTextEffect(&painter, QPoint(contentsMargins().left(), 1));
 #endif
-	drawText(&painter, QPoint(contentsMargins().left(), 0));
+  drawText(&painter, QPoint(contentsMargins().left(), 0));
 }
 
-void DropShadowLabel::setColor(const QColor & color)
-{
-	textColor = color;
-}
+void DropShadowLabel::setColor(const QColor &color) { textColor = color; }
 
-void DropShadowLabel::setDropShadowColor(const QColor & color)
-{
-	dropShadowColor = color;
+void DropShadowLabel::setDropShadowColor(const QColor &color) {
+  dropShadowColor = color;
 }

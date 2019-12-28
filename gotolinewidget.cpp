@@ -12,47 +12,34 @@
 #include "gotolinewidget.h"
 #include <QAction>
 
-GotoLineWidget::GotoLineWidget(QWidget* parent)
-    : QWidget( parent)
-{
-ui.setupUi(this);
-connect( ui.closeButton, SIGNAL( clicked() ), this, SLOT( doHide() ) );
-connect( ui.gotoButton, SIGNAL( clicked() ), this, SLOT( gotoLine() ) );
-ui.gotoButton->setToolTip("Return");
-ui.closeButton->setShortcut(Qt::Key_Escape);
-ui.closeButton->setToolTip("Escape");
+GotoLineWidget::GotoLineWidget(QWidget *parent) : QWidget(parent) {
+  ui.setupUi(this);
+  connect(ui.closeButton, SIGNAL(clicked()), this, SLOT(doHide()));
+  connect(ui.gotoButton, SIGNAL(clicked()), this, SLOT(gotoLine()));
+  ui.gotoButton->setToolTip("Return");
+  ui.closeButton->setShortcut(Qt::Key_Escape);
+  ui.closeButton->setToolTip("Escape");
 }
 
-GotoLineWidget::~GotoLineWidget()
-{
-
-}
-void GotoLineWidget::gotoLine()
-{
-if ( editor )
-  {
-  editor->gotoLine( ui.spinLine->value() - 1 );
-  editor->viewport()->repaint();
-  editor->setFocus();
+GotoLineWidget::~GotoLineWidget() {}
+void GotoLineWidget::gotoLine() {
+  if (editor) {
+    editor->gotoLine(ui.spinLine->value() - 1);
+    editor->viewport()->repaint();
+    editor->setFocus();
   }
-
 }
-void GotoLineWidget::SetEditor(LatexEditor *ed)
-{
-editor=ed;
-}
+void GotoLineWidget::SetEditor(LatexEditor *ed) { editor = ed; }
 
-void GotoLineWidget::doHide()
-{
-emit requestHide();
-if ( editor ) 
-	{
-	editor->viewport()->repaint();
-	editor->setFocus();
-	}
+void GotoLineWidget::doHide() {
+  emit requestHide();
+  if (editor) {
+    editor->viewport()->repaint();
+    editor->setFocus();
+  }
 }
 
-void GotoLineWidget::keyPressEvent ( QKeyEvent * e ) 
-{
-if ((e->key()==Qt::Key_Enter)||(e->key()==Qt::Key_Return)) gotoLine();
+void GotoLineWidget::keyPressEvent(QKeyEvent *e) {
+  if ((e->key() == Qt::Key_Enter) || (e->key() == Qt::Key_Return))
+    gotoLine();
 }

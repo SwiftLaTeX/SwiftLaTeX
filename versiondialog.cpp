@@ -11,53 +11,52 @@
 
 #include "versiondialog.h"
 
-#include <QtCore/QUrl>
 #include <QDesktopServices>
+#include <QtCore/QUrl>
 #define STRINGIFY_INTERNAL(x) #x
 #define STRINGIFY(x) STRINGIFY_INTERNAL(x)
 
 #define VERSION_STR STRINGIFY(TEXMAKERVERSION)
 
-VersionDialog::VersionDialog(QWidget *parent)
-    :QDialog( parent)
-{
-ui.setupUi(this);
-timer.setSingleShot(true);
-connect(&timer, SIGNAL(timeout()), this, SLOT(stopChecker()));
-ui.lineEditCurrent->setText(QLatin1String(VERSION_STR));
-ui.lineEditAvailable->setText(QString::fromUtf8("?.?.?"));
-connect(ui.pushButtonDownload, SIGNAL( clicked() ), this, SLOT( gotoDownloadPage() ) );
-connect(ui.pushButtonCheck, SIGNAL( clicked() ), this, SLOT( launchChecker() ) );
+VersionDialog::VersionDialog(QWidget *parent) : QDialog(parent) {
+  ui.setupUi(this);
+  timer.setSingleShot(true);
+  connect(&timer, SIGNAL(timeout()), this, SLOT(stopChecker()));
+  ui.lineEditCurrent->setText(QLatin1String(VERSION_STR));
+  ui.lineEditAvailable->setText(QString::fromUtf8("?.?.?"));
+  connect(ui.pushButtonDownload, SIGNAL(clicked()), this,
+          SLOT(gotoDownloadPage()));
+  connect(ui.pushButtonCheck, SIGNAL(clicked()), this, SLOT(launchChecker()));
 }
 
-VersionDialog::~VersionDialog(){
+VersionDialog::~VersionDialog() {}
+
+void VersionDialog::gotoDownloadPage() {
+  QDesktopServices::openUrl(
+      QUrl("http://www.xm1math.net/texmaker/download.html"));
 }
 
-void VersionDialog::gotoDownloadPage()
-{
-QDesktopServices::openUrl(QUrl("http://www.xm1math.net/texmaker/download.html"));
+void VersionDialog::launchChecker() {
+  ui.pushButtonCheck->setEnabled(false);
+  timer.start(10000);
+  reply = manager.get(
+      QNetworkRequest(QUrl("http://www.xm1math.net/texmaker/version.txt")));
+  QObject::connect(reply, SIGNAL(finished()), this, SLOT(showResultChecker()));
 }
 
-void VersionDialog::launchChecker()
-{
-ui.pushButtonCheck->setEnabled(false);
-timer.start(10000);
-reply = manager.get (  QNetworkRequest(QUrl("http://www.xm1math.net/texmaker/version.txt"))  );
-QObject::connect (reply, SIGNAL (finished()),this, SLOT(showResultChecker()));
+void VersionDialog::showResultChecker() {
+  timer.stop();
+  if (reply->error())
+    ui.lineEditAvailable->setText(tr("Error"));
+  else
+    ui.lineEditAvailable->setText(QString(reply->readAll()));
+  ui.pushButtonCheck->setEnabled(true);
 }
 
-void VersionDialog::showResultChecker()
-{
-timer.stop();
-if (reply->error()) ui.lineEditAvailable->setText(tr("Error"));
-else ui.lineEditAvailable->setText(QString(reply->readAll()));
-ui.pushButtonCheck->setEnabled(true);
-}
-
-void VersionDialog::stopChecker()
-{
-ui.lineEditAvailable->setText(tr("Error"));
-QObject::disconnect (reply, SIGNAL (finished()),this, SLOT(showResultChecker()));
-reply->abort();
-ui.pushButtonCheck->setEnabled(true);
+void VersionDialog::stopChecker() {
+  ui.lineEditAvailable->setText(tr("Error"));
+  QObject::disconnect(reply, SIGNAL(finished()), this,
+                      SLOT(showResultChecker()));
+  reply->abort();
+  ui.pushButtonCheck->setEnabled(true);
 }

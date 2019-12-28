@@ -11,15 +11,10 @@
 
 #include "addoptiondialog.h"
 
-
 AddOptionDialog::AddOptionDialog(QWidget *parent, const char *name)
-    : QDialog( parent)
-{
-setWindowTitle(name);
-setModal(true);
-ui.setupUi(this);
+    : QDialog(parent) {
+  setWindowTitle(name);
+  setModal(true);
+  ui.setupUi(this);
 }
-AddOptionDialog::~AddOptionDialog()
-{
-}
-
+AddOptionDialog::~AddOptionDialog() {}

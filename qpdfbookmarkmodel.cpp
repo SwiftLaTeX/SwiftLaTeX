@@ -48,319 +48,264 @@
 
 QT_BEGIN_NAMESPACE
 
-class BookmarkNode
-{
+class BookmarkNode {
 public:
-    explicit BookmarkNode(BookmarkNode *parentNode = nullptr)
-        : m_parentNode(parentNode)
-        , m_level(0)
-        , m_pageNumber(0)
-    {
-    }
+  explicit BookmarkNode(BookmarkNode *parentNode = nullptr)
+      : m_parentNode(parentNode), m_level(0), m_pageNumber(0) {}
 
-    ~BookmarkNode()
-    {
-        clear();
-    }
+  ~BookmarkNode() { clear(); }
 
-    void clear()
-    {
-        qDeleteAll(m_childNodes);
-        m_childNodes.clear();
-    }
+  void clear() {
+    qDeleteAll(m_childNodes);
+    m_childNodes.clear();
+  }
 
-    void appendChild(BookmarkNode *child)
-    {
-        m_childNodes.append(child);
-    }
+  void appendChild(BookmarkNode *child) { m_childNodes.append(child); }
 
-    BookmarkNode *child(int row) const
-    {
-        return m_childNodes.at(row);
-    }
+  BookmarkNode *child(int row) const { return m_childNodes.at(row); }
 
-    int childCount() const
-    {
-        return m_childNodes.count();
-    }
+  int childCount() const { return m_childNodes.count(); }
 
-    int row() const
-    {
-        if (m_parentNode)
-            return m_parentNode->m_childNodes.indexOf(const_cast<BookmarkNode*>(this));
+  int row() const {
+    if (m_parentNode)
+      return m_parentNode->m_childNodes.indexOf(
+          const_cast<BookmarkNode *>(this));
 
-        return 0;
-    }
+    return 0;
+  }
 
-    BookmarkNode *parentNode() const
-    {
-        return m_parentNode;
-    }
+  BookmarkNode *parentNode() const { return m_parentNode; }
 
-    QString title() const
-    {
-        return m_title;
-    }
+  QString title() const { return m_title; }
 
-    void setTitle(const QString &title)
-    {
-        m_title = title;
-    }
+  void setTitle(const QString &title) { m_title = title; }
 
-    int level() const
-    {
-        return m_level;
-    }
+  int level() const { return m_level; }
 
-    void setLevel(int level)
-    {
-        m_level = level;
-    }
+  void setLevel(int level) { m_level = level; }
 
-    int pageNumber() const
-    {
-        return m_pageNumber;
-    }
+  int pageNumber() const { return m_pageNumber; }
 
-    void setPageNumber(int pageNumber)
-    {
-        m_pageNumber = pageNumber;
-    }
+  void setPageNumber(int pageNumber) { m_pageNumber = pageNumber; }
 
 private:
-    QVector<BookmarkNode*> m_childNodes;
-    BookmarkNode *m_parentNode;
+  QVector<BookmarkNode *> m_childNodes;
+  BookmarkNode *m_parentNode;
 
-    QString m_title;
-    int m_level;
-    int m_pageNumber;
+  QString m_title;
+  int m_level;
+  int m_pageNumber;
 };
 
-
-class QPdfBookmarkModelPrivate : public QAbstractItemModelPrivate
-{
+class QPdfBookmarkModelPrivate : public QAbstractItemModelPrivate {
 public:
-    QPdfBookmarkModelPrivate()
-        : QAbstractItemModelPrivate()
-        , m_rootNode(new BookmarkNode(nullptr))
-        , m_document(nullptr)
-        , m_structureMode(QPdfBookmarkModel::TreeMode)
-    {
+  QPdfBookmarkModelPrivate()
+      : QAbstractItemModelPrivate(), m_rootNode(new BookmarkNode(nullptr)),
+        m_document(nullptr), m_structureMode(QPdfBookmarkModel::TreeMode) {}
+
+  void rebuild() {
+    Q_Q(QPdfBookmarkModel);
+
+    const bool documentAvailable =
+        (m_document && m_document->status() == QPdfDocument::Ready);
+
+    if (documentAvailable) {
+      q->beginResetModel();
+      m_rootNode->clear();
+      QPdfMutexLocker lock;
+      appendChildNode(m_rootNode.data(), nullptr, 0, m_document->d->doc);
+      lock.unlock();
+      q->endResetModel();
+    } else {
+      if (m_rootNode->childCount() == 0) {
+        return;
+      } else {
+        q->beginResetModel();
+        m_rootNode->clear();
+        q->endResetModel();
+      }
     }
+  }
 
-    void rebuild()
-    {
-        Q_Q(QPdfBookmarkModel);
+  void appendChildNode(BookmarkNode *parentBookmarkNode,
+                       FPDF_BOOKMARK parentBookmark, int level,
+                       FPDF_DOCUMENT document) {
+    FPDF_BOOKMARK bookmark =
+        FPDFBookmark_GetFirstChild(document, parentBookmark);
 
-        const bool documentAvailable = (m_document && m_document->status() == QPdfDocument::Ready);
+    while (bookmark) {
+      BookmarkNode *childBookmarkNode = nullptr;
 
-        if (documentAvailable) {
-            q->beginResetModel();
-            m_rootNode->clear();
-            QPdfMutexLocker lock;
-            appendChildNode(m_rootNode.data(), nullptr, 0, m_document->d->doc);
-            lock.unlock();
-            q->endResetModel();
-        } else {
-            if (m_rootNode->childCount() == 0) {
-                return;
-            } else {
-                q->beginResetModel();
-                m_rootNode->clear();
-                q->endResetModel();
-            }
-        }
+      if (m_structureMode == QPdfBookmarkModel::TreeMode) {
+        childBookmarkNode = new BookmarkNode(parentBookmarkNode);
+        parentBookmarkNode->appendChild(childBookmarkNode);
+      } else if (m_structureMode == QPdfBookmarkModel::ListMode) {
+        childBookmarkNode = new BookmarkNode(m_rootNode.data());
+        m_rootNode->appendChild(childBookmarkNode);
+      }
+
+      const unsigned long titleLength =
+          FPDFBookmark_GetTitle(bookmark, nullptr, 0);
+
+      QVector<ushort> titleBuffer(titleLength);
+      FPDFBookmark_GetTitle(bookmark, titleBuffer.data(), titleBuffer.length());
+
+      const FPDF_DEST dest = FPDFBookmark_GetDest(document, bookmark);
+      const int pageNumber = FPDFDest_GetPageIndex(document, dest);
+      //             float x=0.0;
+      //             float y=0.0;
+      //             FPDFDest_GetLocationInPage(dest,&x,&y);
+
+      childBookmarkNode->setTitle(QString::fromUtf16(titleBuffer.data()));
+      childBookmarkNode->setLevel(level);
+      childBookmarkNode->setPageNumber(pageNumber);
+
+      // recurse down
+      appendChildNode(childBookmarkNode, bookmark, level + 1, document);
+
+      bookmark = FPDFBookmark_GetNextSibling(document, bookmark);
     }
+  }
 
-    void appendChildNode(BookmarkNode *parentBookmarkNode, FPDF_BOOKMARK parentBookmark, int level, FPDF_DOCUMENT document)
-    {
-        FPDF_BOOKMARK bookmark = FPDFBookmark_GetFirstChild(document, parentBookmark);
+  void _q_documentStatusChanged() { rebuild(); }
 
-        while (bookmark) {
-            BookmarkNode *childBookmarkNode = nullptr;
+  Q_DECLARE_PUBLIC(QPdfBookmarkModel)
 
-            if (m_structureMode == QPdfBookmarkModel::TreeMode) {
-                childBookmarkNode = new BookmarkNode(parentBookmarkNode);
-                parentBookmarkNode->appendChild(childBookmarkNode);
-            } else if (m_structureMode == QPdfBookmarkModel::ListMode) {
-                childBookmarkNode = new BookmarkNode(m_rootNode.data());
-                m_rootNode->appendChild(childBookmarkNode);
-            }
-
-            const unsigned long titleLength = FPDFBookmark_GetTitle(bookmark, nullptr, 0);
-
-            QVector<ushort> titleBuffer(titleLength);
-            FPDFBookmark_GetTitle(bookmark, titleBuffer.data(), titleBuffer.length());
-
-            const FPDF_DEST dest = FPDFBookmark_GetDest(document, bookmark);
-            const int pageNumber = FPDFDest_GetPageIndex(document, dest);
-//             float x=0.0;
-//             float y=0.0;
-//             FPDFDest_GetLocationInPage(dest,&x,&y);
-            
-
-
-            childBookmarkNode->setTitle(QString::fromUtf16(titleBuffer.data()));
-            childBookmarkNode->setLevel(level);
-            childBookmarkNode->setPageNumber(pageNumber);
-
-            // recurse down
-            appendChildNode(childBookmarkNode, bookmark, level + 1, document);
-
-            bookmark = FPDFBookmark_GetNextSibling(document, bookmark);
-        }
-    }
-
-    void _q_documentStatusChanged()
-    {
-        rebuild();
-    }
-
-    Q_DECLARE_PUBLIC(QPdfBookmarkModel)
-
-    QScopedPointer<BookmarkNode> m_rootNode;
-    QPointer<QPdfDocument> m_document;
-    QPdfBookmarkModel::StructureMode m_structureMode;
+  QScopedPointer<BookmarkNode> m_rootNode;
+  QPointer<QPdfDocument> m_document;
+  QPdfBookmarkModel::StructureMode m_structureMode;
 };
-
 
 QPdfBookmarkModel::QPdfBookmarkModel(QObject *parent)
-    : QAbstractItemModel(*new QPdfBookmarkModelPrivate, parent)
-{
+    : QAbstractItemModel(*new QPdfBookmarkModelPrivate, parent) {}
+
+QPdfDocument *QPdfBookmarkModel::document() const {
+  Q_D(const QPdfBookmarkModel);
+
+  return d->m_document;
 }
 
-QPdfDocument* QPdfBookmarkModel::document() const
-{
-    Q_D(const QPdfBookmarkModel);
+void QPdfBookmarkModel::setDocument(QPdfDocument *document) {
+  Q_D(QPdfBookmarkModel);
 
-    return d->m_document;
+  if (d->m_document == document)
+    return;
+
+  if (d->m_document)
+    disconnect(d->m_document, SIGNAL(statusChanged(QPdfDocument::Status)), this,
+               SLOT(_q_documentStatusChanged()));
+
+  d->m_document = document;
+  emit documentChanged(d->m_document);
+
+  if (d->m_document)
+    connect(d->m_document, SIGNAL(statusChanged(QPdfDocument::Status)), this,
+            SLOT(_q_documentStatusChanged()));
+
+  d->rebuild();
 }
 
-void QPdfBookmarkModel::setDocument(QPdfDocument *document)
-{
-    Q_D(QPdfBookmarkModel);
+QPdfBookmarkModel::StructureMode QPdfBookmarkModel::structureMode() const {
+  Q_D(const QPdfBookmarkModel);
 
-    if (d->m_document == document)
-        return;
-
-    if (d->m_document)
-        disconnect(d->m_document, SIGNAL(statusChanged(QPdfDocument::Status)), this, SLOT(_q_documentStatusChanged()));
-
-    d->m_document = document;
-    emit documentChanged(d->m_document);
-
-    if (d->m_document)
-        connect(d->m_document, SIGNAL(statusChanged(QPdfDocument::Status)), this, SLOT(_q_documentStatusChanged()));
-
-    d->rebuild();
+  return d->m_structureMode;
 }
 
-QPdfBookmarkModel::StructureMode QPdfBookmarkModel::structureMode() const
-{
-    Q_D(const QPdfBookmarkModel);
+void QPdfBookmarkModel::setStructureMode(StructureMode mode) {
+  Q_D(QPdfBookmarkModel);
 
-    return d->m_structureMode;
+  if (d->m_structureMode == mode)
+    return;
+
+  d->m_structureMode = mode;
+  emit structureModeChanged(d->m_structureMode);
+
+  d->rebuild();
 }
 
-void QPdfBookmarkModel::setStructureMode(StructureMode mode)
-{
-    Q_D(QPdfBookmarkModel);
-
-    if (d->m_structureMode == mode)
-        return;
-
-    d->m_structureMode = mode;
-    emit structureModeChanged(d->m_structureMode);
-
-    d->rebuild();
+int QPdfBookmarkModel::columnCount(const QModelIndex &parent) const {
+  return 1;
 }
 
-int QPdfBookmarkModel::columnCount(const QModelIndex &parent) const
-{
-    return 1;
+QHash<int, QByteArray> QPdfBookmarkModel::roleNames() const {
+  QHash<int, QByteArray> names;
+
+  names[TitleRole] = "title";
+  names[LevelRole] = "level";
+  names[PageNumberRole] = "pageNumber";
+
+  return names;
 }
 
-QHash<int, QByteArray> QPdfBookmarkModel::roleNames() const
-{
-    QHash<int, QByteArray> names;
+QVariant QPdfBookmarkModel::data(const QModelIndex &index, int role) const {
+  if (!index.isValid())
+    return QVariant();
 
-    names[TitleRole] = "title";
-    names[LevelRole] = "level";
-    names[PageNumberRole] = "pageNumber";
-
-    return names;
+  const BookmarkNode *node =
+      static_cast<BookmarkNode *>(index.internalPointer());
+  switch (role) {
+  case TitleRole:
+    return node->title();
+  case LevelRole:
+    return node->level();
+  case PageNumberRole:
+    return node->pageNumber();
+  default:
+    return QVariant();
+  }
 }
 
-QVariant QPdfBookmarkModel::data(const QModelIndex &index, int role) const
-{
-    if (!index.isValid())
-        return QVariant();
+QModelIndex QPdfBookmarkModel::index(int row, int column,
+                                     const QModelIndex &parent) const {
+  Q_D(const QPdfBookmarkModel);
 
-    const BookmarkNode *node = static_cast<BookmarkNode*>(index.internalPointer());
-    switch (role) {
-    case TitleRole:
-        return node->title();
-    case LevelRole:
-        return node->level();
-    case PageNumberRole:
-        return node->pageNumber();
-    default:
-        return QVariant();
-    }
+  if (!hasIndex(row, column, parent))
+    return QModelIndex();
+
+  BookmarkNode *parentNode;
+
+  if (!parent.isValid())
+    parentNode = d->m_rootNode.data();
+  else
+    parentNode = static_cast<BookmarkNode *>(parent.internalPointer());
+
+  BookmarkNode *childNode = parentNode->child(row);
+  if (childNode)
+    return createIndex(row, column, childNode);
+  else
+    return QModelIndex();
 }
 
-QModelIndex QPdfBookmarkModel::index(int row, int column, const QModelIndex &parent) const
-{
-    Q_D(const QPdfBookmarkModel);
+QModelIndex QPdfBookmarkModel::parent(const QModelIndex &index) const {
+  Q_D(const QPdfBookmarkModel);
 
-    if (!hasIndex(row, column, parent))
-        return QModelIndex();
+  if (!index.isValid())
+    return QModelIndex();
 
-    BookmarkNode *parentNode;
+  const BookmarkNode *childNode =
+      static_cast<BookmarkNode *>(index.internalPointer());
+  BookmarkNode *parentNode = childNode->parentNode();
 
-    if (!parent.isValid())
-        parentNode = d->m_rootNode.data();
-    else
-        parentNode = static_cast<BookmarkNode*>(parent.internalPointer());
+  if (parentNode == d->m_rootNode.data())
+    return QModelIndex();
 
-    BookmarkNode *childNode = parentNode->child(row);
-    if (childNode)
-        return createIndex(row, column, childNode);
-    else
-        return QModelIndex();
+  return createIndex(parentNode->row(), 0, parentNode);
 }
 
-QModelIndex QPdfBookmarkModel::parent(const QModelIndex &index) const
-{
-    Q_D(const QPdfBookmarkModel);
+int QPdfBookmarkModel::rowCount(const QModelIndex &parent) const {
+  Q_D(const QPdfBookmarkModel);
 
-    if (!index.isValid())
-        return QModelIndex();
+  if (parent.column() > 0)
+    return 0;
 
-    const BookmarkNode *childNode = static_cast<BookmarkNode*>(index.internalPointer());
-    BookmarkNode *parentNode = childNode->parentNode();
+  BookmarkNode *parentNode = nullptr;
 
-    if (parentNode == d->m_rootNode.data())
-        return QModelIndex();
+  if (!parent.isValid())
+    parentNode = d->m_rootNode.data();
+  else
+    parentNode = static_cast<BookmarkNode *>(parent.internalPointer());
 
-    return createIndex(parentNode->row(), 0, parentNode);
-}
-
-int QPdfBookmarkModel::rowCount(const QModelIndex &parent) const
-{
-    Q_D(const QPdfBookmarkModel);
-
-    if (parent.column() > 0)
-        return 0;
-
-    BookmarkNode *parentNode = nullptr;
-
-    if (!parent.isValid())
-        parentNode = d->m_rootNode.data();
-    else
-        parentNode = static_cast<BookmarkNode*>(parent.internalPointer());
-
-    return parentNode->childCount();
+  return parentNode->childCount();
 }
 
 QT_END_NAMESPACE

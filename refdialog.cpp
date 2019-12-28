@@ -11,13 +11,10 @@
 
 #include "refdialog.h"
 
-RefDialog::RefDialog(QWidget *parent, const char *name)
-    :QDialog( parent)
-{
-setWindowTitle(name);
-setModal(true);
-ui.setupUi(this);
+RefDialog::RefDialog(QWidget *parent, const char *name) : QDialog(parent) {
+  setWindowTitle(name);
+  setModal(true);
+  ui.setupUi(this);
 }
 
-RefDialog::~RefDialog(){
-}
+RefDialog::~RefDialog() {}

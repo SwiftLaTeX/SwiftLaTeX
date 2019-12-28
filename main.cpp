@@ -11,65 +11,58 @@
  *                                                                         *
  ***************************************************************************/
 
-
 #include "texmakerapp.h"
-#include <QStringList>
 #include <QDebug>
+#include <QStringList>
 #define STRINGIFY_INTERNAL(x) #x
 #define STRINGIFY(x) STRINGIFY_INTERNAL(x)
 
 #define VERSION_STR STRINGIFY(TEXMAKERVERSION)
 
-char** appendCommandLineArguments(int argc, char **argv, const QStringList& args)
-{
-  size_t newSize = (argc + args.length() + 1) * sizeof(char*);
-  char** newArgv = (char**)calloc(1, newSize);
-  memcpy(newArgv, argv, (size_t)(argc * sizeof(char*)));
+char **appendCommandLineArguments(int argc, char **argv,
+                                  const QStringList &args) {
+  size_t newSize = (argc + args.length() + 1) * sizeof(char *);
+  char **newArgv = (char **)calloc(1, newSize);
+  memcpy(newArgv, argv, (size_t)(argc * sizeof(char *)));
 
   int pos = argc;
-  for(const QString& str : args)
+  for (const QString &str : args)
     newArgv[pos++] = qstrdup(str.toUtf8().data());
 
   return newArgv;
 }
 
-int main( int argc, char ** argv )
-{
-QStringList rawargs;
-for ( int i = 0; i < argc; ++i )
-	{
-	rawargs.append( argv[ i ]);
-	}
-for (QStringList::Iterator it = ++(rawargs.begin()); it != rawargs.end(); it++)
-    {
-    if ( ( *it == "-dpiscale") && (++it != rawargs.end())) {qputenv("QT_SCALE_FACTOR", (*it).toUtf8());}
+int main(int argc, char **argv) {
+  QStringList rawargs;
+  for (int i = 0; i < argc; ++i) {
+    rawargs.append(argv[i]);
+  }
+  for (QStringList::Iterator it = ++(rawargs.begin()); it != rawargs.end();
+       it++) {
+    if ((*it == "-dpiscale") && (++it != rawargs.end())) {
+      qputenv("QT_SCALE_FACTOR", (*it).toUtf8());
     }
+  }
 
 #if !defined(Q_OS_MAC)
-QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+  QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
-QStringList g_qtFlags = {"--disable-gpu"}; 
-char **newArgv = appendCommandLineArguments(argc, argv, g_qtFlags);
-int newArgc = argc + g_qtFlags.size();
+  QStringList g_qtFlags = {""};
+  char **newArgv = appendCommandLineArguments(argc, argv, g_qtFlags);
+  int newArgc = argc + g_qtFlags.size();
 
-TexmakerApp app("TexMaker", newArgc, newArgv );
+  TexmakerApp app("SwiftLaTeX", newArgc, newArgv);
 
-QStringList args = QCoreApplication::arguments();
-app.setApplicationName("TexMaker");
-app.setApplicationVersion(VERSION_STR);
-app.setOrganizationName("xm1");
-app.setAttribute(Qt::AA_DontShowIconsInMenus, true);
-app.setAttribute(Qt::AA_UseHighDpiPixmaps);
+  QStringList args = QCoreApplication::arguments();
+  app.setApplicationName("SwiftLaTeX classics");
+  app.setApplicationVersion(VERSION_STR);
+  app.setOrganizationName("SwiftLaTeX");
+  app.setAttribute(Qt::AA_DontShowIconsInMenus, true);
+  app.setAttribute(Qt::AA_UseHighDpiPixmaps);
+  QApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
 
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
-QApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
-#endif
+  app.init(args); // Initialization takes place only if there is no other
+                  // instance running.
 
-
-
-
-app.init(args); // Initialization takes place only if there is no other instance running.
-
-
-return app.exec();
+  return app.exec();
 }
