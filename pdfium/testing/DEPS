@@ -1,0 +1,13 @@
+include_rules = [
+  '+core/include',
+  '+core/fxcodec',
+  '+core/fxcrt/include',
+  '+core/fxge/include',
+  '+fxjs/include',
+  '+public',
+  '+v8',
+  '+xfa/fde',
+  '+xfa/fgas',
+  '+xfa/fxfa/parser',
+  '+xfa/fxfa/fm2js',
+]

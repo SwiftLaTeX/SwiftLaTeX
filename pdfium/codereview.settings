@@ -1,0 +1,7 @@
+# This file is used by gcl to get repository specific information.
+CODE_REVIEW_SERVER: codereview.chromium.org
+CC_LIST: pdfium-reviews@googlegroups.com
+STATUS: http://pdfium-status.appspot.com/status
+TRY_ON_UPLOAD: False
+VIEW_VC: https://pdfium.googlesource.com/pdfium/+/
+PROJECT: pdfium

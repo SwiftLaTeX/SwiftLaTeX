@@ -1,0 +1,32 @@
+diff --git a/third_party/libopenjpeg20/0017-tcd_init_tile.patch b/third_party/libopenjpeg20/0017-tcd_init_tile.patch
+new file mode 100644
+index 0000000..e69de29
+diff --git a/third_party/libopenjpeg20/README.pdfium b/third_party/libopenjpeg20/README.pdfium
+index 4852a42..97e6e8c 100644
+--- a/third_party/libopenjpeg20/README.pdfium
++++ b/third_party/libopenjpeg20/README.pdfium
+@@ -26,4 +26,5 @@ Local Modifications:
+ 0014-opj_jp2_read_ihdr_leak.patch: Memory leak in opj_jp2_read_ihdr().
+ 0015-read_SPCod_SPCoc_overflow.patch: Prevent a buffer overflow in opj_j2k_read_SPCod_SPCoc.
+ 0016-read_SQcd_SQcc_overflow.patch: Prevent a buffer overflow in opj_j2k_read_SQcd_SQcc.
++0017-tcd_init_tile.patch: Prevent integer overflows during calculation of |l_nb_precinct_size|.
+ TODO(thestig): List all the other patches.
+diff --git a/third_party/libopenjpeg20/tcd.c b/third_party/libopenjpeg20/tcd.c
+index aebe9be..673633c 100644
+--- a/third_party/libopenjpeg20/tcd.c
++++ b/third_party/libopenjpeg20/tcd.c
+@@ -822,7 +822,14 @@ static INLINE OPJ_BOOL opj_tcd_init_tile(opj_tcd_t *p_tcd, OPJ_UINT32 p_tile_no,
+ 			l_res->ph = (l_res->y0 == l_res->y1) ? 0 : (OPJ_UINT32)((l_br_prc_y_end - l_tl_prc_y_start) >> l_pdy);
+ 			/*fprintf(stderr, "\t\t\tres_pw=%d, res_ph=%d\n", l_res->pw, l_res->ph );*/
+ 			
++			if (l_res->pw && ((OPJ_UINT32)-1) / l_res->pw < l_res->ph) {
++				return OPJ_FALSE;
++			}
+ 			l_nb_precincts = l_res->pw * l_res->ph;
++
++			if (((OPJ_UINT32)-1) / (OPJ_UINT32)sizeof(opj_tcd_precinct_t) < l_nb_precincts) {
++				return OPJ_FALSE;
++			}
+ 			l_nb_precinct_size = l_nb_precincts * (OPJ_UINT32)sizeof(opj_tcd_precinct_t);
+ 			if (resno == 0) {
+ 				tlcbgxstart = l_tl_prc_x_start;

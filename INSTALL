@@ -1,0 +1,8 @@
+Requirements : 
+Qt tool kit >=5.7
+
+To compile texmaker :
+qmake texmaker.pro
+make
+
+or use QtCreator 

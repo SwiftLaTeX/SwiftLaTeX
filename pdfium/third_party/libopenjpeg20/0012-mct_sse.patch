@@ -1,0 +1,60 @@
+diff --git a/third_party/libopenjpeg20/mct.c b/third_party/libopenjpeg20/mct.c
+index 8b0276f..7731c15 100644
+--- a/third_party/libopenjpeg20/mct.c
++++ b/third_party/libopenjpeg20/mct.c
+@@ -37,13 +37,16 @@
+  * POSSIBILITY OF SUCH DAMAGE.
+  */
+ 
+-#ifdef __SSE__
++#if defined(__SSE__) && !defined(_M_IX86) && !defined(__i386)
++#define USE_SSE
+ #include <xmmintrin.h>
+ #endif
+-#ifdef __SSE2__
++#if defined(__SSE2__) && !defined(_M_IX86) && !defined(__i386)
++#define USE_SSE2
+ #include <emmintrin.h>
+ #endif
+-#ifdef __SSE4_1__
++#if defined(__SSE4_1__) && !defined(_M_IX86) && !defined(__i386)
++#define USE_SSE4
+ #include <smmintrin.h>
+ #endif
+ 
+@@ -72,7 +75,7 @@ const OPJ_FLOAT64 * opj_mct_get_mct_norms_real ()
+ /* <summary> */
+ /* Forward reversible MCT. */
+ /* </summary> */
+-#ifdef __SSE2__
++#ifdef USE_SSE2
+ void opj_mct_encode(
+ 		OPJ_INT32* restrict c0,
+ 		OPJ_INT32* restrict c1,
+@@ -137,7 +140,7 @@ void opj_mct_encode(
+ /* <summary> */
+ /* Inverse reversible MCT. */
+ /* </summary> */
+-#ifdef __SSE2__
++#ifdef USE_SSE2
+ void opj_mct_decode(
+ 		OPJ_INT32* restrict c0,
+ 		OPJ_INT32* restrict c1,
+@@ -204,7 +207,7 @@ OPJ_FLOAT64 opj_mct_getnorm(OPJ_UINT32 compno) {
+ /* <summary> */
+ /* Forward irreversible MCT. */
+ /* </summary> */
+-#ifdef __SSE4_1__
++#ifdef USE_SSE4
+ void opj_mct_encode_real(
+ 												 OPJ_INT32* restrict c0,
+ 												 OPJ_INT32* restrict c1,
+@@ -377,7 +380,7 @@ void opj_mct_decode_real(
+ 		OPJ_UINT32 n)
+ {
+ 	OPJ_UINT32 i;
+-#ifdef __SSE__
++#ifdef USE_SSE
+ 	__m128 vrv, vgu, vgv, vbu;
+ 	vrv = _mm_set1_ps(1.402f);
+ 	vgu = _mm_set1_ps(0.34413f);

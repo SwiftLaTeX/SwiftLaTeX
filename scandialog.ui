@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ScanDialog</class>
+ <widget class="QDialog" name="ScanDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>333</width>
+    <height>338</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Texmaker</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0" colspan="2">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>In directory :</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2" colspan="2">
+    <widget class="QLineEdit" name="lineEditDir">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4">
+    <widget class="QPushButton" name="pushButtonBrowse">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="texmaker.qrc">
+       <normaloff>:/images/fileopen16.png</normaloff>:/images/fileopen16.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>16</width>
+       <height>16</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="QLabel" name="labelFind">
+     <property name="text">
+      <string>Text :</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2" colspan="2">
+    <widget class="QLineEdit" name="lineEditSearch"/>
+   </item>
+   <item row="1" column="4">
+    <widget class="QPushButton" name="pushButtonFind">
+     <property name="text">
+      <string>Find</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="4">
+    <widget class="QCheckBox" name="checkBoxSub">
+     <property name="text">
+      <string>Include subdirectories</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="4">
+    <widget class="QPushButton" name="pushButtonAbort">
+     <property name="text">
+      <string>Abort</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="5">
+    <widget class="QTreeWidget" name="treeWidget">
+     <attribute name="headerVisible">
+      <bool>false</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string notr="true">1</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item row="6" column="4">
+    <widget class="QPushButton" name="closeButton">
+     <property name="text">
+      <string>Close</string>
+     </property>
+     <property name="icon">
+      <iconset resource="texmaker.qrc">
+       <normaloff>:/images/fileclose16.png</normaloff>:/images/fileclose16.png</iconset>
+     </property>
+     <property name="autoDefault">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0" colspan="4">
+    <widget class="QLabel" name="labelStat">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>pushButtonBrowse</tabstop>
+  <tabstop>lineEditSearch</tabstop>
+  <tabstop>pushButtonFind</tabstop>
+  <tabstop>checkBoxSub</tabstop>
+  <tabstop>closeButton</tabstop>
+  <tabstop>pushButtonAbort</tabstop>
+  <tabstop>lineEditDir</tabstop>
+ </tabstops>
+ <resources>
+  <include location="texmaker.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>closeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>ScanDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>803</x>
+     <y>462</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>497</x>
+     <y>248</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

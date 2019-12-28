@@ -1,0 +1,13 @@
+Source: texmaker
+Section: tex
+Priority: extra
+Maintainer: Pascal Brachet <pbrachet@xm1math.net>
+Build-Depends: debhelper (>= 7.0.50~), g++, qtbase5-dev,qt5-qmake,qtbase5-dev-tools,qtbase5-dev,qtscript5-dev,pkg-config,qtdeclarative5-dev,libqt5opengl5-dev,qtbase5-private-dev
+
+Package: texmaker
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: cross-platform LaTeX editor
+ Texmaker is a clean, highly configurable LaTeX editor with good hot key 
+ support and extensive LaTeX documentation. Texmaker integrates many tools 
+ needed to develop documents with LaTeX, in just one application.

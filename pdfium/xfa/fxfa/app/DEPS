@@ -1,0 +1,9 @@
+include_rules = [
+  '+core/fdrm/crypto/include',
+  '+core/fpdfapi/fpdf_font/include',
+  '+core/fpdfapi/fpdf_page/include',
+  '+core/fpdfapi/fpdf_parser/include',
+  '+core/fpdfdoc/include',
+  '+core/fxcodec/include',
+  '+core/fxcodec/codec/include',
+]

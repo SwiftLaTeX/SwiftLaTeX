@@ -1,0 +1,19 @@
+################################################################################
+# LeakSanitizer Suppressions file.
+# If a CL introduces a new leak that isn't the fault of the CL itself (e.g. a
+# new testcase), please add a suppression to this file so that it can be
+# addressed in a future CL.
+#
+# For this file to take effect,
+# LSAN_OPTIONS='suppressions=/path/to/lsan_suppressions.txt' must be in the
+# environment.
+# See https://www.chromium.org/developers/testing/leaksanitizer for syntax.
+
+################################################################################
+# CJS_Object/CJS_EmbedObj wrapped by v8::Object currently leak. See bug 260.
+# Obvious leaks:
+leak:*FXJS_NewFxDynamicObj*
+
+# CJS_Field CFX_WideString::StringData leaks
+leak:*CJS_Document*getField_static*
+leak:*CJS_EventHandler*OnField*

@@ -1,0 +1,71 @@
+#!/usr/bin/env python
+#
+# Copyright 2014 PDFium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# This script is wrapper for PDFium that adds some support for how GYP
+# is invoked by PDFium beyond what can be done in the gclient hooks.
+
+import os
+import platform
+import sys
+
+script_dir = os.path.dirname(os.path.realpath(__file__))
+pdfium_root = os.path.abspath(os.path.join(script_dir, os.pardir))
+output_rel_dir = 'out'
+
+sys.path.insert(0, os.path.join(pdfium_root, 'tools', 'gyp', 'pylib'))
+import gyp
+
+# vs_toolchain needs to be after gyp path setting since it also uses gyp.
+sys.path.insert(0, os.path.join(pdfium_root, 'build'))
+import vs_toolchain
+
+def run_gyp(args):
+  rc = gyp.main(args)
+
+  # Copy Windows toolchain DLLs.
+  vs_runtime_dll_dirs = vs_toolchain.SetEnvironmentAndGetRuntimeDllDirs()
+  if vs_runtime_dll_dirs:
+    x64_runtime, x86_runtime = vs_runtime_dll_dirs
+    vs_toolchain.CopyVsRuntimeDlls(
+      os.path.join(pdfium_root, output_rel_dir), (x86_runtime, x64_runtime))
+
+  if rc != 0:
+    print 'Error running GYP'
+    sys.exit(rc)
+
+
+def main():
+  if int(os.environ.get('GYP_PDFIUM_NO_ACTION', 0)):
+    print 'Skipping gyp_pdfium due to GYP_PDFIUM_NO_ACTION env var.'
+    sys.exit(0)
+
+  args = sys.argv[1:]
+  args.append(os.path.join(pdfium_root, 'build_gyp', 'all.gyp'))
+
+  args.append('-I')
+  args.append(os.path.join(pdfium_root, 'build_gyp', 'standalone.gypi'))
+
+  args.extend(['-D', 'gyp_output_dir=' + output_rel_dir])
+
+  # Set the GYP DEPTH variable to the root of the PDFium project.
+  args.append('--depth=' + os.path.relpath(pdfium_root))
+
+  # GYP does not default to ninja, but PDFium should.
+  if not os.environ.get('GYP_GENERATORS', ''):
+    print 'GYP_GENERATORS is not set, defaulting to ninja'
+    os.environ['GYP_GENERATORS'] = 'ninja'
+
+  # Set up the environment variables.
+  vs_toolchain.SetEnvironmentAndGetRuntimeDllDirs()
+
+  print 'Updating projects from gyp files...'
+  sys.stdout.flush()
+
+  run_gyp(args)
+
+
+if __name__ == '__main__':
+  sys.exit(main())

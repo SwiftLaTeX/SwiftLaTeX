@@ -1,0 +1,19 @@
+diff --git a/third_party/libopenjpeg20/jp2.c b/third_party/libopenjpeg20/jp2.c
+index f3baca5..3bcb42e 100644
+--- a/third_party/libopenjpeg20/jp2.c
++++ b/third_party/libopenjpeg20/jp2.c
+@@ -896,8 +896,12 @@ static OPJ_BOOL opj_jp2_check_color(opj_image_t *image, opj_jp2_color_t *color,
+ 		}
+ 		/* verify that no component is targeted more than once */
+ 		for (i = 0; i < nr_channels; i++) {
+-      OPJ_UINT16 pcol = cmap[i].pcol;
+-      assert(cmap[i].mtyp == 0 || cmap[i].mtyp == 1);
++			if (cmap[i].mtyp != 0 && cmap[i].mtyp != 1) {
++				opj_event_msg(p_manager, EVT_ERROR, "Unexpected MTYP value.\n");
++				opj_free(pcol_usage);
++				return OPJ_FALSE;
++			}
++			OPJ_UINT16 pcol = cmap[i].pcol;
+ 			if (pcol >= nr_channels) {
+ 				opj_event_msg(p_manager, EVT_ERROR, "Invalid component/palette index for direct mapping %d.\n", pcol);
+ 				is_sane = OPJ_FALSE;

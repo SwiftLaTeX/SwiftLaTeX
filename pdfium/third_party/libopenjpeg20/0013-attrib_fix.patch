@@ -1,0 +1,18 @@
+diff --git a/third_party/libopenjpeg20/opj_includes.h b/third_party/libopenjpeg20/opj_includes.h
+index f855b7c..5add091 100644
+--- a/third_party/libopenjpeg20/opj_includes.h
++++ b/third_party/libopenjpeg20/opj_includes.h
+@@ -102,12 +102,6 @@
+  ==========================================================
+ */
+
+-/* Ignore GCC attributes if this is not GCC */
+-#ifndef __GNUC__
+-       #define __attribute__(x) /* __attribute__(x) */
+-#endif
+-
+-
+ /* Are restricted pointers available? (C99) */
+ #if (__STDC_VERSION__ != 199901L)
+        /* Not a C99 compiler */
+

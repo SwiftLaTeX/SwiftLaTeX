@@ -1,0 +1,22 @@
+# Copyright 2016 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# See https://bugs.chromium.org/p/webrtc/issues/detail?id=5453.
+# Some WebRTC targets require the 10.7 deployment version of the Mac SDK
+# and a 10.11 min SDK, but those targets are only used in non-Chromium
+# builds. We can remove this when Chromium drops 10.6 support and also
+# requires 10.7.
+mac_sdk_min_build_override = "10.10"
+mac_deployment_target_build_override = "10.7"
+
+# Variable that can be used to support multiple build scenarios, like having
+# Chromium specific targets in a client project's GN file etc.
+build_with_chromium = true
+
+# Support different NDK locations in non-Chromium builds.
+default_android_ndk_root = "//third_party/android_ndk"
+default_android_ndk_version = "r11c"
+
+# Some non-Chromium builds don't support building java targets.
+enable_java_templates = false

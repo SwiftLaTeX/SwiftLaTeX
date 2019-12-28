@@ -1,0 +1,6 @@
+include_rules = [
+  '+core/fxcrt/include',
+  '+core/fpdfapi/fpdf_parser/include',
+  '+core/fxge/include',
+  '+third_party/bigint'
+]

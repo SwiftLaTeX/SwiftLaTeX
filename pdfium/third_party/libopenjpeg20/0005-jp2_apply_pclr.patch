@@ -1,0 +1,49 @@
+diff --git a/third_party/libopenjpeg20/jp2.c b/third_party/libopenjpeg20/jp2.c
+index 47f83a1..6e910a9 100644
+--- a/third_party/libopenjpeg20/jp2.c
++++ b/third_party/libopenjpeg20/jp2.c
+@@ -902,7 +902,7 @@ static OPJ_BOOL opj_jp2_check_color(opj_image_t *image, opj_jp2_color_t *color,
+ 				opj_event_msg(p_manager, EVT_ERROR, "Invalid component/palette index for direct mapping %d.\n", pcol);
+ 				is_sane = OPJ_FALSE;
+ 			}
+-			else if (pcol_usage[pcol] && cmap[i].mtyp == 1) {
++			else if (pcol_usage[pcol] && cmap[i].mtyp != 0) {
+ 				opj_event_msg(p_manager, EVT_ERROR, "Component %d is mapped twice.\n", pcol);
+ 				is_sane = OPJ_FALSE;
+ 			}
+@@ -982,8 +982,8 @@ static void opj_jp2_apply_pclr(opj_image_t *image, opj_jp2_color_t *color)
+       assert( pcol == 0 );
+       new_comps[i] = old_comps[cmp];
+     } else {
+-      assert( i == pcol );
+-      new_comps[pcol] = old_comps[cmp];
++      assert( i == pcol ); // probably wrong?
++      new_comps[i] = old_comps[cmp];
+     }
+ 
+ 		/* Palette mapping: */
+@@ -1007,11 +1007,11 @@ static void opj_jp2_apply_pclr(opj_image_t *image, opj_jp2_color_t *color)
+ 		cmp = cmap[i].cmp; pcol = cmap[i].pcol;
+ 		src = old_comps[cmp].data;
+     assert( src );
+-		max = new_comps[pcol].w * new_comps[pcol].h;
++		max = new_comps[i].w * new_comps[i].h;
+ 
+ 		/* Direct use: */
+     if(cmap[i].mtyp == 0) {
+-      assert( cmp == 0 );
++      assert( cmp == 0 ); // probably wrong.
+       dst = new_comps[i].data;
+       assert( dst );
+       for(j = 0; j < max; ++j) {
+@@ -1019,8 +1019,8 @@ static void opj_jp2_apply_pclr(opj_image_t *image, opj_jp2_color_t *color)
+       }
+     }
+     else {
+-      assert( i == pcol );
+-      dst = new_comps[pcol].data;
++      assert( i == pcol ); // probably wrong?
++      dst = new_comps[i].data;
+       assert( dst );
+       for(j = 0; j < max; ++j) {
+         /* The index */

@@ -1,0 +1,17 @@
+include_rules = [
+  '+core/fpdftext/include',
+  '+core/fpdfapi/include',
+  '+core/fpdfapi/fpdf_edit/include',
+  '+core/fpdfapi/fpdf_page/include',
+  '+core/fpdfapi/fpdf_parser/include',
+  '+core/fpdfapi/fpdf_render/include',
+  '+core/fpdfdoc/include',
+  '+core/fxcodec/include',
+  '+core/fxcrt/include',
+  '+core/fxge/include',
+  '+public',
+  '+v8',
+  '+xfa/fwl/core/include',
+  '+xfa/fxfa/include',
+  '+xfa/fxgraphics/include',
+]

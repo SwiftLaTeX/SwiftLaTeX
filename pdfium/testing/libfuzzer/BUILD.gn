@@ -1,0 +1,170 @@
+# Copyright 2016 The PDFium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import("../../pdfium.gni")
+
+config("libfuzzer_config") {
+  configs = [ "//third_party/pdfium:pdfium_core_config" ]
+
+  defines = [
+    "PNG_PREFIX",
+    "PNG_USE_READ_MACROS",
+  ]
+  include_dirs = [ "../.." ]
+  if (pdf_enable_v8) {
+    defines += [ "PDF_ENABLE_V8" ]
+  }
+  if (pdf_enable_xfa) {
+    defines += [ "PDF_ENABLE_XFA" ]
+  }
+}
+
+if (pdf_enable_xfa) {
+  source_set("pdf_fm2js_fuzzer") {
+    testonly = true
+    sources = [
+      "pdf_fm2js_fuzzer.cc",
+    ]
+    deps = [
+      "//third_party/pdfium:pdfium",
+    ]
+    configs -= [ "//build/config/compiler:chromium_code" ]
+    configs += [
+      "//build/config/compiler:no_chromium_code",
+      ":libfuzzer_config",
+    ]
+  }
+  source_set("pdf_xml_fuzzer") {
+    testonly = true
+    sources = [
+      "pdf_xml_fuzzer.cc",
+    ]
+    deps = [
+      "//third_party/pdfium:pdfium",
+    ]
+    configs -= [ "//build/config/compiler:chromium_code" ]
+    configs += [
+      "//build/config/compiler:no_chromium_code",
+      ":libfuzzer_config",
+    ]
+  }
+  source_set("pdf_cfx_saxreader_fuzzer") {
+    testonly = true
+    sources = [
+      "pdf_cfx_saxreader_fuzzer.cc",
+    ]
+    deps = [
+      "//third_party/pdfium:pdfium",
+    ]
+    configs -= [ "//build/config/compiler:chromium_code" ]
+    configs += [
+      "//build/config/compiler:no_chromium_code",
+      ":libfuzzer_config",
+    ]
+  }
+  source_set("pdf_codec_png_fuzzer") {
+    testonly = true
+    sources = [
+      "pdf_codec_png_fuzzer.cc",
+      "xfa_codec_fuzzer.h",
+    ]
+    deps = [
+      "//third_party/pdfium:pdfium",
+    ]
+    configs -= [ "//build/config/compiler:chromium_code" ]
+    configs += [
+      "//build/config/compiler:no_chromium_code",
+      ":libfuzzer_config",
+    ]
+  }
+  source_set("pdf_codec_jpeg_fuzzer") {
+    testonly = true
+    sources = [
+      "pdf_codec_jpeg_fuzzer.cc",
+      "xfa_codec_fuzzer.h",
+    ]
+    deps = [
+      "//third_party/pdfium:pdfium",
+    ]
+    configs -= [ "//build/config/compiler:chromium_code" ]
+    configs += [
+      "//build/config/compiler:no_chromium_code",
+      ":libfuzzer_config",
+    ]
+  }
+  source_set("pdf_codec_gif_fuzzer") {
+    testonly = true
+    sources = [
+      "pdf_codec_gif_fuzzer.cc",
+      "xfa_codec_fuzzer.h",
+    ]
+    deps = [
+      "//third_party/pdfium:pdfium",
+    ]
+    configs -= [ "//build/config/compiler:chromium_code" ]
+    configs += [
+      "//build/config/compiler:no_chromium_code",
+      ":libfuzzer_config",
+    ]
+  }
+  source_set("pdf_codec_bmp_fuzzer") {
+    testonly = true
+    sources = [
+      "pdf_codec_bmp_fuzzer.cc",
+      "xfa_codec_fuzzer.h",
+    ]
+    deps = [
+      "//third_party/pdfium:pdfium",
+    ]
+    configs -= [ "//build/config/compiler:chromium_code" ]
+    configs += [
+      "//build/config/compiler:no_chromium_code",
+      ":libfuzzer_config",
+    ]
+  }
+  source_set("pdf_codec_tiff_fuzzer") {
+    testonly = true
+    sources = [
+      "pdf_codec_tiff_fuzzer.cc",
+      "xfa_codec_fuzzer.h",
+    ]
+    deps = [
+      "//third_party/pdfium:pdfium",
+    ]
+    configs -= [ "//build/config/compiler:chromium_code" ]
+    configs += [
+      "//build/config/compiler:no_chromium_code",
+      ":libfuzzer_config",
+    ]
+  }
+  source_set("pdf_css_fuzzer") {
+    testonly = true
+    sources = [
+      "pdf_css_fuzzer.cc",
+    ]
+    deps = [
+      "//third_party/pdfium:pdfium",
+    ]
+    configs -= [ "//build/config/compiler:chromium_code" ]
+    configs += [
+      "//build/config/compiler:no_chromium_code",
+      ":libfuzzer_config",
+    ]
+  }
+}
+
+source_set("pdf_jpx_fuzzer") {
+  testonly = true
+  sources = [
+    "pdf_jpx_fuzzer.cc",
+  ]
+  deps = [
+    "//third_party/pdfium:pdfium",
+  ]
+  configs -= [ "//build/config/compiler:chromium_code" ]
+  configs += [
+    "//build/config/compiler:no_chromium_code",
+    ":libfuzzer_config",
+  ]
+}

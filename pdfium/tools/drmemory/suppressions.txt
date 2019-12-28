@@ -1,0 +1,28 @@
+# This file contains suppressions for the Dr.Memory tool, see
+# http://dev.chromium.org/developers/how-tos/using-drmemory
+
+
+# Intended alloc failure
+WARNING
+name=unittests:fxcrt.FX_AllocOverflow
+drmemorylib.dll!replace_calloc
+...
+*!fxcrt_FX_*AllocOverflow*_Test::TestBody
+
+# DrMem-i#471: simple floating register copy without meaningful usage
+UNINITIALIZED READ
+name=embeddertests:DrM-i#471
+*!v8::internal::RegisterValues::GetDoubleRegister
+*!v8::internal::FrameDescription::GetDoubleRegister
+*!v8::internal::Deoptimizer::CopyDoubleRegisters
+*!v8::internal::Deoptimizer::DoComputeCompiledStubFrame
+*!v8::internal::Deoptimizer::DoComputeOutputFrames
+*!v8::internal::Deoptimizer::ComputeOutputFrames
+*!v8::internal::`anonymous namespace'::Invoke
+*!v8::internal::Execution::Call
+
+# PDFium-i#287: new/delete[] mismatch
+INVALID HEAP ARGUMENT
+name=i#287:new-delete-array-mismatch
+drmemorylib.dll!replace_operator_delete_array
+*!NumberlikeArray<>::~NumberlikeArray<>

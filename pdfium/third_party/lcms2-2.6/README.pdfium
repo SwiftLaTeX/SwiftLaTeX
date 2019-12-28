@@ -1,0 +1,14 @@
+Name: Little CMS
+URL: http://www.littlecms.com/
+Version: 2.6
+Security Critical: yes
+License: MIT License
+
+Description:
+Color Management Engine.
+
+Local Modifications:
+
+0000-tag-type-confusion.patch: Fix a type confusion.
+0001-from16-to-8-overflow.patch: Prevent a UBSan warning.
+TODO(ochang): List other patches.

@@ -1,0 +1,12 @@
+diff a/third_party/libpng16/pngpriv.h b/third_party/libpng16/pngpriv.h
+--- a/third_party/libpng16/pngpriv.h
++++ b/third_party/libpng16/pngpriv.h
+@@ -127,7 +127,7 @@
+     */
+ #  if (defined(__ARM_NEON__) || defined(__ARM_NEON)) && \
+    defined(PNG_ALIGNED_MEMORY_SUPPORTED)
+-#     define PNG_ARM_NEON_OPT 2
++#     define PNG_ARM_NEON_OPT 0
+ #  else
+ #     define PNG_ARM_NEON_OPT 0
+ #  endif

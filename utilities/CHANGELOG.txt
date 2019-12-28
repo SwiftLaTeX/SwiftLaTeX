@@ -1,0 +1,600 @@
+Version 5.0.2 -> 5.0.3 :
+----------------------
+- the bug about the bad highlighting on misspelled text before a \cite{} or \label{} command has been fixed
+- if no text is selected the "(un)comment" command will (un)comment the current line
+- the default size of the configuration dialog has been reduced (users request)
+- Fold/Unfold/Fold All/Unfold All menu options has been added (thanks to Robin Watts)
+- a bug about completion when citing references that contain numbers has been fixed
+- a trouble in the "recent files" menu with names including an ampersand has been fixed
+- a typo in the documentation has been fixed
+- a typo in the de translation has been fixed (thanks to Stéphane YVON)
+
+
+version 5.0.1 -> 5.0.2 :
+--------------------
+- a memory leak has been fixed in the internal pdf viewer
+- the trouble about the "open terminal" command on windows has been fixed
+
+version 5.0 -> 5.0.1 :
+--------------------
+- a trouble with the MikTex's ps2pdf command has been fixed
+- the "-dpiscale x" option has been added to the Texmaker command line : with this option the environment variable QT_SCALE_FACTOR will be set to x before building the GUI (same behavior than adding "export QT_SCALE_FACTOR=x" to the environment variables). Can be used to adjust the interface if the monitor dpi is not well detected.
+- the cs translation has been updated
+
+version 4.5 -> 5.0 :
+--------------------
+- new and more modern interface look
+- highdpi is now supported on windows and linux
+- a spellcheck annoying trouble on kde5 has been fixed
+- new pdf engine
+- synctex updated to 1.18
+- Qt4 support has been removed : Qt5 (>=5.7) is now required
+- de, es, hu, pl, and zh_CN translations have been updated
+note : Texmaker depends now only from the Qt toolkit to be compiled
+
+version 4.4.1 -> 4.5 :
+--------------------
+-  /Library/TeX/texbin/ has been added to the default path for MacOsX El Capitan
+- the content of the \cite{} command is no more scanned while the spell checking
+- a compilation trouble has been fixed with Qt 5.5.x
+- a new option allow the svn users to display the uncommitted lines with a different color in the line number widget (Configure Texmaker -> Editor)
+- two more options for the pdf internel viewer contextual menu (user request): number of words in the current pdf page and open the file browser at the pdf file location
+- de, hu, it, nl, pl, se and zh_CN translations have been updated
+
+
+version 4.4 -> 4.4.1 :
+--------------------
+Bugs fixed :
+- a crash if the "% !TEX encoding=" meta tag is not valid has been fixed
+- a bug related to some shorctuts (ctrl+shift+?) has been fixed
+
+
+version 4.3 -> 4.4 :
+--------------------
+Features :
+- a new wizard for a standard XeLaTeX document has been added
+- a script ("User" menu to execute it) to apply a hard word wrap at 80 columns to the selected text has been added (will work like the php wordwrap() function - just change the textwidth value in the script if you need another value)
+- the list of furnished scripts is displayed in the "Run Script" sub-menu of the "User" menu (if a script is located at the same place than the furnished scripts, it will appear automtically in this menu)
+- support for the meta tags "% !TEX encoding=" and "% !TEX spellcheck" has been added (the meta tag "% !TEX root" is already supported)
+- .vrb,.listing and .spx extensions have been added to the "Clean" command (users requests)
+- cs, de, el, hu, pl, ru, se and vi translations have been updated (thanks to all the translators)
+
+Bugs fixed :
+- the xelatex command is now included in the "Tools" menu
+- a bad behavior when spelling the document while a text is selected has been fixed (issue 1393)
+
+version 4.2 -> 4.3 :
+--------------------
+- a visual diff view has been added to the "source viewer" (differences between the current files loaded in the editor and in the "source viewer") based on jsdifflib from Chas Emerick (BSD license)
+- when a command fails, the command is now displayed with the error message "Could not start the command"
+- an "reload all documents from file" option has been added to the "File" menu (users request)
+- if a "completion.txt" file is found in the same directory than texmaker.exe on windows, in the "/usr/share/texmaker/" folder on linux and in the "Resources" subdirectory of the .app package on macosx, all items from this file will be added automatically for the autocompletion (the syntax must be the same than for the ."Customize completion" option of the "User" menu.
+- an option to launch the "Clean" tool when exiting the program has been added (users request)
+- a texmaker man page and a texmaker.menu file have been added in the "utilities" directory of the source (thanks to Bernd Warken for the man-page)
+- the cs, el, es, hu and se translations have been updated (thanks to all the translators)
+
+version 4.1.1 -> 4.2 :
+----------------------
+Features :
+- script support has been added (only for the text editor part - "User" menu)
+- with the new option "-n" for the command line, a new instance of Texmaker can be launched (will break the synchronization with the pdf viewers and others feautures)
+- hu and nl translations have been updated
+- the windows versions are now compiled with Qt 5.2.1
+Bugs fixed :
+- while loading the last session, the bug about the focus has been fixed
+- a bug about the "commands" combo box in the main toolbar has been fixed
+- a typo in the russian translation has been fixed
+- a bad trigger detection for the snippets has been fixed
+
+version 4.1 -> 4.1.1 :
+----------------------
+- the latex reference manual has been updated
+- ca and pt dictionaries have been added
+- ca, cs, de, es, pl and se translations have been updated
+- the math mode \( \) is now supported by the syntax highlighting (patch from Felix Löhr) [user request]
+- double latex and pdflatex compilation has been added for the "Quick build" modes with asymptote (required for the cross references) [user request]
+- while autocompletion, if the inserted item doesn't contain a placeholder the cursor will no more jump to the next placeholder [user request]
+- the delay after regaining focus while the "check for external changes" option is used has been reduced [user request]
+- autocompletion with an underscore character is no more stopped after reaching the undescore [user request]
+- .snm and .nav files are also deleted while using the "Clean" command [user request]
+- if the log report an error for the line 1, the cursor doesn't jump anymore to the top of the document [user request]
+- "user" completion items can now be directly modified [user request]
+
+version 4.0.4 -> 4.1 :
+----------------------
+- a "Beamer presentation" wizard has been added (with theme preview)
+- LuaLaTeX support has been added
+- macosx lion package can now be used on macosx maverick
+- new predefined "Quick build" modes have been added :
+* lualatex + view pdf
+* pdflatex + bib(la)tex + pdflatex + pdflatex + view pdf
+* latex + bib(la)tex + latex + latex + dvips + ps2pdf + view pdf
+* sweave + pdflatex + view pdf
+- detection of utf8 encoding without BOM has been added
+- the "two pages" mode for the pdf viewer is no more reseted after a new compilation (patch from Andreas Volk)
+- "patent" entry to the biblatex menu has been added
+- placeholders have been added to the "Tabbing" wizard
+- de, el, it and uk translations have been updated
+- a link to the english wikibook about LaTeX has been added to the "Help" menu (for non french users)
+- a trouble about the "most used symbols" panel has been fixed
+
+version 4.0.3 -> 4.0.4 :
+------------------------
+- poppler-0.24 support has been added (this poppler version is the first to support officially Qt5 - Texmaker can now be compiled with Qt5 without patching poppler)
+- a compilation trouble on arm system has been fixed
+- the "Enter" key on numeric pad can now also be used to activate the default button in the "goto line", "find" and "replace" widgets (user request)
+- a commented line beginning by indent or spaces can now also be uncommented by the "uncomment" action of the "edit" menu
+- drag and drop for image files is now allowed in the editor (the \includegraphics command will be automatically inserted)
+- a trouble while boldifying some structure items has been fixed
+- CS, ES, PL, SE and ZH_CN translations have been updated
+
+
+version 4.0.2 -> 4.0.3 :
+------------------------
+- The windows and MacOsXlion versions are now compiled with Qt 5.1 (some issues which come from Qt 5.0.x are now fixed) and poppler 0.22
+- Find-and-replace actions can now be applied to a selection only
+- Users can now check if a new version is available via a new option in the "Help" menu
+- A tool to convert source files to Unicode has been added 
+- The user manual has been updated
+- ES, LV, El, AR and IT translations have been updated
+- UK translation has been added (thanks to Володимир Боденчук)
+- utf8 option has been added to the "letter" wizard
+- A trouble in the presentation mode for the pdf viewer on windows has been fixed
+- On MacOsX, session file is no more stored in the tmp/ directory, but in the "cache" directory. 
+
+version 4.0.1 -> 4.0.2 :
+------------------------
+- High-dpi screen support has been added on MacOsX Lion for the pdf viewer, the symbols and the toolbars icons (because of a Qt 5 limitation, icons are still pixelized in the "push buttons" and in the menus for the moment)
+- structure tags (chapter, section, ...) are not totally boldified in the editor
+- the "regular expression" option is no more checked by default in the "replace" widget.
+- on linux, session file is no more stored in the temp/ directory (some linux distribution reset this directory at each reboot), but in the "home/.cache" directory. 
+- detection of acrobat reader 11 and ghostscript 9.07 has been added (for new users)
+- windows versions are now compiled with Qt 5.0.2 (the Qt bug about the save file dialog has been fixed in this Qt release)
+- ar and lv translations have been added (thanks to Koutheir ATTOUCHI and Sandris LACIS)
+
+version 4.0 -> 4.0.1 :
+---------------------
+Bugs fixed :
+- a potentiel crash when synctex send a bad page number has been fixed
+Features :
+- a s character is no more inserted while using ctrl+S shortcut with an unmodified document (work around about the new behavior of Qt5 with the disabled shortcut)
+- the -Pdownload35 option has been added to the default dvips command for miktex
+
+version 3.5.2 -> 4.0 :
+---------------------
+Features :
+- the code has been modified to support Qt5 (this version can also be compiled on Qt>=4.7.2). This version  is the first release of the new branch of Texmaker based on Qt5.
+- the ctrl+shift+F2 keyboard shortcut has been added to the "Toggle between the master document and the current document" action" (user request)
+- the continuous mode in the internal pdf viewer is no more enabled automatically after a new compilation (user request)
+- unix/macosx users can now add an option in the configuration dialog to the lp command (for printing documents in the internal pdf viewer)
+- a special "quick build command" has been added for the .asy files : if the current document has an .asy extension, this "asymptote quick build command" will be used with the F1 shortcut instead of the standard "quick build command" for the .tex documents (user request)
+- while using the "user tags", @@ will now be replaced by @ (a single @ is always used to set a place holder - user request)
+Bugs fixed :
+- a compilation trouble with gcc 4.8 has been fixed
+- a trouble with the insertion of an user tag by using a keyboard trigger has been fixed 
+- a bad column count in the editor has been fixed
+
+version 3.5.1 -> 3.5.2 :
+-----------------------
+The bug about the shortcut of the "quick build" command has been fixed
+
+version 3.5 -> 3.5.1 :
+-----------------------
+Bugs fixed :
+- The trouble with the cmd+right/left shortcut on macosx has been fixed (issue 759)
+- The bug about the customization of the keyboard shorcuts has been fixed (issue 783)
+- The master mode is deactivated before loading a session file (issue 793)
+- an empty beamer block is no more displayed in the structure view (issue 434)
+- the detection of an already opened file has been improved (issue 750)
+Features :
+- a wizard to export the current document to html, open document or mathml via TeX4ht has been added
+- in a command ## are now replaced by #, !! by !, %% by % and @@ by @. So the characters #, !, % and @ can now be used in a command (required, for example, by okular)
+- standard ouptut messages are now displayed for the bib(la)tex command
+- xelatex has been added to the standard commands (with a new "quick compilation" mode : xelatex + view pdf)
+- with a new option in the configuration dialog, a directory can be added to the system PATH (Qt>=4.6 is required)
+
+version 3.4.1 -> 3.5 :
+-----------------------
+Enhancements :
+- New pdf viewer (based on qpdfview from Adam Reichold ): "two pages", "discontinuous" and "presentation" modes have been added. Pages can also be rotated. Printing pdf on windows doesn't use anymore ghostscript.
+- A new option (-insert foo) has been added to the command line. With this option, a latex command can be inserted by an external program to the current document while texmaker is running.
+- Polish quotes mode has been added to the "LaTeX/International quotes" menu (requested by users)
+- The structure items detection has been improved
+- Captured text can be used in the "Replace" dialog while using regular expression ($1, $2...). Example : \\textit\{([^}]*)\} for the "find" field and \textbf{$1} for the "replace" field.
+- The CTRL+SHIFT+F8 shortcut has been added to the "Restore previous session" action (requested by users)
+- Support for high resolution screen on macosx has been added
+Bugs fixed :
+- the tooltip about the "jump to the line" shortcut has been modified for macosx version ("cmd+click" instead of "ctrl+click")
+- .aux is not added after browsing the bib(la)tex command in the configuration dialog if this command is not bibtex
+- structure view is reset after closing all documents
+- the trouble about completion between brackets has been fixed
+
+version 3.4 -> 3.4.1 :
+-----------------------
+Bugs fixed :
+- a bad layout of the buttons for the configuration of the commands has been fixed
+Enhancements :
+- on gnome desktop, themed icons are used for the standard actions
+
+version 3.3.4 -> 3.4 :
+-----------------------
+Bugs fixed :
+- a critical bug while restoring a session with a file which has been deleted has been fixed
+- the bug about double-indentation of user tags has been fixed
+Enhancements :
+- the option "Use a 'build' subdirectory for output files" has been added for the (pdf)latex command (the "--output-directory=build" parameter will be automatically added to the (pdf)latex command and texmaker will search the log and pdf files into this subdirectory - see the user manual for more details)
+- a words counter has been added to the internal pdf viewer (contextual menu)
+- an "Open Terminal" command has been added to the "Tool" menu
+- regular expression support has been added in the "find/replace" dialogs
+- a pdf page can now be exported to a png image in the internal pdf viewer (contextual menu)
+- a "Save a copy" command has been added to the "File" menu
+- the optionnals fields for the biblatex entries has been added ("Bibliography" menu)
+- the labels list in the structure view stays opened or closed as the user sets it while saving the document or adding a new label item
+- standard output is displayed only for the asymptote command
+- the "sectioning", "size", "references" combo boxes (main toolbar) has been replaced by icons in the editor vertical toolbar. 
+- support for macosx lion fullscreen mode has been added
+
+version 3.3.3 -> 3.3.4 :
+-----------------------
+Bugs fixed :
+- a critical bug about "undo" operations in particular circumstances has been fixed
+- the path to asymptote has been fixed for MacTeX
+Enhancements :
+- equation, align, multline and gather environments are now highlighted as mathematicals environments
+- the ambiguous english translation of the "save and close" dialog has been modified
+- insertion of multiline tags will now respect the indentation
+- session file can now be opened by drag and drop and with the command line
+- URL links can now be opened in the integrated pdf viewer
+- editor keeps now the focus by default after launching the "View Pdf" action
+- the paths to texlive 2012, miktex 3.0 and ghostscript 9.04 & 9.05 has been added
+- polish dictionary has been added
+- polish, hungarian, swedish and portuguese translations have been updated
+
+version 3.3.2 -> 3.3.3 :
+-----------------------
+Features :
+- a light session management has been added (files, line, bookmarks and "quick compilation" mode are stored and can be restored via the new "session" menu)
+- in the pdf viewer, the horizontal position is restored after a compilation (if the position is valid) and the zoom factor is restored after a restart of texmaker.
+- it's now possible to modify a "user tag" (from the "user tags" panel in the "structure view")
+- user tags (from the "user tags" panel in the "structure view") can now be reordered by dragging items
+- poppler-data files and fontconfig configuration has been added for the windows version
+- us english dictionary has been added
+- @electronic has been added to the bibliography items detection
+Bugs fixed :
+- a bug about the bad detection of the path of a file displayed in the log panel has been fixed
+- the # parameter is no more used if okular is used as pdf viewer
+- shift(ctrl)+Ins doesn't anymore set the editor to overwrite mode
+- the bug about the number of copies while printing a pdf has been fixed
+
+version 3.3.1 -> 3.3.2 :
+-----------------------
+- The bug about the bad detection of the \part{} structure has been fixed.
+- Swedish translation has been added (thanks to Andreas Pettersson)
+- An additionnal parameter (!) for the current directory is available for the commands
+
+version 3.3 -> 3.3.1 :
+----------------------
+A critical bug about the spelling and grammar checker of the integrated pdf viewer has been fixed.
+
+version 3.2.2 -> 3.3 :
+----------------------
+Features :
+- users can now define an unlimited number of tags via a new panel in the "structure view" : all these tags can be inserted via keyboard triggers.
+- In the integrated pdf viewer, it's now possible to check spelling and grammar the text extracted from a pdf page.
+- the main biblatex entries can now be inserted via the bibliography menu
+- the structure of .Rnw files are now checked like the .tex documents 
+- \foo{} is now displayed before \foo*{} in the completion 
+- commented structure entries are no more used in the structure view
+- colors are now more hard coded (dark desktop themes can now be used)
+- overwrite mode can now be used in the editor
+Bugs fixed :
+- Bad highlight with \end{picture environment} has been fixed 
+
+version 3.2.1 -> 3.2.2 :
+----------------------
+Bugs fixed :
+- the bug about the detection of the language for the user manual has been fixed
+- the regression about the highlighting of search results has been fixed
+- the trouble about the syntax highlighting with the \verb* and \begin{verbatim*} commands is fixed
+Features :
+- the shortcuts of the "Tool" and "Edit" menus can now be modified 
+- While using the "New by copying an existing file" command, the directory of the file is now stored
+- the list of asymptote and tikz tags has been completed
+- users can now hide the pstricks/metapost/tikz/asymptote icons in the structure panels by clicking on the tool bar
+- users can now hide some commands in the left tool bar of the editor
+- the "underline" tag is replaced by the "emphasis" tag in the left toolbar of the editor
+- if errors are detected, the log file is now displayed even if the "quick build" command is not used
+- after setting a document as "master", the structure and the bibliography are rescanned
+
+version 3.2 -> 3.2.1 :
+----------------------
+New features :
+- faster syntax highlighting and structure checking
+- an additionnal parameter (#) for the current file name is available for the commands (required for pdf synchronisation with the sumatra pdf viewer)
+- The log panel can now be closed directly with the escape key.
+Bugs fixed :
+- the trouble about the pdf synchronisation with chid files has been fixed.
+- ctrl+x now works with block selection
+- texmaker no longer crashes whith ctrl+F with no opened documents
+- bad code for french and german quotes has been fixed
+- a little trouble about the syntax highlighting in the \verb environment has been fixed
+- drag and drop with .asy files is now supported
+
+version 3.1 -> 3.2 :
+----------------------
+New features :
+- block selection mode has been added (alt+mouse)
+- a "search in folders" dialog has been added
+- the settings file can now be saved, deleted or loaded
+- all the colors for the syntax highlighting can now be changed (a preconfigured dark theme is available)
+- graphics environments and .asy files have their own syntax highlighting mode
+- a selected piece of text can now be surrounded by french/german quotes (these quotes has been added to the "LaTeX" menu and to the completion)
+- a panel can be added in the structure view to show the list of opened files ("View" menu)
+- the Texdoc tool can be launched directly via the Help menu (users can select the name of the environment before calling Texdoc)
+- the list of label and bibliography items can now be used to customize the completion
+- the "recent files" list can now be cleaned
+- the shortcuts of some commands can now be changed ("switching between the editor and the pdf viewer", "french/german quotes", "next/previous document",...)
+- *.asy files can now be opened directly without using the "all files" filter
+- *.jpeg has been added to the list of the "includegraphics wizard"
+- .thm and .pre files are now deleted while using the "clean" command 
+- windows and mac versions are now compiled with Qt 4.8 and poppler 0.18.2
+- a version compiled on macosx lion is now available
+- the version number is now added to the info.plist file (macosx)
+
+Bugs fixed :
+- some syntax highlighting troubles has been fixed (\verb, \lstinline, lstlisting environment,..)
+- the metapost command in the toolbar launches now really metapost (and not makeindex)
+- extra bracket is no more inserted for the \label command in the completion
+- the user commands list is now refreshed after using the "Edit user commands" dialog
+- the line numbers are now refreshed while clicking in the "grey areas" of the scrollbar
+
+version 3.0.2 -> 3.1 :
+----------------------
+- the "tabular" wizard has been completed and improved
+- a document can now be opened (in read-only mode) beside the editor to make easy copy and paste operations between files ("source viewer" panel)
+- the "R Sweave" command has been added to the predefined commands
+- a wizard has been added to set the "user commands" (same wizard used for the user "quick build" command)
+- an option to replace tab with spaces has been added to the "configure" dialog 
+- current column position is now displayed
+- the "replace" and "goto line" forms are now embedded in the editor (like the "find" form)
+- the "quick document" wizard has been completed
+- users can now search for words in the help browser
+- polish and hungarian translation have been added (thanks to Jan Jełowicki and Tamas Orosz)
+- watching for external changes is now optionnal (disabled by default)
+- an option to backup opened documents every 10 min has been added (disabled by default - copy of the documents are saved with the .bak extension)
+- a new document is now created automatically while using the "Quick start" wizard if a file is not already open (issue 221)
+- the regression about the performance of the syntax highlighting for math environment has been fixed (issue 148)
+- completion doesn't stop anymore on colons (:), but will continue to stop on other words separators (,.) (issue 242)
+- no more crash while refreshing the structure without opening a document (issue 281)
+- the bug about collapsed block has been fixed (issue 272)
+- multiple .bib files (absolute or relative) are now detected in the \bibliography{} command (issue 243)
+- included files with absolute path are now detected correctly (issue 255)
+- the trouble with the path to ghostscript on windows has been fixed
+- the texmaker.desktop file is now compatible with gnome 3 (issue 316)
+
+
+version 3.0.1 -> 3.0.2 :
+----------------------
+- a potential crash has been fixed while loading non unicode/latin1 files (issue 216)
+- the bug about the wrong detection of some filenames in the log file has been fixed (issue 191)
+- if the printer name contains space on macosx, the default printer is used (issue 210)
+
+version 3.0 -> 3.0.1 :
+----------------------
+- The internal pdf viewer can now be embedded in the main window whatever the screen width (issues 177, 183)
+- auto-completion for \eqref and \autoref has been added (issue 112)
+- the "external viewer" button has been added to the tool bar of the embedded pdf viewer (issue 169)
+- Bugs fixed :
+* memory leak about the syntax highlighting for .bib files has been fixed
+* no more extra closing bracket with the auto-completion of \begin{} environments (issues 168, 173, 193)
+* Alt+PgUp end Alt+PgDown keyboard shortcuts work again (issues 150, 195)
+* the bug about the "jump to next error" command has been fixed (issue 164)
+* the columns in the "Log" panel are resizable again (issue 162)
+* multiline "user tags" respect now the indentation of the current line (issue 145)
+* the "check spelling selection" option is no more displayed in the contextual menu if there is no selection (issue 199)
+* the bug about the "latexmk+view pdf" option for the "Quick build" command has been fixed
+
+version 2.3 -> 3.0 :
+----------------------
+- The GUI has been extensively modified : tabs are no more used for the editor and the pdf viewer is now fully embedded in the main window (for screen with a resolution greater than 1400 px)
+- a critical bug has been fixed in the editor
+- the bug about the "latex+asymptote+latex+dvips+viewps" mode for the "quick build" command has been fixed
+- the preamble can now be collapsed (from the first line to the \begin{document} command)
+- users can now add items to the auto-complete commands list
+- labels are now checked in the "childs" documents while using the "master mode" (for one level only)
+- a "full screen" mode has been added
+- the \addbibresource{} command is now detected like \bibliography{}
+- the code of the mathematicals symbols are displayed in a "tooltip" while moving mouse in the "symbols panels"
+- some new keyboard shortcuts has been added : ctrl+space for switching between the editor and the embedded pdf viewer and ctrl+>/ctrl+< for indenting/unindenting the selected text.
+- the obsolete "export to html" command has been removed (for packagers : the files "next.gif", "next_d.gif", "prev.gif", "prev_d.gif", "psheader.txt", "style.css", "up.gif" and "up_d.gif" in the "utilities/" directory have been deleted and don't have anymore to be installed)
+
+NOTE for debian packagers : 
+* by uncommenting the line "DEFINES += DEBIAN_SPELLDIR" in the texmaker.pro file (line 256), the spelldir will be automtically set to "PREFIX"/share/myspell/dicts" in the configdialog.cpp file (spelling_dict.patch)
+* the spelling-error-in-binary.patch is now useless (the spelling errors has been fixed in the texmaker.cpp file)
+
+version 2.2.2 -> 2.3 :
+----------------------
+-  \part, \chapter, \section,.., \begin{foo} \end{foo} blocks can now be collapsed (contextual code folding : the folding marks are only displayed when the cursor is on the first line of a block)
+- the structure view is now updated dynamically while typing
+- while opening a file, users are warned if the document can't be decoded correctly with the default encoding and they can choose an other encoding.
+- in the pdf viewer, the zoom is now centered on the center of the current view
+- a new button allows to toggle in one click between the master document and the current document
+- latexmk can now be chosen for the "Quick build" command
+- relative paths for the \include like latex tags are now supported
+- before saving a file, users are warned if the document has been changed outside texmaker
+- bibliography items are now added to the auto-completion for the \cite command (the .bib files are now parsed while opening a .tex document)
+- the code for the < and > symbols has been fixed
+- the spell checker has been modified to take care of the apostrophes
+- users can now move the editor tabs (thanks to Tim Hoffmann)
+
+version 2.2.1 -> 2.2.2:
+----------------------
+- the bug about the pdfviewer on macosx 10.6 cocoa has been fixed (Qt bug)
+- the parentheses matcher has been modified and simplified to work with Qt 4.7.x
+- compilation process can't now be killed (new button on the "log panel")
+- the name of the pdf file is now displayed in the title bar of the pdf viewer
+- multiple files can now be opened at the same time
+- the drag and drop bug on windows has been fixed
+- .synctex.gz, .out and .blg have been added to the list of extensions for the "clean" command
+- history manager with "back" and "forward" buttons have been added to the pdf viwer
+- if an error in the "log panel" concerns a file different from the current document, the corresponding file is now automatically opened after clicking on it.
+
+version 2.2 -> 2.2.1 :
+----------------------
+- the bug about infinite update of pdf pages in some cases has been fixed
+- the bug about the "Don't launch a new instance of the viewer if the dvi/ps/pdf file is already opened" option has been fixed
+- tools actions are no more disabled while a viewer is opened
+- cs and nl translations has been updated
+
+version 2.1 -> 2.2 :
+--------------------
+- Users can mow easily select a file already opened with a new file selector in the status bar (usefull when a large number of files are opened)
+- pdf pages are now displayed in continuous mode in the pdf viewer
+- printing support has been added to the pdf previewer (ghostscript is required on windows system)
+- the shortcuts are now recorded in english (using a new langage should no more affect the shortcuts)
+- shortcuts can now be removed in the configuration dialog (bug fixed)
+- nl translation has been added
+- syntax highlighting is deactivated between sweave code
+- verbatim, pspicture, tikzpicture, asy environments are now highlighted
+- Users can now reload a document modified externally with the "Reload document from file" command in the "File" menu (all changes not saved with texmaker will be lost)
+- at the first use on windows, Texmaker now tries to autodetect the path to yap, acroread and ghostscript
+- the nl dictionnary has been added
+- completion has been modified (less intrusive)
+- all "foo*.asy" files are now automatically compiled by Texmaker with the asymptote command (new behaviour of the recent release of asymptote)
+- Options has been added to the "includegraphics" dialog (figure environment and caption can be added)
+
+version 2.0 -> 2.1 :
+----------------------
+- synctex support has been added
+- the bug about searching an empty text in the pdf viewer has been fixed
+- after a new compilation, the pdf viewer stays at the same page
+- the bug about the completion while typing "\begin{" has been fixed 
+- the recent files menu can now contain 10 items
+
+version 1.9.9 -> 2.0 :
+----------------------
+- a built-in pdf viewer has been added : the pdf preview is automatically refreshed after a compilation;
+- a new option to the quick build command has been added : with this option, texmaker doesn't launch a new instance of the dvi/ps/pdf viewer if the file is already opened.
+- the "tabular" assistant has been completed :
+    * option to add a vertical margin after a \hline (for big math formulae)
+    * new options  for the "p{}" column alignment (center and left alignment : \usepackage{array} is required)
+- the required blank space at the end of the metapost command is verified if the user changed manually this command 
+- user can now directly create a new document by copying an existing one.
+- a new wizard to set the "user quick build command" has been added.
+- the "AMS align" tag has been added to the "Math" menu.
+- the trouble about the compilation of the hunspell code with gcc 4.5 has been fixed.
+
+version 1.9.2 -> 1.9.9 :
+----------------------
+- while inserting a latex structure (via the code completion or a texmaker command), the fields of the structure are marked with a special character ("•") and users can directly jump to the next field with the "Tab" key.
+- verbatim support has been added in the syntax highlighting.
+- shortcuts has been added for the "next/previous latex error" commands.
+- "escape" shortcut is now udes to close the "find" panel.
+- a new option has been added for the user tags : "@" will be replaced by "•" fields (the first "•" field will be replaced by the selected text)
+- shortcuts can now be changed by pressing directly the key sequence.
+- the blocks of a "beamer" document are now included in the "structure view".
+
+version 1.9.1 -> 1.9.2 :
+------------------------
+- A "favorites symbols" panel has been added (just right-click on a symbol to add it to the favorites)
+- Users can now restore a previous session (when closing the program, the names of the opened documents are automatically recorded)
+- The bidirectional support has been removed (not enough stable)
+- Words can again be selected by using SHIFT+LeftArrow and SHIFT+RightArrow.
+- On macosx, opening a file by double-clicking on it in the Finder will no more crash the program.
+- The trouble with dark color kde theme has been fixed
+
+version 1.9 -> 1.9.1 :
+--------------------
+a critical bug has been fixed (inline spell checking)
+
+version 1.8 -> 1.9 :
+--------------------
+- inline spell checking has been added
+- bidirectional support (thanks to Alavizadeh,Seyyed Razi)
+- Qt>=4.5.1 is required for this version
+- asymptote support has been added and can be used with the "quick buid command"
+- new translations
+- the interface has been uncluterred (some toolbars has been modified)
+- new appaerance (users can choose between "modern" or "classic" appearance for the toolbars - GTK+ style is now used by default on linux/no-kde environment)
+- new menu to change the interface language (the application must be restarted) 
+- a bug has been fixed in the latex log parser
+- texmaker uses now the qtsingleapplication (from qtcreator) instead of the DSingleapplication
+
+IMPORTANT NOTE FOR THE LINUX PACKAGERS :
+1) The desktop file (utilities/texmaker.desktop) and the icon (utilities/texmaker.png) are now automatically installed by the "make install" command. The default paths (/usr/share/applications and /usr/share/pixmaps) can be modified in the texmaker.pro file (lines 146 and 149). 
+2) The structure of the source package has been modified :
+    - dictionaries/ subfolder : spell dictionaries (must be installed in the PREFIX/share/texmaker directory for linux)
+    - locale/ subfolder : all the translations (must be installed in the PREFIX/share/texmaker directory for linux)
+    - doc/ subfolder : all the files needed for the documentation (must be installed in the PREFIX/share/texmaker directory for linux)
+    - utilities/ subfolder : icons, desktop file, changelog, COPYING, AUTORS, files needed by the "html export" tool (blank.png, next_d.gif, next.gif, prev_d.gif, prev.gif, psheader.txt, style.css, up_d.gif, up.gif) etc... (must be installed in the PREFIX/share/texmaker directory for linux)
+The others subfolders (completion/hunspell/images/spell/symbols/tags/singleapp) are only used for compilation (no installation to do)
+
+version 1.7.1 -> 1.8:
+----------------------
+- texmaker can now be only started once per user : inverse search will no more launch a new instance of texmaker
+- the spell checker is now based on hunspell-1.2.4
+- the latex errors detection has been improved
+- the background color of the selected symbol is now always the same (to be sure that the symbol is always visible)
+- parentheses matching is back
+- "\end{...}" is now added automatically after "\begin{...}" while using autocompletion
+
+version 1.7 -> 1.7.1 :
+--------------------
+Bugs fixed :
+- no more crash with the "Previous LaTeX error" command and the syntax highlighting
+- the "find" command starts at cursor and not at the beginning of the document
+
+version 1.6 -> 1.7 :
+--------------------
+- New search widget
+- Spell checking is now based on hunspell and uses OpenOffice.org dictionaries.
+- New LaTeX log errors detection
+- Indentation "memory"
+- Code completion
+version 1.5 -> 1.6 :
+--------------------
+- spell checking bug has been fixed (when misspelled and original word has not the same size)
+- some keyboard accelerators has been changed (trouble with non latin1 keyboard configuration). Users can now changed some keyboard shortcuts ("latex" and "math" menus)
+- german, russian and chinese translations has been added
+- external browser is now used for the documentation
+- a "-master" option to the program command line has been added. The new synopsis is :
+texmaker file [-master] [-line xxx] 
+- the documentation has been completed
+- parentheses matching is now disabled
+- the config file is now in the ini format
+
+version 1.4 -> 1.5 :
+----------------------
+- a "most used symbols" panel has been added
+- the math mode "$$...$$" is replaced by "\[ \]"
+- keyboard accelerators has been added in the "latex" and "math" menus
+- the current line number can be added to the latex related commands
+- the colors for the syntax highlighting can now be modified
+- a summary of the latex errors and warnings is displayed before the full log file
+- compilation trouble with Qt>=4.2 has been fixed
+- support for "QFileOpenEvent" has been added (for macosx)
+- minor bugfixes (dialogs layout, french translation...)
+
+version 1.3 -> 1.4 :
+----------------------
+- Spell checking has been added (aspell is required)
+- Support for the main pstricks commands has been added
+- The html conversion tool is now available on windows (only ghostscript is required)
+- The editor checks now the braces
+- The syntax highlighter can now detect the math mode "\[ \]"
+- Tex files can now be dragged from a file manager to texmaker
+- minor bugfixes (replace dialog, close event...)
+
+version 1.2.1 -> 1.3 :
+----------------------
+- Texmaker is now a pure QT4 program (qt >= 4.1 is required). The qt3 support library is no more required. The editor is now based on the qt4 QtextEdit object and the symbols icon view is an qt4 QTableWidget object.
+- For each file, three bookmarks can be used to speed up navigation.
+
+version 1.2 -> 1.2.1 : Bugs fixed
+---------------------------------
+- Don't use anymore double-clic to open a file from the structure view (Qt-4.0.0 bug). A simple clic must be used now.
+- Don't use anymore / to separate commands (quick build and users commands) but | to avoid confusion with the directories separator.
+- A selected icon is no more highlighted (trouble on windows and macosx - the selected icon was masked).
+- Added the option '-line' for the application.
+New synopsis for texmaker : texmaker document.tex [-line xxx]
+Can be used for inverse search.

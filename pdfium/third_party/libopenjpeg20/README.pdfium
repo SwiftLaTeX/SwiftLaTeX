@@ -1,0 +1,30 @@
+Name: OpenJPEG
+URL: http://www.openjpeg.org/
+Version: 0fa5a17c98c4b8f9ee2286f4f0a50cf52a5fccb0
+Security Critical: yes
+License: 2-clause BSD
+
+Description:
+JPEG 2000 library.
+
+Local Modifications:
+
+0000-use-colorspace.patch: Makes it possible to not call opj_jp2_apply_pclr().
+0001-image-data.patch: Fix a crasher in opj_j2k_update_image_data().
+0002-packet-iterator.patch: Fix integer overflow in opj_pi_create_decode().
+0003-dwt-decode.patch: Check array bounds for opj_dwt_decode_1() and friends.
+0004-j2k_read_mcc.patch: Move incrementing of l_tcp->m_nb_mcc_records to the right place.
+0005-jp2_apply_pclr.patch: Fix out of bounds access.
+0006-tcd_init_tile.patch: Fix a divide by zero bug in opj_tcd_init_tile().
+0007-jp2_read_cmap.patch: Fix wrong rendering on greyscale images with index colorspace.
+0008-jp2_check_color.patch: Replace an assertion with returning false.
+0009-opj_pi_next.patch: Fix potential bad precno value in opj_pi_next* functions.
+0010-pi_update_decode_poc.patch: Set proper upper bound for an array in opj_pi_update_decode_poc().
+0011-j2k_update_image_data.patch: Prevent bad signed -> unsigned casting.
+0012-mct_sse.patch: Don't use SSE intrinsics in 32-bit builds.
+0013-attrib_fix.patch: Don't needlessly redefine __attribute__, https://github.com/uclouvain/openjpeg/issues/727
+0014-opj_jp2_read_ihdr_leak.patch: Memory leak in opj_jp2_read_ihdr().
+0015-read_SPCod_SPCoc_overflow.patch: Prevent a buffer overflow in opj_j2k_read_SPCod_SPCoc.
+0016-read_SQcd_SQcc_overflow.patch: Prevent a buffer overflow in opj_j2k_read_SQcd_SQcc.
+0017-tcd_init_tile.patch: Prevent integer overflows during calculation of |l_nb_precinct_size|.
+TODO(thestig): List all the other patches.

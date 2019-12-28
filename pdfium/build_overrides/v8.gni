@@ -1,0 +1,19 @@
+# Copyright 2015 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+if (is_android) {
+  import("//build/config/android/config.gni")
+}
+
+v8_use_external_startup_data = !is_ios
+
+# Turns on compiler optimizations in V8 in Debug build.
+v8_optimized_debug = true
+
+# V8 extras
+# Adding V8 extras files requires API owners review
+# Be sure to synchronize with build/common.gypi
+
+v8_extra_library_files = []
+v8_experimental_extra_library_files = []

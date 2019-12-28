@@ -1,0 +1,120 @@
+diff -ru freetype-2.6.1/include/freetype/config/ftmodule.h include/freetype/config/ftmodule.h
+--- freetype-2.6.1/include/freetype/config/ftmodule.h	2015-11-05 13:52:36.734733186 -0800
++++ include/freetype/config/ftmodule.h	2015-11-05 13:44:54.445479822 -0800
+@@ -1,3 +1,20 @@
++/***************************************************************************/
++/*                                                                         */
++/*  ftmodule.h                                                             */
++/*                                                                         */
++/*    FreeType modules public interface (specification).                   */
++/*                                                                         */
++/*  Copyright 1996-2001, 2002, 2003 by                                     */
++/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
++/*                                                                         */
++/*  This file is part of the FreeType project, and may only be used,       */
++/*  modified, and distributed under the terms of the FreeType project      */
++/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
++/*  this file you indicate that you have read the license and              */
++/*  understand and accept it fully.                                        */
++/*                                                                         */
++/***************************************************************************/
++
+ /*
+  *  This file registers the FreeType modules compiled into the library.
+  *
+@@ -10,15 +27,15 @@
+  *
+  */
+ 
+-FT_USE_MODULE( FT_Module_Class, autofit_module_class )
++//FT_USE_MODULE( FT_Module_Class, autofit_module_class )
+ FT_USE_MODULE( FT_Driver_ClassRec, tt_driver_class )
+ FT_USE_MODULE( FT_Driver_ClassRec, t1_driver_class )
+ FT_USE_MODULE( FT_Driver_ClassRec, cff_driver_class )
+ FT_USE_MODULE( FT_Driver_ClassRec, t1cid_driver_class )
+-FT_USE_MODULE( FT_Driver_ClassRec, pfr_driver_class )
+-FT_USE_MODULE( FT_Driver_ClassRec, t42_driver_class )
+-FT_USE_MODULE( FT_Driver_ClassRec, winfnt_driver_class )
+-FT_USE_MODULE( FT_Driver_ClassRec, pcf_driver_class )
++//FT_USE_MODULE( FT_Driver_ClassRec, pfr_driver_class )
++//FT_USE_MODULE( FT_Driver_ClassRec, t42_driver_class )
++//FT_USE_MODULE( FT_Driver_ClassRec, winfnt_driver_class )
++//FT_USE_MODULE( FT_Driver_ClassRec, pcf_driver_class )
+ FT_USE_MODULE( FT_Module_Class, psaux_module_class )
+ FT_USE_MODULE( FT_Module_Class, psnames_module_class )
+ FT_USE_MODULE( FT_Module_Class, pshinter_module_class )
+@@ -27,6 +44,6 @@
+ FT_USE_MODULE( FT_Renderer_Class, ft_smooth_renderer_class )
+ FT_USE_MODULE( FT_Renderer_Class, ft_smooth_lcd_renderer_class )
+ FT_USE_MODULE( FT_Renderer_Class, ft_smooth_lcdv_renderer_class )
+-FT_USE_MODULE( FT_Driver_ClassRec, bdf_driver_class )
++//FT_USE_MODULE( FT_Driver_ClassRec, bdf_driver_class )
+ 
+ /* EOF */
+diff -ru freetype-2.6.1/include/freetype/config/ftoption.h include/freetype/config/ftoption.h
+--- freetype-2.6.1/include/freetype/config/ftoption.h	2015-11-05 13:52:36.734733186 -0800
++++ include/freetype/config/ftoption.h	2015-11-05 13:44:54.445479822 -0800
+@@ -92,7 +92,7 @@
+   /* This is done to allow FreeType clients to run unmodified, forcing     */
+   /* them to display normal gray-level anti-aliased glyphs.                */
+   /*                                                                       */
+-/* #define FT_CONFIG_OPTION_SUBPIXEL_RENDERING */
++#define FT_CONFIG_OPTION_SUBPIXEL_RENDERING
+ 
+ 
+   /*************************************************************************/
+@@ -163,7 +163,7 @@
+   /*   Define this macro if you want to enable this `feature'.  See also   */
+   /*   the macro FT_CONFIG_OPTION_SYSTEM_ZLIB below.                       */
+   /*                                                                       */
+-#define FT_CONFIG_OPTION_USE_ZLIB
++//#define FT_CONFIG_OPTION_USE_ZLIB
+ 
+ 
+   /*************************************************************************/
+@@ -336,7 +336,7 @@
+   /*                                                                       */
+   /*   Note that the `FOND' resource isn't checked.                        */
+   /*                                                                       */
+-#define FT_CONFIG_OPTION_MAC_FONTS
++#undef FT_CONFIG_OPTION_MAC_FONTS
+ 
+ 
+   /*************************************************************************/
+@@ -512,7 +512,7 @@
+   /* embedded bitmaps in all formats using the SFNT module (namely         */
+   /* TrueType & OpenType).                                                 */
+   /*                                                                       */
+-#define TT_CONFIG_OPTION_EMBEDDED_BITMAPS
++#undef TT_CONFIG_OPTION_EMBEDDED_BITMAPS
+ 
+ 
+   /*************************************************************************/
+@@ -681,7 +681,7 @@
+   /* and avar tables).  This has many similarities to Type 1 Multiple      */
+   /* Masters support.                                                      */
+   /*                                                                       */
+-#define TT_CONFIG_OPTION_GX_VAR_SUPPORT
++#undef TT_CONFIG_OPTION_GX_VAR_SUPPORT
+ 
+ 
+   /*************************************************************************/
+@@ -689,7 +689,7 @@
+   /* Define TT_CONFIG_OPTION_BDF if you want to include support for        */
+   /* an embedded `BDF ' table within SFNT-based bitmap formats.            */
+   /*                                                                       */
+-#define TT_CONFIG_OPTION_BDF
++#undef TT_CONFIG_OPTION_BDF
+ 
+ 
+   /*************************************************************************/
+@@ -725,7 +725,7 @@
+   /*                                                                       */
+   /* The Chinese font MingTiEG-Medium (CNS 11643 character set) needs 256. */
+   /*                                                                       */
+-#define T1_MAX_CHARSTRINGS_OPERANDS  256
++#define T1_MAX_CHARSTRINGS_OPERANDS  512
+ 
+ 
+   /*************************************************************************/
+Only in freetype-2.6.1/include/freetype: ftchapters.h

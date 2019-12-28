@@ -1,0 +1,13 @@
+diff --git a/third_party/libopenjpeg20/pi.c b/third_party/libopenjpeg20/pi.c
+index 462e07c..9097e31 100644
+--- a/third_party/libopenjpeg20/pi.c
++++ b/third_party/libopenjpeg20/pi.c
+@@ -1028,7 +1028,7 @@ static void opj_pi_update_decode_poc (opj_pi_iterator_t * p_pi,
+ 		l_current_pi->poc.precno0 = 0;
+ 		l_current_pi->poc.resno1 = l_current_poc->resno1; /* Resolution Level Index #0 (End) */
+ 		l_current_pi->poc.compno1 = l_current_poc->compno1; /* Component Index #0 (End) */
+-		l_current_pi->poc.layno1 = l_current_poc->layno1; /* Layer Index #0 (End) */
++		l_current_pi->poc.layno1 = opj_uint_min(l_current_poc->layno1, p_tcp->numlayers); /* Layer Index #0 (End) */
+ 		l_current_pi->poc.precno1 = p_max_precision;
+ 		++l_current_pi;
+ 		++l_current_poc;

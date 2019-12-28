@@ -1,0 +1,28 @@
+diff --git a/third_party/libopenjpeg20/jp2.c b/third_party/libopenjpeg20/jp2.c
+index 3bcb42e..a6648f6 100644
+--- a/third_party/libopenjpeg20/jp2.c
++++ b/third_party/libopenjpeg20/jp2.c
+@@ -561,6 +561,7 @@ static OPJ_BOOL opj_jp2_read_ihdr( opj_jp2_t *jp2,
+ 	p_image_header_data += 2;
+ 
+ 	/* allocate memory for components */
++	opj_free(jp2->comps);
+ 	jp2->comps = (opj_jp2_comps_t*) opj_calloc(jp2->numcomps, sizeof(opj_jp2_comps_t));
+ 	if (jp2->comps == 0) {
+ 		opj_event_msg(p_manager, EVT_ERROR, "Not enough memory to handle image header (ihdr)\n");
+@@ -1758,6 +1759,7 @@ void opj_jp2_setup_decoder(opj_jp2_t *jp2, opj_dparameters_t *parameters)
+ 
+ 	/* further JP2 initializations go here */
+ 	jp2->color.jp2_has_colr = 0;
++	jp2->comps = NULL;
+     jp2->ignore_pclr_cmap_cdef = parameters->flags & OPJ_DPARAMETERS_IGNORE_PCLR_CMAP_CDEF_FLAG;
+ }
+ 
+@@ -1815,7 +1817,6 @@ OPJ_BOOL opj_jp2_setup_encoder(	opj_jp2_t *jp2,
+ 	jp2->numcomps = image->numcomps;	/* NC */
+ 	jp2->comps = (opj_jp2_comps_t*) opj_malloc(jp2->numcomps * sizeof(opj_jp2_comps_t));
+ 	if (!jp2->comps) {
+-		jp2->comps = NULL;
+ 		opj_event_msg(p_manager, EVT_ERROR, "Not enough memory when setup the JP2 encoder\n");
+ 		/* Memory of jp2->cl will be freed by opj_jp2_destroy */
+ 		return OPJ_FALSE;

@@ -1,0 +1,86 @@
+
+# Dr. Memory
+
+Dr. Memory (www.drmemory.org) is an open-source dynamic memory
+monitoring tool for Windows, Linux, and Mac.
+
+## About Dr. Memory
+
+Dr. Memory operates on unmodified application binaries running on
+Windows, Linux, or Mac on commodity x86 and ARM32 (forthcoming) hardware.
+It is capable of identifying memory-related programming errors including:
+  * accesses of uninitialized memory
+  * accesses to unaddressable memory (heap underflow and overflow)
+  * accesses to freed memory
+  * double frees
+  * memory leaks
+  * handle leaks (on Windows)
+  * GDI API usage errors (on Windows)
+  * accesses to un-reserved thread local storage slots (on Windows)
+
+## Using Dr. Memory (Windows only)
+
+Build your application with debug information and then run it under
+Dr. Memory.  Errors found are printed to the screen, and a summary is
+shown at the end of the run.
+
+### Obtain Dr. Memory
+
+The Dr. Memory package is provided as a self-extracting archive
+(DrMemory-Windows-sfx.exe) in tools/drmemory directory, which can be
+extracted by running command 'DrMemory-Windows-sfx.exe -ounpacked -y'.
+
+The Dr. Memory release package can be downloaded from
+https://github.com/DynamoRIO/drmemory/wiki/Downloads.
+
+Nightly builds can be downloaded from
+https://build.chromium.org/p/client.drmemory/builds/.
+
+The Dr. Memory source code can be found at
+https://github.com/DynamoRIO/drmemory.
+
+### Run your application with Dr. Memory
+
+To run your application with Dr. Memory, simply put 'drmemory.exe --'
+before the command that invokes the application.
+
+  * Running pdfium_unittests with Dr. Memory:
+    tools\drmemory\unpaced\bin\drmemory.exe -- out\Debug\pdfium_unittests.exe
+
+  * Running pdfium_tests with Dr. Memory:
+    tools\drmemory\unpaced\bin\drmemory.exe -- out\Debug\pdfium_tests.exe --png YourInputPDF.pdf
+
+### Run test suite with Dr. Memory
+
+A set of scripts are provided to run PDFium test suite with Dr. Memory
+on buildbots, which can also be used for running test suite locally.
+
+  * Running pdfium_unittests with Dr. Memory:
+    tools\drmemory\scripts\pdfium_tests.bat -t pdfium_unittests
+
+  * Running pixel test suite with Dr. Memory:
+    tools\drmemory\scripts\pdfium_tests.bat -t pdfium_pixel
+
+## Documentation
+
+Command 'drmemory.exe -help' prints a list of Dr. Memory runtime
+options with short description.
+
+To view the full documention, point your web browser at
+http://drmemory.org/docs/.
+
+
+## Contact
+
+This project is provided as-is, with no official support.
+Use the Dr. Memory Users group at
+http://groups.google.com/group/drmemory-users/ to ask questions and
+seek help on using Dr. Memory.
+
+Dr. Memory's source code and issue tracker live at
+https://github.com/DynamoRIO/drmemory
+
+If you would like to submit a patch, you will need to first sign a
+Contributor License Agreement.
+See https://github.com/DynamoRIO/drmemory/wiki/Contributing for more
+information.

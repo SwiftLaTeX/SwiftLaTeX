@@ -1,0 +1,34 @@
+Name: FreeType
+URL: http://www.freetype.org/
+Version: 2.6.1
+Security Critical: yes
+License: FreeType License (FTL)
+License File: FTL.TXT
+
+Description:
+FreeType library.
+
+Local Modifications:
+
+0000-include.patch: Modifications to configuration header files.
+
+include/freetype/ftchapers.h is not included.
+
+The following directories in src/ are not included from
+upstream FreeType as they are never used:
+
+autofit
+bdf
+bzip2
+cache
+gxvalid
+gzip
+Jamfile
+lzw
+otvalid
+pcf
+pfr
+tools
+type42
+winfonts
+
