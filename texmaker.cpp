@@ -1307,14 +1307,14 @@ void Texmaker::setupMenus() {
   editMenu->addAction(Act);
 
   toolMenu = menuBar()->addMenu(tr("&Tools"));
-  Act = new QAction(getIcon(":/images/quick.png"), tr("Quick Build"), this);
+  Act = new QAction(getIcon(":/images/quick.png"), tr("Quick Build (LaTex Only)"), this);
   Act->setData(Act->text());
   Act->setShortcut(Qt::Key_F1);
   connect(Act, SIGNAL(triggered()), this, SLOT(QuickBuild()));
   toolMenu->addAction(Act);
   toolMenu->addSeparator();
-  Act = new QAction("LaTeX", this);
-  Act->setData("LaTeX");
+  Act = new QAction("BibTeX", this);
+  Act->setData("BibTeX");
   Act->setShortcut(Qt::Key_F2);
   connect(Act, SIGNAL(triggered()), this, SLOT(Latex()));
   toolMenu->addAction(Act);
@@ -1336,63 +1336,6 @@ void Texmaker::setupMenus() {
   Act = new QAction("PDFLaTeX", this);
   Act->setData("PDFLaTeX");
   Act->setShortcut(Qt::Key_F6);
-  connect(Act, SIGNAL(triggered()), this, SLOT(PDFLatex()));
-  toolMenu->addAction(Act);
-  Act = new QAction(tr("View PDF"), this);
-  Act->setData("View PDF");
-  Act->setShortcut(Qt::Key_F7);
-  connect(Act, SIGNAL(triggered()), this, SLOT(ViewPDF()));
-  toolMenu->addAction(Act);
-  Act = new QAction("PS->PDF", this);
-  Act->setData("PS->PDF");
-  Act->setShortcut(Qt::Key_F8);
-  connect(Act, SIGNAL(triggered()), this, SLOT(PStoPDF()));
-  toolMenu->addAction(Act);
-  Act = new QAction("DVI->PDF", this);
-  Act->setData("DVI->PDF");
-  Act->setShortcut(Qt::Key_F9);
-  connect(Act, SIGNAL(triggered()), this, SLOT(DVItoPDF()));
-  toolMenu->addAction(Act);
-  Act = new QAction(tr("View Log"), this);
-  Act->setData("View Log");
-  Act->setShortcut(Qt::Key_F10);
-  connect(Act, SIGNAL(triggered()), this, SLOT(ViewLog()));
-  toolMenu->addAction(Act);
-  Act = new QAction("BibTeX", this);
-  Act->setData("BibTeX");
-  Act->setShortcut(Qt::Key_F11);
-  connect(Act, SIGNAL(triggered()), this, SLOT(MakeBib()));
-  toolMenu->addAction(Act);
-  Act = new QAction("MakeIndex", this);
-  Act->setData("MakeIndex");
-  Act->setShortcut(Qt::Key_F12);
-  connect(Act, SIGNAL(triggered()), this, SLOT(MakeIndex()));
-  toolMenu->addAction(Act);
-  toolMenu->addSeparator();
-  Act = new QAction("MPost", this);
-  Act->setData("MPost");
-  connect(Act, SIGNAL(triggered()), this, SLOT(MetaPost()));
-  toolMenu->addAction(Act);
-  Act = new QAction("Asymptote", this);
-  Act->setData("Asymptote");
-  connect(Act, SIGNAL(triggered()), this, SLOT(Asymptote()));
-  toolMenu->addAction(Act);
-  Act = new QAction("Latexmk", this);
-  Act->setData("Latexmk");
-  connect(Act, SIGNAL(triggered()), this, SLOT(LatexMk()));
-  toolMenu->addAction(Act);
-  Act = new QAction("R Sweave", this);
-  Act->setData("R Sweave");
-  connect(Act, SIGNAL(triggered()), this, SLOT(Sweave()));
-  toolMenu->addAction(Act);
-  Act = new QAction("XeLaTeX", this);
-  Act->setData("XeLaTeX");
-  toolMenu->addAction(Act);
-  connect(Act, SIGNAL(triggered()), this, SLOT(Xelatex()));
-  Act = new QAction("LuaLaTeX", this);
-  Act->setData("LuaLaTeX");
-  connect(Act, SIGNAL(triggered()), this, SLOT(Lualatex()));
-  toolMenu->addAction(Act);
   toolMenu->addSeparator();
   Act = new QAction(tr("Clean"), this);
   Act->setData("Clean");
@@ -2350,7 +2293,7 @@ void Texmaker::setupMenus() {
   viewMenu->addAction(FullScreenAct);
 
   optionsMenu = menuBar()->addMenu(tr("&Options"));
-  Act = new QAction(getIcon(":/images/configure.png"), tr("Configure Texmaker"),
+  Act = new QAction(getIcon(":/images/configure.png"), tr("Configure"),
                     this);
   connect(Act, SIGNAL(triggered()), this, SLOT(GeneralOptions()));
   optionsMenu->addAction(Act);
@@ -2416,7 +2359,7 @@ void Texmaker::setupMenus() {
 
   helpMenu->addSeparator();
   Act =
-      new QAction(getIcon(":/images/appicon.png"), tr("About Texmaker"), this);
+      new QAction(getIcon(":/images/appicon.png"), tr("About"), this);
   connect(Act, SIGNAL(triggered()), this, SLOT(HelpAbout()));
   helpMenu->addAction(Act);
 
@@ -2599,51 +2542,7 @@ void Texmaker::setupToolBars() {
   // insertToolBarBreak(formatToolBar);
 
   // tools
-  runToolBar = addToolBar("Tools Toolbar");
-  runToolBar->setObjectName("Tools");
-  runToolBar->setStyleSheet(Theme::viewportDarkStyleSheet);
-
-  list.clear();
-  list.append(tr("Quick Build"));
-  list.append("LaTeX");
-  list.append("Dvi->PS");
-  list.append("PDFLaTeX");
-  list.append("BibTeX");
-  list.append("MakeIndex");
-  list.append("MPost");
-  list.append("PS->PDF");
-  list.append("DVI->PDF");
-  list.append("Asymptote");
-  list.append("LatexMk");
-  list.append("R Sweave");
-  list.append("XeLaTeX");
-  list.append("LuaLaTeX");
-
-  for (int i = 0; i <= 4; i++)
-    list.append(QString::number(i + 1) + ": " + UserToolName[i]);
-
-  comboCompil = new QComboBox(runToolBar);
-  comboCompil->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-  comboCompil->setStyleSheet(Theme::comboboxDarkStyleSheet);
-  comboCompil->addItems(list);
-  comboCompil->setCurrentIndex(runIndex);
-  connect(runToolBar->addAction(getIcon(":/images/run.png"), tr("Run")),
-          SIGNAL(triggered()), this, SLOT(doCompile()));
-  runToolBar->addWidget(comboCompil);
-
-  list.clear();
-  list.append(tr("View Dvi"));
-  list.append(tr("View PS"));
-  list.append(tr("View PDF"));
-
-  comboView = new QComboBox(runToolBar);
-  comboView->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-  comboView->setStyleSheet(Theme::comboboxDarkStyleSheet);
-  comboView->addItems(list);
-  comboView->setCurrentIndex(viewIndex);
-  connect(runToolBar->addAction(getIcon(":/images/run.png"), tr("View")),
-          SIGNAL(triggered()), this, SLOT(doView()));
-  runToolBar->addWidget(comboView);
+  
 
   Act = new QAction(getIcon(":/images/viewlog.png"), tr("View Log"), this);
   connect(Act, SIGNAL(triggered()), this, SLOT(ViewLog()));
@@ -2673,7 +2572,7 @@ void Texmaker::setupToolBars() {
   viewMenu->addAction(fileToolBar->toggleViewAction());
   viewMenu->addAction(editToolBar->toggleViewAction());
   // viewMenu->addAction(formatToolBar->toggleViewAction());
-  viewMenu->addAction(runToolBar->toggleViewAction());
+  //viewMenu->addAction(runToolBar->toggleViewAction());
 }
 
 void Texmaker::createStatusBar() {
@@ -5367,8 +5266,7 @@ void Texmaker::SaveSettings() {
     config.setValue("Tools/User Options", userOptionsList);
   if (userBabelList.count() > 0)
     config.setValue("Tools/User Babel", userBabelList);
-  config.setValue("Tools/Run", comboCompil->currentIndex());
-  config.setValue("Tools/View", comboView->currentIndex());
+  
   config.setValue("Tools/IntegratedPdfViewer", builtinpdfview);
   config.setValue("Tools/PdfInternalViewEmbed", embedinternalpdf);
   config.setValue("Tools/SingleViewerInstance", singleviewerinstance);
@@ -9994,79 +9892,11 @@ void Texmaker::EditUserTool() {
 }
 
 void Texmaker::doCompile() {
-  switch (comboCompil->currentIndex()) {
-  case 0: {
-    QuickBuild();
-  } break;
-  case 1: {
-    Latex();
-  } break;
-  case 2: {
-    DviToPS();
-  } break;
-  case 3: {
-    PDFLatex();
-  } break;
-  case 4: {
-    MakeBib();
-  } break;
-  case 5: {
-    MakeIndex();
-  } break;
-  case 6: {
-    MetaPost();
-  } break;
-  case 7: {
-    PStoPDF();
-  } break;
-  case 8: {
-    DVItoPDF();
-  } break;
-  case 9: {
-    Asymptote();
-  } break;
-  case 10: {
-    LatexMk();
-  } break;
-  case 11: {
-    Sweave();
-  } break;
-  case 12: {
-    Xelatex();
-  } break;
-  case 13: {
-    Lualatex();
-  } break;
-  case 14: {
-    UserTool1();
-  } break;
-  case 15: {
-    UserTool2();
-  } break;
-  case 16: {
-    UserTool3();
-  } break;
-  case 17: {
-    UserTool4();
-  } break;
-  case 18: {
-    UserTool5();
-  } break;
-  }
+  
 }
 
 void Texmaker::doView() {
-  switch (comboView->currentIndex()) {
-  case 0: {
-    ViewDvi();
-  } break;
-  case 1: {
-    ViewPS();
-  } break;
-  case 2: {
-    ViewPDF();
-  } break;
-  }
+  
 }
 
 void Texmaker::jumpToPdfline(int line) {}
@@ -10941,7 +10771,7 @@ void Texmaker::GeneralOptions() {
     builtinpdfview = false;
     embedinternalpdf = false;
 
-    ViewPdfPanelAct->setEnabled(false);
+    //ViewPdfPanelAct->setEnabled(false);
 
     StackedViewers->hide();
 
@@ -11703,7 +11533,7 @@ void Texmaker::disableToolsActions() {
   listaction << toolMenu->actions();
   listaction << user12Menu->actions();
   // listaction << optionsMenu->actions();
-  listaction << runToolBar->actions();
+  //listaction << runToolBar->actions();
   QListIterator<QAction *> iterator(listaction);
   while (iterator.hasNext()) {
     QAction *action = iterator.next();
@@ -11717,7 +11547,7 @@ void Texmaker::enableToolsActions() {
   listaction << toolMenu->actions();
   listaction << user12Menu->actions();
   // listaction << optionsMenu->actions();
-  listaction << runToolBar->actions();
+  //listaction << runToolBar->actions();
   QListIterator<QAction *> iterator(listaction);
   while (iterator.hasNext()) {
     QAction *action = iterator.next();

@@ -167,13 +167,13 @@ void ConfigDialog::createIcons() {
   commandButton->setIcon(getIcon(":/images/configtools.png"));
   commandButton->setText(tr("Commands"));
   commandButton->setTextAlignment(Qt::AlignHCenter);
-  commandButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+  //commandButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDisabled);
 
   QListWidgetItem *quickButton = new QListWidgetItem(ui.contentsWidget);
   quickButton->setIcon(getIcon(":/images/configquick.png"));
   quickButton->setText(tr("Quick Build"));
   quickButton->setTextAlignment(Qt::AlignHCenter);
-  quickButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+  //quickButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDisabled);
 
   QListWidgetItem *editorButton = new QListWidgetItem(ui.contentsWidget);
   editorButton->setIcon(getIcon(":/images/configeditor.png"));
@@ -407,6 +407,7 @@ void ConfigDialog::darkColors() {
 }
 
 // pagetools
+
 void ConfigDialog::browseLatex() {
   QString location = QFileDialog::getOpenFileName(
       this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,

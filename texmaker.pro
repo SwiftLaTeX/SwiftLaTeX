@@ -26,7 +26,7 @@ CONFIG	+= qt hide_symbols warn_off rtti_off exceptions_off c++11 release
 CONFIG -= precompile_header
 
 gcc {
-    QMAKE_CXXFLAGS_WARN_ON += -Wno-unused-parameter
+    QMAKE_CXXFLAGS_WARN_ON += -Wno-unused-parameter 
 }
 
 msvc {
@@ -37,6 +37,7 @@ DEFINES += \
     USB_VERSION \
     FT2_BUILD_LIBRARY
 
+ QMAKE_CXXFLAGS += -g
 
 ###############################
 

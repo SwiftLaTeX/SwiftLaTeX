@@ -113,8 +113,7 @@ private:
 
   MiniSplitter *splitter1, *splitter2, *splitter3;
 
-  PlayerButton *toggleStructureButton, *toggleLogButton, *togglePdfButton,
-      *toggleSourceButton;
+  
   bool embedinternalpdf, winmaximized;
 
   QStackedWidget *EditorView;
@@ -150,13 +149,13 @@ private:
   QMenu *helpMenu;
   QMenu *sectionMenu, *sizeMenu, *refMenu;
 
-  QToolBar *fileToolBar, *editToolBar, *runToolBar,
+  QToolBar *fileToolBar, *editToolBar,
       /* *formatToolBar ,*/ *logToolBar, *LeftPanelToolBar,
       *LeftPanelToolBarBis, *centralToolBar, *centralToolBarBis;
   QAction *recentFileActs[10];
   QAction *ToggleAct, *StopAct, *UndoAct, *RedoAct, *SaveAct, *CutAct, *CopyAct,
       *PasteAct, *ToggleDocAct, *ViewStructurePanelAct, *ViewLogPanelAct,
-      *ViewPdfPanelAct, *ViewSourcePanelAct, *FullScreenAct, *NextDocAct,
+      *FullScreenAct, *NextDocAct,
       *PrevDocAct, *ViewOpenedFilesPanelAct;
 
   QAction *relationAct, *arrowAct, *miscAct, *delimAct, *greekAct, *usedAct,
@@ -172,7 +171,7 @@ private:
   bool showEmphasis, showNewline, showMathmode, showIndice, showPuissance,
       showSmallfrac, showDfrac, showRacine;
 
-  QComboBox *comboCompil, *comboView, *comboFiles;
+  QComboBox *comboFiles;
   DropShadowLabel *titleLeftPanel, *posLabel, *stat1, *stat2, *stat3;
 
   QPushButton *pb1, *pb2, *pb3;
