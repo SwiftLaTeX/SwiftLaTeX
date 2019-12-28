@@ -2344,11 +2344,11 @@ void LatexEditor::unfold(int start, int end) {
 
 void LatexEditor::checkStructUpdate(QTextDocument *doc, int blockpos,
                                     QString text, int line) {
+  //Todo prevent frequent fireup
   QList<StructItem> temp = StructItemsList;
   QBrush brushcomment(highlighter->ColorComment);
-  QFuture<struct updateStruct> result =
-      QtConcurrent::run(updateStructureList, doc, blockpos, text, line, temp);
-  struct updateStruct newstruct = result;
+  struct updateStruct newstruct =
+      updateStructureList(doc, blockpos, text, line, temp);
   StructItemsList = newstruct.list;
   if (newstruct.isdirty) {
     emit requestUpdateStructure();
