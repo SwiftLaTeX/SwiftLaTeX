@@ -74,7 +74,6 @@ HEADERS	+= texmaker.h \
 	quickdocumentdialog.h \
 	quickxelatexdialog.h \
 	usermenudialog.h \
-	usertooldialog.h \
 	refdialog.h \
 	configdialog.h \
 	aboutdialog.h \
@@ -146,7 +145,6 @@ SOURCES	+= main.cpp \
 	quickdocumentdialog.cpp \
 	quickxelatexdialog.cpp \
 	usermenudialog.cpp \
-	usertooldialog.cpp \
 	refdialog.cpp \
 	configdialog.cpp \
 	aboutdialog.cpp \
@@ -197,7 +195,6 @@ FORMS   += findwidget.ui\
 	quickdocumentdialog.ui \
 	quickxelatexdialog.ui \
 	usermenudialog.ui \
-	usertooldialog.ui \
 	refdialog.ui \
 	aboutdialog.ui \
 	configdialog.ui \
@@ -208,7 +205,6 @@ FORMS   += findwidget.ui\
 	usercompletiondialog.ui \
 	texdocdialog.ui \
 	scandialog.ui \
-	exportdialog.ui \
 	addtagdialog.ui \
 	quickbeamerdialog.ui 
 TRANSLATIONS += trans/texmaker_fr.ts \

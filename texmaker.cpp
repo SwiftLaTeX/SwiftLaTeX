@@ -90,7 +90,6 @@
 #include "theme.h"
 #include "usercompletiondialog.h"
 #include "usermenudialog.h"
-#include "usertooldialog.h"
 #include "versiondialog.h"
 
 #if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
@@ -4592,7 +4591,7 @@ void Texmaker::ReadSettings() {
   showstructview = config->value("Show/Structureview", true).toBool();
   showpdfview = config->value("Show/Pdfview", true).toBool();
   showsourceview = config->value("Show/Sourceview", false).toBool();
-  showfilesview = config->value("Show/Filesview", false).toBool();
+  showfilesview = config->value("Show/Filesview", true).toBool();
 
   showPstricks = config->value("Show/Pstricks", true).toBool();
   showMp = config->value("Show/Metapost", true).toBool();
@@ -9991,77 +9990,7 @@ void Texmaker::ConvertToUnicode() {
 }
 
 void Texmaker::EditUserTool() {
-  QStringList usualNames, usualCommands;
-  usualNames << tr("LaTeX") << tr("PdfLaTeX") << tr("dvips") << tr("Dvi Viewer")
-             << tr("PS Viewer") << tr("Dvipdfm") << tr("ps2pdf") << tr("Bibtex")
-             << tr("Makeindex") << tr("Pdf Viewer") << tr("metapost")
-             << tr("ghostscript") << tr("Asymptote") << tr("Latexmk")
-             << tr("R Sweave") << tr("XeLaTex") << tr("LuaLaTex");
-  usualCommands << latex_command << pdflatex_command << dvips_command
-                << viewdvi_command << viewps_command << dvipdf_command
-                << ps2pdf_command << bibtex_command << makeindex_command
-                << viewpdf_command << metapost_command << ghostscript_command
-                << asymptote_command << latexmk_command << sweave_command
-                << xelatex_command << lualatex_command;
-  QAction *Act;
-  UserToolDialog *utDlg = new UserToolDialog(this, tr("Edit User &Commands"),
-                                             usualNames, usualCommands);
-  for (int i = 0; i <= 4; i++) {
-    utDlg->Name[i] = UserToolName[i];
-    utDlg->Tool[i] = UserToolCommand[i];
-  }
-  utDlg->init();
-  if (utDlg->exec()) {
-    for (int i = 0; i <= 4; i++) {
-      UserToolName[i] = utDlg->Name[i];
-      UserToolCommand[i] = utDlg->Tool[i];
-    }
-    user12Menu->clear();
-    Act = new QAction("1: " + UserToolName[0], this);
-    Act->setShortcut(Qt::SHIFT + Qt::ALT + Qt::Key_F1);
-    connect(Act, SIGNAL(triggered()), this, SLOT(UserTool1()));
-    user12Menu->addAction(Act);
-    Act = new QAction("2: " + UserToolName[1], this);
-    Act->setShortcut(Qt::SHIFT + Qt::ALT + Qt::Key_F2);
-    connect(Act, SIGNAL(triggered()), this, SLOT(UserTool2()));
-    user12Menu->addAction(Act);
-    Act = new QAction("3: " + UserToolName[2], this);
-    Act->setShortcut(Qt::SHIFT + Qt::ALT + Qt::Key_F3);
-    connect(Act, SIGNAL(triggered()), this, SLOT(UserTool3()));
-    user12Menu->addAction(Act);
-    Act = new QAction("4: " + UserToolName[3], this);
-    Act->setShortcut(Qt::SHIFT + Qt::ALT + Qt::Key_F4);
-    connect(Act, SIGNAL(triggered()), this, SLOT(UserTool4()));
-    user12Menu->addAction(Act);
-    Act = new QAction("5: " + UserToolName[4], this);
-    Act->setShortcut(Qt::SHIFT + Qt::ALT + Qt::Key_F5);
-    connect(Act, SIGNAL(triggered()), this, SLOT(UserTool5()));
-    user12Menu->addAction(Act);
-    user12Menu->addSeparator();
-    Act = new QAction(tr("Edit User &Commands"), this);
-    connect(Act, SIGNAL(triggered()), this, SLOT(EditUserTool()));
-    user12Menu->addAction(Act);
-    QStringList list;
-    list.append(tr("Quick Build"));
-    list.append("LaTeX");
-    list.append("Dvi->PS");
-    list.append("PDFLaTeX");
-    list.append("BibTeX");
-    list.append("MakeIndex");
-    list.append("MPost");
-    list.append("PS->PDF");
-    list.append("DVI->PDF");
-    list.append("Asymptote");
-    list.append("LatexMk");
-    list.append("R Sweave");
-    list.append("XeLaTeX");
-    list.append("LuaLaTeX");
-    int runIndex = comboCompil->currentIndex();
-    for (int i = 0; i <= 4; i++)
-      comboCompil->setItemText(14 + i,
-                               QString::number(i + 1) + ": " + UserToolName[i]);
-    comboCompil->setCurrentIndex(runIndex);
-  }
+  
 }
 
 void Texmaker::doCompile() {
