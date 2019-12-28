@@ -88,11 +88,8 @@ HEADERS	+= texmaker.h \
 	texdocdialog.h \
 	textblockselection.h \
 	scandialog.h \
-	exportdialog.h \
 	usertagslistwidget.h \
 	addtagdialog.h \
-	unicodedialog.h \
-	unicodeview.h \
 	svnhelper.h \
 	quickbeamerdialog.h \
 	hunspell/affentry.hxx \
@@ -163,11 +160,8 @@ SOURCES	+= main.cpp \
 	usercompletiondialog.cpp \
 	texdocdialog.cpp \
 	scandialog.cpp \
-	exportdialog.cpp \
 	usertagslistwidget.cpp \
 	addtagdialog.cpp \
-	unicodedialog.cpp \
-	unicodeview.cpp \
 	quickbeamerdialog.cpp \
 	svnhelper.cpp \
 	hunspell/affentry.cxx \

@@ -75,7 +75,6 @@
 #include "arraydialog.h"
 #include "configdialog.h"
 #include "encodingdialog.h"
-#include "exportdialog.h"
 #include "filechooser.h"
 #include "graphicfilechooser.h"
 #include "letterdialog.h"
@@ -1402,6 +1401,7 @@ void Texmaker::setupMenus() {
   Act->setData("Clean");
   connect(Act, SIGNAL(triggered()), this, SLOT(CleanAll()));
   toolMenu->addAction(Act);
+  #if 0
   toolMenu->addSeparator();
   Act = new QAction(tr("Open Terminal"), this);
   Act->setData("Open Terminal");
@@ -1411,12 +1411,13 @@ void Texmaker::setupMenus() {
   Act->setData("Export via TeX4ht");
   connect(Act, SIGNAL(triggered()), this, SLOT(Export()));
   toolMenu->addAction(Act);
+  
   toolMenu->addSeparator();
   Act = new QAction(tr("Convert to unicode"), this);
   Act->setData("Convert to unicode");
   connect(Act, SIGNAL(triggered()), this, SLOT(ConvertToUnicode()));
   toolMenu->addAction(Act);
-
+  #endif
   Act = new QAction(getIcon(":/images/errorprev.png"),
                     tr("Previous LaTeX Error"), this);
   connect(Act, SIGNAL(triggered()), this, SLOT(PreviousError()));
@@ -9909,6 +9910,7 @@ void Texmaker::UserTool5() {
 }
 
 void Texmaker::OpenTerminal() {
+#if 0
   QProcess process;
 
   QString finame;
@@ -9957,9 +9959,11 @@ void Texmaker::OpenTerminal() {
                             shell + "\"");
   }
 #endif
+#endif
 }
 
 void Texmaker::Export() {
+#if 0
   if (!currentEditorView())
     return;
   QString finame;
@@ -9981,12 +9985,15 @@ void Texmaker::Export() {
     htlatex_command = exportDlg->ui.lineEditPath->text();
     htlatex_options = exportDlg->ui.lineEditOptions->text();
   }
+#endif
 }
 
 void Texmaker::ConvertToUnicode() {
+#if 0
   UnicodeDialog *uniDlg = new UnicodeDialog(this);
   uniDlg->init(EditorFont, showline, edcolors(), hicolors());
   uniDlg->exec();
+#endif
 }
 
 void Texmaker::EditUserTool() {
