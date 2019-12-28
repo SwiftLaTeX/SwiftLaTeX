@@ -13,7 +13,7 @@ DEFINES += TEXMAKERVERSION=$${TEXMAKERVERSION}
 
 
 equals(QT_MAJOR_VERSION, 5):greaterThan(QT_MINOR_VERSION, 6) {
-QT += core gui widgets xml printsupport concurrent 
+QT += core gui widgets xml printsupport  
 equals(INTERNALBROWSER,yes){
 QT += webenginewidgets
 }  
@@ -37,7 +37,7 @@ DEFINES += \
     USB_VERSION \
     FT2_BUILD_LIBRARY
 
- QMAKE_CXXFLAGS += -g
+# QMAKE_CXXFLAGS += -g
 
 ###############################
 
@@ -87,7 +87,6 @@ HEADERS	+= texmaker.h \
 	usercompletiondialog.h \
 	texdocdialog.h \
 	textblockselection.h \
-	scandialog.h \
 	usertagslistwidget.h \
 	addtagdialog.h \
 	quickbeamerdialog.h \
@@ -157,7 +156,6 @@ SOURCES	+= main.cpp \
 	encodingdialog.cpp \
 	usercompletiondialog.cpp \
 	texdocdialog.cpp \
-	scandialog.cpp \
 	usertagslistwidget.cpp \
 	addtagdialog.cpp \
 	quickbeamerdialog.cpp \
@@ -205,7 +203,6 @@ FORMS   += findwidget.ui\
 	encodingdialog.ui \
 	usercompletiondialog.ui \
 	texdocdialog.ui \
-	scandialog.ui \
 	addtagdialog.ui \
 	quickbeamerdialog.ui 
 TRANSLATIONS += trans/texmaker_fr.ts \

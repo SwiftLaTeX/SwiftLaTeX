@@ -1270,10 +1270,7 @@ void Texmaker::setupMenus() {
   connect(Act, SIGNAL(triggered()), this, SLOT(editFindNext()));
   editMenu->addAction(Act);
 
-  Act = new QAction(tr("Find In Directory"), this);
-  Act->setData("Find In Directory");
-  connect(Act, SIGNAL(triggered()), this, SLOT(editFindInDirectory()));
-  editMenu->addAction(Act);
+
 
   Act = new QAction(tr("Replace"), this);
   Act->setData("Replace");
@@ -4134,13 +4131,7 @@ void Texmaker::editSelectAll() {
 }
 
 void Texmaker::editFindInDirectory() {
-  if (!scanDialog) {
-    scanDialog = new ScanDialog(this);
-    connect(scanDialog, SIGNAL(openFileAtLine(const QString &, int, bool)),
-            this, SLOT(fileOpenAndGoto(const QString &, int, bool)));
-  }
-  scanDialog->show();
-  scanDialog->raise();
+  
 }
 
 void Texmaker::editFind() {

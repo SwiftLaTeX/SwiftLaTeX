@@ -47,7 +47,6 @@
 #include "logeditor.h"
 #include "minisplitter.h"
 #include "playerbutton.h"
-#include "scandialog.h"
 #include "symbollistwidget.h"
 #include "usertagslistwidget.h"
 #include "xmltagslistwidget.h"
@@ -218,7 +217,6 @@ private:
   bool svnEnable;
   QString svnPath;
   // dialogs
-  QPointer<ScanDialog> scanDialog;
 #ifdef INTERNAL_BROWSER
   QPointer<Browser> browserWindow, diffWindow;
 #endif

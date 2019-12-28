@@ -34,7 +34,6 @@
 #include <QTextCodec>
 #include <QTextDocumentFragment>
 #include <QTextLayout>
-#include <QtConcurrent>
 #include <QtCore>
 //#include <QPlatformInputContext>
 
