@@ -2381,6 +2381,7 @@ void Texmaker::setupMenus() {
   connect(Act, SIGNAL(triggered()), this, SLOT(SetInterfaceFont()));
   optionsMenu->addAction(Act);
 #endif
+#if defined(NO_WEBBUILD)
   optionsMenu->addSeparator();
   translationMenu = optionsMenu->addMenu(tr("Interface Language"));
   translationGroup = new QActionGroup(this);
@@ -2397,6 +2398,7 @@ void Texmaker::setupMenus() {
     translationMenu->addAction(Act);
   }
   optionsMenu->addSeparator();
+#endif
 #if defined(Q_OS_MAC)
   settingsMenu = optionsMenu->addMenu(tr("Manage Settings File"));
 #else
@@ -11747,12 +11749,14 @@ bool Texmaker::spelldicExist() {
 }
 
 void Texmaker::updateTranslation() {
+#if defined(NO_WEBBUILD)
   QAction *action = qobject_cast<QAction *>(sender());
   QString lang = action->text();
   TexmakerApp::instance()->language = lang;
   QMessageBox::information(this, "Texmaker",
                            tr("The language setting will take effect after "
                               "restarting the application."));
+#endif
 }
 
 // void Texmaker::updateAppearance()

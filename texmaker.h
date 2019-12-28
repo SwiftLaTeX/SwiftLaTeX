@@ -42,7 +42,6 @@
 #include <QWidgetAction>
 
 #include "dropshadowlabel.h"
-#include "encodingprober/qencodingprober.h"
 #include "hunspell/hunspell.hxx"
 #include "latexeditorview.h"
 #include "logeditor.h"

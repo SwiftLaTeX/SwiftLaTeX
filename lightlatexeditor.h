@@ -22,7 +22,6 @@
 #include <QTextEdit>
 #include <QWidget>
 
-#include "encodingprober/qencodingprober.h"
 #include "lightlatexhighlighter.h"
 #include "textblockselection.h"
 

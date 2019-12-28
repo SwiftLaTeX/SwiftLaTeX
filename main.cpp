@@ -43,10 +43,9 @@ int main(int argc, char **argv) {
       qputenv("QT_SCALE_FACTOR", (*it).toUtf8());
     }
   }
-
-#if !defined(Q_OS_MAC)
+  
   QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-#endif
+
   QStringList g_qtFlags = {""};
   char **newArgv = appendCommandLineArguments(argc, argv, g_qtFlags);
   int newArgc = argc + g_qtFlags.size();

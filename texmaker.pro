@@ -34,11 +34,7 @@ msvc {
 }
 
 DEFINES += \
-    OPJ_STATIC \
-    PNG_PREFIX \
-    PNG_USE_READ_MACROS \
-    V8_DEPRECATION_WARNINGS \
-    NOMINMAX \
+    USB_VERSION \
     FT2_BUILD_LIBRARY
 
 
@@ -227,26 +223,7 @@ FORMS   += findwidget.ui\
 TRANSLATIONS += trans/texmaker_fr.ts \
 	trans/texmaker_de.ts \
 	trans/texmaker_es.ts \
-	trans/texmaker_gl.ts \
-	trans/texmaker_it.ts \
-	trans/texmaker_ru.ts \
 	trans/texmaker_zh_CN.ts \
-	trans/texmaker_zh_TW.ts \
-	trans/texmaker_cs.ts \
-	trans/texmaker_pt.ts \
-	trans/texmaker_pt_BR.ts \
-	trans/texmaker_nl.ts  \
-	trans/texmaker_hu.ts  \
-	trans/texmaker_fa.ts  \
-	trans/texmaker_pl.ts  \
-	trans/texmaker_vi_VN.ts \
-	trans/texmaker_da.ts \
-	trans/texmaker_ca.ts \
-	trans/texmaker_sr.ts \
-	trans/texmaker_el.ts \
-	trans/texmaker_se.ts \
-	trans/texmaker_ar.ts \
-	trans/texmaker_lv.ts \
 	trans/texmaker_uk.ts
 ################################
 unix:!macx {
