@@ -46,52 +46,49 @@ QT_BEGIN_NAMESPACE
 class QPdfDocument;
 class QPdfBookmarkModelPrivate;
 
-class QPdfBookmarkModel : public QAbstractItemModel
-{
-    Q_OBJECT
+class QPdfBookmarkModel : public QAbstractItemModel {
+  Q_OBJECT
 
-    Q_PROPERTY(QPdfDocument* document READ document WRITE setDocument NOTIFY documentChanged)
-    Q_PROPERTY(StructureMode structureMode READ structureMode WRITE setStructureMode NOTIFY structureModeChanged)
+  Q_PROPERTY(QPdfDocument *document READ document WRITE setDocument NOTIFY
+                 documentChanged)
+  Q_PROPERTY(StructureMode structureMode READ structureMode WRITE
+                 setStructureMode NOTIFY structureModeChanged)
 
 public:
-    enum StructureMode
-    {
-        TreeMode,
-        ListMode
-    };
-    Q_ENUM(StructureMode)
+  enum StructureMode { TreeMode, ListMode };
+  Q_ENUM(StructureMode)
 
-    enum Role
-    {
-        TitleRole = Qt::DisplayRole,
-        LevelRole = Qt::UserRole,
-        PageNumberRole
-    };
-    Q_ENUM(Role)
+  enum Role {
+    TitleRole = Qt::DisplayRole,
+    LevelRole = Qt::UserRole,
+    PageNumberRole
+  };
+  Q_ENUM(Role)
 
-    explicit QPdfBookmarkModel(QObject *parent = nullptr);
+  explicit QPdfBookmarkModel(QObject *parent = nullptr);
 
-    QPdfDocument* document() const;
-    void setDocument(QPdfDocument *document);
+  QPdfDocument *document() const;
+  void setDocument(QPdfDocument *document);
 
-    StructureMode structureMode() const;
-    void setStructureMode(StructureMode mode);
+  StructureMode structureMode() const;
+  void setStructureMode(StructureMode mode);
 
-    QVariant data(const QModelIndex &index, int role) const override;
-    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
-    QModelIndex parent(const QModelIndex &index) const override;
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-    QHash<int, QByteArray> roleNames() const override;
+  QVariant data(const QModelIndex &index, int role) const override;
+  QModelIndex index(int row, int column,
+                    const QModelIndex &parent = QModelIndex()) const override;
+  QModelIndex parent(const QModelIndex &index) const override;
+  int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+  int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+  QHash<int, QByteArray> roleNames() const override;
 
 Q_SIGNALS:
-    void documentChanged(QPdfDocument *document);
-    void structureModeChanged(QPdfBookmarkModel::StructureMode structureMode);
+  void documentChanged(QPdfDocument *document);
+  void structureModeChanged(QPdfBookmarkModel::StructureMode structureMode);
 
 private:
-    Q_DECLARE_PRIVATE(QPdfBookmarkModel)
+  Q_DECLARE_PRIVATE(QPdfBookmarkModel)
 
-    Q_PRIVATE_SLOT(d_func(), void _q_documentStatusChanged())
+  Q_PRIVATE_SLOT(d_func(), void _q_documentStatusChanged())
 };
 
 QT_END_NAMESPACE

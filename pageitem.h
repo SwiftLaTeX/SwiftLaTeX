@@ -22,143 +22,139 @@ modified by Pascal Brachet
 #ifndef PAGEITEM_H
 #define PAGEITEM_H
 
+#include <QGraphicsObject>
 #include <QtCore>
 #include <QtGui>
-#include <QGraphicsObject>
-
 
 #include "qpdfdocument.h"
 
-class PageItem : public QGraphicsObject
-{
-    Q_OBJECT
+class PageItem : public QGraphicsObject {
+  Q_OBJECT
 
 public:
-    static int cacheSize();
-    static void setCacheSize(int cacheSize);
+  static int cacheSize();
+  static void setCacheSize(int cacheSize);
 
-    static bool decoratePages();
-    static void setDecoratePages(bool decoratePages);
+  static bool decoratePages();
+  static void setDecoratePages(bool decoratePages);
 
-    static bool decorateLinks();
-    static void setDecorateLinks(bool decorateLinks);
+  static bool decorateLinks();
+  static void setDecorateLinks(bool decorateLinks);
 
-    static bool invertColors();
-    static void setInvertColors(bool invertColors);
+  static bool invertColors();
+  static void setInvertColors(bool invertColors);
 
-    PageItem(QMutex* mutex, QPdfDocument* doc, int index, QGraphicsItem* parent = 0);
-    ~PageItem();
+  PageItem(QMutex *mutex, QPdfDocument *doc, int index,
+           QGraphicsItem *parent = 0);
+  ~PageItem();
 
-    QRectF boundingRect() const;
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*);
+  QRectF boundingRect() const;
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *);
 
-    int index() const;
-    QSizeF size() const;
+  int index() const;
+  QSizeF size() const;
 
-    const QList< QRectF >& highlights() const;
-    void setHighlights(const QList< QRectF >& highlights);
+  const QList<QRectF> &highlights() const;
+  void setHighlights(const QList<QRectF> &highlights);
 
-    int physicalDpiX() const;
-    int physicalDpiY() const;
-    void setPhysicalDpi(int physicalDpiX, int physicalDpiY);
+  int physicalDpiX() const;
+  int physicalDpiY() const;
+  void setPhysicalDpi(int physicalDpiX, int physicalDpiY);
 
-    qreal scaleFactor() const;
-    void setScaleFactor(qreal scaleFactor);
+  qreal scaleFactor() const;
+  void setScaleFactor(qreal scaleFactor);
 
-    QPdf::Rotation rotation() const;
-    void setRotation(QPdf::Rotation rotation);
+  QPdf::Rotation rotation() const;
+  void setRotation(QPdf::Rotation rotation);
 
-    const QTransform& transform() const;
-    const QTransform& normalizedTransform() const;
-    
-    void setHighlightPath(const QPainterPath& path);
-    void setSearchPath(const QPainterPath& path);
-    void clearPaths();
-    QImage exportImagePage();
+  const QTransform &transform() const;
+  const QTransform &normalizedTransform() const;
+
+  void setHighlightPath(const QPainterPath &path);
+  void setSearchPath(const QPainterPath &path);
+  void clearPaths();
+  QImage exportImagePage();
 
 signals:
-    void imageReady(QImage image, bool prefetch);
+  void imageReady(QImage image, bool prefetch);
 
-    void linkClicked(int page, qreal left, qreal top);
-    void linkClicked(const QString& url);
-    void wantNumWords();
-    void wantPngExport(int);
-    void syncpage(int, const QPointF&);
-    void wantNumPageWords(int);
-    void wantOpenLocation();
- 
+  void linkClicked(int page, qreal left, qreal top);
+  void linkClicked(const QString &url);
+  void wantNumWords();
+  void wantPngExport(int);
+  void syncpage(int, const QPointF &);
+  void wantNumPageWords(int);
+  void wantOpenLocation();
 
 public slots:
-    void refresh();
-   void clearHighlight();
-    void startRender(bool prefetch = false);
-    void cancelRender();
+  void refresh();
+  void clearHighlight();
+  void startRender(bool prefetch = false);
+  void cancelRender();
 
 protected slots:
-    void on_render_finished();
-    void on_imageReady(QImage image, bool prefetch);
+  void on_render_finished();
+  void on_imageReady(QImage image, bool prefetch);
 
 protected:
-    void hoverEnterEvent(QGraphicsSceneHoverEvent* event);
-    void hoverMoveEvent(QGraphicsSceneHoverEvent* event);
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent* event);
-    void mousePressEvent(QGraphicsSceneMouseEvent* event);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+  void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+  void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
+  void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+  void mousePressEvent(QGraphicsSceneMouseEvent *event);
+  void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+  void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+  void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 
 private:
-    static QCache< PageItem*, QImage > s_cache;
+  static QCache<PageItem *, QImage> s_cache;
 
-    static bool s_decoratePages;
-    static bool s_decorateLinks;
+  static bool s_decoratePages;
+  static bool s_decorateLinks;
 
-    static bool s_invertColors;
+  static bool s_invertColors;
 
-    QMutex* m_mutex;
-    QPdfDocument* m_doc;
+  QMutex *m_mutex;
+  QPdfDocument *m_doc;
 
-    int m_index;
-    QSizeF m_size;
+  int m_index;
+  QSizeF m_size;
 
+  QList<QRectF> m_highlights;
+  QRectF m_rubberBand;
 
-    QList< QRectF > m_highlights;
-    QRectF m_rubberBand;
+  void copyToClipboard(const QPoint &screenPos);
 
-    void copyToClipboard(const QPoint& screenPos);
+  // geometry
 
-    // geometry
+  int m_physicalDpiX;
+  int m_physicalDpiY;
 
-    int m_physicalDpiX;
-    int m_physicalDpiY;
+  qreal m_scaleFactor;
+  QPdf::Rotation m_rotation;
 
-    qreal m_scaleFactor;
-    QPdf::Rotation m_rotation;
+  QTransform m_transform;
+  QTransform m_normalizedTransform;
+  QRectF m_boundingRect;
 
-    QTransform m_transform;
-    QTransform m_normalizedTransform;
-    QRectF m_boundingRect;
+  QImage m_image;
 
-    QImage m_image;
+  void prepareGeometry();
 
-    void prepareGeometry();
+  // render
 
-    // render
+  QFutureWatcher<void> *m_render;
+  void render(int physicalDpiX, int physicalDpiY, qreal scaleFactor,
+              QPdf::Rotation rotation, bool prefetch);
 
-    QFutureWatcher< void >* m_render;
-    void render(int physicalDpiX, int physicalDpiY, qreal scaleFactor, QPdf::Rotation rotation, bool prefetch);
+  QPainterPath highlightPath, searchPath;
+  QTimer highlightRemover;
 
-    QPainterPath highlightPath, searchPath;
-    QTimer highlightRemover;
-
-    private slots:
-    void jumpToSourceFromPdf();
-    void requestNumWords();
-    void requestPngExport();
-    void requestPageWords();
-    void requestOpenLocation();
-    
+private slots:
+  void jumpToSourceFromPdf();
+  void requestNumWords();
+  void requestPngExport();
+  void requestPageWords();
+  void requestOpenLocation();
 };
-
 
 #endif // PAGEITEM_H

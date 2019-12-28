@@ -12,7 +12,6 @@
 #ifndef GETICON_H
 #define GETICON_H
 
-
 #include <QIcon>
 QIcon getIcon(QString name);
 

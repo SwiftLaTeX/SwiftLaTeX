@@ -14,25 +14,23 @@
 
 #include "ui_usercompletiondialog.h"
 
-#include <QListWidgetItem>
 #include <QList>
+#include <QListWidgetItem>
 #include <QStringList>
 
-
-
-class UserCompletionDialog : public QDialog  {
-   Q_OBJECT
+class UserCompletionDialog : public QDialog {
+  Q_OBJECT
 public:
-	UserCompletionDialog(QWidget *parent=0, QStringList extraCompletion=QStringList(""));
-	~UserCompletionDialog();
-	Ui::UserCompletionDialog ui;
-	QStringList userlist;
+  UserCompletionDialog(QWidget *parent = 0,
+                       QStringList extraCompletion = QStringList(""));
+  ~UserCompletionDialog();
+  Ui::UserCompletionDialog ui;
+  QStringList userlist;
 private slots:
-void slotItemClicked(QListWidgetItem* item);
-void actionDelete();
-void actionReplace();
-void actionAddCommand();
+  void slotItemClicked(QListWidgetItem *item);
+  void actionDelete();
+  void actionReplace();
+  void actionAddCommand();
 };
-
 
 #endif

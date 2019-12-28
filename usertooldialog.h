@@ -12,34 +12,35 @@
 #ifndef USERTOOLDIALOG_H
 #define USERTOOLDIALOG_H
 
-#include <QString>
-#include "userquickdialog.h"
 #include "ui_usertooldialog.h"
+#include "userquickdialog.h"
+#include <QString>
 
 typedef QString userCd[5];
 
+class UserToolDialog : public QDialog {
+  Q_OBJECT
+public:
+  UserToolDialog(QWidget *parent = 0, QString name = "",
+                 QStringList names = QStringList(""),
+                 QStringList commands = QStringList(""));
+  ~UserToolDialog();
+  Ui::UserToolDialog ui;
 
-class UserToolDialog : public QDialog  {
-   Q_OBJECT
-public: 
-	UserToolDialog(QWidget *parent=0, QString name="", QStringList names=QStringList(""), QStringList commands=QStringList(""));
-	~UserToolDialog();
-	Ui::UserToolDialog ui;
-
-      userCd Name,Tool;
+  userCd Name, Tool;
 
 private:
-    int previous_index;
-    UserQuickDialog *userquickdlg;
-    QStringList usualNames, usualCommands;
+  int previous_index;
+  UserQuickDialog *userquickdlg;
+  QStringList usualNames, usualCommands;
 public slots:
-    void init();
+  void init();
 
 private slots:
-    void change(int index);
-    void slotOk();
-    void updateItem();
-    void userQuickWizard();
+  void change(int index);
+  void slotOk();
+  void updateItem();
+  void userQuickWizard();
 };
 
 #endif

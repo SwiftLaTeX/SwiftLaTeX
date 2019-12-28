@@ -33,77 +33,73 @@ along with qpdfview.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef PRESENTATIONVIEW_H
 #define PRESENTATIONVIEW_H
 
+#include <QWidget>
 #include <QtCore>
 #include <QtGui>
-#include <QWidget>
-
 
 #include "qpdfdocument.h"
 
-
 #include "pageitem.h"
 
-class PresentationView : public QWidget
-{
-    Q_OBJECT
+class PresentationView : public QWidget {
+  Q_OBJECT
 
 public:
-    PresentationView(QMutex* mutex, QPdfDocument* document);
-    ~PresentationView();
+  PresentationView(QMutex *mutex, QPdfDocument *document);
+  ~PresentationView();
 
-    int numberOfPages() const;
-    int currentPage() const;
+  int numberOfPages() const;
+  int currentPage() const;
 
 signals:
-    void imageReady(QImage image);
-    
+  void imageReady(QImage image);
+
 public slots:
-    void previousPage();
-    void nextPage();
-    void firstPage();
-    void lastPage();
+  void previousPage();
+  void nextPage();
+  void firstPage();
+  void lastPage();
 
-    void jumpToPage(int page, bool returnTo = true);
+  void jumpToPage(int page, bool returnTo = true);
 
-    void startRender();
-    void cancelRender();
+  void startRender();
+  void cancelRender();
 
 protected slots:
-    void on_render_finished();
-    void on_imageReady(QImage image);
+  void on_render_finished();
+  void on_imageReady(QImage image);
 
 protected:
-    void resizeEvent(QResizeEvent* event);
-    void paintEvent(QPaintEvent* event);
+  void resizeEvent(QResizeEvent *event);
+  void paintEvent(QPaintEvent *event);
 
-    void keyPressEvent(QKeyEvent* event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mousePressEvent(QMouseEvent* event);
+  void keyPressEvent(QKeyEvent *event);
+  void mouseMoveEvent(QMouseEvent *event);
+  void mousePressEvent(QMouseEvent *event);
 
 private:
-    QMutex* m_mutex;
-    QPdfDocument* m_document;
+  QMutex *m_mutex;
+  QPdfDocument *m_document;
 
-    int m_numberOfPages;
-    int m_currentPage;
-    int m_returnToPage;
+  int m_numberOfPages;
+  int m_currentPage;
+  int m_returnToPage;
 
-    //QList< Poppler::LinkGoto* > m_links;
+  // QList< Poppler::LinkGoto* > m_links;
 
-    qreal m_scaleFactor;
+  qreal m_scaleFactor;
 
-    QTransform m_normalizedTransform;
-    QRectF m_boundingRect;
+  QTransform m_normalizedTransform;
+  QRectF m_boundingRect;
 
-    QImage m_image;
+  QImage m_image;
 
-    void prepareView();
+  void prepareView();
 
-    // render
+  // render
 
-    QFutureWatcher< void >* m_render;
-    void render(int index, qreal scaleFactor);
-    
+  QFutureWatcher<void> *m_render;
+  void render(int index, qreal scaleFactor);
 };
 
 #endif // PRESENTATIONVIEW_H

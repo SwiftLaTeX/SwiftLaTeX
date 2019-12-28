@@ -12,32 +12,29 @@
 #ifndef QUICKXELATEXDIALOG_H
 #define QUICKXELATEXDIALOG_H
 
-#include "ui_quickxelatexdialog.h"
 #include "addoptiondialog.h"
+#include "ui_quickxelatexdialog.h"
 
-
-
-class QuickXelatexDialog : public QDialog  {
-   Q_OBJECT
+class QuickXelatexDialog : public QDialog {
+  Q_OBJECT
 public:
-	QuickXelatexDialog(QWidget *parent=0, const char *name=0);
-	~QuickXelatexDialog();
-	Ui::QuickXelatexDialog ui;
+  QuickXelatexDialog(QWidget *parent = 0, const char *name = 0);
+  ~QuickXelatexDialog();
+  Ui::QuickXelatexDialog ui;
 
 public:
-
   QStringList otherClassList, otherPaperList, otherOptionsList, otherBabelList;
 
 public slots:
-    void Init();
+  void Init();
 private slots:
-    void addUserClass();
-    void addUserPaper();
-    void addUserOptions();
-    void addUserBabel();
-private :
-AddOptionDialog *dlg;
-};
+  void addUserClass();
+  void addUserPaper();
+  void addUserOptions();
+  void addUserBabel();
 
+private:
+  AddOptionDialog *dlg;
+};
 
 #endif

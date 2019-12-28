@@ -12,33 +12,31 @@
 #ifndef QUICKDOCUMENTDIALOG_H
 #define QUICKDOCUMENTDIALOG_H
 
-#include "ui_quickdocumentdialog.h"
 #include "addoptiondialog.h"
+#include "ui_quickdocumentdialog.h"
 
-
-
-class QuickDocumentDialog : public QDialog  {
-   Q_OBJECT
+class QuickDocumentDialog : public QDialog {
+  Q_OBJECT
 public:
-	QuickDocumentDialog(QWidget *parent=0, const char *name=0);
-	~QuickDocumentDialog();
-	Ui::QuickDocumentDialog ui;
+  QuickDocumentDialog(QWidget *parent = 0, const char *name = 0);
+  ~QuickDocumentDialog();
+  Ui::QuickDocumentDialog ui;
 
 public:
-
-  QStringList otherClassList, otherPaperList, otherEncodingList, otherOptionsList, otherBabelList;
+  QStringList otherClassList, otherPaperList, otherEncodingList,
+      otherOptionsList, otherBabelList;
 
 public slots:
-    void Init();
+  void Init();
 private slots:
-    void addUserClass();
-    void addUserPaper();
-    void addUserEncoding();
-    void addUserOptions();
-    void addUserBabel();
-private :
-AddOptionDialog *dlg;
-};
+  void addUserClass();
+  void addUserPaper();
+  void addUserEncoding();
+  void addUserOptions();
+  void addUserBabel();
 
+private:
+  AddOptionDialog *dlg;
+};
 
 #endif

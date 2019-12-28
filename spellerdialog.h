@@ -11,39 +11,41 @@
 #ifndef SPELLERDIALOG_H
 #define SPELLERDIALOG_H
 
-#include "ui_spellerdialog.h"
-#include "latexeditor.h"
 #include "hunspell/hunspell.hxx"
+#include "latexeditor.h"
+#include "ui_spellerdialog.h"
 
 #include <QTextCursor>
 
-class SpellerDialog : public QDialog  {
-   Q_OBJECT
+class SpellerDialog : public QDialog {
+  Q_OBJECT
 public:
-	SpellerDialog(QWidget *parent=0,LatexEditor *ed=0,QString ignoredWords="");
-	~SpellerDialog();
-	Ui::SpellerDialog ui;
-QStringList alwaysignoredwordList;
-private :
-QString spell_dic, spell_encoding;
-LatexEditor *editor;
-QStringList ignoredwordList, hardignoredwordList;
-int startpos, endpos, deltacol;
-Hunspell * pChecker;
-bool go;
-QTextCursor c;
-bool isSpace(QChar c) const;
-protected:
-void closeEvent( QCloseEvent* );
-private slots:
-void accept();
-void spellingInit();
-void slotIgnore();
-void slotAlwaysIgnore();
-void slotReplace();
-void updateItem();
-void SpellingNextWord();
-};
+  SpellerDialog(QWidget *parent = 0, LatexEditor *ed = 0,
+                QString ignoredWords = "");
+  ~SpellerDialog();
+  Ui::SpellerDialog ui;
+  QStringList alwaysignoredwordList;
 
+private:
+  QString spell_dic, spell_encoding;
+  LatexEditor *editor;
+  QStringList ignoredwordList, hardignoredwordList;
+  int startpos, endpos, deltacol;
+  Hunspell *pChecker;
+  bool go;
+  QTextCursor c;
+  bool isSpace(QChar c) const;
+
+protected:
+  void closeEvent(QCloseEvent *);
+private slots:
+  void accept();
+  void spellingInit();
+  void slotIgnore();
+  void slotAlwaysIgnore();
+  void slotReplace();
+  void updateItem();
+  void SpellingNextWord();
+};
 
 #endif

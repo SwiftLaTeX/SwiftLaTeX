@@ -16,33 +16,35 @@
 
 #include <QKeySequence>
 
-class KeySequenceDialog : public QDialog
-{
-    Q_OBJECT
-public: 
-	KeySequenceDialog(QWidget *parent = 0);
-	~KeySequenceDialog();
-	Ui::KeySequenceDialog ui;
-    QKeySequence keySequence() const;
-    bool eventFilter(QObject *o, QEvent *e);
+class KeySequenceDialog : public QDialog {
+  Q_OBJECT
+public:
+  KeySequenceDialog(QWidget *parent = 0);
+  ~KeySequenceDialog();
+  Ui::KeySequenceDialog ui;
+  QKeySequence keySequence() const;
+  bool eventFilter(QObject *o, QEvent *e);
 public Q_SLOTS:
-    void setKeySequence(const QKeySequence &sequence);
+  void setKeySequence(const QKeySequence &sequence);
 Q_SIGNALS:
-    void keySequenceChanged(const QKeySequence &sequence);
-protected:
-    void focusInEvent(QFocusEvent *e);
-    void focusOutEvent(QFocusEvent *e);
-    void keyPressEvent(QKeyEvent *e);
-    void keyReleaseEvent(QKeyEvent *e);
-    bool event(QEvent *e);
-private slots:
-    void slotClearShortcut();
-private:
-    void handleKeyEvent(QKeyEvent *e);
-    int translateModifiers(Qt::KeyboardModifiers state, const QString &text) const;
+  void keySequenceChanged(const QKeySequence &sequence);
 
-    int m_num;
-    QKeySequence m_keySequence;
+protected:
+  void focusInEvent(QFocusEvent *e);
+  void focusOutEvent(QFocusEvent *e);
+  void keyPressEvent(QKeyEvent *e);
+  void keyReleaseEvent(QKeyEvent *e);
+  bool event(QEvent *e);
+private slots:
+  void slotClearShortcut();
+
+private:
+  void handleKeyEvent(QKeyEvent *e);
+  int translateModifiers(Qt::KeyboardModifiers state,
+                         const QString &text) const;
+
+  int m_num;
+  QKeySequence m_keySequence;
 };
 
 #endif

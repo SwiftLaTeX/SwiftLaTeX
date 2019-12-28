@@ -14,13 +14,12 @@
 
 #include "ui_x11fontdialog.h"
 
-class X11FontDialog : public QDialog  {
-   Q_OBJECT
+class X11FontDialog : public QDialog {
+  Q_OBJECT
 public:
-	X11FontDialog(QWidget *parent=0);
-	~X11FontDialog();
-	Ui::X11FontDialog ui;
+  X11FontDialog(QWidget *parent = 0);
+  ~X11FontDialog();
+  Ui::X11FontDialog ui;
 };
-
 
 #endif

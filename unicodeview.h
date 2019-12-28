@@ -12,33 +12,35 @@
 #ifndef UNICODEVIEW_H
 #define UNICODEVIEW_H
 
-#include <QWidget>
-#include <QFont>
-#include <QColor>
-#include <QStackedWidget>
-#include <QToolBar>
-#include <QLabel>
-#include <QSplitter>
-#include "lightlatexeditor.h"
-#include "lightlinenumberwidget.h"
 #include "lightfindwidget.h"
 #include "lightgotolinewidget.h"
+#include "lightlatexeditor.h"
+#include "lightlinenumberwidget.h"
 #include "minisplitter.h"
+#include <QColor>
+#include <QFont>
+#include <QLabel>
+#include <QSplitter>
+#include <QStackedWidget>
+#include <QToolBar>
+#include <QWidget>
 
-class UnicodeView : public QWidget  {
-   Q_OBJECT
-public: 
-UnicodeView(QWidget *parent, QFont & efont,bool line, QList<QColor> edcolors, QList<QColor> hicolors);
-~UnicodeView();
+class UnicodeView : public QWidget {
+  Q_OBJECT
+public:
+  UnicodeView(QWidget *parent, QFont &efont, bool line, QList<QColor> edcolors,
+              QList<QColor> hicolors);
+  ~UnicodeView();
   LightLatexEditor *editor;
   QToolBar *centralToolBar;
-  void changeSettings(QFont & new_font,bool line);
+  void changeSettings(QFont &new_font, bool line);
+
 private:
   MiniSplitter *splitter;
-  LightLineNumberWidget* m_lineNumberWidget;
-  void setLineNumberWidgetVisible( bool );
+  LightLineNumberWidget *m_lineNumberWidget;
+  void setLineNumberWidgetVisible(bool);
   QStackedWidget *Stack;
-  QLabel* titleLabel;
+  QLabel *titleLabel;
   LightFindWidget *findwidget;
   LightGotoLineWidget *gotolinewidget;
   QString lastdocument;

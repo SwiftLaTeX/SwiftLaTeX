@@ -14,18 +14,16 @@
 
 #include "ui_texdocdialog.h"
 
-class TexdocDialog : public QDialog
-{
-    Q_OBJECT
+class TexdocDialog : public QDialog {
+  Q_OBJECT
 
- public:
-    TexdocDialog( QWidget *parent = 0);
-    Ui::TexdocDialog ui;
+public:
+  TexdocDialog(QWidget *parent = 0);
+  Ui::TexdocDialog ui;
 
 private slots:
-    void chooseFile();
-    void expand(bool e);
-
+  void chooseFile();
+  void expand(bool e);
 };
 
 #endif

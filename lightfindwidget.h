@@ -12,31 +12,32 @@
 #ifndef LIGHTFINDWIDGET_H
 #define LIGHTFINDWIDGET_H
 
-#include "ui_findwidget.h"
 #include "lightlatexeditor.h"
+#include "ui_findwidget.h"
 
-class LightFindWidget : public QWidget
-{ 
-    Q_OBJECT
+class LightFindWidget : public QWidget {
+  Q_OBJECT
 
 public:
-    LightFindWidget(QWidget* parent = 0);
-    ~LightFindWidget();
-    Ui::FindWidget ui;
+  LightFindWidget(QWidget *parent = 0);
+  ~LightFindWidget();
+  Ui::FindWidget ui;
 public slots:
-    virtual void doFind();
-    void SetEditor(LightLatexEditor *ed);
-    void doHide();
+  virtual void doFind();
+  void SetEditor(LightLatexEditor *ed);
+  void doHide();
 private slots:
-    void expand(bool e);
-    void updateSelection(bool e);
-private :
+  void expand(bool e);
+  void updateSelection(bool e);
+
+private:
   int startpos, endpos;
+
 protected:
-    LightLatexEditor *editor;
+  LightLatexEditor *editor;
 signals:
-void requestHide();
-void requestExtension();
+  void requestHide();
+  void requestExtension();
 };
 
 #endif

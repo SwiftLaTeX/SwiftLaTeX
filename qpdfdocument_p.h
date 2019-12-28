@@ -39,8 +39,8 @@
 
 #include "qpdfdocument.h"
 
-#include "public/fpdfview.h"
 #include "public/fpdf_dataavail.h"
+#include "public/fpdfview.h"
 
 #include <qbuffer.h>
 #include <qmutex.h>
@@ -49,50 +49,53 @@
 
 QT_BEGIN_NAMESPACE
 
-class QPdfMutexLocker : public QMutexLocker
-{
+class QPdfMutexLocker : public QMutexLocker {
 public:
-    QPdfMutexLocker();
+  QPdfMutexLocker();
 };
 
-class QPdfDocumentPrivate: public FPDF_FILEACCESS, public FX_FILEAVAIL, public FX_DOWNLOADHINTS
-{
+class QPdfDocumentPrivate : public FPDF_FILEACCESS,
+                            public FX_FILEAVAIL,
+                            public FX_DOWNLOADHINTS {
 public:
-    QPdfDocumentPrivate();
-    ~QPdfDocumentPrivate();
+  QPdfDocumentPrivate();
+  ~QPdfDocumentPrivate();
 
-    QPdfDocument *q;
+  QPdfDocument *q;
 
-    FPDF_AVAIL avail;
-    FPDF_DOCUMENT doc;
-    bool loadComplete;
+  FPDF_AVAIL avail;
+  FPDF_DOCUMENT doc;
+  bool loadComplete;
 
-    QPointer<QIODevice> device;
-    QScopedPointer<QIODevice> ownDevice;
-    QBuffer asyncBuffer;
-    QPointer<QIODevice> sequentialSourceDevice;
-    QByteArray password;
+  QPointer<QIODevice> device;
+  QScopedPointer<QIODevice> ownDevice;
+  QBuffer asyncBuffer;
+  QPointer<QIODevice> sequentialSourceDevice;
+  QByteArray password;
 
-    QPdfDocument::Status status;
-    QPdfDocument::DocumentError lastError;
-    int pageCount;
+  QPdfDocument::Status status;
+  QPdfDocument::DocumentError lastError;
+  int pageCount;
 
-    void clear();
+  void clear();
 
-    void load(QIODevice *device, bool ownDevice);
-    void loadAsync(QIODevice *device);
+  void load(QIODevice *device, bool ownDevice);
+  void loadAsync(QIODevice *device);
 
-    void _q_tryLoadingWithSizeFromContentHeader();
-    void initiateAsyncLoadWithTotalSizeKnown(quint64 totalSize);
-    void _q_copyFromSequentialSourceDevice();
-    void tryLoadDocument();
-    void checkComplete();
-    void setStatus(QPdfDocument::Status status);
+  void _q_tryLoadingWithSizeFromContentHeader();
+  void initiateAsyncLoadWithTotalSizeKnown(quint64 totalSize);
+  void _q_copyFromSequentialSourceDevice();
+  void tryLoadDocument();
+  void checkComplete();
+  void setStatus(QPdfDocument::Status status);
 
-    static FPDF_BOOL fpdf_IsDataAvail(struct _FX_FILEAVAIL* pThis, size_t offset, size_t size);
-    static int fpdf_GetBlock(void* param, unsigned long position, unsigned char* pBuf, unsigned long size);
-    static void fpdf_AddSegment(struct _FX_DOWNLOADHINTS* pThis, size_t offset, size_t size);
-    void updateLastError();
+  static FPDF_BOOL fpdf_IsDataAvail(struct _FX_FILEAVAIL *pThis, size_t offset,
+                                    size_t size);
+  static int fpdf_GetBlock(void *param, unsigned long position,
+                           unsigned char *pBuf, unsigned long size);
+  static void fpdf_AddSegment(struct _FX_DOWNLOADHINTS *pThis, size_t offset,
+                              size_t size);
+  void updateLastError();
 };
 
 QT_END_NAMESPACE

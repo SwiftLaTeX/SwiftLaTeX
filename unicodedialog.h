@@ -16,21 +16,22 @@
 #include "unicodeview.h"
 #include <QVBoxLayout>
 
-class UnicodeDialog : public QDialog  {
-   Q_OBJECT
+class UnicodeDialog : public QDialog {
+  Q_OBJECT
 public:
-	UnicodeDialog(QWidget *parent=0);
-	~UnicodeDialog();
-	Ui::UnicodeDialog ui;
-void init(QFont & efont,bool line, QList<QColor> edcolors, QList<QColor> hicolors);
-private :
-  UnicodeView* unicodeviewWidget;
-  QVBoxLayout* mainlay;
-private slots:
-    void chooseFile();
-    void convertFile();
-    void resetEditor();
-};
+  UnicodeDialog(QWidget *parent = 0);
+  ~UnicodeDialog();
+  Ui::UnicodeDialog ui;
+  void init(QFont &efont, bool line, QList<QColor> edcolors,
+            QList<QColor> hicolors);
 
+private:
+  UnicodeView *unicodeviewWidget;
+  QVBoxLayout *mainlay;
+private slots:
+  void chooseFile();
+  void convertFile();
+  void resetEditor();
+};
 
 #endif

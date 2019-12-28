@@ -14,52 +14,52 @@
 
 #include "ui_configdialog.h"
 
-#include <QListWidgetItem>
-#include <QTableWidgetItem>
 #include "keysequencedialog.h"
 #include "userquickdialog.h"
+#include <QListWidgetItem>
+#include <QTableWidgetItem>
 
-class ConfigDialog : public QDialog
-{
-    Q_OBJECT
+class ConfigDialog : public QDialog {
+  Q_OBJECT
 
 public:
-    ConfigDialog(QWidget* parent = 0);
-	~ConfigDialog();
-Ui::ConfigDialog ui;
+  ConfigDialog(QWidget *parent = 0);
+  ~ConfigDialog();
+  Ui::ConfigDialog ui;
 
 public slots:
-    void changePage(QListWidgetItem *current, QListWidgetItem *previous);
+  void changePage(QListWidgetItem *current, QListWidgetItem *previous);
 
 private slots:
-void createIcons();
-void browseAspell();
-void browseSvn();
-void browseLatex();
-void browseDvips();
-void browseBibtex();
-void browseMakeindex();
-void browseDviviewer();
-void browsePsviewer();
-void browsePdflatex();
-void browseXelatex();
-void browseLualatex();
-void browseDvipdfm();
-void browsePs2pdf();
-void browsePdfviewer();
-void browseMetapost();
-void browseGhostscript();
-void browseAsymptote();
-void browseLatexmk();
-void configureShortCut(QTableWidgetItem *item);
-void configureKeyToggle();
-void userQuickWizard();
-void asyQuickWizard();
-void restoreColors();
-void darkColors();
-private :
-KeySequenceDialog *keydlg;
-UserQuickDialog *userquickdlg;
+  void createIcons();
+  void browseAspell();
+  void browseSvn();
+  void browseLatex();
+  void browseDvips();
+  void browseBibtex();
+  void browseMakeindex();
+  void browseDviviewer();
+  void browsePsviewer();
+  void browsePdflatex();
+  void browseXelatex();
+  void browseLualatex();
+  void browseDvipdfm();
+  void browsePs2pdf();
+  void browsePdfviewer();
+  void browseMetapost();
+  void browseGhostscript();
+  void browseAsymptote();
+  void browseLatexmk();
+  void configureShortCut(QTableWidgetItem *item);
+  void configureKeyToggle();
+  void userQuickWizard();
+  void asyQuickWizard();
+  void restoreColors();
+  void darkColors();
+
+private:
+  KeySequenceDialog *keydlg;
+  UserQuickDialog *userquickdlg;
 };
 
 #endif

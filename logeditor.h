@@ -12,30 +12,31 @@
 #ifndef LOGEDITOR_H
 #define LOGEDITOR_H
 
-#include <QWidget>
-#include <QString>
 #include <QPlainTextEdit>
-#include <QTextDocument>
-#include <QTextCursor>
+#include <QString>
 #include <QTextBlock>
-
+#include <QTextCursor>
+#include <QTextDocument>
+#include <QWidget>
 
 #include "loghighlighter.h"
 
-class LogEditor : public QPlainTextEdit  {
-   Q_OBJECT
-public: 
-	LogEditor(QWidget *parent);
-	~LogEditor();
+class LogEditor : public QPlainTextEdit {
+  Q_OBJECT
+public:
+  LogEditor(QWidget *parent);
+  ~LogEditor();
 
 public slots:
-   void insertLine(QString l);
-   void setCursorPosition(int parag, int index);
+  void insertLine(QString l);
+  void setCursorPosition(int parag, int index);
+
 protected:
-    virtual void mousePressEvent(QMouseEvent *e);
-    void paintEvent(QPaintEvent *event);
+  virtual void mousePressEvent(QMouseEvent *e);
+  void paintEvent(QPaintEvent *event);
 signals:
-    void clickonline(int l);
+  void clickonline(int l);
+
 private:
   LogHighlighter *highlighter;
 };

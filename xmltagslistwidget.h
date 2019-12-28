@@ -17,30 +17,29 @@
 
 class QDomElement;
 
-struct xmlTag
-    {
-    QString txt;
-    QString tag;
-    QString dx;
-    QString dy;
-    int type;
-    };
+struct xmlTag {
+  QString txt;
+  QString tag;
+  QString dx;
+  QString dy;
+  int type;
+};
 
-struct xmlTagList
-    {
-    QString title;
-    QList<xmlTag> tags;
-    QList<xmlTagList> children;
-    };
+struct xmlTagList {
+  QString title;
+  QList<xmlTag> tags;
+  QList<xmlTagList> children;
+};
 
-class XmlTagsListWidget : public QListWidget  {
+class XmlTagsListWidget : public QListWidget {
   Q_OBJECT
 public:
-	XmlTagsListWidget(QWidget *parent, QString file);
+  XmlTagsListWidget(QWidget *parent, QString file);
+
 private:
-xmlTagList getTags(const QDomElement &element);
-xmlTagList xmlSections;
-void addListWidgetItems(const xmlTagList &tagList);
+  xmlTagList getTags(const QDomElement &element);
+  xmlTagList xmlSections;
+  void addListWidgetItems(const xmlTagList &tagList);
 };
 
 #endif

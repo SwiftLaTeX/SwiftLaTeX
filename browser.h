@@ -12,37 +12,36 @@
 #ifndef BROWSER_H
 #define BROWSER_H
 
-#include <QMainWindow>
+#include <QAction>
 #include <QLineEdit>
+#include <QMainWindow>
 #include <QPushButton>
 #include <QWebEngineView>
-#include <QAction>
 
-class Browser : public QMainWindow
-{
-    Q_OBJECT
+class Browser : public QMainWindow {
+  Q_OBJECT
 public:
-    Browser( const QString home, bool showToolBar=true, QWidget* parent = 0);
-    ~Browser();
+  Browser(const QString home, bool showToolBar = true, QWidget *parent = 0);
+  ~Browser();
 
 protected slots:
-    void adjustTitle();
-    void setProgress(int p);
-    void finishLoading(bool);
+  void adjustTitle();
+  void setProgress(int p);
+  void finishLoading(bool);
 private slots:
   void Index();
   void Print();
   void Find();
+
 private:
-    QWebEngineView *view;
-    int progress;
-    QLineEdit *searchLineEdit;
-    QPushButton *findButton;
-    QString index;
-    bool ontop;
-    QString pdffichier;
-    QAction *searchAct;
+  QWebEngineView *view;
+  int progress;
+  QLineEdit *searchLineEdit;
+  QPushButton *findButton;
+  QString index;
+  bool ontop;
+  QString pdffichier;
+  QAction *searchAct;
 };
 
 #endif
-

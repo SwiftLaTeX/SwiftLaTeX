@@ -12,33 +12,31 @@
 #ifndef LIGHTLINENUMBERWIDGET_H
 #define LIGHTLINENUMBERWIDGET_H
 
-#include <QtGui>
-#include <QWidget>
+#include "lightlatexeditor.h"
 #include <QFont>
 #include <QPaintEvent>
-#include "lightlatexeditor.h"
+#include <QWidget>
+#include <QtGui>
 
-
-class LightLineNumberWidget: public QWidget
-{
-    Q_OBJECT
+class LightLineNumberWidget : public QWidget {
+  Q_OBJECT
 public:
-    LightLineNumberWidget(LightLatexEditor*, QWidget* parent);
-    virtual ~LightLineNumberWidget();
+  LightLineNumberWidget(LightLatexEditor *, QWidget *parent);
+  virtual ~LightLineNumberWidget();
 
 public slots:
-    void doRepaint() { repaint(); }
-    void setFont(QFont efont);
+  void doRepaint() { repaint(); }
+  void setFont(QFont efont);
 
 protected:
-    virtual bool event(QEvent *event);
-    virtual void paintEvent( QPaintEvent* event);
-    virtual void mousePressEvent(QMouseEvent *e);
+  virtual bool event(QEvent *event);
+  virtual void paintEvent(QPaintEvent *event);
+  virtual void mousePressEvent(QMouseEvent *e);
 
 private:
-    LightLatexEditor* m_editor;
-    QFont numfont;
-    int start, end;
+  LightLatexEditor *m_editor;
+  QFont numfont;
+  int start, end;
 };
 
 #endif

@@ -12,34 +12,31 @@
 #ifndef TEXMAKERAPP_H
 #define TEXMAKERAPP_H
 
-
-#include <QTranslator>
 #include "texmaker.h"
+#include <QTranslator>
 
-
-class TexmakerApp : public QApplication
-{
+class TexmakerApp : public QApplication {
 public:
-    TexmakerApp(const QString &id, int & argc, char ** argv );
-    ~TexmakerApp();
-    Texmaker *mw;  
-    void init( QStringList args );  // This function does all the initialization instead of the constructor.
-    void makeTranslation(const QString &lang);
-    QList<QTranslator*> translatorsList;
-    static TexmakerApp *instance();
-    void ReadSettings();
-    void SaveSettings();
-    QString language;
+  TexmakerApp(const QString &id, int &argc, char **argv);
+  ~TexmakerApp();
+  Texmaker *mw;
+  void init(QStringList args); // This function does all the initialization
+                               // instead of the constructor.
+  void makeTranslation(const QString &lang);
+  QList<QTranslator *> translatorsList;
+  static TexmakerApp *instance();
+  void ReadSettings();
+  void SaveSettings();
+  QString language;
+
 private:
-    static TexmakerApp *theAppInstance;
+  static TexmakerApp *theAppInstance;
+
 protected:
-    bool event(QEvent *event);
+  bool event(QEvent *event);
 #if defined(Q_OS_MAC)
-    QString MacFile;
+  QString MacFile;
 #endif
 };
-inline TexmakerApp *TexmakerApp::instance()
-{
-	return theAppInstance;
-}
+inline TexmakerApp *TexmakerApp::instance() { return theAppInstance; }
 #endif

@@ -14,13 +14,12 @@
 
 #include "ui_addtagdialog.h"
 
-class AddTagDialog : public QDialog
-{
-    Q_OBJECT
-public: 
-	AddTagDialog(QWidget *parent = 0);
-	~AddTagDialog();
-	Ui::AddTagDialog ui;
+class AddTagDialog : public QDialog {
+  Q_OBJECT
+public:
+  AddTagDialog(QWidget *parent = 0);
+  ~AddTagDialog();
+  Ui::AddTagDialog ui;
 };
 
 #endif

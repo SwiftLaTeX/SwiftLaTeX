@@ -15,27 +15,26 @@
 #include <QLabel>
 #include <QPixmap>
 
-class PlayerButton : public QLabel
-{
-    Q_OBJECT
+class PlayerButton : public QLabel {
+  Q_OBJECT
 
 public:
-PlayerButton( QWidget *parent = 0 );
+  PlayerButton(QWidget *parent = 0);
 
-void setImages( QString name);
-void setEnabled( bool enabled );
-void enterEvent( QEvent * e );
-void leaveEvent( QEvent * e );
-void mouseReleaseEvent( QMouseEvent * e );
+  void setImages(QString name);
+  void setEnabled(bool enabled);
+  void enterEvent(QEvent *e);
+  void leaveEvent(QEvent *e);
+  void mouseReleaseEvent(QMouseEvent *e);
 
 private:
-QPixmap pixEnabled;
-QPixmap pixHover;
-QPixmap pixDisabled;
-bool state;
+  QPixmap pixEnabled;
+  QPixmap pixHover;
+  QPixmap pixDisabled;
+  bool state;
 
 signals:
-void clicked();
+  void clicked();
 };
 
 #endif

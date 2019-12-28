@@ -15,22 +15,18 @@
 #include "ui_quickbeamerdialog.h"
 #include <QLabel>
 
-
-
-
-class QuickBeamerDialog : public QDialog  {
-   Q_OBJECT
+class QuickBeamerDialog : public QDialog {
+  Q_OBJECT
 public:
-	QuickBeamerDialog(QWidget *parent=0, const char *name=0);
-	~QuickBeamerDialog();
-	Ui::QuickBeamerDialog ui;
-QLabel *labelImage;
+  QuickBeamerDialog(QWidget *parent = 0, const char *name = 0);
+  ~QuickBeamerDialog();
+  Ui::QuickBeamerDialog ui;
+  QLabel *labelImage;
 
 public slots:
-    void Init();
+  void Init();
 private slots:
-void updatePreview(const QString &theme);
+  void updatePreview(const QString &theme);
 };
-
 
 #endif

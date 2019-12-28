@@ -14,31 +14,32 @@
 
 #include "ui_userquickdialog.h"
 
-#include <QListWidgetItem>
-#include <QList>
-#include <QStringList>
 #include <QCloseEvent>
+#include <QList>
+#include <QListWidgetItem>
+#include <QStringList>
 
-typedef  QMap<QString,QString> CommandsMap;
+typedef QMap<QString, QString> CommandsMap;
 
-class UserQuickDialog : public QDialog  {
-   Q_OBJECT
+class UserQuickDialog : public QDialog {
+  Q_OBJECT
 public:
-	UserQuickDialog(QWidget *parent=0, QStringList usualNames=QStringList(""), QStringList usualCommands=QStringList(""));
-	~UserQuickDialog();
-	Ui::UserQuickDialog ui;
-QString userQuickCommand;
-private:
-QStringList userlist;
-CommandsMap cmdmap;
-private slots:
-void addItem(QString cmd);
-void actionUp();
-void actionDown();
-void actionDelete();
-void actionAddCommand();
-void updateQuickCommand();
-};
+  UserQuickDialog(QWidget *parent = 0, QStringList usualNames = QStringList(""),
+                  QStringList usualCommands = QStringList(""));
+  ~UserQuickDialog();
+  Ui::UserQuickDialog ui;
+  QString userQuickCommand;
 
+private:
+  QStringList userlist;
+  CommandsMap cmdmap;
+private slots:
+  void addItem(QString cmd);
+  void actionUp();
+  void actionDown();
+  void actionDelete();
+  void actionAddCommand();
+  void updateQuickCommand();
+};
 
 #endif

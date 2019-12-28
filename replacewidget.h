@@ -12,36 +12,37 @@
 #ifndef REPLACEWIDGET_H
 #define REPLACEWIDGET_H
 
-#include "ui_replacewidget.h"
 #include "latexeditor.h"
+#include "ui_replacewidget.h"
 
-class ReplaceWidget : public QWidget
-{ 
-    Q_OBJECT
+class ReplaceWidget : public QWidget {
+  Q_OBJECT
 
 public:
-    ReplaceWidget(QWidget* parent = 0);
-    ~ReplaceWidget();
-    Ui::ReplaceWidget ui;
+  ReplaceWidget(QWidget *parent = 0);
+  ~ReplaceWidget();
+  Ui::ReplaceWidget ui;
 
 public slots:
-    virtual void doReplace();
-    virtual void doReplaceAll();
-    void SetEditor(LatexEditor *ed);
-    void doHide();
+  virtual void doReplace();
+  virtual void doReplaceAll();
+  void SetEditor(LatexEditor *ed);
+  void doHide();
 private slots:
-    void expand(bool e);
-    void updateSelection(bool e);
-    void updateReg(bool e);
-private :
+  void expand(bool e);
+  void updateSelection(bool e);
+  void updateReg(bool e);
+
+private:
   int startpos, endpos, deltacol;
   void replaceSelection();
+
 protected:
-    LatexEditor *editor;
-void keyPressEvent ( QKeyEvent * e );
+  LatexEditor *editor;
+  void keyPressEvent(QKeyEvent *e);
 signals:
-void requestHide();
-void requestExtension();
+  void requestHide();
+  void requestExtension();
 };
 
-#endif 
+#endif

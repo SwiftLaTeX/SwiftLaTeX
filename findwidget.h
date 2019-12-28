@@ -12,32 +12,33 @@
 #ifndef FINDWIDGET_H
 #define FINDWIDGET_H
 
-#include "ui_findwidget.h"
 #include "latexeditor.h"
+#include "ui_findwidget.h"
 
-class FindWidget : public QWidget
-{ 
-    Q_OBJECT
+class FindWidget : public QWidget {
+  Q_OBJECT
 
 public:
-    FindWidget(QWidget* parent = 0);
-    ~FindWidget();
-    Ui::FindWidget ui;
+  FindWidget(QWidget *parent = 0);
+  ~FindWidget();
+  Ui::FindWidget ui;
 public slots:
-    virtual void doFind();
-    void SetEditor(LatexEditor *ed);
-    void doHide();
+  virtual void doFind();
+  void SetEditor(LatexEditor *ed);
+  void doHide();
 private slots:
-    void expand(bool e);
-    void updateSelection(bool e);
-private :
+  void expand(bool e);
+  void updateSelection(bool e);
+
+private:
   int startpos, endpos;
+
 protected:
-    LatexEditor *editor;
-void keyPressEvent ( QKeyEvent * e );
+  LatexEditor *editor;
+  void keyPressEvent(QKeyEvent *e);
 signals:
-void requestHide();
-void requestExtension();
+  void requestHide();
+  void requestExtension();
 };
 
 #endif

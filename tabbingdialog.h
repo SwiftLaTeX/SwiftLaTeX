@@ -14,12 +14,12 @@
 
 #include "ui_tabbingdialog.h"
 
-class TabbingDialog : public QDialog  {
-   Q_OBJECT
-public: 
-	TabbingDialog(QWidget *parent=0, const char *name=0);
-	~TabbingDialog();
-	Ui::TabbingDialog ui;
+class TabbingDialog : public QDialog {
+  Q_OBJECT
+public:
+  TabbingDialog(QWidget *parent = 0, const char *name = 0);
+  ~TabbingDialog();
+  Ui::TabbingDialog ui;
 };
 
 #endif

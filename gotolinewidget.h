@@ -12,27 +12,27 @@
 #ifndef GOTOLINEWIDGET_H
 #define GOTOLINEWIDGET_H
 
-#include "ui_gotolinewidget.h"
 #include "latexeditor.h"
+#include "ui_gotolinewidget.h"
 
-class GotoLineWidget : public QWidget
-{ 
-    Q_OBJECT
+class GotoLineWidget : public QWidget {
+  Q_OBJECT
 
 public:
-    GotoLineWidget(QWidget* parent = 0);
-    ~GotoLineWidget();
-    Ui::GotoLineWidget ui;
+  GotoLineWidget(QWidget *parent = 0);
+  ~GotoLineWidget();
+  Ui::GotoLineWidget ui;
 
 public slots:
-    virtual void gotoLine();
-    void SetEditor(LatexEditor *ed);
-    void doHide();
+  virtual void gotoLine();
+  void SetEditor(LatexEditor *ed);
+  void doHide();
+
 protected:
-    LatexEditor *editor;
-void keyPressEvent ( QKeyEvent * e );
+  LatexEditor *editor;
+  void keyPressEvent(QKeyEvent *e);
 signals:
-void requestHide();
+  void requestHide();
 };
 
-#endif 
+#endif

@@ -9,42 +9,41 @@
  *                                                                         *
  ***************************************************************************/
 
-
 #ifndef LIGHTLATEXHIGHLIGHTER_H
 #define LIGHTLATEXHIGHLIGHTER_H
 
-
-#include <QSyntaxHighlighter>
-#include <QHash>
-#include <QTextCharFormat>
 #include <QColor>
+#include <QHash>
+#include <QSyntaxHighlighter>
 #include <QTextBlockUserData>
+#include <QTextCharFormat>
 //#include "latexeditor.h"
 
 class QTextDocument;
 class LightLatexEditor;
 
-class LightLatexHighlighter : public QSyntaxHighlighter
-{
-    Q_OBJECT
+class LightLatexHighlighter : public QSyntaxHighlighter {
+  Q_OBJECT
 
 public:
-    LightLatexHighlighter(QTextDocument *parent = 0);
-    ~LightLatexHighlighter();
-    QColor ColorStandard, ColorComment, ColorMath, ColorCommand, ColorKeyword, ColorVerbatim, ColorTodo, ColorKeywordGraphic, ColorNumberGraphic;
-    QStringList KeyWords, KeyWordsGraphic, KeyWordsGraphicBis;
+  LightLatexHighlighter(QTextDocument *parent = 0);
+  ~LightLatexHighlighter();
+  QColor ColorStandard, ColorComment, ColorMath, ColorCommand, ColorKeyword,
+      ColorVerbatim, ColorTodo, ColorKeywordGraphic, ColorNumberGraphic;
+  QStringList KeyWords, KeyWordsGraphic, KeyWordsGraphicBis;
 public slots:
-void setColors(QList<QColor> colors);
-void SetEditor(LightLatexEditor *ed);
-void setModeGraphic(bool m);
-private :
-bool isWordSeparator(QChar c) const;
-bool isSpace(QChar c) const;
-bool isGraphic;
-protected:
-LightLatexEditor *editor;
-void highlightBlock(const QString &text);
-};
+  void setColors(QList<QColor> colors);
+  void SetEditor(LightLatexEditor *ed);
+  void setModeGraphic(bool m);
 
+private:
+  bool isWordSeparator(QChar c) const;
+  bool isSpace(QChar c) const;
+  bool isGraphic;
+
+protected:
+  LightLatexEditor *editor;
+  void highlightBlock(const QString &text);
+};
 
 #endif

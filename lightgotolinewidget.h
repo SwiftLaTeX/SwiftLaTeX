@@ -12,26 +12,26 @@
 #ifndef LIGHTGOTOLINEWIDGET_H
 #define LIGHTGOTOLINEWIDGET_H
 
-#include "ui_gotolinewidget.h"
 #include "lightlatexeditor.h"
+#include "ui_gotolinewidget.h"
 
-class LightGotoLineWidget : public QWidget
-{ 
-    Q_OBJECT
+class LightGotoLineWidget : public QWidget {
+  Q_OBJECT
 
 public:
-    LightGotoLineWidget(QWidget* parent = 0);
-    ~LightGotoLineWidget();
-    Ui::GotoLineWidget ui;
+  LightGotoLineWidget(QWidget *parent = 0);
+  ~LightGotoLineWidget();
+  Ui::GotoLineWidget ui;
 
 public slots:
-    virtual void gotoLine();
-    void SetEditor(LightLatexEditor *ed);
-    void doHide();
+  virtual void gotoLine();
+  void SetEditor(LightLatexEditor *ed);
+  void doHide();
+
 protected:
-    LightLatexEditor *editor;
+  LightLatexEditor *editor;
 signals:
-void requestHide();
+  void requestHide();
 };
 
-#endif 
+#endif

@@ -14,13 +14,12 @@
 
 #include "ui_refdialog.h"
 
-class RefDialog : public QDialog  {
-   Q_OBJECT
+class RefDialog : public QDialog {
+  Q_OBJECT
 public:
-	RefDialog(QWidget *parent=0, const char *name=0);
-	~RefDialog();
-	Ui::RefDialog ui;
+  RefDialog(QWidget *parent = 0, const char *name = 0);
+  ~RefDialog();
+  Ui::RefDialog ui;
 };
-
 
 #endif

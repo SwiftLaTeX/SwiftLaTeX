@@ -1,6 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com, author Tobias König <tobias.koenig@kdab.com>
+** Copyright (C) 2017 Klarälvdalens Datakonsult AB, a KDAB Group company,
+*info@kdab.com, author Tobias König <tobias.koenig@kdab.com>
 ** Contact: http://www.qt.io/licensing/
 **
 ** This file is part of the QtPDF module of the Qt Toolkit.
@@ -37,7 +38,7 @@
 #ifndef QPDFNAMESPACE_H
 #define QPDFNAMESPACE_H
 
-//using namespace std;
+// using namespace std;
 
 #include <QObject>
 #include <QtCore>
@@ -45,27 +46,22 @@
 namespace QPdf {
 //    Q_NAMESPACE
 
-    enum Rotation {
-        Rotate0,
-        Rotate90,
-        Rotate180,
-        Rotate270
-    };
-    //Q_ENUM_NS(Rotation)
+enum Rotation { Rotate0, Rotate90, Rotate180, Rotate270 };
+// Q_ENUM_NS(Rotation)
 
-    enum RenderFlag {
-        NoRenderFlags = 0x000,
-        RenderAnnotations = 0x001,
-        RenderOptimizedForLcd = 0x002,
-        RenderGrayscale = 0x004,
-        RenderForceHalftone = 0x008,
-        RenderTextAliased = 0x010,
-        RenderImageAliased = 0x020,
-        RenderPathAliased = 0x040
-    };
-    //Q_FLAG_NS(RenderFlag)
-    Q_DECLARE_FLAGS(RenderFlags, RenderFlag)
-}
+enum RenderFlag {
+  NoRenderFlags = 0x000,
+  RenderAnnotations = 0x001,
+  RenderOptimizedForLcd = 0x002,
+  RenderGrayscale = 0x004,
+  RenderForceHalftone = 0x008,
+  RenderTextAliased = 0x010,
+  RenderImageAliased = 0x020,
+  RenderPathAliased = 0x040
+};
+// Q_FLAG_NS(RenderFlag)
+Q_DECLARE_FLAGS(RenderFlags, RenderFlag)
+} // namespace QPdf
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QPdf::RenderFlags)
 

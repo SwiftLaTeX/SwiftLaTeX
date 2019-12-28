@@ -13,21 +13,19 @@
 #ifndef DROPSHADOWLABEL_H
 #define DROPSHADOWLABEL_H
 
-class DropShadowLabel : public QLabel
-{
-	Q_OBJECT
- 
+class DropShadowLabel : public QLabel {
+  Q_OBJECT
+
 public:
- 
-	DropShadowLabel(const QString &text,QWidget* parent = 0);
-	void paintEvent(QPaintEvent *event);
-	void setColor(const QColor & color);
-	void setDropShadowColor(const QColor & color);
+  DropShadowLabel(const QString &text, QWidget *parent = 0);
+  void paintEvent(QPaintEvent *event);
+  void setColor(const QColor &color);
+  void setDropShadowColor(const QColor &color);
+
 private:
- 
-	QColor dropShadowColor;
-	QColor textColor;
-	void drawText(QPainter *painter, QPoint offset);
-	void drawTextEffect(QPainter* painter, QPoint offset);
+  QColor dropShadowColor;
+  QColor textColor;
+  void drawText(QPainter *painter, QPoint offset);
+  void drawTextEffect(QPainter *painter, QPoint offset);
 };
-#endif 
+#endif

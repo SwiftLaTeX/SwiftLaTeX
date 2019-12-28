@@ -14,29 +14,28 @@
 
 #include "ui_exportdialog.h"
 
-#include <QProcess>
 #include <QPointer>
+#include <QProcess>
 
-class ExportDialog : public QDialog
-{
-    Q_OBJECT
+class ExportDialog : public QDialog {
+  Q_OBJECT
 
 public:
-    ExportDialog(QWidget* parent = 0, QString f="", QString ep="");
-	~ExportDialog();
-Ui::ExportDialog ui;
+  ExportDialog(QWidget *parent = 0, QString f = "", QString ep = "");
+  ~ExportDialog();
+  Ui::ExportDialog ui;
 
 private slots:
-void browseHtlatex();
-void runHtlatex();
-void readFromStderr();
-void readFromStdoutput();
-void SlotEndProcess(int err);
+  void browseHtlatex();
+  void runHtlatex();
+  void readFromStderr();
+  void readFromStdoutput();
+  void SlotEndProcess(int err);
 
-private :
-QString filename;
-QString extra_path;
-QPointer<QProcess> proc;
+private:
+  QString filename;
+  QString extra_path;
+  QPointer<QProcess> proc;
 };
 
 #endif

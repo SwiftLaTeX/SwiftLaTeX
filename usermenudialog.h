@@ -8,36 +8,35 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 #ifndef USERMENUDIALOG_H
 #define USERMENUDIALOG_H
 
-#include <QString>
 #include "ui_usermenudialog.h"
+#include <QString>
 
 typedef QString userlist[10];
 
-class UserMenuDialog : public QDialog
-{
-    Q_OBJECT
+class UserMenuDialog : public QDialog {
+  Q_OBJECT
 
 public:
-    UserMenuDialog( QWidget* parent = 0, QString name="");
-    ~UserMenuDialog();
-    Ui::UserMenuDialog ui;
+  UserMenuDialog(QWidget *parent = 0, QString name = "");
+  ~UserMenuDialog();
+  Ui::UserMenuDialog ui;
 
-    userlist Name,Tag;
+  userlist Name, Tag;
 
 private:
-    int previous_index;
+  int previous_index;
 
 public slots:
-    void init();
+  void init();
 
 private slots:
-    void change(int index);
-    void slotOk();
-    void updateItem();
+  void change(int index);
+  void slotOk();
+  void updateItem();
 };
 
 #endif // USERMENUDIALOG_H
