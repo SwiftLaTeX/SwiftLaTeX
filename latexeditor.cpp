@@ -36,7 +36,7 @@
 #include <QFuture>
 #include <QtCore>
 #include <QtConcurrent>
-#include <QScriptValue>
+#include <QMessageBox>
 //#include <QPlatformInputContext>
 
 
@@ -461,8 +461,6 @@ return newstruct;
 LatexEditor::LatexEditor(QWidget *parent,QFont & efont, QList<QColor> edcolors, QList<QColor> hicolors,bool inlinespelling,QString ignoredWords,Hunspell *spellChecker,bool tabspaces,int tabwidth,const QKeySequence viewfocus, QString name,QStringList ulist) : QPlainTextEdit(parent),c(0),lastSaveRevision(0)
 {
   
-QScriptValue appContext = fScriptEngine.newQObject(this); 
-fScriptEngine.globalObject().setProperty("TM", appContext);
 
 fname=name;
 vfocus=viewfocus;
@@ -2934,19 +2932,7 @@ return blockBoundingGeometry(block).translated(contentOffset());
 /*** SCRIPT ***/
 void LatexEditor::ExecuteScript(QString location)
 {
-if ( !location.isEmpty() ) 
-	{
-	QString text ="";
-	QTextCodec *codec = QTextCodec::codecForName("UTF-8");
-	QFile scriptfile(location);
-	if (scriptfile.open(QFile::ReadOnly))
-	    {
-	    QTextStream ts_script(&scriptfile);
-	    ts_script.setCodec(codec);
-	    text= ts_script.readAll();
-	    }
-	QScriptValue result = fScriptEngine.evaluate(text);
-	}
+	QMessageBox::warning(this, "No-Script", "Script support is currently disabled");
 }
 
 void LatexEditor::selectRange(int start, int length)

@@ -50,8 +50,6 @@
 #include "xmltagslistwidget.h"
 #include "logeditor.h"
 #include "hunspell/hunspell.hxx"
-#include "pdfviewerwidget.h"
-#include "pdfviewer.h"
 #include "sourceview.h"
 #include "encodingprober/qencodingprober.h"
 #include "scandialog.h"
@@ -206,8 +204,7 @@ QPointer<ScanDialog> scanDialog;
 #ifdef INTERNAL_BROWSER
 QPointer<Browser> browserWindow, diffWindow;
 #endif
-QPointer<PdfViewerWidget> pdfviewerWidget;
-QPointer<PdfViewer> pdfviewerWindow;
+
 SourceView* sourceviewerWidget;
 //tools
 QProcess *proc;

@@ -87,8 +87,6 @@ HEADERS	+= texmaker.h \
 	xmltagslistwidget.h \
 	blockdata.h \
 	keysequencedialog.h \
-	pdfviewerwidget.h \
-	pdfviewer.h \
 	userquickdialog.h \
 	encodingdialog.h \
 	usercompletiondialog.h \
@@ -96,8 +94,6 @@ HEADERS	+= texmaker.h \
 	textblockselection.h \
 	scandialog.h \
 	exportdialog.h \
-	synctex_parser.h \
-	synctex_parser_utils.h \
 	usertagslistwidget.h \
 	addtagdialog.h \
 	versiondialog.h \
@@ -172,16 +168,12 @@ SOURCES	+= main.cpp \
 	xmltagslistwidget.cpp \
 	blockdata.cpp \
 	keysequencedialog.cpp \
-	pdfviewerwidget.cpp \
-	pdfviewer.cpp \
 	userquickdialog.cpp \
 	encodingdialog.cpp \
 	usercompletiondialog.cpp \
 	texdocdialog.cpp \
 	scandialog.cpp \
 	exportdialog.cpp \
-	synctex_parser.c \
-	synctex_parser_utils.c \
 	usertagslistwidget.cpp \
 	addtagdialog.cpp \
 	versiondialog.cpp \

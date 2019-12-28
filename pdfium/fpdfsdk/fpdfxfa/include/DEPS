@@ -1,3 +1,0 @@
-include_rules = [
-  "+xfa/fwl/core/include",
-]

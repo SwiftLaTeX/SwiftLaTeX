@@ -572,25 +572,8 @@ if (new_encoding!="")
 else
   {  
   // no unicode
-   int minSize = qMin(verifyBuf.size(), buf.size());
-  hasDecodingError = (minSize < buf.size()- 4 || memcmp(verifyBuf.constData() + verifyBuf.size() - minSize,buf.constData() + buf.size() - minSize, minSize));
-  QEncodingProber prober (QEncodingProber::Universal);
-  if (hasDecodingError)
-    {
-    prober.feed (buf.constData());
-    if (prober.confidence() > 0.6) //Kencodingprober works very bad with tex documents
-      {
-      detected_codec = QTextCodec::codecForName(prober.encoding());
-      if (detected_codec) new_encoding=detected_codec->name();
-      else if (encoding=="UTF-8") new_encoding="ISO-8859-1";
-      else if (encoding=="ISO-8859-1") new_encoding="UTF-8";
-      else new_encoding=QString(QTextCodec::codecForLocale()->name());
-      }
-    else if (encoding=="UTF-8") new_encoding="ISO-8859-1";
-    else if (encoding=="ISO-8859-1") new_encoding="UTF-8";
-    else new_encoding=QString(QTextCodec::codecForLocale()->name());
-    }
-
+  	//
+  	 hasDecodingError=true;
   }
 
 if (hasDecodingError)

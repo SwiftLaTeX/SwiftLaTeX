@@ -30,8 +30,7 @@
 #include <QMutex>
 #include <QQueue>
 #include <QDebug>
-#include <QScriptEngine>
-//#include <QScriptEngineDebugger>
+
 
 #include "latexhighlighter.h"
 #include "textblockselection.h"
@@ -200,7 +199,6 @@ bool highlightLine;
 QString copyBlockSelection() const;
 QColor colorBackground, colorLine, colorHighlight, colorCursor;
 
-QScriptEngine fScriptEngine;
 
 
 private slots:

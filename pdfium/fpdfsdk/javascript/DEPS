@@ -1,5 +1,0 @@
-include_rules = [
-  '+core/fdrm/crypto/include',
-  '+core/fpdfapi/fpdf_font/include',
-  '+fxjs/include'
-]

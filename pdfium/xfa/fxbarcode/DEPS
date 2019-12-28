@@ -1,4 +1,0 @@
-include_rules = [
-  '+core/fxcodec/include',
-  '+core/fxcodec/codec/include',
-]

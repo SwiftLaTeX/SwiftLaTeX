@@ -59,6 +59,7 @@
 #include <QPrinter>
 #include <QProcessEnvironment>
 #include <QSysInfo> 
+#include <QDomDocument>
 
 
 
@@ -886,12 +887,7 @@ StackedViewers->addWidget(sourceviewerWidget);
 ShowPdfView(false);
 ShowSourceView(false);
 
-if (embedinternalpdf && builtinpdfview && showpdfview ) 
-  {
-  StackedViewers->show();
-  sourceviewerWidget->hide();
-  }
-else if (showsourceview)
+if (showsourceview)
   {
   StackedViewers->setCurrentWidget(sourceviewerWidget);
   StackedViewers->show();
@@ -2129,52 +2125,12 @@ user11Menu->addSeparator();
 Act = new QAction(tr("Edit User &Tags"), this);
 connect(Act, SIGNAL(triggered()), this, SLOT(EditUserMenu()));
 user11Menu->addAction(Act);
-user12Menu=user1Menu->addMenu(tr("User &Commands"));
-Act = new QAction("1: "+UserToolName[0], this);
-Act->setShortcut(Qt::SHIFT+Qt::ALT+Qt::Key_F1);
-connect(Act, SIGNAL(triggered()), this, SLOT(UserTool1()));
-user12Menu->addAction(Act);
-Act = new QAction("2: "+UserToolName[1], this);
-Act->setShortcut(Qt::SHIFT+Qt::ALT+Qt::Key_F2);
-connect(Act, SIGNAL(triggered()), this, SLOT(UserTool2()));
-user12Menu->addAction(Act);
-Act = new QAction("3: "+UserToolName[2], this);
-Act->setShortcut(Qt::SHIFT+Qt::ALT+Qt::Key_F3);
-connect(Act, SIGNAL(triggered()), this, SLOT(UserTool3()));
-user12Menu->addAction(Act);
-Act = new QAction("4: "+UserToolName[3], this);
-Act->setShortcut(Qt::SHIFT+Qt::ALT+Qt::Key_F4);
-connect(Act, SIGNAL(triggered()), this, SLOT(UserTool4()));
-user12Menu->addAction(Act);
-Act = new QAction("5: "+UserToolName[4], this);
-Act->setShortcut(Qt::SHIFT+Qt::ALT+Qt::Key_F5);
-connect(Act, SIGNAL(triggered()), this, SLOT(UserTool5()));
-user12Menu->addAction(Act);
-user12Menu->addSeparator();
-Act = new QAction(tr("Edit User &Commands"), this);
-connect(Act, SIGNAL(triggered()), this, SLOT(EditUserTool()));
-user12Menu->addAction(Act);
 
 Act = new QAction(tr("Customize Completion"), this);
 connect(Act, SIGNAL(triggered()), this, SLOT(EditUserCompletion()));
 user1Menu->addAction(Act);
 
-user1Menu->addSeparator();
-scriptMenu=user1Menu->addMenu(tr("Run script"));
-for (int i=0; i < scriptList.count(); i++)
-	{
-	Act = new QAction(scriptList.at(i), this);
-	Act->setData(scriptList.at(i)+".tms");
-	connect(Act, SIGNAL(triggered()), this, SLOT(editRunFurnishedScript()));
-	scriptMenu->addAction(Act);
-	}
 
-
-
-Act = new QAction(tr("Other script"), this);
-Act->setData("Other script");
-connect(Act, SIGNAL(triggered()), this, SLOT(editRunScript()));
-scriptMenu->addAction(Act);
 
 viewMenu = menuBar()->addMenu(tr("&View"));
 NextDocAct = new QAction(tr("Next Document"), this);
@@ -2886,26 +2842,7 @@ if (new_encoding!="")
   }
 else
   {  
-  // no unicode
-   int minSize = qMin(verifyBuf.size(), buf.size());
-  hasDecodingError = (minSize < buf.size()- 4 || memcmp(verifyBuf.constData() + verifyBuf.size() - minSize,buf.constData() + buf.size() - minSize, minSize));
-  QEncodingProber prober (QEncodingProber::Universal);
-  if (hasDecodingError)
-    {
-    prober.feed (buf.constData());
-    if (prober.confidence() > 0.6) //Kencodingprober works very bad with tex documents
-      {
-      detected_codec = QTextCodec::codecForName(prober.encoding());
-      if (detected_codec) new_encoding=detected_codec->name();
-      else if (input_encoding=="UTF-8") new_encoding="ISO-8859-1";
-      else if (input_encoding=="ISO-8859-1") new_encoding="UTF-8";
-      else new_encoding=QString(QTextCodec::codecForLocale()->name());
-      }
-    else if (input_encoding=="UTF-8") new_encoding="ISO-8859-1";
-    else if (input_encoding=="ISO-8859-1") new_encoding="UTF-8";
-    else new_encoding=QString(QTextCodec::codecForLocale()->name());
-    }
-
+ 	 hasDecodingError=true;
   }
 
 
@@ -3183,38 +3120,7 @@ foreach (const QString& fn, filesNames)
   }
 if ((filesNames.count()==1) && embedinternalpdf && builtinpdfview && showpdfview)
   {
-  if ( !currentEditorView() || !singlemode ) return;
-  QString finame=getName();
-  QFileInfo fi(finame);
-  QString basename=fi.completeBaseName();
-  QString pdfname=outputName(finame,".pdf");
-  QFileInfo pdfi(pdfname);
-  if (pdfi.exists() && pdfi.isReadable()) 
-    {
-      if (pdfviewerWidget)
-	{
-	pdfviewerWidget->openFile(outputName(finame,".pdf"),viewpdf_command,ghostscript_command);
-	StackedViewers->setCurrentWidget(pdfviewerWidget);
-	
-	//pdfviewerWidget->raise();
-	pdfviewerWidget->show();
-	}
-      else
-	{
-    //    pdfviewerWidget=new PdfViewer(outputName(finame,".pdf"),viewpdf_command, this);
-	pdfviewerWidget=new PdfViewerWidget(outputName(finame,".pdf"),viewpdf_command,ghostscript_command,lp_options,QKeySequence(keyToggleFocus),pdfCheckerLang,lastScale,StackedViewers);
-	pdfviewerWidget->centralToolBarBis->setMinimumHeight(centralToolBarBis->height());
-	pdfviewerWidget->centralToolBarBis->setMaximumHeight(centralToolBarBis->height());
-	connect(pdfviewerWidget, SIGNAL(openDocAtLine(const QString&, int, bool)), this, SLOT(fileOpenAndGoto(const QString&, int, bool)));
-	connect(pdfviewerWidget, SIGNAL(sendFocusToEditor()), this, SLOT(getFocusToEditor()));
-	connect(pdfviewerWidget, SIGNAL(sendPaperSize(const QString&)), this, SLOT(setPrintPaperSize(const QString&)));
-	StackedViewers->addWidget(pdfviewerWidget);
-	StackedViewers->setCurrentWidget(pdfviewerWidget);
-	//pdfviewerWidget->raise();
-	pdfviewerWidget->show();
-	pdfviewerWidget->openFile(outputName(finame,".pdf"),viewpdf_command,ghostscript_command);
-	}
-    }
+  	
   }
 if (currentEditorView()) currentEditorView()->editor->setFocus();
 }
@@ -3748,8 +3654,7 @@ if (browserWindow) browserWindow->close();
 if (diffWindow) diffWindow->close();
 #endif
 
-if (pdfviewerWidget) {StackedViewers->removeWidget(pdfviewerWidget);delete(pdfviewerWidget);} 
-if (pdfviewerWindow) pdfviewerWindow->close(); 
+ 
 bool accept=true;
 int query;
 QString locale = TexmakerApp::instance()->language.left(2);
@@ -3852,8 +3757,7 @@ if (browserWindow) browserWindow->close();
 if (diffWindow) diffWindow->close();
 #endif
 
-if (pdfviewerWidget) {StackedViewers->removeWidget(pdfviewerWidget);delete(pdfviewerWidget);} 
-if (pdfviewerWindow) pdfviewerWindow->close(); 
+
 bool accept=true;
 int query;
 QString locale = TexmakerApp::instance()->language.left(2);
@@ -3922,37 +3826,8 @@ if (action)
   load(action->data().toString());
   if (embedinternalpdf && builtinpdfview && showpdfview)
       {
-      if ( !currentEditorView() || !singlemode ) return;
-      QString finame=getName();
-      QFileInfo fi(finame);
-      QString basename=fi.completeBaseName();
-      QString pdfname=outputName(finame,".pdf");
-      QFileInfo pdfi(pdfname);
-      if (pdfi.exists() && pdfi.isReadable()) 
-	{
-	  if (pdfviewerWidget)
-	    {
-	    pdfviewerWidget->openFile(outputName(finame,".pdf"),viewpdf_command,ghostscript_command);
-	    StackedViewers->setCurrentWidget(pdfviewerWidget);
-	    //pdfviewerWidget->raise();
-	    pdfviewerWidget->show();
-	    }
-	  else
-	    {
-	//    pdfviewerWidget=new PdfViewer(outputName(finame,".pdf"),viewpdf_command, this);
-	    pdfviewerWidget=new PdfViewerWidget(outputName(finame,".pdf"),viewpdf_command,ghostscript_command,lp_options,QKeySequence(keyToggleFocus),pdfCheckerLang,lastScale,StackedViewers);
-	    pdfviewerWidget->centralToolBarBis->setMinimumHeight(centralToolBarBis->height());
-	    pdfviewerWidget->centralToolBarBis->setMaximumHeight(centralToolBarBis->height());
-	    connect(pdfviewerWidget, SIGNAL(openDocAtLine(const QString&, int, bool)), this, SLOT(fileOpenAndGoto(const QString&, int, bool)));
-	    connect(pdfviewerWidget, SIGNAL(sendFocusToEditor()), this, SLOT(getFocusToEditor()));
-	    connect(pdfviewerWidget, SIGNAL(sendPaperSize(const QString&)), this, SLOT(setPrintPaperSize(const QString&)));
-	    StackedViewers->addWidget(pdfviewerWidget);
-	    StackedViewers->setCurrentWidget(pdfviewerWidget);
-	    //pdfviewerWidget->raise();
-	    pdfviewerWidget->show();
-	    pdfviewerWidget->openFile(outputName(finame,".pdf"),viewpdf_command,ghostscript_command);
-	    }
-	}
+      
+	
       }
   }
 if (currentEditorView()) currentEditorView()->editor->setFocus();
@@ -4270,52 +4145,12 @@ OutputTextEdit->insertLine("Use the Tab key to reach the next "+QString(0x2022)+
 
 void Texmaker::editRunScript()
 {
-if ( !currentEditorView() )	return;
-QString currentDir=QDir::homePath();
-if (!lastScript.isEmpty())
-	{
-	QFileInfo fi(lastScript);
-	if (fi.exists() && fi.isReadable()) currentDir=fi.absolutePath();
-	}
-QString fn = QFileDialog::getOpenFileName(this,tr("Browse script"),currentDir,"Script (*.tms)");
-if (fn.isEmpty()) return;
-lastScript=fn;
-currentEditorView()->editor->ExecuteScript(fn);
+
 }
 
 void Texmaker::editRunFurnishedScript()
 {
-QString actData;
-QAction *action = qobject_cast<QAction *>(sender());
-if ( !currentEditorView() )	return;
-if (action)
-	{
-	actData=action->data().toString();
-	#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
 
-	#ifdef USB_VERSION
-	QString scriptfile=QCoreApplication::applicationDirPath() + "/"+actData;
-	#else
-	QString scriptfile=PREFIX"/share/texmaker/"+actData;
-	#endif
-
-	#endif
-	#if defined(Q_OS_MAC)
-	QString scriptfile=QCoreApplication::applicationDirPath() + "/../Resources/"+actData;
-	#endif
-	#if defined(Q_OS_WIN32)
-	QString scriptfile=QCoreApplication::applicationDirPath() + "/"+actData;
-	#endif
-
-	QFileInfo fic(scriptfile);
-	if (fic.exists() && fic.isReadable() )
-		{
-		currentEditorView()->editor->ExecuteScript(scriptfile);
-		}
-	else { QMessageBox::warning( this,tr("Error"),tr("File not found"));}
-	
-
-	}
 
 }
 
@@ -4607,8 +4442,10 @@ useoutputdir=config->value( "Tools/OutputDir",false).toBool();
 clean_exit=config->value( "Tools/CleanWhenExit",false).toBool();
 quickmode=config->value( "Tools/Quick Mode",3).toInt();
 QString baseName = qApp->style()->objectName();
-builtinpdfview=config->value("Tools/IntegratedPdfViewer",true).toBool();
-embedinternalpdf=config->value("Tools/PdfInternalViewEmbed", screen.width() > 1400).toBool();
+builtinpdfview=false;
+embedinternalpdf=false;
+// builtinpdfview=config->value("Tools/IntegratedPdfViewer",true).toBool();
+// embedinternalpdf=config->value("Tools/PdfInternalViewEmbed", screen.width() > 1400).toBool();
 singleviewerinstance=config->value("Tools/SingleViewerInstance",false).toBool();
 htlatex_options=config->value("Tools/HtOptions","\"\" \"\" \"\" -interaction=nonstopmode").toString();
 
@@ -5036,11 +4873,6 @@ config.setValue("Geometries/MainwindowY", y() );
 
 config.setValue("Print/PaperSize",psize);
 int pscale=10;
-if (builtinpdfview)
-  {
-  if (pdfviewerWindow) pscale= (int) (pdfviewerWindow->getScale()*100);
-  if (embedinternalpdf && pdfviewerWidget) pscale= (int) (pdfviewerWidget->getScale()*100);
-  }
 
 config.setValue("PdfView/Scale",pscale);
 
@@ -5891,16 +5723,7 @@ if (item)
 	    QFileInfo fic(finame);
 	    if (!fic.exists()) return;
 	    QString basename=fic.completeBaseName();
-	    if (embedinternalpdf && builtinpdfview)
-	      {
-	      if (pdfviewerWidget)
-		{
-		if (pdfviewerWidget->pdf_file!=fic.absolutePath()+"/"+basename+".pdf") pdfviewerWidget->openFile(fic.absolutePath()+"/"+basename+".pdf",viewpdf_command,ghostscript_command);
-		StackedViewers->setCurrentWidget(pdfviewerWidget);
-		pdfviewerWidget->show();
-		if ( (pdflatex_command.contains("synctex=1")) || (latex_command.contains("synctex=1")) || (xelatex_command.contains("synctex=1"))) pdfviewerWidget->jumpToPdfFromSource(getName(),structure.at(index).cursor.block().blockNumber()+1,1);
-		}
-	      }
+	    
 	  }
       }
   }
@@ -8006,58 +7829,7 @@ else if (capt=="@@") commandline.replace("@@","@");
 
 if (builtinpdfview && (comd==viewpdf_command))
   {
-    if (embedinternalpdf)
-      {
-      if (pdfviewerWidget)
-	{
-	pdfviewerWidget->openFile(outputName(finame,".pdf"),viewpdf_command,ghostscript_command);
-	StackedViewers->setCurrentWidget(pdfviewerWidget);
-	//pdfviewerWidget->raise();
-      	showpdfview=true;
-	ShowPdfView(false);
-	pdfviewerWidget->show();
-	if ( (pdflatex_command.contains("synctex=1")) || (latex_command.contains("synctex=1")) || (xelatex_command.contains("synctex=1")) ) pdfviewerWidget->jumpToPdfFromSource(getName(),currentline,currentcol);
-	}
-      else
-	{
-    //    pdfviewerWidget=new PdfViewer(outputName(finame,".pdf"),viewpdf_command, this);
-	pdfviewerWidget=new PdfViewerWidget(outputName(finame,".pdf"),viewpdf_command,ghostscript_command,lp_options,QKeySequence(keyToggleFocus),pdfCheckerLang,lastScale,StackedViewers);
-	pdfviewerWidget->centralToolBarBis->setMinimumHeight(centralToolBarBis->height());
-	pdfviewerWidget->centralToolBarBis->setMaximumHeight(centralToolBarBis->height());
-	connect(pdfviewerWidget, SIGNAL(openDocAtLine(const QString&, int, bool)), this, SLOT(fileOpenAndGoto(const QString&, int, bool)));
-	connect(pdfviewerWidget, SIGNAL(sendFocusToEditor()), this, SLOT(getFocusToEditor()));
-	connect(pdfviewerWidget, SIGNAL(sendPaperSize(const QString&)), this, SLOT(setPrintPaperSize(const QString&)));
-	StackedViewers->addWidget(pdfviewerWidget);
-	StackedViewers->setCurrentWidget(pdfviewerWidget);
-	//pdfviewerWidget->raise();
-	pdfviewerWidget->show();
-	pdfviewerWidget->openFile(outputName(finame,".pdf"),viewpdf_command,ghostscript_command);
-	if ( (pdflatex_command.contains("synctex=1")) || (latex_command.contains("synctex=1")) || (xelatex_command.contains("synctex=1")) ) pdfviewerWidget->jumpToPdfFromSource(getName(),currentline,currentcol);
-	}
-      return;
-      }
-   else
-    {
-    if (pdfviewerWindow)
-      {
-      pdfviewerWindow->openFile(outputName(finame,".pdf"),viewpdf_command,ghostscript_command);
-      pdfviewerWindow->raise();
-      pdfviewerWindow->show();
-      if ( (pdflatex_command.contains("synctex=1")) || (latex_command.contains("synctex=1")) || (xelatex_command.contains("synctex=1"))) pdfviewerWindow->jumpToPdfFromSource(getName(),currentline,currentcol);
-      }
-    else
-      {
-  //    pdfviewerWindow=new PdfViewer(outputName(finame,".pdf"),viewpdf_command, this);
-      pdfviewerWindow=new PdfViewer(outputName(finame,".pdf"),viewpdf_command,ghostscript_command,lp_options,QKeySequence(keyToggleFocus),pdfCheckerLang,lastScale,0);
-      connect(pdfviewerWindow, SIGNAL(openDocAtLine(const QString&, int, bool)), this, SLOT(fileOpenAndGoto(const QString&, int, bool)));
-      connect(pdfviewerWindow, SIGNAL(sendFocusToEditor()), this, SLOT(getFocusToEditor()));
-      connect(pdfviewerWindow, SIGNAL(sendPaperSize(const QString&)), this, SLOT(setPrintPaperSize(const QString&)));
-      pdfviewerWindow->raise();
-      pdfviewerWindow->show();
-      if ( (pdflatex_command.contains("synctex=1")) || (latex_command.contains("synctex=1")) || (xelatex_command.contains("synctex=1"))) pdfviewerWindow->jumpToPdfFromSource(getName(),currentline,currentcol);
-      }
-    return;     
-    }
+    
   }
 else if (comd==asymptote_command)
   {
@@ -9358,71 +9130,7 @@ ViewPDF();
 
 void Texmaker::jumpToPdfline(int line)
 {
-if (!builtinpdfview) return;
-QString finame;
-if (singlemode) {finame=getName();}
-else {finame=MasterName;}
-if ((singlemode && !currentEditorView()) || finame.startsWith("untitled") || finame=="")
-	{
-	QMessageBox::warning( this,tr("Error"),tr("Can't detect the file name"));
-	return;
-	}
-fileSave();
-QFileInfo fi(finame);
-if (!fi.exists()) return;
-QString basename=fi.completeBaseName();
-if (embedinternalpdf)
-    {
-    if (pdfviewerWidget)
-      {
-      if (pdfviewerWidget->pdf_file!=outputName(finame,".pdf")) pdfviewerWidget->openFile(outputName(finame,".pdf"),viewpdf_command,ghostscript_command);
-      StackedViewers->setCurrentWidget(pdfviewerWidget);
-      //pdfviewerWidget->raise();
-      pdfviewerWidget->show();
-      if ( (pdflatex_command.contains("synctex=1")) || (latex_command.contains("synctex=1")) || (xelatex_command.contains("synctex=1"))) pdfviewerWidget->jumpToPdfFromSource(getName(),line,1);
-      pdfviewerWidget->getFocus();
-      }
-    else
-      {
-  //    pdfviewerWidget=new PdfViewer(outputName(finame,".pdf"),viewpdf_command, this);
-      pdfviewerWidget=new PdfViewerWidget(outputName(finame,".pdf"),viewpdf_command,ghostscript_command,lp_options,QKeySequence(keyToggleFocus),pdfCheckerLang,lastScale,StackedViewers);
-      pdfviewerWidget->centralToolBarBis->setMinimumHeight(centralToolBarBis->height());
-      pdfviewerWidget->centralToolBarBis->setMaximumHeight(centralToolBarBis->height());
-      connect(pdfviewerWidget, SIGNAL(openDocAtLine(const QString&, int, bool)), this, SLOT(fileOpenAndGoto(const QString&, int, bool)));
-      connect(pdfviewerWidget, SIGNAL(sendFocusToEditor()), this, SLOT(getFocusToEditor()));
-      connect(pdfviewerWidget, SIGNAL(sendPaperSize(const QString&)), this, SLOT(setPrintPaperSize(const QString&)));
-      StackedViewers->addWidget(pdfviewerWidget);
-      StackedViewers->setCurrentWidget(pdfviewerWidget);
-      //pdfviewerWidget->raise();
-      pdfviewerWidget->show();
-      pdfviewerWidget->openFile(outputName(finame,".pdf"),viewpdf_command,ghostscript_command);
-      if ( (pdflatex_command.contains("synctex=1")) || (latex_command.contains("synctex=1")) || (xelatex_command.contains("synctex=1"))) pdfviewerWidget->jumpToPdfFromSource(getName(),line,1);
-      pdfviewerWidget->getFocus();
-      }
-    }
-else
-    {
-    if (pdfviewerWindow)
-      {
-      if (pdfviewerWindow->pdf_file!=outputName(finame,".pdf")) pdfviewerWindow->openFile(outputName(finame,".pdf"),viewpdf_command,ghostscript_command);
-      pdfviewerWindow->raise();
-      pdfviewerWindow->show();
-      qApp->setActiveWindow(pdfviewerWindow);
-      pdfviewerWindow->setFocus();
-      if ( (pdflatex_command.contains("synctex=1")) || (latex_command.contains("synctex=1")) || (xelatex_command.contains("synctex=1")) ) pdfviewerWindow->jumpToPdfFromSource(getName(),line,1);
-      }
-    else
-      {
-  //    pdfviewerWindow=new PdfViewer(outputName(finame,".pdf"),viewpdf_command, this);
-      pdfviewerWindow=new PdfViewer(outputName(finame,".pdf"),viewpdf_command,ghostscript_command,lp_options,QKeySequence(keyToggleFocus),pdfCheckerLang,lastScale,0);
-      connect(pdfviewerWindow, SIGNAL(openDocAtLine(const QString&, int, bool)), this, SLOT(fileOpenAndGoto(const QString&, int, bool)));
-      connect(pdfviewerWindow, SIGNAL(sendFocusToEditor()), this, SLOT(getFocusToEditor()));
-      connect(pdfviewerWindow, SIGNAL(sendPaperSize(const QString&)), this, SLOT(setPrintPaperSize(const QString&)));
-      pdfviewerWindow->raise();
-      pdfviewerWindow->show();
-      if ( (pdflatex_command.contains("synctex=1")) || (latex_command.contains("synctex=1")) || (xelatex_command.contains("synctex=1"))) pdfviewerWindow->jumpToPdfFromSource(getName(),line,1);
-      }  
-    }
+
 }
 
 
@@ -10283,49 +9991,27 @@ if (confDlg->exec())
 	asymptote_command=confDlg->ui.lineEditAsymptote->text();
 	latexmk_command=confDlg->ui.lineEditLatexmk->text();
 	sweave_command=confDlg->ui.lineEditSweave->text();
-	builtinpdfview=confDlg->ui.radioButtonInternalPdfViewer->isChecked();
-	embedinternalpdf=confDlg->ui.checkBoxInternalPdfViewEmbed->isChecked();
+	builtinpdfview=false;
+	embedinternalpdf=false;
 	
-	if (embedinternalpdf && builtinpdfview) 
-	  {
-	  StackedViewers->show();
-	  ViewPdfPanelAct->setEnabled(true);
-	  togglePdfButton->show();
-	  ShowPdfView(false);
-	  ShowSourceView(false);
-	  if (showpdfview)
-	    {
-	    StackedViewers->show();
-	    sourceviewerWidget->hide();
-	    }
-	  else if (showsourceview)
-	    {
-	    StackedViewers->setCurrentWidget(sourceviewerWidget);
-	    StackedViewers->show();
-	    }
-	  else StackedViewers->hide();
-	  }
-	else 
-	  {
-	  if (pdfviewerWidget) {StackedViewers->removeWidget(pdfviewerWidget);delete(pdfviewerWidget);}
-	  //StackedViewers->hide();
+	
+	
+	  
+	  
 	  ViewPdfPanelAct->setEnabled(false);
 	  togglePdfButton->hide();
 	  if (showsourceview)
-	    {
+	  {
 	    StackedViewers->setCurrentWidget(sourceviewerWidget);
 	    StackedViewers->show();
-	    }
-	  else StackedViewers->hide();
 	  }
+	  else StackedViewers->hide();
+	  
 	singleviewerinstance=confDlg->ui.checkBoxSingleInstanceViewer->isChecked();
 	useoutputdir=confDlg->ui.checkBoxTempBuild->isChecked();
 	clean_exit=confDlg->ui.checkBoxClean->isChecked();
 	
-	if ((pdfviewerWidget) && keyToggleFocus!="none") pdfviewerWidget->setKeyEditorFocus(QKeySequence(keyToggleFocus));
-	if (pdfviewerWidget)  pdfviewerWidget->setGSCommand(ghostscript_command);
-	if ((pdfviewerWindow) && keyToggleFocus!="none") pdfviewerWindow->setKeyEditorFocus(QKeySequence(keyToggleFocus));
-	if (pdfviewerWindow)  pdfviewerWindow->setGSCommand(ghostscript_command);
+	
 	
 	QString fam=confDlg->ui.comboBoxFont->lineEdit()->text();
 	int si=confDlg->ui.spinBoxSize->value();
@@ -11273,30 +10959,7 @@ toggleLogButton->setEnabled(showoutputview);
 
 void Texmaker::ShowPdfView(bool change)
 {
-disconnect(ViewPdfPanelAct, SIGNAL(triggered()), this, SLOT(TogglePdfPanel()));
-disconnect(togglePdfButton, SIGNAL( clicked() ), this, SLOT(TogglePdfPanel() ) );
-disconnect(ViewSourcePanelAct, SIGNAL(triggered()), this, SLOT(ToggleSourcePanel()));
-disconnect(toggleSourceButton, SIGNAL( clicked() ), this, SLOT(ToggleSourcePanel() ) );
-if (change) showpdfview=!showpdfview;
-if (showpdfview)
-    {
-    sourceviewerWidget->hide();
-    if (pdfviewerWidget) StackedViewers->setCurrentWidget(pdfviewerWidget);
-    StackedViewers->show();
-    showsourceview=false;
-    ViewSourcePanelAct->setChecked(showsourceview);
-    toggleSourceButton->setEnabled(showsourceview);
-    }
-else
-   {
-   StackedViewers->hide();
-   }
-ViewPdfPanelAct->setChecked(showpdfview);
-togglePdfButton->setEnabled(showpdfview);
-connect(ViewPdfPanelAct, SIGNAL(triggered()), this, SLOT(TogglePdfPanel()));
-connect(togglePdfButton, SIGNAL( clicked() ), this, SLOT(TogglePdfPanel() ) );
-connect(ViewSourcePanelAct, SIGNAL(triggered()), this, SLOT(ToggleSourcePanel()));
-connect(toggleSourceButton, SIGNAL( clicked() ), this, SLOT(ToggleSourcePanel() ) );
+
 }
 
 void Texmaker::ShowSourceView(bool change)

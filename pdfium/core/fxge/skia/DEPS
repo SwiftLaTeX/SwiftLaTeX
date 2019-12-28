@@ -1,5 +1,0 @@
-include_rules = [
-  '+fpdfsdk/include',
-  '+public',
-  '+third_party/skia/include',
-]
