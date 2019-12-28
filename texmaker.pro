@@ -13,7 +13,7 @@ DEFINES += TEXMAKERVERSION=$${TEXMAKERVERSION}
 
 
 equals(QT_MAJOR_VERSION, 5):greaterThan(QT_MINOR_VERSION, 6) {
-QT += core gui widgets xml printsupport  
+QT += core gui widgets xml 
 equals(INTERNALBROWSER,yes){
 QT += webenginewidgets
 }  

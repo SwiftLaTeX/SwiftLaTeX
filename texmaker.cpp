@@ -35,8 +35,6 @@
 #include <QMainWindow>
 #include <QMenuBar>
 #include <QMessageBox>
-#include <QPrintDialog>
-#include <QPrinter>
 #include <QProcess>
 #include <QProcessEnvironment>
 #include <QSettings>
@@ -1059,12 +1057,9 @@ void Texmaker::setupMenus() {
   connect(Act, SIGNAL(triggered()), this, SLOT(allReload()));
   fileMenu->addAction(Act);
 
-  Act = new QAction(tr("Print"), this);
-  Act->setShortcut(Qt::CTRL + Qt::Key_P);
-  connect(Act, SIGNAL(triggered()), this, SLOT(filePrint()));
+ 
   fileMenu->addSeparator();
-  fileMenu->addAction(Act);
-
+ 
   if (gtkEnv)
     Act = new QAction(
         QIcon::fromTheme("application-exit", QIcon(":/images/exit.png")),
@@ -3953,14 +3948,7 @@ void Texmaker::CleanRecent() {
 }
 
 void Texmaker::filePrint() {
-  if (!currentEditorView())
-    return;
-  QTextDocument *document = currentEditorView()->editor->document();
-  QPrinter printer;
-  QPrintDialog *dlg = new QPrintDialog(&printer, this);
-  if (dlg->exec() != QDialog::Accepted)
-    return;
-  document->print(&printer);
+  
 }
 
 void Texmaker::fileOpenAndGoto(const QString &f, int line, bool focus) {
