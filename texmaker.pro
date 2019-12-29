@@ -83,10 +83,8 @@ HEADERS	+= texmaker.h \
 	xmltagslistwidget.h \
 	blockdata.h \
 	keysequencedialog.h \
-	userquickdialog.h \
 	encodingdialog.h \
 	usercompletiondialog.h \
-	texdocdialog.h \
 	textblockselection.h \
 	usertagslistwidget.h \
 	addtagdialog.h \
@@ -153,10 +151,8 @@ SOURCES	+= main.cpp \
 	xmltagslistwidget.cpp \
 	blockdata.cpp \
 	keysequencedialog.cpp \
-	userquickdialog.cpp \
 	encodingdialog.cpp \
 	usercompletiondialog.cpp \
-	texdocdialog.cpp \
 	usertagslistwidget.cpp \
 	addtagdialog.cpp \
 	quickbeamerdialog.cpp \
@@ -200,10 +196,8 @@ FORMS   += findwidget.ui\
 	configdialog.ui \
 	spellerdialog.ui \
 	keysequencedialog.ui \
-	userquickdialog.ui \
 	encodingdialog.ui \
 	usercompletiondialog.ui \
-	texdocdialog.ui \
 	addtagdialog.ui \
 	quickbeamerdialog.ui 
 TRANSLATIONS += trans/texmaker_fr.ts \

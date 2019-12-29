@@ -201,7 +201,7 @@ private:
   QString beamer_theme, beamer_size, beamer_encoding, beamer_author,
       beamer_babel;
   qreal lastScale;
-  bool clean_exit;
+  //bool clean_exit;
 
   bool svnEnable;
   QString svnPath;
@@ -438,7 +438,7 @@ private slots:
   // void PDFLatex();
   // void ViewPDF();
   void CleanAll();
-  void AutoCleanAll();
+  //void AutoCleanAll();
   // void MakeBib();
   // void MakeIndex();
   // void PStoPDF();

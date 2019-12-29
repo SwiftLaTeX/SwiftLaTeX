@@ -84,7 +84,6 @@
 #include "structdialog.h"
 #include "tabbingdialog.h"
 #include "tabdialog.h"
-#include "texdocdialog.h"
 #include "theme.h"
 #include "usercompletiondialog.h"
 #include "usermenudialog.h"
@@ -3752,8 +3751,8 @@ void Texmaker::fileCloseAll() {
 }
 
 void Texmaker::fileExit() {
-  if (clean_exit)
-    AutoCleanAll();
+  // if (clean_exit)
+  //   AutoCleanAll();
   SaveSettings();
 #ifdef INTERNAL_BROWSER
   if (browserWindow)
@@ -3840,8 +3839,8 @@ void Texmaker::fileExit() {
 }
 
 void Texmaker::closeEvent(QCloseEvent *e) {
-  if (clean_exit)
-    AutoCleanAll();
+  // if (clean_exit)
+  //   AutoCleanAll();
   SaveSettings();
 #ifdef INTERNAL_BROWSER
   if (browserWindow)
@@ -4477,7 +4476,7 @@ void Texmaker::ReadSettings() {
 
   extra_path = config->value("Tools/ExtraPath", "").toString();
   useoutputdir = config->value("Tools/OutputDir", false).toBool();
-  clean_exit = config->value("Tools/CleanWhenExit", false).toBool();
+  //clean_exit = config->value("Tools/CleanWhenExit", false).toBool();
   
   QString baseName = qApp->style()->objectName();
   builtinpdfview = false;
@@ -4826,7 +4825,7 @@ void Texmaker::SaveSettings() {
 
   config.setValue("Tools/ExtraPath", extra_path);
   config.setValue("Tools/OutputDir", useoutputdir);
-  config.setValue("Tools/CleanWhenExit", clean_exit);
+  //config.setValue("Tools/CleanWhenExit", clean_exit);
 
  
 
@@ -9023,9 +9022,9 @@ void Texmaker::CleanAll() {
   //Should be done in another part
 }
 
-void Texmaker::AutoCleanAll() {
-  //No need for anything
-}
+// void Texmaker::AutoCleanAll() {
+//   //No need for anything
+// }
 
 // void Texmaker::Asymptote() {
 //   // stat2->setText(QString(" %1 ").arg("Asymptote"));
@@ -9898,15 +9897,15 @@ void Texmaker::GeneralOptions() {
   confDlg->ui.checkBoxSvn->setChecked(svnEnable);
 
 
-  if (builtinpdfview)
-    confDlg->ui.radioButtonInternalPdfViewer->setChecked(true);
-  else
-    confDlg->ui.radioButtonExternalPdfViewer->setChecked(true);
-  confDlg->ui.checkBoxInternalPdfViewEmbed->setChecked(embedinternalpdf);
-  if (singleviewerinstance)
-    confDlg->ui.checkBoxSingleInstanceViewer->setChecked(true);
-  confDlg->ui.checkBoxTempBuild->setChecked(useoutputdir);
-  confDlg->ui.checkBoxClean->setChecked(clean_exit);
+  // if (builtinpdfview)
+  //   confDlg->ui.radioButtonInternalPdfViewer->setChecked(true);
+  // else
+  //   confDlg->ui.radioButtonExternalPdfViewer->setChecked(true);
+  // confDlg->ui.checkBoxInternalPdfViewEmbed->setChecked(embedinternalpdf);
+  // if (singleviewerinstance)
+  //   confDlg->ui.checkBoxSingleInstanceViewer->setChecked(true);
+  // confDlg->ui.checkBoxTempBuild->setChecked(useoutputdir);
+  // confDlg->ui.checkBoxClean->setChecked(clean_exit);
 
   confDlg->ui.comboBoxFont->lineEdit()->setText(EditorFont.family());
   confDlg->ui.comboBoxEncoding->setCurrentIndex(
@@ -10076,10 +10075,10 @@ void Texmaker::GeneralOptions() {
 
     //StackedViewers->hide();
 
-    singleviewerinstance =
-        confDlg->ui.checkBoxSingleInstanceViewer->isChecked();
-    useoutputdir = confDlg->ui.checkBoxTempBuild->isChecked();
-    clean_exit = confDlg->ui.checkBoxClean->isChecked();
+    // singleviewerinstance =
+    //     confDlg->ui.checkBoxSingleInstanceViewer->isChecked();
+    // useoutputdir = confDlg->ui.checkBoxTempBuild->isChecked();
+    // clean_exit = confDlg->ui.checkBoxClean->isChecked();
 
     QString fam = confDlg->ui.comboBoxFont->lineEdit()->text();
     int si = confDlg->ui.spinBoxSize->value();

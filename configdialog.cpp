@@ -28,7 +28,7 @@ ConfigDialog::ConfigDialog(QWidget *parent) : QDialog(parent) {
   ui.contentsWidget->setIconSize(QSize(64, 64));
   ui.contentsWidget->setViewMode(QListView::IconMode);
   ui.contentsWidget->setMovement(QListView::Static);
-  ui.labelBibtex->setText("Bib(la)tex");
+  // ui.labelBibtex->setText("Bib(la)tex");
   // pageditor
   QFontDatabase fdb;
   ui.comboBoxFont->addItems(fdb.families());
@@ -40,7 +40,7 @@ ConfigDialog::ConfigDialog(QWidget *parent) : QDialog(parent) {
       ui.comboBoxEncoding->addItem(codec->name());
   }
   connect(ui.pushButtonAspell, SIGNAL(clicked()), this, SLOT(browseAspell()));
-  connect(ui.pushButtonSvn, SIGNAL(clicked()), this, SLOT(browseSvn()));
+  // connect(ui.pushButtonSvn, SIGNAL(clicked()), this, SLOT(browseSvn()));
 
   // ui.labelGetDic->setText( tr("Get dictionary at: %1").arg("<br><a
   // href=\"http://wiki.services.openoffice.org/wiki/Dictionaries\">http://wiki.services.openoffice.org/wiki/Dictionaries</a>")
@@ -103,42 +103,42 @@ ConfigDialog::ConfigDialog(QWidget *parent) : QDialog(parent) {
   connect(ui.pushButtonDark, SIGNAL(clicked()), this, SLOT(darkColors()));
 
   // pagequick
-  connect(ui.radioButton6, SIGNAL(toggled(bool)), ui.lineEditUserquick,
-          SLOT(setEnabled(bool)));
-  connect(ui.radioButton6, SIGNAL(toggled(bool)), ui.pushButtonWizard,
-          SLOT(setEnabled(bool)));
+  // connect(ui.radioButton6, SIGNAL(toggled(bool)), ui.lineEditUserquick,
+  //         SLOT(setEnabled(bool)));
+  // connect(ui.radioButton6, SIGNAL(toggled(bool)), ui.pushButtonWizard,
+  //         SLOT(setEnabled(bool)));
 
   // pagetools
-  connect(ui.pushButtonLatex, SIGNAL(clicked()), this, SLOT(browseLatex()));
-  connect(ui.pushButtonDvips, SIGNAL(clicked()), this, SLOT(browseDvips()));
-  connect(ui.pushButtonBibtex, SIGNAL(clicked()), this, SLOT(browseBibtex()));
-  connect(ui.pushButtonMakeindex, SIGNAL(clicked()), this,
-          SLOT(browseMakeindex()));
-  connect(ui.pushButtonDviviewer, SIGNAL(clicked()), this,
-          SLOT(browseDviviewer()));
-  connect(ui.pushButtonPsviewer, SIGNAL(clicked()), this,
-          SLOT(browsePsviewer()));
-  connect(ui.pushButtonPdflatex, SIGNAL(clicked()), this,
-          SLOT(browsePdflatex()));
-  connect(ui.pushButtonXelatex, SIGNAL(clicked()), this, SLOT(browseXelatex()));
-  connect(ui.pushButtonLualatex, SIGNAL(clicked()), this,
-          SLOT(browseLualatex()));
-  connect(ui.pushButtonDvipdfm, SIGNAL(clicked()), this, SLOT(browseDvipdfm()));
-  connect(ui.pushButtonPs2pdf, SIGNAL(clicked()), this, SLOT(browsePs2pdf()));
-  connect(ui.pushButtonPdfviewer, SIGNAL(clicked()), this,
-          SLOT(browsePdfviewer()));
-  connect(ui.pushButtonMetapost, SIGNAL(clicked()), this,
-          SLOT(browseMetapost()));
-  connect(ui.pushButtonGhostscript, SIGNAL(clicked()), this,
-          SLOT(browseGhostscript()));
-  connect(ui.pushButtonAsymptote, SIGNAL(clicked()), this,
-          SLOT(browseAsymptote()));
-  connect(ui.pushButtonLatexmk, SIGNAL(clicked()), this, SLOT(browseLatexmk()));
+  // connect(ui.pushButtonLatex, SIGNAL(clicked()), this, SLOT(browseLatex()));
+  // connect(ui.pushButtonDvips, SIGNAL(clicked()), this, SLOT(browseDvips()));
+  // connect(ui.pushButtonBibtex, SIGNAL(clicked()), this, SLOT(browseBibtex()));
+  // connect(ui.pushButtonMakeindex, SIGNAL(clicked()), this,
+  //         SLOT(browseMakeindex()));
+  // connect(ui.pushButtonDviviewer, SIGNAL(clicked()), this,
+  //         SLOT(browseDviviewer()));
+  // connect(ui.pushButtonPsviewer, SIGNAL(clicked()), this,
+  //         SLOT(browsePsviewer()));
+  // connect(ui.pushButtonPdflatex, SIGNAL(clicked()), this,
+  //         SLOT(browsePdflatex()));
+  // connect(ui.pushButtonXelatex, SIGNAL(clicked()), this, SLOT(browseXelatex()));
+  // connect(ui.pushButtonLualatex, SIGNAL(clicked()), this,
+  //         SLOT(browseLualatex()));
+  // connect(ui.pushButtonDvipdfm, SIGNAL(clicked()), this, SLOT(browseDvipdfm()));
+  // connect(ui.pushButtonPs2pdf, SIGNAL(clicked()), this, SLOT(browsePs2pdf()));
+  // connect(ui.pushButtonPdfviewer, SIGNAL(clicked()), this,
+  //         SLOT(browsePdfviewer()));
+  // connect(ui.pushButtonMetapost, SIGNAL(clicked()), this,
+  //         SLOT(browseMetapost()));
+  // connect(ui.pushButtonGhostscript, SIGNAL(clicked()), this,
+  //         SLOT(browseGhostscript()));
+  // connect(ui.pushButtonAsymptote, SIGNAL(clicked()), this,
+  //         SLOT(browseAsymptote()));
+  // connect(ui.pushButtonLatexmk, SIGNAL(clicked()), this, SLOT(browseLatexmk()));
 
-  connect(ui.pushButtonWizard, SIGNAL(clicked()), this,
-          SLOT(userQuickWizard()));
-  connect(ui.pushButtonAsyWizard, SIGNAL(clicked()), this,
-          SLOT(asyQuickWizard()));
+  // connect(ui.pushButtonWizard, SIGNAL(clicked()), this,
+  //         SLOT(userQuickWizard()));
+  // connect(ui.pushButtonAsyWizard, SIGNAL(clicked()), this,
+  //         SLOT(asyQuickWizard()));
 
   connect(ui.shorttableWidget, SIGNAL(itemClicked(QTableWidgetItem *)), this,
           SLOT(configureShortCut(QTableWidgetItem *)));
@@ -163,16 +163,16 @@ void ConfigDialog::createIcons() {
   int h = 0;
   ui.contentsWidget->setIconSize(QSize(64, 64));
 
-  QListWidgetItem *commandButton = new QListWidgetItem(ui.contentsWidget);
-  commandButton->setIcon(getIcon(":/images/configtools.png"));
-  commandButton->setText(tr("Commands"));
-  commandButton->setTextAlignment(Qt::AlignHCenter);
-  //commandButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDisabled);
+  // QListWidgetItem *commandButton = new QListWidgetItem(ui.contentsWidget);
+  // commandButton->setIcon(getIcon(":/images/configtools.png"));
+  // commandButton->setText(tr("Commands"));
+  // commandButton->setTextAlignment(Qt::AlignHCenter);
+  // //commandButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDisabled);
 
-  QListWidgetItem *quickButton = new QListWidgetItem(ui.contentsWidget);
-  quickButton->setIcon(getIcon(":/images/configquick.png"));
-  quickButton->setText(tr("Quick Build"));
-  quickButton->setTextAlignment(Qt::AlignHCenter);
+  // QListWidgetItem *quickButton = new QListWidgetItem(ui.contentsWidget);
+  // quickButton->setIcon(getIcon(":/images/configquick.png"));
+  // quickButton->setText(tr("Quick Build"));
+  // quickButton->setTextAlignment(Qt::AlignHCenter);
   //quickButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDisabled);
 
   QListWidgetItem *editorButton = new QListWidgetItem(ui.contentsWidget);
@@ -188,23 +188,18 @@ void ConfigDialog::createIcons() {
   keysButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
   h = ui.contentsWidget->fontMetrics()
-          .size(Qt::TextSingleLine, tr("Commands"))
+          .size(Qt::TextSingleLine, tr("Editor"))
           .height();
   w = ui.contentsWidget->fontMetrics()
-          .size(Qt::TextSingleLine, tr("Commands"))
-          .width();
-  if (ui.contentsWidget->fontMetrics()
-          .size(Qt::TextSingleLine, tr("Quick Build"))
-          .width() > w)
-    w = ui.contentsWidget->fontMetrics()
-            .size(Qt::TextSingleLine, tr("Quick Build"))
-            .width();
-  if (ui.contentsWidget->fontMetrics()
           .size(Qt::TextSingleLine, tr("Editor"))
-          .width() > w)
-    w = ui.contentsWidget->fontMetrics()
-            .size(Qt::TextSingleLine, tr("Editor"))
-            .width();
+          .width();
+  // if (ui.contentsWidget->fontMetrics()
+  //         .size(Qt::TextSingleLine, tr("Quick Build"))
+  //         .width() > w)
+  //   w = ui.contentsWidget->fontMetrics()
+  //           .size(Qt::TextSingleLine, tr("Quick Build"))
+  //           .width();
+
   if (ui.contentsWidget->fontMetrics()
           .size(Qt::TextSingleLine, tr("Shortcuts"))
           .width() > w)
@@ -265,18 +260,18 @@ void ConfigDialog::browseAspell() {
   }
 }
 
-void ConfigDialog::browseSvn() {
-#if defined(Q_OS_WIN32)
-  QString svndir = qgetenv("PROGRAMFILES");
-#else
-  QString svndir = "/usr/bin";
-#endif
-  QString folder = QFileDialog::getExistingDirectory(
-      this, tr("svn command directory"), svndir, 0);
-  if (!folder.isEmpty()) {
-    ui.lineEditSvn->setText(folder);
-  }
-}
+// void ConfigDialog::browseSvn() {
+// #if defined(Q_OS_WIN32)
+//   QString svndir = qgetenv("PROGRAMFILES");
+// #else
+//   QString svndir = "/usr/bin";
+// #endif
+//   QString folder = QFileDialog::getExistingDirectory(
+//       this, tr("svn command directory"), svndir, 0);
+//   if (!folder.isEmpty()) {
+//     ui.lineEditSvn->setText(folder);
+//   }
+// }
 
 void ConfigDialog::restoreColors() {
   QTableWidgetItem *colorItem;
@@ -408,186 +403,186 @@ void ConfigDialog::darkColors() {
 
 // pagetools
 
-void ConfigDialog::browseLatex() {
-  QString location = QFileDialog::getOpenFileName(
-      this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
-      QFileDialog::DontResolveSymlinks);
-  if (!location.isEmpty()) {
-    location.replace(QString("\\"), QString("/"));
-    location = "\"" + location + "\" -interaction=nonstopmode %.tex";
-    ui.lineEditLatex->setText(location);
-  }
-}
+// void ConfigDialog::browseLatex() {
+//   QString location = QFileDialog::getOpenFileName(
+//       this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
+//       QFileDialog::DontResolveSymlinks);
+//   if (!location.isEmpty()) {
+//     location.replace(QString("\\"), QString("/"));
+//     location = "\"" + location + "\" -interaction=nonstopmode %.tex";
+//     ui.lineEditLatex->setText(location);
+//   }
+// }
 
-void ConfigDialog::browseDvips() {
-  QString location = QFileDialog::getOpenFileName(
-      this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
-      QFileDialog::DontResolveSymlinks);
-  if (!location.isEmpty()) {
-    location.replace(QString("\\"), QString("/"));
-    location = "\"" + location + "\" -o %.ps %.dvi";
-    ui.lineEditDvips->setText(location);
-  }
-}
+// void ConfigDialog::browseDvips() {
+//   QString location = QFileDialog::getOpenFileName(
+//       this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
+//       QFileDialog::DontResolveSymlinks);
+//   if (!location.isEmpty()) {
+//     location.replace(QString("\\"), QString("/"));
+//     location = "\"" + location + "\" -o %.ps %.dvi";
+//     ui.lineEditDvips->setText(location);
+//   }
+// }
 
-void ConfigDialog::browseBibtex() {
-  QString location = QFileDialog::getOpenFileName(
-      this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
-      QFileDialog::DontResolveSymlinks);
-  if (!location.isEmpty()) {
-    location.replace(QString("\\"), QString("/"));
-    if (location.contains("bibtex") && !location.contains("MiKTeX"))
-      location = "\"" + location + "\" %.aux";
-    else
-      location = "\"" + location + "\" %";
-    ui.lineEditBibtex->setText(location);
-  }
-}
+// void ConfigDialog::browseBibtex() {
+//   QString location = QFileDialog::getOpenFileName(
+//       this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
+//       QFileDialog::DontResolveSymlinks);
+//   if (!location.isEmpty()) {
+//     location.replace(QString("\\"), QString("/"));
+//     if (location.contains("bibtex") && !location.contains("MiKTeX"))
+//       location = "\"" + location + "\" %.aux";
+//     else
+//       location = "\"" + location + "\" %";
+//     ui.lineEditBibtex->setText(location);
+//   }
+// }
 
-void ConfigDialog::browseMakeindex() {
-  QString location = QFileDialog::getOpenFileName(
-      this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
-      QFileDialog::DontResolveSymlinks);
-  if (!location.isEmpty()) {
-    location.replace(QString("\\"), QString("/"));
-    location = "\"" + location + "\" %.idx";
-    ui.lineEditMakeindex->setText(location);
-  }
-}
+// void ConfigDialog::browseMakeindex() {
+//   QString location = QFileDialog::getOpenFileName(
+//       this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
+//       QFileDialog::DontResolveSymlinks);
+//   if (!location.isEmpty()) {
+//     location.replace(QString("\\"), QString("/"));
+//     location = "\"" + location + "\" %.idx";
+//     ui.lineEditMakeindex->setText(location);
+//   }
+// }
 
-void ConfigDialog::browseDviviewer() {
-  QString location = QFileDialog::getOpenFileName(
-      this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
-      QFileDialog::DontResolveSymlinks);
-  if (!location.isEmpty()) {
-    location.replace(QString("\\"), QString("/"));
-    location = "\"" + location + "\" %.dvi";
-    ui.lineEditDviviewer->setText(location);
-  }
-}
+// void ConfigDialog::browseDviviewer() {
+//   QString location = QFileDialog::getOpenFileName(
+//       this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
+//       QFileDialog::DontResolveSymlinks);
+//   if (!location.isEmpty()) {
+//     location.replace(QString("\\"), QString("/"));
+//     location = "\"" + location + "\" %.dvi";
+//     ui.lineEditDviviewer->setText(location);
+//   }
+// }
 
-void ConfigDialog::browsePsviewer() {
-  QString location = QFileDialog::getOpenFileName(
-      this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
-      QFileDialog::DontResolveSymlinks);
-  if (!location.isEmpty()) {
-    location.replace(QString("\\"), QString("/"));
-    location = "\"" + location + "\" %.ps";
-    ui.lineEditPsviewer->setText(location);
-  }
-}
+// void ConfigDialog::browsePsviewer() {
+//   QString location = QFileDialog::getOpenFileName(
+//       this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
+//       QFileDialog::DontResolveSymlinks);
+//   if (!location.isEmpty()) {
+//     location.replace(QString("\\"), QString("/"));
+//     location = "\"" + location + "\" %.ps";
+//     ui.lineEditPsviewer->setText(location);
+//   }
+// }
 
-void ConfigDialog::browsePdflatex() {
-  QString location = QFileDialog::getOpenFileName(
-      this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
-      QFileDialog::DontResolveSymlinks);
-  if (!location.isEmpty()) {
-    location.replace(QString("\\"), QString("/"));
-    location = "\"" + location + "\" -interaction=nonstopmode %.tex";
-    ui.lineEditPdflatex->setText(location);
-  }
-}
+// void ConfigDialog::browsePdflatex() {
+//   QString location = QFileDialog::getOpenFileName(
+//       this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
+//       QFileDialog::DontResolveSymlinks);
+//   if (!location.isEmpty()) {
+//     location.replace(QString("\\"), QString("/"));
+//     location = "\"" + location + "\" -interaction=nonstopmode %.tex";
+//     ui.lineEditPdflatex->setText(location);
+//   }
+// }
 
-void ConfigDialog::browseXelatex() {
-  QString location = QFileDialog::getOpenFileName(
-      this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
-      QFileDialog::DontResolveSymlinks);
-  if (!location.isEmpty()) {
-    location.replace(QString("\\"), QString("/"));
-    location = "\"" + location + "\" -interaction=nonstopmode %.tex";
-    ui.lineEditXelatex->setText(location);
-  }
-}
+// void ConfigDialog::browseXelatex() {
+//   QString location = QFileDialog::getOpenFileName(
+//       this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
+//       QFileDialog::DontResolveSymlinks);
+//   if (!location.isEmpty()) {
+//     location.replace(QString("\\"), QString("/"));
+//     location = "\"" + location + "\" -interaction=nonstopmode %.tex";
+//     ui.lineEditXelatex->setText(location);
+//   }
+// }
 
-void ConfigDialog::browseLualatex() {
-  QString location = QFileDialog::getOpenFileName(
-      this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
-      QFileDialog::DontResolveSymlinks);
-  if (!location.isEmpty()) {
-    location.replace(QString("\\"), QString("/"));
-    location = "\"" + location + "\" -interaction=nonstopmode %.tex";
-    ui.lineEditLualatex->setText(location);
-  }
-}
+// void ConfigDialog::browseLualatex() {
+//   QString location = QFileDialog::getOpenFileName(
+//       this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
+//       QFileDialog::DontResolveSymlinks);
+//   if (!location.isEmpty()) {
+//     location.replace(QString("\\"), QString("/"));
+//     location = "\"" + location + "\" -interaction=nonstopmode %.tex";
+//     ui.lineEditLualatex->setText(location);
+//   }
+// }
 
-void ConfigDialog::browseDvipdfm() {
-  QString location = QFileDialog::getOpenFileName(
-      this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
-      QFileDialog::DontResolveSymlinks);
-  if (!location.isEmpty()) {
-    location.replace(QString("\\"), QString("/"));
-    location = "\"" + location + "\" %.dvi";
-    ui.lineEditDvipdfm->setText(location);
-  }
-}
+// void ConfigDialog::browseDvipdfm() {
+//   QString location = QFileDialog::getOpenFileName(
+//       this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
+//       QFileDialog::DontResolveSymlinks);
+//   if (!location.isEmpty()) {
+//     location.replace(QString("\\"), QString("/"));
+//     location = "\"" + location + "\" %.dvi";
+//     ui.lineEditDvipdfm->setText(location);
+//   }
+// }
 
-void ConfigDialog::browsePs2pdf() {
-  QString location = QFileDialog::getOpenFileName(
-      this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
-      QFileDialog::DontResolveSymlinks);
-  if (!location.isEmpty()) {
-    location.replace(QString("\\"), QString("/"));
-    location = "\"" + location + "\" %.ps";
-    ui.lineEditPs2pdf->setText(location);
-  }
-}
+// void ConfigDialog::browsePs2pdf() {
+//   QString location = QFileDialog::getOpenFileName(
+//       this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
+//       QFileDialog::DontResolveSymlinks);
+//   if (!location.isEmpty()) {
+//     location.replace(QString("\\"), QString("/"));
+//     location = "\"" + location + "\" %.ps";
+//     ui.lineEditPs2pdf->setText(location);
+//   }
+// }
 
-void ConfigDialog::browsePdfviewer() {
-  QString location = QFileDialog::getOpenFileName(
-      this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
-      QFileDialog::DontResolveSymlinks);
-  if (!location.isEmpty()) {
-    location.replace(QString("\\"), QString("/"));
-    location = "\"" + location + "\" %.pdf";
-    ui.lineEditPdfviewer->setText(location);
-  }
-}
+// void ConfigDialog::browsePdfviewer() {
+//   QString location = QFileDialog::getOpenFileName(
+//       this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
+//       QFileDialog::DontResolveSymlinks);
+//   if (!location.isEmpty()) {
+//     location.replace(QString("\\"), QString("/"));
+//     location = "\"" + location + "\" %.pdf";
+//     ui.lineEditPdfviewer->setText(location);
+//   }
+// }
 
-void ConfigDialog::browseMetapost() {
-  QString location = QFileDialog::getOpenFileName(
-      this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
-      QFileDialog::DontResolveSymlinks);
-  if (!location.isEmpty()) {
-    location.replace(QString("\\"), QString("/"));
-    location = "\"" + location + "\" --interaction nonstopmode ";
-    ui.lineEditMetapost->setText(location);
-  }
-}
+// void ConfigDialog::browseMetapost() {
+//   QString location = QFileDialog::getOpenFileName(
+//       this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
+//       QFileDialog::DontResolveSymlinks);
+//   if (!location.isEmpty()) {
+//     location.replace(QString("\\"), QString("/"));
+//     location = "\"" + location + "\" --interaction nonstopmode ";
+//     ui.lineEditMetapost->setText(location);
+//   }
+// }
 
-void ConfigDialog::browseGhostscript() {
-  QString location = QFileDialog::getOpenFileName(
-      this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
-      QFileDialog::DontResolveSymlinks);
-  if (!location.isEmpty()) {
-    location.replace(QString("\\"), QString("/"));
-    location = "\"" + location + "\"";
-    ui.lineEditGhostscript->setText(location);
-  }
-}
+// void ConfigDialog::browseGhostscript() {
+//   QString location = QFileDialog::getOpenFileName(
+//       this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
+//       QFileDialog::DontResolveSymlinks);
+//   if (!location.isEmpty()) {
+//     location.replace(QString("\\"), QString("/"));
+//     location = "\"" + location + "\"";
+//     ui.lineEditGhostscript->setText(location);
+//   }
+// }
 
-void ConfigDialog::browseAsymptote() {
-  QString location = QFileDialog::getOpenFileName(
-      this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
-      QFileDialog::DontResolveSymlinks);
-  if (!location.isEmpty()) {
-    location.replace(QString("\\"), QString("/"));
-    location = "\"" + location + "\" %.asy";
-    ui.lineEditAsymptote->setText(location);
-  }
-}
+// void ConfigDialog::browseAsymptote() {
+//   QString location = QFileDialog::getOpenFileName(
+//       this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
+//       QFileDialog::DontResolveSymlinks);
+//   if (!location.isEmpty()) {
+//     location.replace(QString("\\"), QString("/"));
+//     location = "\"" + location + "\" %.asy";
+//     ui.lineEditAsymptote->setText(location);
+//   }
+// }
 
-void ConfigDialog::browseLatexmk() {
-  QString location = QFileDialog::getOpenFileName(
-      this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
-      QFileDialog::DontResolveSymlinks);
-  if (!location.isEmpty()) {
-    location.replace(QString("\\"), QString("/"));
-    location =
-        "\"" + location +
-        "\" -e \"$pdflatex=q/pdflatex -interaction=nonstopmode/\" -pdf %.tex";
-    ui.lineEditLatexmk->setText(location);
-  }
-}
+// void ConfigDialog::browseLatexmk() {
+//   QString location = QFileDialog::getOpenFileName(
+//       this, tr("Browse program"), QDir::rootPath(), "Program (*)", 0,
+//       QFileDialog::DontResolveSymlinks);
+//   if (!location.isEmpty()) {
+//     location.replace(QString("\\"), QString("/"));
+//     location =
+//         "\"" + location +
+//         "\" -e \"$pdflatex=q/pdflatex -interaction=nonstopmode/\" -pdf %.tex";
+//     ui.lineEditLatexmk->setText(location);
+//   }
+// }
 
 void ConfigDialog::configureShortCut(QTableWidgetItem *item) {
   QString shortcut, data, newshortcut;
@@ -628,124 +623,124 @@ void ConfigDialog::configureKeyToggle() {
   delete (keydlg);
 }
 
-void ConfigDialog::userQuickWizard() {
-  QStringList usualNames, usualCommands;
+//void ConfigDialog::userQuickWizard() {
+  // QStringList usualNames, usualCommands;
 
-  usualNames.append(tr("LaTeX"));
-  usualCommands.append(ui.lineEditLatex->text());
+  // usualNames.append(tr("LaTeX"));
+  // usualCommands.append(ui.lineEditLatex->text());
 
-  usualNames.append(tr("PdfLaTeX"));
-  usualCommands.append(ui.lineEditPdflatex->text());
+  // usualNames.append(tr("PdfLaTeX"));
+  // usualCommands.append(ui.lineEditPdflatex->text());
 
-  usualNames.append(tr("dvips"));
-  usualCommands.append(ui.lineEditDvips->text());
+  // usualNames.append(tr("dvips"));
+  // usualCommands.append(ui.lineEditDvips->text());
 
-  usualNames.append(tr("Dvi Viewer"));
-  usualCommands.append(ui.lineEditDviviewer->text());
+  // usualNames.append(tr("Dvi Viewer"));
+  // usualCommands.append(ui.lineEditDviviewer->text());
 
-  usualNames.append(tr("PS Viewer"));
-  usualCommands.append(ui.lineEditPsviewer->text());
+  // usualNames.append(tr("PS Viewer"));
+  // usualCommands.append(ui.lineEditPsviewer->text());
 
-  usualNames.append(tr("Dvipdfm"));
-  usualCommands.append(ui.lineEditDvipdfm->text());
+  // usualNames.append(tr("Dvipdfm"));
+  // usualCommands.append(ui.lineEditDvipdfm->text());
 
-  usualNames.append(tr("ps2pdf"));
-  usualCommands.append(ui.lineEditPs2pdf->text());
+  // usualNames.append(tr("ps2pdf"));
+  // usualCommands.append(ui.lineEditPs2pdf->text());
 
-  usualNames.append(tr("Bibtex"));
-  usualCommands.append(ui.lineEditBibtex->text());
+  // usualNames.append(tr("Bibtex"));
+  // usualCommands.append(ui.lineEditBibtex->text());
 
-  usualNames.append(tr("Makeindex"));
-  usualCommands.append(ui.lineEditMakeindex->text());
+  // usualNames.append(tr("Makeindex"));
+  // usualCommands.append(ui.lineEditMakeindex->text());
 
-  usualNames.append(tr("Pdf Viewer"));
-  usualCommands.append(ui.lineEditPdfviewer->text());
+  // usualNames.append(tr("Pdf Viewer"));
+  // usualCommands.append(ui.lineEditPdfviewer->text());
 
-  usualNames.append(tr("metapost"));
-  usualCommands.append(ui.lineEditMetapost->text());
+  // usualNames.append(tr("metapost"));
+  // usualCommands.append(ui.lineEditMetapost->text());
 
-  usualNames.append(tr("ghostscript"));
-  usualCommands.append(ui.lineEditGhostscript->text());
+  // usualNames.append(tr("ghostscript"));
+  // usualCommands.append(ui.lineEditGhostscript->text());
 
-  usualNames.append(tr("Asymptote"));
-  usualCommands.append(ui.lineEditAsymptote->text());
+  // usualNames.append(tr("Asymptote"));
+  // usualCommands.append(ui.lineEditAsymptote->text());
 
-  usualNames.append(tr("Latexmk"));
-  usualCommands.append(ui.lineEditLatexmk->text());
+  // usualNames.append(tr("Latexmk"));
+  // usualCommands.append(ui.lineEditLatexmk->text());
 
-  usualNames.append(tr("R Sweave"));
-  usualCommands.append(ui.lineEditSweave->text());
+  // usualNames.append(tr("R Sweave"));
+  // usualCommands.append(ui.lineEditSweave->text());
 
-  usualNames.append(tr("XeLaTeX"));
-  usualCommands.append(ui.lineEditXelatex->text());
+  // usualNames.append(tr("XeLaTeX"));
+  // usualCommands.append(ui.lineEditXelatex->text());
 
-  usualNames.append(tr("LuaLaTeX"));
-  usualCommands.append(ui.lineEditLualatex->text());
+  // usualNames.append(tr("LuaLaTeX"));
+  // usualCommands.append(ui.lineEditLualatex->text());
 
-  userquickdlg = new UserQuickDialog(this, usualNames, usualCommands);
-  if (userquickdlg->exec()) {
-    ui.lineEditUserquick->setText(userquickdlg->userQuickCommand);
-  }
-  delete (userquickdlg);
-}
+  // userquickdlg = new UserQuickDialog(this, usualNames, usualCommands);
+  // if (userquickdlg->exec()) {
+  //   ui.lineEditUserquick->setText(userquickdlg->userQuickCommand);
+  // }
+  // delete (userquickdlg);
+//}
 
-void ConfigDialog::asyQuickWizard() {
-  QStringList usualNames, usualCommands;
+// void ConfigDialog::asyQuickWizard() {
+//   QStringList usualNames, usualCommands;
 
-  usualNames.append(tr("LaTeX"));
-  usualCommands.append(ui.lineEditLatex->text());
+//   usualNames.append(tr("LaTeX"));
+//   usualCommands.append(ui.lineEditLatex->text());
 
-  usualNames.append(tr("PdfLaTeX"));
-  usualCommands.append(ui.lineEditPdflatex->text());
+//   usualNames.append(tr("PdfLaTeX"));
+//   usualCommands.append(ui.lineEditPdflatex->text());
 
-  usualNames.append(tr("dvips"));
-  usualCommands.append(ui.lineEditDvips->text());
+//   usualNames.append(tr("dvips"));
+//   usualCommands.append(ui.lineEditDvips->text());
 
-  usualNames.append(tr("Dvi Viewer"));
-  usualCommands.append(ui.lineEditDviviewer->text());
+//   usualNames.append(tr("Dvi Viewer"));
+//   usualCommands.append(ui.lineEditDviviewer->text());
 
-  usualNames.append(tr("PS Viewer"));
-  usualCommands.append(ui.lineEditPsviewer->text());
+//   usualNames.append(tr("PS Viewer"));
+//   usualCommands.append(ui.lineEditPsviewer->text());
 
-  usualNames.append(tr("Dvipdfm"));
-  usualCommands.append(ui.lineEditDvipdfm->text());
+//   usualNames.append(tr("Dvipdfm"));
+//   usualCommands.append(ui.lineEditDvipdfm->text());
 
-  usualNames.append(tr("ps2pdf"));
-  usualCommands.append(ui.lineEditPs2pdf->text());
+//   usualNames.append(tr("ps2pdf"));
+//   usualCommands.append(ui.lineEditPs2pdf->text());
 
-  usualNames.append(tr("Bibtex"));
-  usualCommands.append(ui.lineEditBibtex->text());
+//   usualNames.append(tr("Bibtex"));
+//   usualCommands.append(ui.lineEditBibtex->text());
 
-  usualNames.append(tr("Makeindex"));
-  usualCommands.append(ui.lineEditMakeindex->text());
+//   usualNames.append(tr("Makeindex"));
+//   usualCommands.append(ui.lineEditMakeindex->text());
 
-  usualNames.append(tr("Pdf Viewer"));
-  usualCommands.append(ui.lineEditPdfviewer->text());
+//   usualNames.append(tr("Pdf Viewer"));
+//   usualCommands.append(ui.lineEditPdfviewer->text());
 
-  usualNames.append(tr("metapost"));
-  usualCommands.append(ui.lineEditMetapost->text());
+//   usualNames.append(tr("metapost"));
+//   usualCommands.append(ui.lineEditMetapost->text());
 
-  usualNames.append(tr("ghostscript"));
-  usualCommands.append(ui.lineEditGhostscript->text());
+//   usualNames.append(tr("ghostscript"));
+//   usualCommands.append(ui.lineEditGhostscript->text());
 
-  usualNames.append(tr("Asymptote"));
-  usualCommands.append(ui.lineEditAsymptote->text());
+//   usualNames.append(tr("Asymptote"));
+//   usualCommands.append(ui.lineEditAsymptote->text());
 
-  usualNames.append(tr("Latexmk"));
-  usualCommands.append(ui.lineEditLatexmk->text());
+//   usualNames.append(tr("Latexmk"));
+//   usualCommands.append(ui.lineEditLatexmk->text());
 
-  usualNames.append(tr("R Sweave"));
-  usualCommands.append(ui.lineEditSweave->text());
+//   usualNames.append(tr("R Sweave"));
+//   usualCommands.append(ui.lineEditSweave->text());
 
-  usualNames.append(tr("XeLaTeX"));
-  usualCommands.append(ui.lineEditXelatex->text());
+//   usualNames.append(tr("XeLaTeX"));
+//   usualCommands.append(ui.lineEditXelatex->text());
 
-  usualNames.append(tr("LuaLaTeX"));
-  usualCommands.append(ui.lineEditLualatex->text());
+//   usualNames.append(tr("LuaLaTeX"));
+//   usualCommands.append(ui.lineEditLualatex->text());
 
-  userquickdlg = new UserQuickDialog(this, usualNames, usualCommands);
-  if (userquickdlg->exec()) {
-    ui.lineEditAsyQuick->setText(userquickdlg->userQuickCommand);
-  }
-  delete (userquickdlg);
-}
+//   userquickdlg = new UserQuickDialog(this, usualNames, usualCommands);
+//   if (userquickdlg->exec()) {
+//     ui.lineEditAsyQuick->setText(userquickdlg->userQuickCommand);
+//   }
+//   delete (userquickdlg);
+// }

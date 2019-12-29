@@ -13,9 +13,7 @@
 #define CONFIGDIALOG_H
 
 #include "ui_configdialog.h"
-
 #include "keysequencedialog.h"
-#include "userquickdialog.h"
 #include <QListWidgetItem>
 #include <QTableWidgetItem>
 
@@ -33,33 +31,13 @@ public slots:
 private slots:
   void createIcons();
   void browseAspell();
-  void browseSvn();
-  void browseLatex();
-  void browseDvips();
-  void browseBibtex();
-  void browseMakeindex();
-  void browseDviviewer();
-  void browsePsviewer();
-  void browsePdflatex();
-  void browseXelatex();
-  void browseLualatex();
-  void browseDvipdfm();
-  void browsePs2pdf();
-  void browsePdfviewer();
-  void browseMetapost();
-  void browseGhostscript();
-  void browseAsymptote();
-  void browseLatexmk();
   void configureShortCut(QTableWidgetItem *item);
   void configureKeyToggle();
-  void userQuickWizard();
-  void asyQuickWizard();
   void restoreColors();
   void darkColors();
 
 private:
   KeySequenceDialog *keydlg;
-  UserQuickDialog *userquickdlg;
 };
 
 #endif
