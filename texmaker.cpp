@@ -72,7 +72,7 @@
 #include "addtagdialog.h"
 #include "arraydialog.h"
 
-#include "encodingdialog.h"
+
 #include "filechooser.h"
 #include "graphicfilechooser.h"
 #include "letterdialog.h"
@@ -2882,17 +2882,19 @@ void Texmaker::load(const QString &f) {
   }
 
   if (hasDecodingError) {
-    EncodingDialog *encDlg = new EncodingDialog(this);
-    encDlg->ui.comboBoxEncoding->setCurrentIndex(
-        encDlg->ui.comboBoxEncoding->findText(new_encoding, Qt::MatchExactly));
-    encDlg->ui.label->setText(encDlg->ui.label->text() + " (" + input_encoding +
-                              ").");
-    if (encDlg->exec()) {
-      new_encoding = encDlg->ui.comboBoxEncoding->currentText();
-      codec = QTextCodec::codecForName(new_encoding.toLatin1());
-      text = codec->toUnicode(buf);
-    } else
-      return;
+    // EncodingDialog *encDlg = new EncodingDialog(this);
+    // encDlg->ui.comboBoxEncoding->setCurrentIndex(
+    //     encDlg->ui.comboBoxEncoding->findText(new_encoding, Qt::MatchExactly));
+    // encDlg->ui.label->setText(encDlg->ui.label->text() + " (" + input_encoding +
+    //                           ").");
+    // if (encDlg->exec()) {
+    //   new_encoding = encDlg->ui.comboBoxEncoding->currentText();
+    //   codec = QTextCodec::codecForName(new_encoding.toLatin1());
+    //   text = codec->toUnicode(buf);
+    // } else
+    //   return;
+    QMessageBox::warning(this, "Unsupported Encoding", "Only unicode encoding is supported");
+    return;
   }
 
 #if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
