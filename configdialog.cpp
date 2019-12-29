@@ -592,6 +592,8 @@ void ConfigDialog::configureShortCut(QTableWidgetItem *item) {
     if (data == "key") {
       keydlg = new KeySequenceDialog(this);
       keydlg->setKeySequence(QKeySequence(shortcut));
+      keydlg->setModal(true);
+      keydlg->show();
       if (keydlg->exec()) {
         newshortcut = keydlg->ui.lineEdit->text();
         if (!newshortcut.isEmpty()) {
@@ -605,6 +607,10 @@ void ConfigDialog::configureShortCut(QTableWidgetItem *item) {
       delete (keydlg);
     }
   }
+}
+
+void ConfigDialog::configureShortCutDone(QTableWidgetItem *item) {
+
 }
 
 void ConfigDialog::configureKeyToggle() {
