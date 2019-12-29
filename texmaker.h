@@ -211,15 +211,13 @@ private:
 #endif
 
   // tools
-
   QStringList listViewerCommands;
-  bool checkViewerInstance;
+  //bool checkViewerInstance;
   // latex errors
   QStringList errorFileList, errorTypeList, errorLineList, errorMessageList,
       errorLogList;
   QList<int> onlyErrorList;
   int errorIndex, runIndex, viewIndex;
-  QString pdfCheckerLang;
 // X11
 #if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
   QString x11style;

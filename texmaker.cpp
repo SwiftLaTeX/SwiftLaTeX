@@ -512,7 +512,7 @@ Texmaker::Texmaker(QWidget *parent) : QMainWindow(parent) {
 
   logpresent = false;
   listViewerCommands.clear();
-  checkViewerInstance = false;
+  //checkViewerInstance = false;
 
   errorFileList.clear();
   errorTypeList.clear();
@@ -4696,10 +4696,8 @@ void Texmaker::ReadSettings() {
   if (!fi.exists() || !fi.isReadable())
     defaultDic = dicDir + "en_GB.dic";
   spell_dic = config->value("Spell/Dic", defaultDic).toString();
-  QFileInfo fispell(spell_dic);
-  pdfCheckerLang = fispell.fileName().left(2);
-  if (!pdfCheckerLang.contains(QRegExp("(de|en|es|fr|id|it|nl|pl|pt|ru)")))
-    pdfCheckerLang = "en";
+  
+ 
 
   spell_ignored_words = config->value("Spell/Words", "").toString();
   inlinespellcheck = config->value("Spell/Inline", true).toBool();
@@ -10109,10 +10107,8 @@ void Texmaker::GeneralOptions() {
           new Hunspell(dic.toLatin1() + ".aff", dic.toLatin1() + ".dic");
     } else
       spellChecker = 0;
-    QFileInfo fispell(spell_dic);
-    pdfCheckerLang = fispell.fileName().left(2);
-    if (!pdfCheckerLang.contains(QRegExp("(de|en|es|fr|id|it|nl|pl|pt|ru)")))
-      pdfCheckerLang = "en";
+  
+   
 
     if (QColor::isValidColor(confDlg->ui.colortableWidget->item(0, 1)->text()))
       colorBackground =
