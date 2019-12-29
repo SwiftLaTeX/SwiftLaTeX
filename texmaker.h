@@ -50,7 +50,7 @@
 #include "symbollistwidget.h"
 #include "usertagslistwidget.h"
 #include "xmltagslistwidget.h"
-
+#include "spellerdialog.h"
 #ifdef INTERNAL_BROWSER
 #include "browser.h"
 #endif
@@ -255,6 +255,7 @@ private:
   QTimer *autosaveTimer;
 
   ConfigDialog *confDlg;
+  SpellerDialog *spellDlg;
 
 private slots:
   LatexEditorView *currentEditorView() const;
@@ -299,6 +300,7 @@ private slots:
   void editIndent();
   void editUnindent();
   void editSpell();
+  void editSpellDone();
   void editTipTab();
 
 

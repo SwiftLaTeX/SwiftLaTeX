@@ -80,7 +80,7 @@
 #include "quickdocumentdialog.h"
 #include "quickxelatexdialog.h"
 #include "refdialog.h"
-#include "spellerdialog.h"
+
 #include "structdialog.h"
 #include "tabbingdialog.h"
 #include "tabdialog.h"
@@ -119,8 +119,12 @@ Texmaker::Texmaker(QWidget *parent) : QMainWindow(parent) {
   } else
     spellChecker = 0;
 
+
+//Out Exec() to Show() Patch
   confDlg = NULL;
   autosaveTimer = NULL;
+  spellDlg = NULL;
+//
 
   // spellChecker=0;
   untitled_id = 1;
@@ -4181,19 +4185,27 @@ void Texmaker::editSpell() {
   if (!currentEditorView())
     return;
   if (spelldicExist()) {
-    SpellerDialog *spellDlg = new SpellerDialog(
-        this, currentEditorView()->editor, spell_ignored_words);
-    if (spellDlg->exec()) {
-      spell_ignored_words = spellDlg->alwaysignoredwordList.join(",");
-      currentEditorView()->editor->highlighter->SetAlwaysIgnoredWords(
-          spell_ignored_words);
-      currentEditorView()->editor->highlighter->rehighlight();
+    if(spellDlg) {
+      spellDlg->deleteLater();
+      spellDlg = NULL;
     }
+    spellDlg = new SpellerDialog(
+        this, currentEditorView()->editor, spell_ignored_words);
+    connect(spellDlg, SIGNAL(accepted()), this, SLOT(editSpellDone()));
+    spellDlg->show();
+    
   } else {
     QMessageBox::warning(this, tr("Error"),
                          tr("Error : Can't open the dictionary"));
     return;
   }
+}
+
+void Texmaker::editSpellDone() {
+    spell_ignored_words = spellDlg->alwaysignoredwordList.join(",");
+    currentEditorView()->editor->highlighter->SetAlwaysIgnoredWords(
+          spell_ignored_words);
+    currentEditorView()->editor->highlighter->rehighlight();
 }
 
 void Texmaker::editTipTab() {

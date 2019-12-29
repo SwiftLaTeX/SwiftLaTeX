@@ -36,7 +36,6 @@
 #include <QTextLayout>
 
 #include "blockdata.h"
-#include "encodingdialog.h"
 
 static void convertToPlainText(QString &txt) {
   QChar *uc = txt.data();
@@ -544,16 +543,7 @@ void LightLatexEditor::load(const QString &f) {
   }
 
   if (hasDecodingError) {
-    EncodingDialog *encDlg = new EncodingDialog(this);
-    encDlg->ui.comboBoxEncoding->setCurrentIndex(
-        encDlg->ui.comboBoxEncoding->findText(new_encoding, Qt::MatchExactly));
-    encDlg->ui.label->setText(encDlg->ui.label->text() + " (" + encoding +
-                              ").");
-    if (encDlg->exec()) {
-      new_encoding = encDlg->ui.comboBoxEncoding->currentText();
-      codec = QTextCodec::codecForName(new_encoding.toLatin1());
-      text = codec->toUnicode(buf);
-    } else
+      QMessageBox::warning(this, "Unsupported Encoding", "Only unicode encoding is supported");
       return;
   }
 
