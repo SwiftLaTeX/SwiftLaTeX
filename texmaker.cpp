@@ -78,7 +78,7 @@
 #include "letterdialog.h"
 #include "quickbeamerdialog.h"
 
-#include "quickxelatexdialog.h"
+
 #include "refdialog.h"
 
 
@@ -125,6 +125,7 @@ Texmaker::Texmaker(QWidget *parent) : QMainWindow(parent) {
   autosaveTimer = NULL;
   spellDlg = NULL;
   stDlg = NULL;
+  startDlg = NULL;
 //
 
   // spellChecker=0;
@@ -6197,14 +6198,16 @@ void Texmaker::QuickLetter() {
 
 
 void Texmaker::QuickXelatex() {
-  QString opt = "";
-  QString optbabel = "";
-  int li = 3;
+  
+ 
   int f;
   if (!currentEditorView())
     fileNew();
-  QString tag = QString("\\documentclass[");
-  QuickXelatexDialog *startDlg = new QuickXelatexDialog(this, "Quick Start");
+ 
+  if(startDlg) {
+    startDlg->deleteLater();
+  }
+  startDlg = new QuickXelatexDialog(this, "Quick Start");
   startDlg->otherClassList = userClassList;
   startDlg->otherPaperList = userPaperList;
   startDlg->otherOptionsList = userOptionsList;
@@ -6232,7 +6235,16 @@ void Texmaker::QuickXelatex() {
   startDlg->ui.checkBoxGraphicx->setChecked(graphicx_package);
   startDlg->ui.lineEditAuthor->setText(author);
   startDlg->ui.lineEditGeometry->setText(geometry_options);
-  if (startDlg->exec()) {
+  startDlg->setModal(true);
+  startDlg->show();
+  connect(startDlg, SIGNAL(accepted()), this, SLOT(QuickXelatexDone()));
+}
+
+void Texmaker::QuickXelatexDone() {
+    int li = 3;
+    QString opt = "";
+    QString optbabel = "";
+    QString tag = QString("\\documentclass[");
     tag += startDlg->ui.comboBoxSize->currentText() + QString(",");
     tag += startDlg->ui.comboBoxPaper->currentText();
     QList<QListWidgetItem *> selectedItems =
@@ -6246,9 +6258,6 @@ void Texmaker::QuickXelatex() {
     tag += QString("\n");
 
     tag += QString("\\usepackage{fontspec}\n");
-    tag += QString("\\defaultfontfeatures{Mapping=tex-text}\n");
-    tag += QString("\\usepackage{xunicode}\n");
-    tag += QString("\\usepackage{xltxtra}\n");
     tag += QString("%\\setmainfont{???}\n");
     if (startDlg->ui.checkBoxBabel->isChecked()) {
       QList<QListWidgetItem *> babelItems =
@@ -6303,7 +6312,6 @@ void Texmaker::QuickXelatex() {
     userPaperList = startDlg->otherPaperList;
     userOptionsList = startDlg->otherOptionsList;
     userBabelList = startDlg->otherBabelList;
-  }
 }
 
 void Texmaker::QuickBeamer() {

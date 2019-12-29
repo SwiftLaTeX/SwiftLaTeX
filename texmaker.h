@@ -52,6 +52,7 @@
 #include "xmltagslistwidget.h"
 #include "spellerdialog.h"
 #include "structdialog.h"
+#include "quickxelatexdialog.h"
 #ifdef INTERNAL_BROWSER
 #include "browser.h"
 #endif
@@ -259,6 +260,7 @@ private:
   ConfigDialog *confDlg;
   SpellerDialog *spellDlg;
   StructDialog *stDlg;
+  QuickXelatexDialog *startDlg;
 
 
 private slots:
@@ -432,6 +434,7 @@ private slots:
   void QuickTabbing();
   void QuickLetter();
   void QuickXelatex();
+  void QuickXelatexDone();
   void QuickBeamer();
 
   //void RunCommand(QString comd, bool waitendprocess);
