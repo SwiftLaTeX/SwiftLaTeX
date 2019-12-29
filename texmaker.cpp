@@ -58,7 +58,7 @@
 #include <QTextTableFormat>
 #include <QToolBar>
 #include <QTreeWidgetItem>
-
+#include "configdialog.h"
 //#ifdef Q_WS_WIN
 //#include <windows.h>
 //#endif
@@ -71,7 +71,7 @@
 #include "aboutdialog.h"
 #include "addtagdialog.h"
 #include "arraydialog.h"
-#include "configdialog.h"
+
 #include "encodingdialog.h"
 #include "filechooser.h"
 #include "graphicfilechooser.h"
@@ -119,6 +119,9 @@ Texmaker::Texmaker(QWidget *parent) : QMainWindow(parent) {
   } else
     spellChecker = 0;
 
+  confDlg = NULL;
+  autosaveTimer = NULL;
+
   // spellChecker=0;
   untitled_id = 1;
 
@@ -128,8 +131,8 @@ Texmaker::Texmaker(QWidget *parent) : QMainWindow(parent) {
 #else
   setWindowIcon(getIcon(":/images/appicon.png"));
 #endif
-  QApplication::setOrganizationName("Xm1");
-  QApplication::setApplicationName("Texmaker");
+  QApplication::setOrganizationName("SwiftLaTeX");
+  QApplication::setApplicationName("SwiftLaTeX");
 
   setIconSize(QSize(22, 22));
 
@@ -945,7 +948,15 @@ Texmaker::Texmaker(QWidget *parent) : QMainWindow(parent) {
   stat3->setText(QString(" %1 ").arg(input_encoding));
 
   setAcceptDrops(true);
-  autosaveTimer = new QTimer(this);
+ 
+  setupAutoSaveTimer();
+}
+
+void Texmaker::setupAutoSaveTimer() {
+  if(!autosaveTimer)
+    autosaveTimer = new QTimer(this);
+  disconnect(autosaveTimer, SIGNAL(timeout()), this, SLOT(fileBackupAll()));
+  autosaveTimer->stop();
   if (autosave) {
     connect(autosaveTimer, SIGNAL(timeout()), this, SLOT(fileBackupAll()));
     autosaveTimer->start(600000);
@@ -4372,10 +4383,10 @@ void Texmaker::ReadSettings() {
 #ifdef USB_VERSION
   QSettings *config =
       new QSettings(QCoreApplication::applicationDirPath() + "/texmaker.ini",
-                    QSettings::IniFormat); // for USB-stick version :
+                    QSettings::IniFormat, this); // for USB-stick version :
 #else
   QSettings *config = new QSettings(QSettings::IniFormat, QSettings::UserScope,
-                                    "xm1", "texmaker");
+                                    "xm1", "texmaker", this);
 #endif
   settingsFileName = config->fileName();
   if (!config->contains("IniMode")) {
@@ -9877,7 +9888,9 @@ void Texmaker::PreviousError() {
 
 void Texmaker::HelpAbout() {
   AboutDialog *abDlg = new AboutDialog(this);
-  abDlg->exec();
+  abDlg->show();
+  abDlg->setModal(true);
+  abDlg->setAttribute(Qt::WA_DeleteOnClose);
 }
 
 // void Texmaker::CheckVersion() {}
@@ -9891,8 +9904,12 @@ void Texmaker::HelpAbout() {
 
 ////////////// OPTIONS //////////////////////////////////////
 void Texmaker::GeneralOptions() {
-  ConfigDialog *confDlg = new ConfigDialog(this);
 
+  if(confDlg) {
+      confDlg->deleteLater();
+      confDlg = NULL;
+  }
+  confDlg = new ConfigDialog(this);
   // confDlg->ui.lineEditSvn->setText(svnPath);
   // confDlg->ui.checkBoxSvn->setChecked(svnEnable);
 
@@ -10045,9 +10062,16 @@ void Texmaker::GeneralOptions() {
                       Qt::ItemIsEditable);
   confDlg->ui.colortableWidget->setItem(11, 1, colorItem);
 
-  disconnect(autosaveTimer, SIGNAL(timeout()), this, SLOT(fileBackupAll()));
-  autosaveTimer->stop();
-  if (confDlg->exec()) {
+  connect(confDlg,
+                    SIGNAL(accepted()), this,
+                    SLOT(configurationDone()));
+  confDlg->setModal(true);
+  confDlg->show();
+
+  
+}
+
+void Texmaker::configurationDone() {
     listViewerCommands.clear();
     for (int row = 0; row < confDlg->ui.shorttableWidget->rowCount(); row++) {
       QString itemtext = confDlg->ui.shorttableWidget->item(row, 0)->text();
@@ -10267,12 +10291,8 @@ void Texmaker::GeneralOptions() {
       // OutputTextEdit->insertLine("Editor settings apply only to new loaded
       // document.");
       currentEditorView()->editor->setFocus();
-    }
-  }
-  if (autosave) {
-    connect(autosaveTimer, SIGNAL(timeout()), this, SLOT(fileBackupAll()));
-    autosaveTimer->start(600000);
-  }
+      setupAutoSaveTimer();
+    } 
 }
 
 void Texmaker::ToggleMode() {

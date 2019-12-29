@@ -40,7 +40,7 @@
 #include <QTreeWidgetItem>
 #include <QVBoxLayout>
 #include <QWidgetAction>
-
+#include "configdialog.h"
 #include "dropshadowlabel.h"
 #include "hunspell/hunspell.hxx"
 #include "latexeditorview.h"
@@ -87,6 +87,7 @@ public slots:
 
 private:
   void setupMenus();
+  void setupAutoSaveTimer();
   void setupToolBars();
   void createStatusBar();
   bool FileAlreadyOpen(QString f);
@@ -252,6 +253,8 @@ private:
   QStringList translationList, scriptList;
   QActionGroup *translationGroup /*, *appearanceGroup*/;
   QTimer *autosaveTimer;
+
+  ConfigDialog *confDlg;
 
 private slots:
   LatexEditorView *currentEditorView() const;
@@ -484,7 +487,7 @@ private slots:
   // void Docufrlatex();
 
   void GeneralOptions();
-
+  void configurationDone();
   void gotoNextDocument();
   void gotoPrevDocument();
 
