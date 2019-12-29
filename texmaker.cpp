@@ -3200,9 +3200,9 @@ void Texmaker::fileOpen() {
     if (!fn.isEmpty())
       load(fn);
   }
-  if ((filesNames.count() == 1) && embedinternalpdf && builtinpdfview &&
-      showpdfview) {
-  }
+  // if ((filesNames.count() == 1) && embedinternalpdf && builtinpdfview &&
+  //     showpdfview) {
+  // }
   if (currentEditorView())
     currentEditorView()->editor->setFocus();
 }
@@ -3905,8 +3905,8 @@ void Texmaker::fileOpenRecent() {
   QAction *action = qobject_cast<QAction *>(sender());
   if (action) {
     load(action->data().toString());
-    if (embedinternalpdf && builtinpdfview && showpdfview) {
-    }
+    // if (embedinternalpdf && builtinpdfview && showpdfview) {
+    // }
   }
   if (currentEditorView())
     currentEditorView()->editor->setFocus();
@@ -4479,8 +4479,8 @@ void Texmaker::ReadSettings() {
   //clean_exit = config->value("Tools/CleanWhenExit", false).toBool();
   
   QString baseName = qApp->style()->objectName();
-  builtinpdfview = false;
-  embedinternalpdf = false;
+  // builtinpdfview = false;
+  // embedinternalpdf = false;
   // builtinpdfview=config->value("Tools/IntegratedPdfViewer",true).toBool();
   // embedinternalpdf=config->value("Tools/PdfInternalViewEmbed", screen.width()
   // > 1400).toBool();
@@ -4840,8 +4840,8 @@ void Texmaker::SaveSettings() {
   if (userBabelList.count() > 0)
     config.setValue("Tools/User Babel", userBabelList);
   
-  config.setValue("Tools/IntegratedPdfViewer", builtinpdfview);
-  config.setValue("Tools/PdfInternalViewEmbed", embedinternalpdf);
+  // config.setValue("Tools/IntegratedPdfViewer", builtinpdfview);
+  // config.setValue("Tools/PdfInternalViewEmbed", embedinternalpdf);
   config.setValue("Tools/SingleViewerInstance", singleviewerinstance);
 
   config.setValue("Files/Last Document", lastDocument);
@@ -9893,8 +9893,8 @@ void Texmaker::HelpAbout() {
 void Texmaker::GeneralOptions() {
   ConfigDialog *confDlg = new ConfigDialog(this);
 
-  confDlg->ui.lineEditSvn->setText(svnPath);
-  confDlg->ui.checkBoxSvn->setChecked(svnEnable);
+  // confDlg->ui.lineEditSvn->setText(svnPath);
+  // confDlg->ui.checkBoxSvn->setChecked(svnEnable);
 
 
   // if (builtinpdfview)
@@ -10064,12 +10064,12 @@ void Texmaker::GeneralOptions() {
    
    
 
-    svnEnable = confDlg->ui.checkBoxSvn->isChecked();
-    svnPath = confDlg->ui.lineEditSvn->text();
+    // svnEnable = confDlg->ui.checkBoxSvn->isChecked();
+    // svnPath = confDlg->ui.lineEditSvn->text();
 
    
-    builtinpdfview = false;
-    embedinternalpdf = false;
+    // builtinpdfview = false;
+    // embedinternalpdf = false;
 
     //ViewPdfPanelAct->setEnabled(false);
 

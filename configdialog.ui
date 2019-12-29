@@ -411,43 +411,6 @@
              </property>
             </spacer>
            </item>
-           <item row="1" column="0">
-            <widget class="QGroupBox" name="groupBox_5">
-             <property name="title">
-              <string>Svn</string>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_20">
-              <item row="0" column="0" colspan="2">
-               <widget class="QCheckBox" name="checkBoxSvn">
-                <property name="text">
-                 <string>Detect uncommitted lines at the opening</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="label_9">
-                <property name="text">
-                 <string>Path to the svn command</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QLineEdit" name="lineEditSvn"/>
-              </item>
-              <item row="1" column="2">
-               <widget class="QPushButton" name="pushButtonSvn">
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="icon">
-                 <iconset resource="texmaker.qrc">
-                  <normaloff>:/images/fileopen16.png</normaloff>:/images/fileopen16.png</iconset>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
           </layout>
          </widget>
          <widget class="QWidget" name="ps">

@@ -108,7 +108,7 @@ private:
   MiniSplitter *splitter1, *splitter2, *splitter3;
 
   
-  bool embedinternalpdf, winmaximized;
+  bool winmaximized;
 
   QStackedWidget *EditorView;
   //QStackedWidget *StackedViewers;
@@ -181,7 +181,7 @@ private:
   bool singlemode, wordwrap, parenmatch, showline, showoutputview,
       showstructview, showpdfview, showsourceview, showfilesview, ams_packages,
       makeidx_package, completion, inlinespellcheck, modern_style, new_gui,
-      builtinpdfview, singleviewerinstance, babel_package, geometry_package,
+       singleviewerinstance, babel_package, geometry_package,
       graphicx_package, watchfiles, autosave, tabspaces, useoutputdir;
   bool lmodern_package, kpfonts_package, fourier_package;
   QString document_class, typeface_size, paper_size, document_encoding, author,
