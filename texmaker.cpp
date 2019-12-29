@@ -77,7 +77,7 @@
 #include "graphicfilechooser.h"
 #include "letterdialog.h"
 #include "quickbeamerdialog.h"
-#include "quickdocumentdialog.h"
+
 #include "quickxelatexdialog.h"
 #include "refdialog.h"
 
@@ -2063,13 +2063,10 @@ void Texmaker::setupMenus() {
 
   wizardMenu = menuBar()->addMenu(tr("&Wizard"));
   Act = new QAction(tr("Quick Start"), this);
-  connect(Act, SIGNAL(triggered()), this, SLOT(QuickDocument()));
+  connect(Act, SIGNAL(triggered()), this, SLOT(QuickXelatex()));
   wizardMenu->addAction(Act);
   Act = new QAction(tr("Quick Beamer Presentation"), this);
   connect(Act, SIGNAL(triggered()), this, SLOT(QuickBeamer()));
-  wizardMenu->addAction(Act);
-  Act = new QAction(tr("Quick Xelatex Document"), this);
-  connect(Act, SIGNAL(triggered()), this, SLOT(QuickXelatex()));
   wizardMenu->addAction(Act);
   Act = new QAction(tr("Quick Letter"), this);
   connect(Act, SIGNAL(triggered()), this, SLOT(QuickLetter()));
@@ -6197,179 +6194,7 @@ void Texmaker::QuickLetter() {
   }
 }
 
-void Texmaker::QuickDocument() {
-  QString opt = "";
-  QString optbabel = "";
-  int li = 3;
-  int f;
-  QString fontenc = "";
-  if (!currentEditorView())
-    fileNew();
-  QString tag = QString("\\documentclass[");
-  QuickDocumentDialog *startDlg = new QuickDocumentDialog(this, "Quick Start");
-  startDlg->otherClassList = userClassList;
-  startDlg->otherPaperList = userPaperList;
-  startDlg->otherEncodingList = userEncodingList;
-  startDlg->otherOptionsList = userOptionsList;
-  startDlg->otherBabelList = userBabelList;
-  startDlg->Init();
-  f = startDlg->ui.comboBoxClass->findText(
-      document_class, Qt::MatchExactly | Qt::MatchCaseSensitive);
-  startDlg->ui.comboBoxClass->setCurrentIndex(f);
-  f = startDlg->ui.comboBoxSize->findText(
-      typeface_size, Qt::MatchExactly | Qt::MatchCaseSensitive);
-  startDlg->ui.comboBoxSize->setCurrentIndex(f);
-  f = startDlg->ui.comboBoxPaper->findText(
-      paper_size, Qt::MatchExactly | Qt::MatchCaseSensitive);
-  startDlg->ui.comboBoxPaper->setCurrentIndex(f);
-  f = startDlg->ui.comboBoxEncoding->findText(
-      document_encoding, Qt::MatchExactly | Qt::MatchCaseSensitive);
-  startDlg->ui.comboBoxEncoding->setCurrentIndex(f);
-  QList<QListWidgetItem *> babItems = startDlg->ui.listWidgetBabel->findItems(
-      babel_default, Qt::MatchExactly | Qt::MatchCaseSensitive);
-  if (babItems.size() > 0)
-    startDlg->ui.listWidgetBabel->setCurrentItem(babItems.at(0));
-  startDlg->ui.checkBoxAMS->setChecked(ams_packages);
-  startDlg->ui.checkBoxIDX->setChecked(makeidx_package);
-  startDlg->ui.checkBoxBabel->setChecked(babel_package);
-  startDlg->ui.listWidgetBabel->setEnabled(babel_package);
-  startDlg->ui.pushButtonBabel->setEnabled(babel_package);
-  startDlg->ui.checkBoxGeometry->setChecked(geometry_package);
-  startDlg->ui.lineEditGeometry->setEnabled(geometry_package);
-  startDlg->ui.checkBoxGraphicx->setChecked(graphicx_package);
-  startDlg->ui.checkBoxLmodern->setChecked(lmodern_package);
-  startDlg->ui.checkBoxKpfonts->setChecked(kpfonts_package);
-  startDlg->ui.checkBoxFourier->setChecked(fourier_package);
-  startDlg->ui.lineEditAuthor->setText(author);
-  startDlg->ui.lineEditGeometry->setText(geometry_options);
-  if (startDlg->exec()) {
-    tag += startDlg->ui.comboBoxSize->currentText() + QString(",");
-    tag += startDlg->ui.comboBoxPaper->currentText();
-    QList<QListWidgetItem *> selectedItems =
-        startDlg->ui.listWidgetOptions->selectedItems();
-    for (int i = 0; i < selectedItems.size(); ++i) {
-      if (selectedItems.at(i))
-        opt += QString(",") + selectedItems.at(i)->text();
-    }
-    tag += opt + QString("]{");
-    tag += startDlg->ui.comboBoxClass->currentText() + QString("}");
-    tag += QString("\n");
-    if (startDlg->ui.comboBoxEncoding->currentText() != "NONE")
-      tag += QString("\\usepackage[") +
-             startDlg->ui.comboBoxEncoding->currentText() +
-             QString("]{inputenc}");
-    tag += QString("\n");
-    if (startDlg->ui.comboBoxEncoding->currentText().startsWith("utf8x")) {
-      tag += QString("\\usepackage{ucs}\n");
-      li = li + 1;
-    }
-    if (startDlg->ui.checkBoxBabel->isChecked()) {
-      QList<QListWidgetItem *> babelItems =
-          startDlg->ui.listWidgetBabel->selectedItems();
-      for (int i = 0; i < babelItems.size(); ++i) {
-        if (babelItems.at(i)) {
-          if ((babelItems.at(i)->text() == "arabic") && fontenc.isEmpty())
-            fontenc = "LAE,LFE";
-          else if ((babelItems.at(i)->text() == "russian") && fontenc.isEmpty())
-            fontenc = "OT1";
-          else if ((babelItems.at(i)->text() == "slovak") && fontenc.isEmpty())
-            fontenc = "IL2";
-          else if ((babelItems.at(i)->text() == "francais") &&
-                   fontenc.isEmpty())
-            fontenc = "T1";
-          else if ((babelItems.at(i)->text() == "french") && fontenc.isEmpty())
-            fontenc = "T1";
-          else if ((babelItems.at(i)->text() == "frenchb") && fontenc.isEmpty())
-            fontenc = "T1";
-          else if ((babelItems.at(i)->text() == "german") && fontenc.isEmpty())
-            fontenc = "T1";
-          else if ((babelItems.at(i)->text() == "portuguese") &&
-                   fontenc.isEmpty())
-            fontenc = "T1";
-          else if ((babelItems.at(i)->text() == "icelandic") &&
-                   fontenc.isEmpty())
-            fontenc = "T1";
-          else if ((babelItems.at(i)->text() == "czech") && fontenc.isEmpty())
-            fontenc = "T1";
-          else if ((babelItems.at(i)->text() == "magyar") && fontenc.isEmpty())
-            fontenc = "T1";
-          else if ((babelItems.at(i)->text() == "finnish") && fontenc.isEmpty())
-            fontenc = "T1";
-          if (i == 0) {
-            optbabel += babelItems.at(i)->text();
-            babel_default = babelItems.at(i)->text();
-          } else
-            optbabel += QString(",") + babelItems.at(i)->text();
-        }
-      }
-      tag += QString("\\usepackage[" + optbabel + "]{babel}\n");
-      li = li + 1;
-      if (!fontenc.isEmpty()) {
-        tag += QString("\\usepackage[" + fontenc + "]{fontenc}\n");
-        li = li + 1;
-      }
-    }
-    if (startDlg->ui.checkBoxAMS->isChecked()) {
-      tag += QString("\\usepackage{amsmath}\n\\usepackage{amsfonts}"
-                     "\n\\usepackage{amssymb}\n");
-      li = li + 3;
-    }
-    if (startDlg->ui.checkBoxIDX->isChecked()) {
-      tag += QString("\\usepackage{makeidx}\n");
-      li = li + 1;
-    }
-    if (startDlg->ui.checkBoxGraphicx->isChecked()) {
-      tag += QString("\\usepackage{graphicx}\n");
-      li = li + 1;
-    }
-    if (startDlg->ui.checkBoxLmodern->isChecked()) {
-      tag += QString("\\usepackage{lmodern}\n");
-      li = li + 1;
-    }
-    if (startDlg->ui.checkBoxKpfonts->isChecked()) {
-      tag += QString("\\usepackage{kpfonts}\n");
-      li = li + 1;
-    }
-    if (startDlg->ui.checkBoxFourier->isChecked()) {
-      tag += QString("\\usepackage{fourier}\n");
-      li = li + 1;
-    }
-    if (startDlg->ui.checkBoxGeometry->isChecked()) {
-      tag += QString("\\usepackage[" + startDlg->ui.lineEditGeometry->text() +
-                     "]{geometry}\n");
-      li = li + 1;
-    }
-    if (startDlg->ui.lineEditAuthor->text() != "") {
-      tag += "\\author{" + startDlg->ui.lineEditAuthor->text() + "}\n";
-      li = li + 1;
-    }
-    if (startDlg->ui.lineEditTitle->text() != "") {
-      tag += "\\title{" + startDlg->ui.lineEditTitle->text() + "}\n";
-      li = li + 1;
-    }
-    tag += QString("\\begin{document}\n\n\\end{document}");
-    InsertTag(tag, 0, li);
-    document_class = startDlg->ui.comboBoxClass->currentText();
-    typeface_size = startDlg->ui.comboBoxSize->currentText();
-    paper_size = startDlg->ui.comboBoxPaper->currentText();
-    document_encoding = startDlg->ui.comboBoxEncoding->currentText();
-    ams_packages = startDlg->ui.checkBoxAMS->isChecked();
-    makeidx_package = startDlg->ui.checkBoxIDX->isChecked();
-    babel_package = startDlg->ui.checkBoxBabel->isChecked();
-    geometry_package = startDlg->ui.checkBoxGeometry->isChecked();
-    graphicx_package = startDlg->ui.checkBoxGraphicx->isChecked();
-    lmodern_package = startDlg->ui.checkBoxLmodern->isChecked();
-    kpfonts_package = startDlg->ui.checkBoxKpfonts->isChecked();
-    fourier_package = startDlg->ui.checkBoxFourier->isChecked();
-    author = startDlg->ui.lineEditAuthor->text();
-    geometry_options = startDlg->ui.lineEditGeometry->text();
-    userClassList = startDlg->otherClassList;
-    userPaperList = startDlg->otherPaperList;
-    userEncodingList = startDlg->otherEncodingList;
-    userOptionsList = startDlg->otherOptionsList;
-    userBabelList = startDlg->otherBabelList;
-  }
-}
+
 
 void Texmaker::QuickXelatex() {
   QString opt = "";

@@ -73,7 +73,6 @@ HEADERS	+= texmaker.h \
 	tabdialog.h \
 	letterdialog.h \
 	addoptiondialog.h \
-	quickdocumentdialog.h \
 	quickxelatexdialog.h \
 	usermenudialog.h \
 	refdialog.h \
@@ -140,7 +139,6 @@ SOURCES	+= main.cpp \
 	tabdialog.cpp \
 	letterdialog.cpp \
 	addoptiondialog.cpp \
-	quickdocumentdialog.cpp \
 	quickxelatexdialog.cpp \
 	usermenudialog.cpp \
 	refdialog.cpp \
@@ -186,7 +184,6 @@ FORMS   += findwidget.ui\
 	tabdialog.ui \
 	letterdialog.ui \
 	addoptiondialog.ui \
-	quickdocumentdialog.ui \
 	quickxelatexdialog.ui \
 	usermenudialog.ui \
 	refdialog.ui \

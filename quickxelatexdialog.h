@@ -32,6 +32,10 @@ private slots:
   void addUserPaper();
   void addUserOptions();
   void addUserBabel();
+  void addUserClassDone();
+  void addUserPaperDone();
+  void addUserOptionsDone();
+  void addUserBabelDone();
 
 private:
   AddOptionDialog *dlg;

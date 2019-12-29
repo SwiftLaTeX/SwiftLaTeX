@@ -431,7 +431,6 @@ private slots:
   void QuickArray();
   void QuickTabbing();
   void QuickLetter();
-  void QuickDocument();
   void QuickXelatex();
   void QuickBeamer();
 

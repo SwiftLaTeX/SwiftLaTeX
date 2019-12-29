@@ -13,6 +13,7 @@
 
 QuickXelatexDialog::QuickXelatexDialog(QWidget *parent, const char *name)
     : QDialog(parent) {
+  dlg = NULL;
   setWindowTitle(name);
   setModal(true);
   ui.setupUi(this);
@@ -90,49 +91,75 @@ void QuickXelatexDialog::Init() {
 }
 
 void QuickXelatexDialog::addUserClass() {
-  QString newoption = "";
-  dlg = new AddOptionDialog(this, "New");
-  if (dlg->exec()) {
-    newoption = dlg->ui.lineEdit->text();
-    if (newoption != "")
-      otherClassList.append(newoption);
-    Init();
+  
+  if(dlg) {
+    dlg->deleteLater();
   }
-  delete (dlg);
+  dlg = new AddOptionDialog(this, "New");
+  dlg->setModal(true);
+  dlg->show();
+  connect(dlg, SIGNAL(accepted()), this, SLOT(addUserClassDone()));
+
+  
+}
+
+void QuickXelatexDialog::addUserClassDone() {
+  QString newoption = dlg->ui.lineEdit->text();
+  if (newoption != "")
+      otherClassList.append(newoption);
+  Init();
 }
 
 void QuickXelatexDialog::addUserPaper() {
-  QString newoption = "";
+  if(dlg) {
+    dlg->deleteLater();
+  }
   dlg = new AddOptionDialog(this, "New");
-  if (dlg->exec()) {
-    newoption = dlg->ui.lineEdit->text();
+  dlg->setModal(true);
+  dlg->show();
+  connect(dlg, SIGNAL(accepted()), this, SLOT(addUserPaperDone()));
+}
+
+void QuickXelatexDialog::addUserPaperDone() {
+  QString newoption = "";
+  newoption = dlg->ui.lineEdit->text();
     if (newoption != "")
       otherPaperList.append(newoption);
     Init();
-  }
-  delete (dlg);
 }
 
 void QuickXelatexDialog::addUserOptions() {
-  QString newoption = "";
+  if(dlg) {
+    dlg->deleteLater();
+  }
   dlg = new AddOptionDialog(this, "New");
-  if (dlg->exec()) {
-    newoption = dlg->ui.lineEdit->text();
+  dlg->setModal(true);
+  dlg->show();
+  connect(dlg, SIGNAL(accepted()), this, SLOT(addUserOptionsDone()));
+}
+
+void QuickXelatexDialog::addUserOptionsDone() {
+  QString newoption = "";
+  newoption = dlg->ui.lineEdit->text();
     if (newoption != "")
       otherOptionsList.append(newoption);
     Init();
-  }
-  delete (dlg);
 }
 
 void QuickXelatexDialog::addUserBabel() {
-  QString newoption = "";
+  if(dlg) {
+    dlg->deleteLater();
+  }
   dlg = new AddOptionDialog(this, "New");
-  if (dlg->exec()) {
-    newoption = dlg->ui.lineEdit->text();
+  dlg->setModal(true);
+  dlg->show();
+  connect(dlg, SIGNAL(accepted()), this, SLOT(addUserBabelDone()));
+}
+
+void QuickXelatexDialog::addUserBabelDone() {
+  QString newoption = "";
+  newoption = dlg->ui.lineEdit->text();
     if (newoption != "")
       otherBabelList.append(newoption);
     Init();
-  }
-  delete (dlg);
 }
