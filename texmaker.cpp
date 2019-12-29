@@ -81,7 +81,7 @@
 #include "quickxelatexdialog.h"
 #include "refdialog.h"
 
-#include "structdialog.h"
+
 #include "tabbingdialog.h"
 #include "tabdialog.h"
 #include "theme.h"
@@ -124,6 +124,7 @@ Texmaker::Texmaker(QWidget *parent) : QMainWindow(parent) {
   confDlg = NULL;
   autosaveTimer = NULL;
   spellDlg = NULL;
+  stDlg = NULL;
 //
 
   // spellChecker=0;
@@ -5802,35 +5803,55 @@ void Texmaker::InsertBibLatex() {
 }
 
 void Texmaker::InsertStruct() {
-  QString actData, tag;
+  QString actData;
   if (!currentEditorView())
     return;
   // currentEditorView()->editor->viewport()->setFocus();
   QAction *action = qobject_cast<QAction *>(sender());
   if (action) {
     actData = action->data().toString();
-    StructDialog *stDlg = new StructDialog(this, actData);
-    if (stDlg->exec()) {
-      if (stDlg->ui.checkBox->isChecked()) {
-        tag = actData + "{";
-      } else {
-        tag = actData + "*{";
-      }
-      tag += stDlg->ui.TitlelineEdit->text();
-      tag += QString("}\n");
-      InsertTag(tag, 0, 1);
-      // UpdateStructure();
+    if(stDlg) {
+      stDlg->deleteLater();
+      stDlg = NULL;
     }
+    stDlg = new StructDialog(this, actData);
+    stDlg->setModal(true);
+    stDlg->show();
+    connect(stDlg, SIGNAL(accepted()), this, SLOT(InsertStructDone()));
   }
 }
 
+void Texmaker::InsertStructDone() {
+    QString tag;
+    QString actData = stDlg->windowTitle();
+    if (stDlg->ui.checkBox->isChecked()) {
+        tag = actData + "{";
+    } else {
+        tag = actData + "*{";
+    }
+    tag += stDlg->ui.TitlelineEdit->text();
+    tag += QString("}\n");
+    InsertTag(tag, 0, 1);
+}
+
 void Texmaker::InsertStructFromString(const QString &text) {
-  QString tag;
+ 
   if (!currentEditorView())
     return;
   // currentEditorView()->editor->viewport()->setFocus();
-  StructDialog *stDlg = new StructDialog(this, text);
-  if (stDlg->exec()) {
+  if(stDlg) {
+      stDlg->deleteLater();
+      stDlg = NULL;
+    }
+    stDlg = new StructDialog(this, text);
+    stDlg->setModal(true);
+    stDlg->show();
+    connect(stDlg, SIGNAL(accepted()), this, SLOT(InsertStructDone()));
+}
+
+void Texmaker::InsertStructFromStringDone() {
+    QString tag;
+    QString text = stDlg->windowTitle();
     if (stDlg->ui.checkBox->isChecked()) {
       tag = text + "{";
     } else {
@@ -5839,8 +5860,6 @@ void Texmaker::InsertStructFromString(const QString &text) {
     tag += stDlg->ui.TitlelineEdit->text();
     tag += QString("}\n");
     InsertTag(tag, 0, 1);
-    // UpdateStructure();
-  }
 }
 
 void Texmaker::InsertImage() {

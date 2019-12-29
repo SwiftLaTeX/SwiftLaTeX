@@ -51,6 +51,7 @@
 #include "usertagslistwidget.h"
 #include "xmltagslistwidget.h"
 #include "spellerdialog.h"
+#include "structdialog.h"
 #ifdef INTERNAL_BROWSER
 #include "browser.h"
 #endif
@@ -254,8 +255,11 @@ private:
   QActionGroup *translationGroup /*, *appearanceGroup*/;
   QTimer *autosaveTimer;
 
+//Patch from Exec()
   ConfigDialog *confDlg;
   SpellerDialog *spellDlg;
+  StructDialog *stDlg;
+
 
 private slots:
   LatexEditorView *currentEditorView() const;
@@ -357,7 +361,9 @@ private slots:
   void InsertBib();
   void InsertBibLatex();
   void InsertStruct();
+  void InsertStructDone();
   void InsertStructFromString(const QString &text);
+  void InsertStructFromStringDone();
   void InsertImage();
   void InsertInclude();
   void InsertInput();
