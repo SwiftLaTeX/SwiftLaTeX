@@ -96,9 +96,6 @@ private:
   bool currentfileSaved();
   bool isCurrentModifiedOutside();
   bool copyFile(QString origin, QString destination);
-  // void removeDir(QDir thedir);
-  // QString outputName(QString finame, QString extension);
-  // QString outputBaseName(QString finame);
   void setMasterDocument(const QString &fn);
 
   int untitled_id;
@@ -180,7 +177,7 @@ private:
   // settings
   bool eraseSettings, replaceSettings;
   QString settingsFileName;
-  int split1_right, split1_left, split2_top, split2_bottom, quickmode, tabwidth;
+  int split1_right, split1_left, split2_top, split2_bottom, tabwidth;
   bool singlemode, wordwrap, parenmatch, showline, showoutputview,
       showstructview, showpdfview, showsourceview, showfilesview, ams_packages,
       makeidx_package, completion, inlinespellcheck, modern_style, new_gui,
@@ -189,13 +186,7 @@ private:
   bool lmodern_package, kpfonts_package, fourier_package;
   QString document_class, typeface_size, paper_size, document_encoding, author,
       geometry_options, babel_default;
-  QString latex_command, viewdvi_command, dvips_command, dvipdf_command,
-      metapost_command, psize, xelatex_command, lualatex_command,
-      htlatex_command, htlatex_options;
-  QString viewps_command, ps2pdf_command, makeindex_command, bibtex_command,
-      pdflatex_command, viewpdf_command, userquick_command, ghostscript_command,
-      asymptote_command, latexmk_command, sweave_command, texdoc_command,
-      quick_asy_command, lp_options;
+ 
   QString spell_dic, spell_ignored_words;
   QString lastDocument, input_encoding, lastChild, lastTemplate, lastScript;
   QString struct_level1, struct_level2, struct_level3, struct_level4,
@@ -204,6 +195,7 @@ private:
       userCompletionList, userBabelList;
   QStringList labelitem, bibitem, listbibfiles, listchildfiles;
   Userlist UserMenuName, UserMenuTag;
+
   QString keyToggleFocus;
   QString extra_path;
   QString beamer_theme, beamer_size, beamer_encoding, beamer_author,
@@ -219,8 +211,7 @@ private:
 #endif
 
   // tools
-  QProcess *proc;
-  bool FINPROCESS, ERRPROCESS, STOPPROCESS;
+
   QStringList listViewerCommands;
   bool checkViewerInstance;
   // latex errors
@@ -324,7 +315,6 @@ private slots:
   void DeleteSettings();
   void CopySettings();
   void ReplaceSettings();
-  void setPrintPaperSize(const QString &p);
 
   void NewDocumentStatus(bool m);
   void UpdateCaption();

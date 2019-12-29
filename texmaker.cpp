@@ -4410,7 +4410,7 @@ void Texmaker::ReadSettings() {
   splitter1state = config->value("Splitter1State").toByteArray();
   splitter2state = config->value("Splitter2State").toByteArray();
   splitter3state = config->value("Splitter3State").toByteArray();
-  psize = config->value("Print/PaperSize", "a4").toString();
+  
   lastScale = config->value("PdfView/Scale", 10).toFloat() / 100.0;
 #if defined(Q_OS_WIN32)
   if (xf.contains("Courier New", Qt::CaseInsensitive))
@@ -4478,7 +4478,7 @@ void Texmaker::ReadSettings() {
   extra_path = config->value("Tools/ExtraPath", "").toString();
   useoutputdir = config->value("Tools/OutputDir", false).toBool();
   clean_exit = config->value("Tools/CleanWhenExit", false).toBool();
-  quickmode = config->value("Tools/Quick Mode", 3).toInt();
+  
   QString baseName = qApp->style()->objectName();
   builtinpdfview = false;
   embedinternalpdf = false;
@@ -4487,354 +4487,13 @@ void Texmaker::ReadSettings() {
   // > 1400).toBool();
   singleviewerinstance =
       config->value("Tools/SingleViewerInstance", false).toBool();
-  htlatex_options =
-      config
-          ->value("Tools/HtOptions", "\"\" \"\" \"\" -interaction=nonstopmode")
-          .toString();
 
-#if defined(Q_OS_MAC)
 
-  keyToggleFocus = config->value("Shortcuts/togglefocus", "Ctrl+$").toString();
-  latex_command =
-      config->value("Tools/Latex", "\"latex\" -interaction=nonstopmode %.tex")
-          .toString();
-  dvips_command =
-      config->value("Tools/Dvips", "\"dvips\" -o %.ps %.dvi").toString();
-  ps2pdf_command = config->value("Tools/Ps2pdf", "\"ps2pdf\" %.ps").toString();
-  makeindex_command =
-      config->value("Tools/Makeindex", "\"makeindex\" %.idx").toString();
-  bibtex_command = config->value("Tools/Bibtex", "\"bibtex\" %.aux").toString();
-  pdflatex_command =
-      config
-          ->value("Tools/Pdflatex",
-                  "\"pdflatex\" -synctex=1 -interaction=nonstopmode %.tex")
-          .toString();
-  xelatex_command =
-      config
-          ->value("Tools/Xelatex",
-                  "\"xelatex\" -synctex=1 -interaction=nonstopmode %.tex")
-          .toString();
-  lualatex_command = config
-                         ->value("Tools/Lualatex",
-                                 "\"lualatex\" -interaction=nonstopmode %.tex")
-                         .toString();
-  if (lualatex_command.isEmpty())
-    lualatex_command = QString("\"lualatex\" -interaction=nonstopmode %.tex");
-  if (xelatex_command.isEmpty())
-    xelatex_command =
-        QString("\"xelatex\" -synctex=1 -interaction=nonstopmode %.tex");
-  dvipdf_command =
-      config->value("Tools/Dvipdf", "\"dvipdfm\" %.dvi").toString();
-  metapost_command =
-      config->value("Tools/Metapost", "\"mpost\" --interaction nonstopmode ")
-          .toString();
-  viewdvi_command = config->value("Tools/Dvi", "open %.dvi").toString();
-  viewps_command = config->value("Tools/Ps", "open %.ps").toString();
-  viewpdf_command = config->value("Tools/Pdf", "open %.pdf").toString();
-  ghostscript_command = config->value("Tools/Ghostscript", "gs").toString();
-  asymptote_command = config->value("Tools/Asymptote", "asy %.asy").toString();
-  latexmk_command =
-      config
-          ->value("Tools/Latexmk",
-                  "\"latexmk\" -e \"$pdflatex=q/pdflatex -synctex=1 "
-                  "-interaction=nonstopmode/\" -pdf %.tex")
-          .toString();
-  sweave_command =
-      config->value("Tools/Sweave", "R CMD Sweave %.Rnw").toString();
-  texdoc_command = config->value("Tools/Texdoc", "texdoc").toString();
-  htlatex_command = config->value("Tools/Htlatex", "htlatex").toString();
-  quick_asy_command =
-      config->value("Tools/QuickAsy", "asy -f pdf -noView %.asy|open %.pdf")
-          .toString();
-  lp_options = config->value("Tools/LP", "-o fitplot").toString();
 
-  qApp->setStyle(QLatin1String("Fusion"));
-#endif
-#if defined(Q_OS_WIN32)
   keyToggleFocus =
       config->value("Shortcuts/togglefocus", "Ctrl+Space").toString();
-  latex_command =
-      config->value("Tools/Latex", "latex -interaction=nonstopmode %.tex")
-          .toString();
-  dvips_command =
-      config->value("Tools/Dvips", "dvips -Pdownload35 -o %.ps %.dvi")
-          .toString();
-  ps2pdf_command = config->value("Tools/Ps2pdf", "ps2pdf %.ps").toString();
-  makeindex_command =
-      config->value("Tools/Makeindex", "makeindex %.idx").toString();
-  bibtex_command = config->value("Tools/Bibtex", "bibtex %").toString();
-  // bibtex %.aux
-  pdflatex_command =
-      config
-          ->value("Tools/Pdflatex",
-                  "pdflatex -synctex=1 -interaction=nonstopmode %.tex")
-          .toString();
-  xelatex_command =
-      config
-          ->value("Tools/Xelatex",
-                  "xelatex -synctex=1 -interaction=nonstopmode %.tex")
-          .toString();
-  lualatex_command =
-      config->value("Tools/Lualatex", "lualatex -interaction=nonstopmode %.tex")
-          .toString();
-  dvipdf_command = config->value("Tools/Dvipdf", "dvipdfm %.dvi").toString();
-  metapost_command =
-      config->value("Tools/Metapost", "mpost --interaction nonstopmode ")
-          .toString();
-  viewdvi_command =
-      config
-          ->value("Tools/Dvi",
-                  "\"C:/Program Files/MiKTeX 2.9/miktex/bin/yap.exe\" %.dvi")
-          .toString();
-  viewps_command =
-      config
-          ->value("Tools/Ps",
-                  "\"C:/Program Files/Ghostgum/gsview/gsview32.exe\" %.ps")
-          .toString();
-  viewpdf_command = config
-                        ->value("Tools/Pdf", "\"C:/Program Files/Adobe/Reader "
-                                             "11.0/Reader/AcroRd32.exe\" %.pdf")
-                        .toString();
-  ghostscript_command =
-      config
-          ->value("Tools/Ghostscript",
-                  "\"C:/Program Files/gs/gs9.07/bin/gswin32c.exe\"")
-          .toString();
-  asymptote_command =
-      config
-          ->value("Tools/Asymptote",
-                  "\"C:/Program Files/Asymptote/asy.exe\" %.asy")
-          .toString();
-  latexmk_command = config
-                        ->value("Tools/Latexmk",
-                                "latexmk -e \"$pdflatex=q/pdflatex -synctex=1 "
-                                "-interaction=nonstopmode/\" -pdf %.tex")
-                        .toString();
-  sweave_command =
-      config
-          ->value("Tools/Sweave",
-                  "C:/Program Files/R/R-2.13.2/bin/R.exe CMD Sweave %.Rnw")
-          .toString();
-  texdoc_command = config->value("Tools/Texdoc", "texdoc").toString();
-  htlatex_command = config->value("Tools/Htlatex", "htlatex").toString();
-  QString yap = "C:/Program Files/MiKTeX 2.9/miktex/bin/yap.exe";
-  QString gsview = "C:/Program Files/Ghostgum/gsview/gsview32.exe";
-  QString gswin = "C:/Program Files/gs/gs9.21/bin/gswin32c.exe";
-  QString acro = "C:/Program Files/Adobe/Reader 11.0/Reader/AcroRd32.exe";
-
-  if (new_user) {
-    if (!QFileInfo(gswin).exists()) {
-      if (QFileInfo("C:/Program Files (x86)/gs/gs9.21/bin/gswin32c.exe")
-              .exists())
-        gswin = "C:/Program Files (x86)/gs/gs9.21/bin/gswin32c.exe";
-      else if (QFileInfo("C:/Program Files/gs/gs9.20/bin/gswin32c.exe")
-                   .exists())
-        gswin = "C:/Program Files/gs/gs9.20/bin/gswin32c.exe";
-      else if (QFileInfo("C:/Program Files (x86)/gs/gs9.20/bin/gswin32c.exe")
-                   .exists())
-        gswin = "C:/Program Files (x86)/gs/gs9.20/bin/gswin32c.exe";
-      else if (QFileInfo("C:/Program Files/gs/gs9.19/bin/gswin32c.exe")
-                   .exists())
-        gswin = "C:/Program Files/gs/gs9.19/bin/gswin32c.exe";
-      else if (QFileInfo("C:/Program Files (x86)/gs/gs9.19/bin/gswin32c.exe")
-                   .exists())
-        gswin = "C:/Program Files (x86)/gs/gs9.19/bin/gswin32c.exe";
-      else if (QFileInfo("C:/Program Files/gs/gs9.18/bin/gswin32c.exe")
-                   .exists())
-        gswin = "C:/Program Files/gs/gs9.18/bin/gswin32c.exe";
-      else if (QFileInfo("C:/Program Files (x86)/gs/gs9.18/bin/gswin32c.exe")
-                   .exists())
-        gswin = "C:/Program Files (x86)/gs/gs9.18/bin/gswin32c.exe";
-    }
-    ghostscript_command = "\"" + gswin + "\"";
-    if (!QFileInfo(yap).exists()) {
-      if (QFileInfo("C:/Program Files (x86)/MiKTeX 2.9/miktex/bin/yap.exe")
-              .exists())
-        yap = "C:/Program Files (x86)/MiKTeX 2.9/miktex/bin/yap.exe";
-      else if (QFileInfo("C:/Program Files/MiKTeX 3.0/miktex/bin/yap.exe")
-                   .exists())
-        yap = "C:/Program Files/MiKTeX 3.0/miktex/bin/yap.exe";
-      else if (QFileInfo("C:/Program Files (x86)/MiKTeX 3.0/miktex/bin/yap.exe")
-                   .exists())
-        yap = "C:/Program Files (x86)/MiKTeX 3.0/miktex/bin/yap.exe";
-      else if (QFileInfo("C:/Program Files/MiKTeX 2.8/miktex/bin/yap.exe")
-                   .exists())
-        yap = "C:/Program Files/MiKTeX 2.8/miktex/bin/yap.exe";
-      else if (QFileInfo("C:/Program Files (x86)/MiKTeX 2.8/miktex/bin/yap.exe")
-                   .exists())
-        yap = "C:/Program Files (x86)/MiKTeX 2.8/miktex/bin/yap.exe";
-      else if (QFileInfo("C:/Program Files/MiKTeX 2.7/miktex/bin/yap.exe")
-                   .exists())
-        yap = "C:/Program Files/MiKTeX 2.7/miktex/bin/yap.exe";
-      else if (QFileInfo("C:/Program Files (x86)/MiKTeX 2.7/miktex/bin/yap.exe")
-                   .exists())
-        yap = "C:/Program Files (x86)/MiKTeX 2.7/miktex/bin/yap.exe";
-      else if (QFileInfo("C:/Program Files/MiKTeX 2.5/miktex/bin/yap.exe")
-                   .exists())
-        yap = "C:/Program Files/MiKTeX 2.5/miktex/bin/yap.exe";
-      else if (QFileInfo("C:/Program Files (x86)/MiKTeX 2.5/miktex/bin/yap.exe")
-                   .exists())
-        yap = "C:/Program Files (x86)/MiKTeX 2.5/miktex/bin/yap.exe";
-      else if (QFileInfo("C:/texlive/2009/bin/win32/dviout.exe").exists())
-        yap = "C:/texlive/2009/bin/win32/dviout.exe";
-      else if (QFileInfo("C:/texlive/2010/bin/win32/dviout.exe").exists())
-        yap = "C:/texlive/2010/bin/win32/dviout.exe";
-      else if (QFileInfo("C:/texlive/2011/bin/win32/dviout.exe").exists())
-        yap = "C:/texlive/2011/bin/win32/dviout.exe";
-      else if (QFileInfo("C:/texlive/2012/bin/win32/dviout.exe").exists())
-        yap = "C:/texlive/2012/bin/win32/dviout.exe";
-      else if (QFileInfo("C:/texlive/2013/bin/win32/dviout.exe").exists())
-        yap = "C:/texlive/2013/bin/win32/dviout.exe";
-      else if (QFileInfo("C:/texlive/2014/bin/win32/dviout.exe").exists())
-        yap = "C:/texlive/2014/bin/win32/dviout.exe";
-      else if (QFileInfo("C:/texlive/2015/bin/win32/dviout.exe").exists())
-        yap = "C:/texlive/2015/bin/win32/dviout.exe";
-      else if (QFileInfo("C:/texlive/2016/bin/win32/dviout.exe").exists())
-        yap = "C:/texlive/2016/bin/win32/dviout.exe";
-      else if (QFileInfo("C:/texlive/2017/bin/win32/dviout.exe").exists())
-        yap = "C:/texlive/2017/bin/win32/dviout.exe";
-    }
-    viewdvi_command = "\"" + yap + "\" %.dvi";
-    if (!QFileInfo(gsview).exists()) {
-      if (QFileInfo("C:/Program Files (x86)/Ghostgum/gsview/gsview32.exe")
-              .exists())
-        gsview = "C:/Program Files (x86)/Ghostgum/gsview/gsview32.exe";
-      else if (QFileInfo("C:/texlive/2009/bin/win32/psv.exe").exists())
-        gsview = "C:/texlive/2009/bin/win32/psv.exe";
-      else if (QFileInfo("C:/texlive/2010/bin/win32/psv.exe").exists())
-        gsview = "C:/texlive/2010/bin/win32/psv.exe";
-      else if (QFileInfo("C:/texlive/2011/bin/win32/psv.exe").exists())
-        gsview = "C:/texlive/2011/bin/win32/psv.exe";
-      else if (QFileInfo("C:/texlive/2012/bin/win32/psv.exe").exists())
-        gsview = "C:/texlive/2012/bin/win32/psv.exe";
-      else if (QFileInfo("C:/texlive/2013/bin/win32/psv.exe").exists())
-        gsview = "C:/texlive/2012/bin/win32/psv.exe";
-      else if (QFileInfo("C:/texlive/2014/bin/win32/psv.exe").exists())
-        gsview = "C:/texlive/2014/bin/win32/psv.exe";
-      else if (QFileInfo("C:/texlive/2015/bin/win32/psv.exe").exists())
-        gsview = "C:/texlive/2015/bin/win32/psv.exe";
-      else if (QFileInfo("C:/texlive/2016/bin/win32/psv.exe").exists())
-        gsview = "C:/texlive/2016/bin/win32/psv.exe";
-      else if (QFileInfo("C:/texlive/2017/bin/win32/psv.exe").exists())
-        gsview = "C:/texlive/2017/bin/win32/psv.exe";
-    }
-    viewps_command = "\"" + gsview + "\" %.ps";
-    if (!QFileInfo(acro).exists()) {
-      if (QFileInfo(
-              "C:/Program Files (x86)/Adobe/Reader 11.0/Reader/AcroRd32.exe")
-              .exists())
-        acro = "C:/Program Files (x86)/Adobe/Reader 11.0/Reader/AcroRd32.exe";
-      else if (QFileInfo(
-                   "C:/Program Files/Adobe/Reader 10.0/Reader/AcroRd32.exe")
-                   .exists())
-        acro = "C:/Program Files/Adobe/Reader 10.0/Reader/AcroRd32.exe";
-      else if (QFileInfo("C:/Program Files (x86)/Adobe/Reader "
-                         "10.0/Reader/AcroRd32.exe")
-                   .exists())
-        acro = "C:/Program Files (x86)/Adobe/Reader 10.0/Reader/AcroRd32.exe";
-      else if (QFileInfo(
-                   "C:/Program Files/Adobe/Reader 9.0/Reader/AcroRd32.exe")
-                   .exists())
-        acro = "C:/Program Files/Adobe/Reader 9.0/Reader/AcroRd32.exe";
-      else if (QFileInfo("C:/Program Files (x86)/Adobe/Reader "
-                         "9.0/Reader/AcroRd32.exe")
-                   .exists())
-        acro = "C:/Program Files (x86)/Adobe/Reader 9.0/Reader/AcroRd32.exe";
-      else if (QFileInfo(
-                   "C:/Program Files/Adobe/Reader 8.0/Reader/AcroRd32.exe")
-                   .exists())
-        acro = "C:/Program Files/Adobe/Reader 8.0/Reader/AcroRd32.exe";
-      else if (QFileInfo("C:/Program Files (x86)/Adobe/Reader "
-                         "8.0/Reader/AcroRd32.exe")
-                   .exists())
-        acro = "C:/Program Files (x86)/Adobe/Reader 8.0/Reader/AcroRd32.exe";
-    }
-    viewpdf_command = "\"" + acro + "\" %.pdf";
-  }
-  //\"C:/Program Files/MiKTeX 2.7/miktex/bin/yap.exe\" -1 -s @%.tex %.dvi
-  quick_asy_command =
-      config
-          ->value(
-              "Tools/QuickAsy",
-              "\"C:/Program Files/Asymptote/asy.exe\" -f pdf -noView %.asy|" +
-                  viewpdf_command)
-          .toString();
-  lp_options = config->value("Tools/LP", "").toString();
-
-  qApp->setStyle(QLatin1String("Fusion"));
-
-#endif
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
-  keyToggleFocus =
-      config->value("Shortcuts/togglefocus", "Ctrl+Space").toString();
-  int desktop_env = 1; // 1 : no kde ; 2: kde ; 3 : kde4 ;
-  QStringList styles = QStyleFactory::keys();
-  QString kdesession = ::getenv("KDE_FULL_SESSION");
-  QString kdeversion = ::getenv("KDE_SESSION_VERSION");
-  if (!kdesession.isEmpty())
-    desktop_env = 2;
-  if (!kdeversion.isEmpty())
-    desktop_env = 3;
-
-  // desktop_env=1;
-  latex_command =
-      config->value("Tools/Latex", "latex -interaction=nonstopmode %.tex")
-          .toString();
-  dvips_command =
-      config->value("Tools/Dvips", "dvips -o %.ps %.dvi").toString();
-  ps2pdf_command = config->value("Tools/Ps2pdf", "ps2pdf %.ps").toString();
-  makeindex_command =
-      config->value("Tools/Makeindex", "makeindex %.idx").toString();
-  bibtex_command = config->value("Tools/Bibtex", "bibtex %.aux").toString();
-  pdflatex_command =
-      config
-          ->value("Tools/Pdflatex",
-                  "pdflatex -synctex=1 -interaction=nonstopmode %.tex")
-          .toString();
-  xelatex_command =
-      config
-          ->value("Tools/Xelatex",
-                  "xelatex -synctex=1 -interaction=nonstopmode %.tex")
-          .toString();
-  lualatex_command =
-      config->value("Tools/Lualatex", "lualatex -interaction=nonstopmode %.tex")
-          .toString();
-  dvipdf_command = config->value("Tools/Dvipdf", "dvipdfm %.dvi").toString();
-  metapost_command =
-      config->value("Tools/Metapost", "mpost --interaction nonstopmode ")
-          .toString();
-  // xdvi %.dvi  -sourceposition @:%.tex
-  // kdvi "file:%.dvi#src:@ %.tex"
-  switch (desktop_env) {
-  case 1: {
-    viewdvi_command = config->value("Tools/Dvi", "evince %.dvi").toString();
-    viewps_command = config->value("Tools/Ps", "evince %.ps").toString();
-    viewpdf_command = config->value("Tools/Pdf", "evince %.pdf").toString();
-  } break;
-  case 2: {
-    viewdvi_command = config->value("Tools/Dvi", "kdvi %.dvi").toString();
-    viewps_command = config->value("Tools/Ps", "kghostview %.ps").toString();
-    viewpdf_command = config->value("Tools/Pdf", "kpdf %.pdf").toString();
-  } break;
-  case 3: {
-    viewdvi_command = config->value("Tools/Dvi", "okular %.dvi").toString();
-    viewps_command = config->value("Tools/Ps", "okular %.ps").toString();
-    viewpdf_command = config->value("Tools/Pdf", "okular %.pdf").toString();
-  } break;
-  }
-
-  ghostscript_command = config->value("Tools/Ghostscript", "gs").toString();
-  asymptote_command = config->value("Tools/Asymptote", "asy %.asy").toString();
-  latexmk_command = config
-                        ->value("Tools/Latexmk",
-                                "latexmk -e \"$pdflatex=q/pdflatex -synctex=1 "
-                                "-interaction=nonstopmode/\" -pdf %.tex")
-                        .toString();
-  sweave_command =
-      config->value("Tools/Sweave", "R CMD Sweave %.Rnw").toString();
-  texdoc_command = config->value("Tools/Texdoc", "texdoc").toString();
-  htlatex_command = config->value("Tools/Htlatex", "htlatex").toString();
-
+  int desktop_env = 1; 
+  
   x11style = config->value("X11/Style", "Fusion").toString();
   if (xf.contains("DejaVu Sans", Qt::CaseInsensitive))
     deft = "DejaVu Sans";
@@ -4849,38 +4508,16 @@ void Texmaker::ReadSettings() {
   x11fontfamily = config->value("X11/Font Family", deft).toString();
   x11fontsize = config->value("X11/Font Size", "10").toInt();
 
-#ifdef AUTHORIZE_LINUX_QSTYLES
-  if (desktop_env == 1) {
-    if (styles.contains("GTK+"))
-      qApp->setStyle(QLatin1String("gtkstyle"));
-    else if (styles.contains("Breeze"))
-      qApp->setStyle(QLatin1String("breeze"));
-    else
-      qApp->setStyle(QLatin1String("fusion"));
-  } else if (styles.contains("Breeze"))
-    qApp->setStyle(QLatin1String("breeze"));
-  else
-    qApp->setStyle(QLatin1String("fusion"));
-#else
+
   qApp->setStyle(QLatin1String("fusion"));
-#endif
+
   // QApplication::setPalette(QApplication::style()->standardPalette());
   QFont x11Font(x11fontfamily, x11fontsize);
   QApplication::setFont(x11Font);
 
-  quick_asy_command = config
-                          ->value("Tools/QuickAsy",
-                                  "asy -f pdf -noView %.asy|" + viewpdf_command)
-                          .toString();
-  lp_options = config->value("Tools/LP", "-o fitplot").toString();
-#endif
-  userquick_command =
-      config
-          ->value("Tools/Userquick",
-                  "latex -interaction=nonstopmode %.tex|bibtex %.aux|latex "
-                  "-interaction=nonstopmode %.tex|latex "
-                  "-interaction=nonstopmode %.tex|xdvi %.dvi")
-          .toString();
+  
+
+ 
   userClassList = config->value("Tools/User Class").toStringList();
   userPaperList = config->value("Tools/User Paper").toStringList();
   userEncodingList = config->value("Tools/User Encoding").toStringList();
@@ -5137,7 +4774,7 @@ void Texmaker::SaveSettings() {
   config.setValue("Geometries/MainwindowX", x());
   config.setValue("Geometries/MainwindowY", y());
 
-  config.setValue("Print/PaperSize", psize);
+  
   int pscale = 10;
 
   config.setValue("PdfView/Scale", pscale);
@@ -5193,30 +4830,7 @@ void Texmaker::SaveSettings() {
   config.setValue("Tools/OutputDir", useoutputdir);
   config.setValue("Tools/CleanWhenExit", clean_exit);
 
-  config.setValue("Tools/Quick Mode", quickmode);
-  config.setValue("Tools/Latex", latex_command);
-  config.setValue("Tools/Dvi", viewdvi_command);
-  config.setValue("Tools/Dvips", dvips_command);
-  config.setValue("Tools/Ps", viewps_command);
-  config.setValue("Tools/Ps2pdf", ps2pdf_command);
-  config.setValue("Tools/Makeindex", makeindex_command);
-  config.setValue("Tools/Bibtex", bibtex_command);
-  config.setValue("Tools/Pdflatex", pdflatex_command);
-  config.setValue("Tools/Xelatex", xelatex_command);
-  config.setValue("Tools/Lualatex", lualatex_command);
-  config.setValue("Tools/Pdf", viewpdf_command);
-  config.setValue("Tools/Dvipdf", dvipdf_command);
-  config.setValue("Tools/Metapost", metapost_command);
-  config.setValue("Tools/Ghostscript", ghostscript_command);
-  config.setValue("Tools/Asymptote", asymptote_command);
-  config.setValue("Tools/Latexmk", latexmk_command);
-  config.setValue("Tools/Sweave", sweave_command);
-  config.setValue("Tools/Texdoc", texdoc_command);
-  config.setValue("Tools/HtOptions", htlatex_options);
-  config.setValue("Tools/Htlatex", htlatex_command);
-  config.setValue("Tools/Userquick", userquick_command);
-  config.setValue("Tools/QuickAsy", quick_asy_command);
-  config.setValue("Tools/LP", lp_options);
+ 
 
   if (userClassList.count() > 0)
     config.setValue("Tools/User Class", userClassList);
@@ -5376,7 +4990,7 @@ void Texmaker::ReplaceSettings() {
   }
 }
 
-void Texmaker::setPrintPaperSize(const QString &p) { psize = p; }
+
 
 ////////////////// STRUCTURE ///////////////////
 void Texmaker::ShowOpenedFiles() {
@@ -10285,29 +9899,12 @@ void Texmaker::GeneralOptions() {
   confDlg->ui.lineEditSvn->setText(svnPath);
   confDlg->ui.checkBoxSvn->setChecked(svnEnable);
 
-  confDlg->ui.lineEditLualatex->setText(lualatex_command);
-  confDlg->ui.lineEditXelatex->setText(xelatex_command);
-  confDlg->ui.lineEditPath->setText(extra_path);
-  confDlg->ui.lineEditLatex->setText(latex_command);
-  confDlg->ui.lineEditPdflatex->setText(pdflatex_command);
-  confDlg->ui.lineEditDvips->setText(dvips_command);
-  confDlg->ui.lineEditDviviewer->setText(viewdvi_command);
-  confDlg->ui.lineEditPsviewer->setText(viewps_command);
-  confDlg->ui.lineEditDvipdfm->setText(dvipdf_command);
-  confDlg->ui.lineEditPs2pdf->setText(ps2pdf_command);
-  confDlg->ui.lineEditBibtex->setText(bibtex_command);
-  confDlg->ui.lineEditMakeindex->setText(makeindex_command);
-  confDlg->ui.lineEditPdfviewer->setText(viewpdf_command);
+
   if (builtinpdfview)
     confDlg->ui.radioButtonInternalPdfViewer->setChecked(true);
   else
     confDlg->ui.radioButtonExternalPdfViewer->setChecked(true);
   confDlg->ui.checkBoxInternalPdfViewEmbed->setChecked(embedinternalpdf);
-  confDlg->ui.lineEditMetapost->setText(metapost_command);
-  confDlg->ui.lineEditGhostscript->setText(ghostscript_command);
-  confDlg->ui.lineEditAsymptote->setText(asymptote_command);
-  confDlg->ui.lineEditLatexmk->setText(latexmk_command);
-  confDlg->ui.lineEditSweave->setText(sweave_command);
   if (singleviewerinstance)
     confDlg->ui.checkBoxSingleInstanceViewer->setChecked(true);
   confDlg->ui.checkBoxTempBuild->setChecked(useoutputdir);
@@ -10357,79 +9954,8 @@ void Texmaker::GeneralOptions() {
 
   confDlg->ui.lineEditAspellCommand->setText(spell_dic);
 
-  if (quickmode == 1) {
-    confDlg->ui.radioButton1->setChecked(true);
-    confDlg->ui.lineEditUserquick->setEnabled(false);
-    confDlg->ui.pushButtonWizard->setEnabled(false);
-  }
-  if (quickmode == 2) {
-    confDlg->ui.radioButton2->setChecked(true);
-    confDlg->ui.lineEditUserquick->setEnabled(false);
-    confDlg->ui.pushButtonWizard->setEnabled(false);
-  }
-  if (quickmode == 3) {
-    confDlg->ui.radioButton3->setChecked(true);
-    confDlg->ui.lineEditUserquick->setEnabled(false);
-    confDlg->ui.pushButtonWizard->setEnabled(false);
-  }
-  if (quickmode == 4) {
-    confDlg->ui.radioButton4->setChecked(true);
-    confDlg->ui.lineEditUserquick->setEnabled(false);
-    confDlg->ui.pushButtonWizard->setEnabled(false);
-  }
-  if (quickmode == 5) {
-    confDlg->ui.radioButton5->setChecked(true);
-    confDlg->ui.lineEditUserquick->setEnabled(false);
-    confDlg->ui.pushButtonWizard->setEnabled(false);
-  }
-  if (quickmode == 6) {
-    confDlg->ui.radioButton6->setChecked(true);
-    confDlg->ui.lineEditUserquick->setEnabled(true);
-    confDlg->ui.pushButtonWizard->setEnabled(true);
-  }
-  if (quickmode == 7) {
-    confDlg->ui.radioButton7->setChecked(true);
-    confDlg->ui.lineEditUserquick->setEnabled(false);
-    confDlg->ui.pushButtonWizard->setEnabled(false);
-  }
-  if (quickmode == 8) {
-    confDlg->ui.radioButton8->setChecked(true);
-    confDlg->ui.lineEditUserquick->setEnabled(false);
-    confDlg->ui.pushButtonWizard->setEnabled(false);
-  }
-  if (quickmode == 9) {
-    confDlg->ui.radioButton9->setChecked(true);
-    confDlg->ui.lineEditUserquick->setEnabled(false);
-    confDlg->ui.pushButtonWizard->setEnabled(false);
-  }
-  if (quickmode == 10) {
-    confDlg->ui.radioButton10->setChecked(true);
-    confDlg->ui.lineEditUserquick->setEnabled(false);
-    confDlg->ui.pushButtonWizard->setEnabled(false);
-  }
-  if (quickmode == 11) {
-    confDlg->ui.radioButton11->setChecked(true);
-    confDlg->ui.lineEditUserquick->setEnabled(false);
-    confDlg->ui.pushButtonWizard->setEnabled(false);
-  }
-  if (quickmode == 12) {
-    confDlg->ui.radioButton12->setChecked(true);
-    confDlg->ui.lineEditUserquick->setEnabled(false);
-    confDlg->ui.pushButtonWizard->setEnabled(false);
-  }
-  if (quickmode == 13) {
-    confDlg->ui.radioButton13->setChecked(true);
-    confDlg->ui.lineEditUserquick->setEnabled(false);
-    confDlg->ui.pushButtonWizard->setEnabled(false);
-  }
-  if (quickmode == 14) {
-    confDlg->ui.radioButton14->setChecked(true);
-    confDlg->ui.lineEditUserquick->setEnabled(false);
-    confDlg->ui.pushButtonWizard->setEnabled(false);
-  }
-  confDlg->ui.lineEditUserquick->setText(userquick_command);
-  confDlg->ui.lineEditAsyQuick->setText(quick_asy_command);
-  confDlg->ui.lineEditPrinter->setText(lp_options);
+  
+  
 
   int row = 0;
   KeysMap::Iterator its, iter;
@@ -10538,61 +10064,13 @@ void Texmaker::GeneralOptions() {
     ModifyShortcuts();
     keyToggleFocus = confDlg->ui.pushButtonToggleFocus->text();
 
-    if (confDlg->ui.radioButton1->isChecked())
-      quickmode = 1;
-    if (confDlg->ui.radioButton2->isChecked())
-      quickmode = 2;
-    if (confDlg->ui.radioButton3->isChecked())
-      quickmode = 3;
-    if (confDlg->ui.radioButton4->isChecked())
-      quickmode = 4;
-    if (confDlg->ui.radioButton5->isChecked())
-      quickmode = 5;
-    if (confDlg->ui.radioButton6->isChecked())
-      quickmode = 6;
-    if (confDlg->ui.radioButton7->isChecked())
-      quickmode = 7;
-    if (confDlg->ui.radioButton8->isChecked())
-      quickmode = 8;
-    if (confDlg->ui.radioButton9->isChecked())
-      quickmode = 9;
-    if (confDlg->ui.radioButton10->isChecked())
-      quickmode = 10;
-    if (confDlg->ui.radioButton11->isChecked())
-      quickmode = 11;
-    if (confDlg->ui.radioButton12->isChecked())
-      quickmode = 12;
-    if (confDlg->ui.radioButton13->isChecked())
-      quickmode = 13;
-    if (confDlg->ui.radioButton14->isChecked())
-      quickmode = 14;
-    userquick_command = confDlg->ui.lineEditUserquick->text();
-    quick_asy_command = confDlg->ui.lineEditAsyQuick->text();
-    lp_options = confDlg->ui.lineEditPrinter->text();
+   
+   
 
     svnEnable = confDlg->ui.checkBoxSvn->isChecked();
     svnPath = confDlg->ui.lineEditSvn->text();
 
-    lualatex_command = confDlg->ui.lineEditLualatex->text();
-    xelatex_command = confDlg->ui.lineEditXelatex->text();
-    extra_path = confDlg->ui.lineEditPath->text();
-    latex_command = confDlg->ui.lineEditLatex->text();
-    pdflatex_command = confDlg->ui.lineEditPdflatex->text();
-    dvips_command = confDlg->ui.lineEditDvips->text();
-    viewdvi_command = confDlg->ui.lineEditDviviewer->text();
-    viewps_command = confDlg->ui.lineEditPsviewer->text();
-    dvipdf_command = confDlg->ui.lineEditDvipdfm->text();
-    ps2pdf_command = confDlg->ui.lineEditPs2pdf->text();
-    bibtex_command = confDlg->ui.lineEditBibtex->text();
-    makeindex_command = confDlg->ui.lineEditMakeindex->text();
-    viewpdf_command = confDlg->ui.lineEditPdfviewer->text();
-    metapost_command = confDlg->ui.lineEditMetapost->text();
-    if (metapost_command.right(1) != " ")
-      metapost_command += " ";
-    ghostscript_command = confDlg->ui.lineEditGhostscript->text();
-    asymptote_command = confDlg->ui.lineEditAsymptote->text();
-    latexmk_command = confDlg->ui.lineEditLatexmk->text();
-    sweave_command = confDlg->ui.lineEditSweave->text();
+   
     builtinpdfview = false;
     embedinternalpdf = false;
 
@@ -11911,7 +11389,6 @@ void Texmaker::SaveSession() {
         "xml", "version=\"1.0\" encoding=\"UTF-8\"");
     doc.appendChild(instr);
     QDomElement root = doc.createElement("TexmakerSession");
-    root.setAttribute("quickmode", QString::number(quickmode));
     doc.appendChild(root);
     QDomElement element;
     FilesMap::Iterator itf;
@@ -11980,8 +11457,7 @@ void Texmaker::LoadSessionFile(const QString &fn) {
     fic.close();
     return;
   }
-  if (root.hasAttribute("quickmode"))
-    quickmode = root.attribute("quickmode").toInt();
+
   QString file, ofile;
   int b1, b2, b3, l, ob1, ob2, ob3, ol;
   bool ma, oma;
@@ -12057,7 +11533,6 @@ void Texmaker::SaveLastSession() {
       "xml", "version=\"1.0\" encoding=\"UTF-8\"");
   doc.appendChild(instr);
   QDomElement root = doc.createElement("TexmakerSession");
-  root.setAttribute("quickmode", QString::number(quickmode));
   doc.appendChild(root);
   QDomElement element;
   FilesMap::Iterator itf;
@@ -12113,8 +11588,7 @@ void Texmaker::LoadLastSession() {
     fic.close();
     return;
   }
-  if (root.hasAttribute("quickmode"))
-    quickmode = root.attribute("quickmode").toInt();
+
   QString file, ofile;
   int b1, b2, b3, l, ob1, ob2, ob3, ol;
   bool ma, oma;
