@@ -69,7 +69,7 @@ int output_flush(void *context, void *handle) {
 int output_close(void *context, void *handle) { return fclose(handle); }
 
 #define MAXAVAILABLENAMESIZE 512
-#define KPSE_BASE_URL "http://127.0.0.1:5000/tex"
+#define KPSE_BASE_URL "https://www.swiftlatex.com/dl/tex"
 
 static size_t curl_write_data(void *ptr, size_t size, size_t nmemb,
                               void *stream) {
@@ -243,7 +243,7 @@ char *kpse_find_file(const char *name, tt_input_format_type format) {
     return patched_name;
   }
 
-  if (strrchr(patched_name, '/') == NULL && fetch_tex_file(patched_name) == 0) // Nope Try download it //Now we can ask for help to download the file
+  if (strrchr(patched_name, '/') == NULL && strrchr(patched_name, ' ') == NULL && fetch_tex_file(patched_name) == 0) //only download it if not "/" and " " in the directory
   {
     return patched_name;
   }
@@ -326,7 +326,7 @@ int main() {
   ourapi.input_getc = input_getc;
   ourapi.input_ungetc = input_ungetc;
   ourapi.input_close = input_close;
-  tex_simple_main(&ourapi, "xelatex.fmt", "test.tex", 0);
+  tex_simple_main(&ourapi, "swiftlatex.fmt", "test.tex", 0);
 
   return 0;
 }

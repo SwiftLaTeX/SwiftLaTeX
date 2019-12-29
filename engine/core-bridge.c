@@ -45,9 +45,10 @@ const char *tt_get_error_message(void) { return error_buf; }
 int tex_simple_main(tt_bridge_api_t *api, char *dump_name,
                     char *input_file_name, time_t build_date) {
   int rv;
-  // halt_on_error_p = 1;
-  // synctex_enabled = 0;
-  // in_initex_mode = 1;
+
+  halt_on_error_p = 1;
+  
+  //in_initex_mode = 1;
   tectonic_global_bridge = api;
 
   if (setjmp(jump_buffer)) {
