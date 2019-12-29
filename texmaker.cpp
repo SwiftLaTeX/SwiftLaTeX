@@ -952,7 +952,7 @@ Texmaker::Texmaker(QWidget *parent) : QMainWindow(parent) {
   // stat2->setText(QString(" %1 ").arg(tr("Ready")));
   stat3->setText(QString(" %1 ").arg(input_encoding));
 
-  setAcceptDrops(true);
+  //setAcceptDrops(true);
  
   setupAutoSaveTimer();
 }
@@ -10450,27 +10450,27 @@ void Texmaker::gotoBookmark3() {
 }
 
 //*********************************
-void Texmaker::dragEnterEvent(QDragEnterEvent *event) {
-  if (event->mimeData()->hasFormat("text/uri-list"))
-    event->acceptProposedAction();
-}
+// void Texmaker::dragEnterEvent(QDragEnterEvent *event) {
+//   if (event->mimeData()->hasFormat("text/uri-list"))
+//     event->acceptProposedAction();
+// }
 
-void Texmaker::dropEvent(QDropEvent *event) {
-#if defined(Q_OS_WIN32)
-  QRegExp rx("file:(/+)(.*\\.(?:tex|bib|sty|cls|mp|asy|Rnw|tks))");
-#else
-  QRegExp rx("file:(//)(.*\\.(?:tex|bib|sty|cls|mp|asy|Rnw|tks))");
-#endif
-  QList<QUrl> uris = event->mimeData()->urls();
-  QString uri;
-  for (int i = 0; i < uris.size(); ++i) {
-    uri = uris.at(i).toString();
-    if (rx.exactMatch(uri)) {
-      load(rx.cap(2));
-    }
-  }
-  event->acceptProposedAction();
-}
+// void Texmaker::dropEvent(QDropEvent *event) {
+// #if defined(Q_OS_WIN32)
+//   QRegExp rx("file:(/+)(.*\\.(?:tex|bib|sty|cls|mp|asy|Rnw|tks))");
+// #else
+//   QRegExp rx("file:(//)(.*\\.(?:tex|bib|sty|cls|mp|asy|Rnw|tks))");
+// #endif
+//   QList<QUrl> uris = event->mimeData()->urls();
+//   QString uri;
+//   for (int i = 0; i < uris.size(); ++i) {
+//     uri = uris.at(i).toString();
+//     if (rx.exactMatch(uri)) {
+//       load(rx.cap(2));
+//     }
+//   }
+//   event->acceptProposedAction();
+// }
 
 //***********************************
 void Texmaker::SetMostUsedSymbols() {
