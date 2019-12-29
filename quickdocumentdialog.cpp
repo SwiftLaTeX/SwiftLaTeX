@@ -27,6 +27,7 @@ QuickDocumentDialog::QuickDocumentDialog(QWidget *parent, const char *name)
   ui.listWidgetOptions->setSelectionMode(QAbstractItemView::ExtendedSelection);
   ui.listWidgetBabel->setSelectionMode(QAbstractItemView::ExtendedSelection);
   setWindowTitle(tr("Quick Start"));
+  dlg = NULL;
 }
 
 QuickDocumentDialog::~QuickDocumentDialog() {}
@@ -116,61 +117,103 @@ void QuickDocumentDialog::Init() {
 }
 
 void QuickDocumentDialog::addUserClass() {
-  QString newoption = "";
+  
+  if(dlg) {
+  	dlg->deleteLater();
+  }
   dlg = new AddOptionDialog(this, "New");
-  if (dlg->exec()) {
-    newoption = dlg->ui.lineEdit->text();
+  dlg->setModal(true);
+  dlg->show();
+  connect(dlg, SIGNAL(accepted()), this, SLOT(addUserClassDone));
+  
+}
+
+void QuickDocumentDialog::addUserClassDone() {
+	QString newoption = "";
+	newoption = dlg->ui.lineEdit->text();
     if (newoption != "")
       otherClassList.append(newoption);
     Init();
-  }
-  delete (dlg);
 }
 
 void QuickDocumentDialog::addUserPaper() {
-  QString newoption = "";
+  
+  if(dlg) {
+  	dlg->deleteLater();
+  }
   dlg = new AddOptionDialog(this, "New");
-  if (dlg->exec()) {
-    newoption = dlg->ui.lineEdit->text();
+  dlg->setModal(true);
+  dlg->show();
+  connect(dlg, SIGNAL(accepted()), this, SLOT(addUserPaperDone));
+  
+}
+
+void QuickDocumentDialog::addUserPaperDone() {
+	QString newoption = "";
+	newoption = dlg->ui.lineEdit->text();
     if (newoption != "")
       otherPaperList.append(newoption);
     Init();
-  }
-  delete (dlg);
 }
 
 void QuickDocumentDialog::addUserEncoding() {
-  QString newoption = "";
+  
+  if(dlg) {
+  	dlg->deleteLater();
+  }
   dlg = new AddOptionDialog(this, "New");
-  if (dlg->exec()) {
-    newoption = dlg->ui.lineEdit->text();
+  dlg->setModal(true);
+  dlg->show();
+  connect(dlg, SIGNAL(accepted()), this, SLOT(addUserEncodingDone));
+  
+}
+
+
+void QuickDocumentDialog::addUserEncodingDone() {
+	QString newoption = "";
+	newoption = dlg->ui.lineEdit->text();
     if (newoption != "")
       otherEncodingList.append(newoption);
     Init();
-  }
-  delete (dlg);
 }
 
+
 void QuickDocumentDialog::addUserOptions() {
-  QString newoption = "";
+ 
+  if(dlg) {
+  	dlg->deleteLater();
+  }
   dlg = new AddOptionDialog(this, "New");
-  if (dlg->exec()) {
-    newoption = dlg->ui.lineEdit->text();
+  dlg->setModal(true);
+  dlg->show();
+  connect(dlg, SIGNAL(accepted()), this, SLOT(addUserOptionsDone));
+}
+
+void QuickDocumentDialog::addUserOptionsDone() {
+	QString newoption = "";
+	newoption = dlg->ui.lineEdit->text();
     if (newoption != "")
       otherOptionsList.append(newoption);
     Init();
-  }
-  delete (dlg);
 }
 
 void QuickDocumentDialog::addUserBabel() {
-  QString newoption = "";
+  
+  if(dlg) {
+  	dlg->deleteLater();
+  }
   dlg = new AddOptionDialog(this, "New");
-  if (dlg->exec()) {
-    newoption = dlg->ui.lineEdit->text();
+  dlg->setModal(true);
+  dlg->show();
+  connect(dlg, SIGNAL(accepted()), this, SLOT(addUserBabelDone));
+  
+  
+}
+
+void QuickDocumentDialog::addUserBabelDone() {
+	QString newoption = "";
+	newoption = dlg->ui.lineEdit->text();
     if (newoption != "")
       otherBabelList.append(newoption);
     Init();
-  }
-  delete (dlg);
 }

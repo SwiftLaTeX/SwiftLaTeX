@@ -34,6 +34,11 @@ private slots:
   void addUserEncoding();
   void addUserOptions();
   void addUserBabel();
+  void addUserClassDone();
+  void addUserPaperDone();
+  void addUserEncodingDone();
+  void addUserOptionsDone();
+  void addUserBabelDone();
 
 private:
   AddOptionDialog *dlg;
