@@ -97,10 +97,8 @@ private:
   bool isCurrentModifiedOutside();
   bool copyFile(QString origin, QString destination);
   // void removeDir(QDir thedir);
-  void createBuildSubdirectory(QString fn);
-  QString outputName(QString finame, QString extension);
-  QString outputBaseName(QString finame);
-  bool gtkSession();
+  // QString outputName(QString finame, QString extension);
+  // QString outputBaseName(QString finame);
   void setMasterDocument(const QString &fn);
 
   int untitled_id;
@@ -116,7 +114,7 @@ private:
   bool embedinternalpdf, winmaximized;
 
   QStackedWidget *EditorView;
-  QStackedWidget *StackedViewers;
+  //QStackedWidget *StackedViewers;
   LogEditor *OutputTextEdit;
 
   QStackedWidget *LeftPanelStackedWidget;
@@ -152,7 +150,7 @@ private:
       /* *formatToolBar ,*/ *logToolBar, *LeftPanelToolBar,
       *LeftPanelToolBarBis, *centralToolBar, *centralToolBarBis;
   QAction *recentFileActs[10];
-  QAction *ToggleAct, *StopAct, *UndoAct, *RedoAct, *SaveAct, *CutAct, *CopyAct,
+  QAction *ToggleAct,  *UndoAct, *RedoAct, *SaveAct, *CutAct, *CopyAct,
       *PasteAct, *ToggleDocAct, *ViewStructurePanelAct, *ViewLogPanelAct,
       *FullScreenAct, *NextDocAct,
       *PrevDocAct, *ViewOpenedFilesPanelAct;
@@ -206,7 +204,6 @@ private:
       userCompletionList, userBabelList;
   QStringList labelitem, bibitem, listbibfiles, listchildfiles;
   Userlist UserMenuName, UserMenuTag;
-  UserCd UserToolName, UserToolCommand;
   QString keyToggleFocus;
   QString extra_path;
   QString beamer_theme, beamer_size, beamer_encoding, beamer_author,
@@ -303,7 +300,6 @@ private slots:
   void editSelectAll();
   void editFind();
   void editFindNext();
-  void editFindInDirectory();
   void editReplace();
   void editGotoLine();
   void editComment();
@@ -312,8 +308,7 @@ private slots:
   void editUnindent();
   void editSpell();
   void editTipTab();
-  void editRunScript();
-  void editRunFurnishedScript();
+
 
   void doFoldAll(int i);
   void doUnfoldAll(int i);
@@ -441,44 +436,44 @@ private slots:
   void QuickXelatex();
   void QuickBeamer();
 
-  void RunCommand(QString comd, bool waitendprocess);
-  void readFromStderr();
-  void stopProcess();
-  void readFromStdoutput();
-  void SlotEndProcess(int err);
-  void SlotEndViewerProcess(int err);
-  void QuickBuild();
-  void Latex();
-  void ViewDvi();
-  void DviToPS();
-  void ViewPS();
-  void PDFLatex();
-  void ViewPDF();
+  //void RunCommand(QString comd, bool waitendprocess);
+  // void readFromStderr();
+  // void stopProcess();
+  // void readFromStdoutput();
+  // void SlotEndProcess(int err);
+  // void SlotEndViewerProcess(int err);
+  // void QuickBuild();
+  // void Latex();
+  // void ViewDvi();
+  // void DviToPS();
+  // void ViewPS();
+  // void PDFLatex();
+  // void ViewPDF();
   void CleanAll();
   void AutoCleanAll();
-  void MakeBib();
-  void MakeIndex();
-  void PStoPDF();
-  void DVItoPDF();
-  void MetaPost();
-  void Asymptote();
-  void LatexMk();
-  void Sweave();
-  void Xelatex();
-  void Lualatex();
-  void AsyFile(QString asyfile);
-  void UserTool1();
-  void UserTool2();
-  void UserTool3();
-  void UserTool4();
-  void UserTool5();
-  void EditUserTool();
-  void doCompile();
-  void doView();
+  // void MakeBib();
+  // void MakeIndex();
+  // void PStoPDF();
+  // void DVItoPDF();
+  // void MetaPost();
+  // void Asymptote();
+  // void LatexMk();
+  // void Sweave();
+  // void Xelatex();
+  // void Lualatex();
+  // void AsyFile(QString asyfile);
+  // void UserTool1();
+  // void UserTool2();
+  // void UserTool3();
+  // void UserTool4();
+  // void UserTool5();
+  // void EditUserTool();
+  // void doCompile();
+  // void doView();
   void jumpToPdfline(int line);
-  void OpenTerminal();
-  void Export();
-  void ConvertToUnicode();
+  // void OpenTerminal();
+  // void Export();
+  // void ConvertToUnicode();
 
   void LoadLog();
   void ViewLog();
@@ -492,12 +487,12 @@ private slots:
   bool LogExists();
 
   /////
-  void LatexHelp();
-  void UserManualHelp();
-  void TexDocHelp();
+  // void LatexHelp();
+  // void UserManualHelp();
+  // void TexDocHelp();
   void HelpAbout();
-  void CheckVersion();
-  void Doculatex();
+  // void CheckVersion();
+  // void Doculatex();
   // void Docufrlatex();
 
   void GeneralOptions();
@@ -538,13 +533,10 @@ private slots:
 
   void ToggleStructurePanel();
   void ToggleLogPanel();
-  void TogglePdfPanel();
-  void ToggleSourcePanel();
   void ToggleFilesPanel();
   void ShowStructView(bool change);
   void ShowOutputView(bool change);
-  void ShowPdfView(bool change);
-  void ShowSourceView(bool change);
+ 
   void ShowFilesView(bool change);
   void ToggleFullScreen();
   void EditUserCompletion();
@@ -574,7 +566,7 @@ private slots:
   void SaveLastSession();
   void LoadLastSession();
 
-  void compareDocuments();
+
 
 protected:
   void dragEnterEvent(QDragEnterEvent *event);

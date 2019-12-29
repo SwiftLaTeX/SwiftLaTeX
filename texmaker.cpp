@@ -556,11 +556,11 @@ Texmaker::Texmaker(QWidget *parent) : QMainWindow(parent) {
     scriptList.append(qmScriptInfo.completeBaseName());
   }
 
-  StackedViewers = new QStackedWidget(this);
-  StackedViewers->setLineWidth(0);
-  StackedViewers->setFrameShape(QFrame::NoFrame);
-  StackedViewers->setFrameShadow(QFrame::Plain);
-  StackedViewers->setMinimumWidth(200);
+  // StackedViewers = new QStackedWidget(this);
+  // StackedViewers->setLineWidth(0);
+  // StackedViewers->setFrameShape(QFrame::NoFrame);
+  // StackedViewers->setFrameShadow(QFrame::Plain);
+  // StackedViewers->setMinimumWidth(200);
 
   // EDITEUR
   QFrame *centralFrame = new QFrame(this);
@@ -886,7 +886,7 @@ Texmaker::Texmaker(QWidget *parent) : QMainWindow(parent) {
           SLOT(splitter2Changed()));
   // splitter1->addWidget(splitter3);
   splitter1->addWidget(splitter2);
-  splitter1->addWidget(StackedViewers);
+  //splitter1->addWidget(StackedViewers);
   setCentralWidget(splitter1);
 
   splitter2->show();
@@ -925,10 +925,8 @@ Texmaker::Texmaker(QWidget *parent) : QMainWindow(parent) {
   ShowOutputView(false);
   ShowStructView(false);
   ShowFilesView(false);
-  ShowPdfView(false);
-  ShowSourceView(false);
-
-  StackedViewers->hide();
+ 
+  //StackedViewers->hide();
 
   UpdateRecentFile();
 
@@ -1299,40 +1297,40 @@ void Texmaker::setupMenus() {
   editMenu->addAction(Act);
 
   toolMenu = menuBar()->addMenu(tr("&Tools"));
-  Act = new QAction(getIcon(":/images/quick.png"), tr("Quick Build (LaTex Only)"), this);
-  Act->setData(Act->text());
-  Act->setShortcut(Qt::Key_F1);
-  connect(Act, SIGNAL(triggered()), this, SLOT(QuickBuild()));
-  toolMenu->addAction(Act);
-  toolMenu->addSeparator();
-  Act = new QAction("BibTeX", this);
-  Act->setData("BibTeX");
-  Act->setShortcut(Qt::Key_F2);
-  connect(Act, SIGNAL(triggered()), this, SLOT(Latex()));
-  toolMenu->addAction(Act);
-  Act = new QAction(tr("View Dvi"), this);
-  Act->setData("View Dvi");
-  Act->setShortcut(Qt::Key_F3);
-  connect(Act, SIGNAL(triggered()), this, SLOT(ViewDvi()));
-  toolMenu->addAction(Act);
-  Act = new QAction("Dvi->PS", this);
-  Act->setData("Dvi->PS");
-  Act->setShortcut(Qt::Key_F4);
-  connect(Act, SIGNAL(triggered()), this, SLOT(DviToPS()));
-  toolMenu->addAction(Act);
-  Act = new QAction(tr("View PS"), this);
-  Act->setData("View PS");
-  Act->setShortcut(Qt::Key_F5);
-  connect(Act, SIGNAL(triggered()), this, SLOT(ViewPS()));
-  toolMenu->addAction(Act);
-  Act = new QAction("PDFLaTeX", this);
-  Act->setData("PDFLaTeX");
-  Act->setShortcut(Qt::Key_F6);
-  toolMenu->addSeparator();
-  Act = new QAction(tr("Clean"), this);
-  Act->setData("Clean");
-  connect(Act, SIGNAL(triggered()), this, SLOT(CleanAll()));
-  toolMenu->addAction(Act);
+  // Act = new QAction(getIcon(":/images/quick.png"), tr("Quick Build (LaTex Only)"), this);
+  // Act->setData(Act->text());
+  // Act->setShortcut(Qt::Key_F1);
+  // connect(Act, SIGNAL(triggered()), this, SLOT(QuickBuild()));
+  // toolMenu->addAction(Act);
+  // toolMenu->addSeparator();
+  // Act = new QAction("BibTeX", this);
+  // Act->setData("BibTeX");
+  // Act->setShortcut(Qt::Key_F2);
+  // connect(Act, SIGNAL(triggered()), this, SLOT(Latex()));
+  // toolMenu->addAction(Act);
+  // Act = new QAction(tr("View Dvi"), this);
+  // Act->setData("View Dvi");
+  // Act->setShortcut(Qt::Key_F3);
+  // connect(Act, SIGNAL(triggered()), this, SLOT(ViewDvi()));
+  // toolMenu->addAction(Act);
+  // Act = new QAction("Dvi->PS", this);
+  // Act->setData("Dvi->PS");
+  // Act->setShortcut(Qt::Key_F4);
+  // connect(Act, SIGNAL(triggered()), this, SLOT(DviToPS()));
+  // toolMenu->addAction(Act);
+  // Act = new QAction(tr("View PS"), this);
+  // Act->setData("View PS");
+  // Act->setShortcut(Qt::Key_F5);
+  // connect(Act, SIGNAL(triggered()), this, SLOT(ViewPS()));
+  // toolMenu->addAction(Act);
+  // Act = new QAction("PDFLaTeX", this);
+  // Act->setData("PDFLaTeX");
+  // Act->setShortcut(Qt::Key_F6);
+  // toolMenu->addSeparator();
+  // Act = new QAction(tr("Clean"), this);
+  // Act->setData("Clean");
+  // connect(Act, SIGNAL(triggered()), this, SLOT(CleanAll()));
+  // toolMenu->addAction(Act);
   #if 0
   toolMenu->addSeparator();
   Act = new QAction(tr("Open Terminal"), this);
@@ -2554,11 +2552,11 @@ void Texmaker::setupToolBars() {
   connect(Act, SIGNAL(triggered()), this, SLOT(PreviousError()));
   logToolBar->addAction(Act);
 
-  StopAct = new QAction(getIcon(":/images/process-stop.png"),
-                        tr("Stop Process"), this);
-  connect(StopAct, SIGNAL(triggered()), this, SLOT(stopProcess()));
-  logToolBar->addAction(StopAct);
-  StopAct->setEnabled(false);
+  // StopAct = new QAction(getIcon(":/images/process-stop.png"),
+  //                       tr("Stop Process"), this);
+  // connect(StopAct, SIGNAL(triggered()), this, SLOT(stopProcess()));
+  // logToolBar->addAction(StopAct);
+  // StopAct->setEnabled(false);
 
   viewMenu->addSeparator();
   viewMenu->addAction(fileToolBar->toggleViewAction());
@@ -4118,9 +4116,6 @@ void Texmaker::editSelectAll() {
   currentEditorView()->editor->selectAll();
 }
 
-void Texmaker::editFindInDirectory() {
-  
-}
 
 void Texmaker::editFind() {
   if (!currentEditorView())
@@ -4196,10 +4191,6 @@ void Texmaker::editTipTab() {
   OutputTextEdit->insertLine("Use the Tab key to reach the next " +
                              QString(0x2022) + " field");
 }
-
-void Texmaker::editRunScript() {}
-
-void Texmaker::editRunFurnishedScript() {}
 
 /************ by Robin.Watts ***********************/
 static void lineTo(LatexEditor *editor, int line) {
@@ -4939,16 +4930,8 @@ void Texmaker::ReadSettings() {
   UserMenuTag[8] = config->value("User/Tag9", "").toString();
   UserMenuName[9] = config->value("User/Menu10", "").toString();
   UserMenuTag[9] = config->value("User/Tag10", "").toString();
-  UserToolName[0] = config->value("User/ToolName1", "").toString();
-  UserToolCommand[0] = config->value("User/Tool1", "").toString();
-  UserToolName[1] = config->value("User/ToolName2", "").toString();
-  UserToolCommand[1] = config->value("User/Tool2", "").toString();
-  UserToolName[2] = config->value("User/ToolName3", "").toString();
-  UserToolCommand[2] = config->value("User/Tool3", "").toString();
-  UserToolName[3] = config->value("User/ToolName4", "").toString();
-  UserToolCommand[3] = config->value("User/Tool4", "").toString();
-  UserToolName[4] = config->value("User/ToolName5", "").toString();
-  UserToolCommand[4] = config->value("User/Tool5", "").toString();
+ 
+ 
 
   userTagsList = config->value("User/TagList").toStringList();
 
@@ -5278,16 +5261,7 @@ void Texmaker::SaveSettings() {
   config.setValue("User/Tag9", UserMenuTag[8]);
   config.setValue("User/Menu10", UserMenuName[9]);
   config.setValue("User/Tag10", UserMenuTag[9]);
-  config.setValue("User/ToolName1", UserToolName[0]);
-  config.setValue("User/Tool1", UserToolCommand[0]);
-  config.setValue("User/ToolName2", UserToolName[1]);
-  config.setValue("User/Tool2", UserToolCommand[1]);
-  config.setValue("User/ToolName3", UserToolName[2]);
-  config.setValue("User/Tool3", UserToolCommand[2]);
-  config.setValue("User/ToolName4", UserToolName[3]);
-  config.setValue("User/Tool4", UserToolCommand[3]);
-  config.setValue("User/ToolName5", UserToolName[4]);
-  config.setValue("User/Tool5", UserToolCommand[4]);
+ 
 
   config.setValue("User/TagList", userTagsList);
 
@@ -8482,1478 +8456,1350 @@ void Texmaker::ShowSizeMenu() {
 }
 
 ///////////////TOOLS////////////////////
-void Texmaker::RunCommand(QString comd, bool waitendprocess) {
-  QString finame;
-  QString commandline = comd;
-  QByteArray result;
-  if (singlemode) {
-    finame = getName();
-  } else {
-    finame = MasterName;
-  }
-  if ((singlemode && !currentEditorView()) || finame == "") {
-    QMessageBox::warning(this, tr("Error"), tr("Can't detect the file name"));
-    return;
-  }
-  if (finame.startsWith("untitled")) {
-    QMessageBox::warning(
-        this, tr("Error"),
-        tr("A document must be saved with an extension (and without spaces or "
-           "accents in the name) before being used by a command."));
-    return;
-  }
-  if (!currentfileSaved()) {
-    ERRPROCESS = true;
-    return;
-  }
-  // QFileInfo texfi(finame);
-  // QString suf="."+texfi.suffix();
-  // QString realname;
-  if ((comd.startsWith("latex") || comd.startsWith("pdflatex")) &&
-      useoutputdir) {
-    commandline.replace("latex", "latex --output-directory=build");
-    createBuildSubdirectory(finame);
-    //  realname=finame;
-  }
-  // else
-  //   {
-  //   realname=outputName(finame,suf);
-  //   }
-  //
-  // qDebug() << realname;
-  QFileInfo fi(finame);
-  QString basename = fi.completeBaseName();
+// void Texmaker::RunCommand(QString comd, bool waitendprocess) {
+//   QString finame;
+//   QString commandline = comd;
+//   QByteArray result;
+//   if (singlemode) {
+//     finame = getName();
+//   } else {
+//     finame = MasterName;
+//   }
+//   if ((singlemode && !currentEditorView()) || finame == "") {
+//     QMessageBox::warning(this, tr("Error"), tr("Can't detect the file name"));
+//     return;
+//   }
+//   if (finame.startsWith("untitled")) {
+//     QMessageBox::warning(
+//         this, tr("Error"),
+//         tr("A document must be saved with an extension (and without spaces or "
+//            "accents in the name) before being used by a command."));
+//     return;
+//   }
+//   if (!currentfileSaved()) {
+//     ERRPROCESS = true;
+//     return;
+//   }
+//   // QFileInfo texfi(finame);
+//   // QString suf="."+texfi.suffix();
+//   // QString realname;
+//   if ((comd.startsWith("latex") || comd.startsWith("pdflatex")) &&
+//       useoutputdir) {
+//     commandline.replace("latex", "latex --output-directory=build");
+//     createBuildSubdirectory(finame);
+//     //  realname=finame;
+//   }
+//   // else
+//   //   {
+//   //   realname=outputName(finame,suf);
+//   //   }
+//   //
+//   // qDebug() << realname;
+//   QFileInfo fi(finame);
+//   QString basename = fi.completeBaseName();
 
-  // commandline.replace("%","\""+basename+"\"");
-  // commandline.replace("!",fi.absolutePath());
-  QFileInfo ficur(getName());
-  // if (!commandline.contains("okular"))
-  // commandline.replace("#","\""+ficur.completeBaseName()+"\"");
-  int currentline = 1;
-  int currentcol = 1;
-  if (currentEditorView()) {
-    currentline = currentEditorView()->editor->linefromblock(
-        currentEditorView()->editor->textCursor().block());
-    currentcol = currentEditorView()->editor->textCursor().position() -
-                 currentEditorView()->editor->textCursor().block().position() +
-                 1;
-  }
-  // commandline.replace("@",QString::number(currentline));
+//   // commandline.replace("%","\""+basename+"\"");
+//   // commandline.replace("!",fi.absolutePath());
+//   QFileInfo ficur(getName());
+//   // if (!commandline.contains("okular"))
+//   // commandline.replace("#","\""+ficur.completeBaseName()+"\"");
+//   int currentline = 1;
+//   int currentcol = 1;
+//   if (currentEditorView()) {
+//     currentline = currentEditorView()->editor->linefromblock(
+//         currentEditorView()->editor->textCursor().block());
+//     currentcol = currentEditorView()->editor->textCursor().position() -
+//                  currentEditorView()->editor->textCursor().block().position() +
+//                  1;
+//   }
+//   // commandline.replace("@",QString::number(currentline));
 
-  QRegExp rx1("(#+)");
-  QString capt = "";
-  if (rx1.indexIn(commandline) != -1)
-    capt = rx1.cap(1);
-  if (capt == "#")
-    commandline.replace("#", "\"" + ficur.completeBaseName() + "\"");
-  else if (capt == "##")
-    commandline.replace("##", "#");
+//   QRegExp rx1("(#+)");
+//   QString capt = "";
+//   if (rx1.indexIn(commandline) != -1)
+//     capt = rx1.cap(1);
+//   if (capt == "#")
+//     commandline.replace("#", "\"" + ficur.completeBaseName() + "\"");
+//   else if (capt == "##")
+//     commandline.replace("##", "#");
 
-  QRegExp rx2("(%+)");
-  capt = "";
-  if (rx2.indexIn(commandline) != -1)
-    capt = rx2.cap(1);
-  if (capt == "%")
-    commandline.replace("%", "\"" + basename + "\"");
-  else if (capt == "%%")
-    commandline.replace("%%", "%");
+//   QRegExp rx2("(%+)");
+//   capt = "";
+//   if (rx2.indexIn(commandline) != -1)
+//     capt = rx2.cap(1);
+//   if (capt == "%")
+//     commandline.replace("%", "\"" + basename + "\"");
+//   else if (capt == "%%")
+//     commandline.replace("%%", "%");
 
-  QRegExp rx3("(!+)");
-  capt = "";
-  if (rx3.indexIn(commandline) != -1)
-    capt = rx3.cap(1);
-  if (capt == "!")
-    commandline.replace("!", fi.absolutePath());
-  else if (capt == "!!")
-    commandline.replace("!!", "!");
+//   QRegExp rx3("(!+)");
+//   capt = "";
+//   if (rx3.indexIn(commandline) != -1)
+//     capt = rx3.cap(1);
+//   if (capt == "!")
+//     commandline.replace("!", fi.absolutePath());
+//   else if (capt == "!!")
+//     commandline.replace("!!", "!");
 
-  QRegExp rx4("(@+)");
-  capt = "";
-  if (rx4.indexIn(commandline) != -1)
-    capt = rx4.cap(1);
-  if (capt == "@")
-    commandline.replace("@", QString::number(currentline));
-  else if (capt == "@@")
-    commandline.replace("@@", "@");
+//   QRegExp rx4("(@+)");
+//   capt = "";
+//   if (rx4.indexIn(commandline) != -1)
+//     capt = rx4.cap(1);
+//   if (capt == "@")
+//     commandline.replace("@", QString::number(currentline));
+//   else if (capt == "@@")
+//     commandline.replace("@@", "@");
 
-  if (builtinpdfview && (comd == viewpdf_command)) {
+//   if (builtinpdfview && (comd == viewpdf_command)) {
 
-  } else if (comd == asymptote_command) {
-    QDir currentdir(fi.absolutePath());
-    foreach (QFileInfo asyFileInfo,
-             currentdir.entryInfoList(QStringList(basename + "*.asy"),
-                                      QDir::Files | QDir::Readable,
-                                      QDir::Name | QDir::IgnoreCase)) {
-      QString asyName =
-          asyFileInfo.absolutePath() + "/" + asyFileInfo.completeBaseName();
-      AsyFile(asyName);
-    }
-    return;
-  }
+//   } else if (comd == asymptote_command) {
+//     QDir currentdir(fi.absolutePath());
+//     foreach (QFileInfo asyFileInfo,
+//              currentdir.entryInfoList(QStringList(basename + "*.asy"),
+//                                       QDir::Files | QDir::Readable,
+//                                       QDir::Name | QDir::IgnoreCase)) {
+//       QString asyName =
+//           asyFileInfo.absolutePath() + "/" + asyFileInfo.completeBaseName();
+//       AsyFile(asyName);
+//     }
+//     return;
+//   }
 
-  proc = new QProcess(this);
-  proc->setWorkingDirectory(fi.absolutePath());
-  proc->setProperty("command", commandline);
+//   proc = new QProcess(this);
+//   proc->setWorkingDirectory(fi.absolutePath());
+//   proc->setProperty("command", commandline);
 
-//****
-#if defined(Q_OS_MAC)
-  QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-  if (extra_path.isEmpty())
-    env.insert("PATH", env.value("PATH") +
-                           ":/Library/TeX/texbin:/Library/TeX/Distributions/"
-                           ".DefaultTeX/Contents/Programs/texbin:/usr/bin:/usr/"
-                           "sbin:/sbin:/usr/local/bin:/usr/texbin:/sw/bin:");
-  else
-    env.insert("PATH", env.value("PATH") +
-                           ":/Library/TeX/texbin:/Library/TeX/Distributions/"
-                           ".DefaultTeX/Contents/Programs/texbin:/usr/bin:/usr/"
-                           "sbin:/sbin:/usr/local/bin:/usr/texbin:/sw/bin:" +
-                           extra_path);
-  proc->setProcessEnvironment(env);
-#endif
-#if defined(Q_OS_WIN32)
-  QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-  // if (extra_path.isEmpty()) env.insert("PATH", env.value("PATH") +
-  // ";c:/texlive/2018/bin;c:/texlive/2017/bin;c:/texlive/2016/bin;c:/texlive/2015/bin;c:/texlive/2014/bin;c:/texlive/2013/bin;c:/texlive/2012/bin;c:/texlive/2011/bin;c:/texlive/2010/bin;c:/w32tex/bin;c:/Program
-  // Files/MiKTeX 3.0/miktex/bin;c:/Program Files
-  // (x86)/MiKTeX 3.0/miktex/bin;c:/Program
-  // Files/MiKTeX 2.9/miktex/bin;c:/Program Files
-  // (x86)/MiKTeX 2.9/miktex/bin;c:/Program
-  // Files/MiKTeX 2.8/miktex/bin;c:/Program Files (x86)/MiKTeX 2.8/miktex/bin");
-  // else
-  //  env.insert("PATH", env.value("PATH") +
-  //  ";c:/texlive/2018/bin;c:/texlive/2017/bin;c:/texlive/2016/bin;c:/texlive/2015/bin;c:/texlive/2014/bin;c:/texlive/2013/bin;c:/texlive/2012/bin;c:/texlive/2011/bin;c:/texlive/2010/bin;c:/w32tex/bin;c:/Program
-  //  Files/MiKTeX 3.0/miktex/bin;c:/Program Files
-  //  (x86)/MiKTeX 3.0/miktex/bin;c:/Program
-  //  Files/MiKTeX 2.9/miktex/bin;c:/Program Files
-  //  (x86)/MiKTeX 2.9/miktex/bin;c:/Program
-  //  Files/MiKTeX 2.8/miktex/bin;c:/Program Files
-  //  (x86)/MiKTeX 2.8/miktex/bin;"+extra_path);
-  if (!extra_path.isEmpty()) {
-    env.insert("PATH", env.value("PATH") + ";" + extra_path);
-    proc->setProcessEnvironment(env);
-  }
-#endif
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
-  QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-  if (!extra_path.isEmpty()) {
-    env.insert("PATH", env.value("PATH") + ":" + extra_path);
-    proc->setProcessEnvironment(env);
-  }
-#endif
-  qputenv("PATH", env.value("PATH").toLatin1());
-  //****
-  connect(proc, SIGNAL(readyReadStandardError()), this, SLOT(readFromStderr()));
-  if ((comd == asymptote_command) || (comd == bibtex_command))
-    connect(proc, SIGNAL(readyReadStandardOutput()), this,
-            SLOT(readFromStdoutput()));
-  if (checkViewerInstance &&
-      ((comd == viewdvi_command) || (comd == viewps_command) ||
-       (comd == viewpdf_command))) {
-    connect(proc, SIGNAL(finished(int)), this, SLOT(SlotEndViewerProcess(int)));
-    if (singleviewerinstance) {
-      if (listViewerCommands.contains(commandline))
-        return;
-      else
-        listViewerCommands.append(commandline);
-    } else {
-      listViewerCommands.clear();
-    }
-  } else {
-    if (((comd != viewdvi_command) && (comd != viewps_command) &&
-         (comd != viewpdf_command)))
-      disableToolsActions();
-    connect(proc, SIGNAL(finished(int)), this, SLOT(SlotEndProcess(int)));
-  }
-  OutputTextEdit->clear();
-  OutputTableWidget->hide();
-  OutputTextEdit->setMaximumHeight(splitter2->sizes().at(1));
-  separatorline->hide();
+// //****
+// #if defined(Q_OS_MAC)
+//   QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+//   if (extra_path.isEmpty())
+//     env.insert("PATH", env.value("PATH") +
+//                            ":/Library/TeX/texbin:/Library/TeX/Distributions/"
+//                            ".DefaultTeX/Contents/Programs/texbin:/usr/bin:/usr/"
+//                            "sbin:/sbin:/usr/local/bin:/usr/texbin:/sw/bin:");
+//   else
+//     env.insert("PATH", env.value("PATH") +
+//                            ":/Library/TeX/texbin:/Library/TeX/Distributions/"
+//                            ".DefaultTeX/Contents/Programs/texbin:/usr/bin:/usr/"
+//                            "sbin:/sbin:/usr/local/bin:/usr/texbin:/sw/bin:" +
+//                            extra_path);
+//   proc->setProcessEnvironment(env);
+// #endif
+// #if defined(Q_OS_WIN32)
+//   QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+//   // if (extra_path.isEmpty()) env.insert("PATH", env.value("PATH") +
+//   // ";c:/texlive/2018/bin;c:/texlive/2017/bin;c:/texlive/2016/bin;c:/texlive/2015/bin;c:/texlive/2014/bin;c:/texlive/2013/bin;c:/texlive/2012/bin;c:/texlive/2011/bin;c:/texlive/2010/bin;c:/w32tex/bin;c:/Program
+//   // Files/MiKTeX 3.0/miktex/bin;c:/Program Files
+//   // (x86)/MiKTeX 3.0/miktex/bin;c:/Program
+//   // Files/MiKTeX 2.9/miktex/bin;c:/Program Files
+//   // (x86)/MiKTeX 2.9/miktex/bin;c:/Program
+//   // Files/MiKTeX 2.8/miktex/bin;c:/Program Files (x86)/MiKTeX 2.8/miktex/bin");
+//   // else
+//   //  env.insert("PATH", env.value("PATH") +
+//   //  ";c:/texlive/2018/bin;c:/texlive/2017/bin;c:/texlive/2016/bin;c:/texlive/2015/bin;c:/texlive/2014/bin;c:/texlive/2013/bin;c:/texlive/2012/bin;c:/texlive/2011/bin;c:/texlive/2010/bin;c:/w32tex/bin;c:/Program
+//   //  Files/MiKTeX 3.0/miktex/bin;c:/Program Files
+//   //  (x86)/MiKTeX 3.0/miktex/bin;c:/Program
+//   //  Files/MiKTeX 2.9/miktex/bin;c:/Program Files
+//   //  (x86)/MiKTeX 2.9/miktex/bin;c:/Program
+//   //  Files/MiKTeX 2.8/miktex/bin;c:/Program Files
+//   //  (x86)/MiKTeX 2.8/miktex/bin;"+extra_path);
+//   if (!extra_path.isEmpty()) {
+//     env.insert("PATH", env.value("PATH") + ";" + extra_path);
+//     proc->setProcessEnvironment(env);
+//   }
+// #endif
+// #if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
+//   QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+//   if (!extra_path.isEmpty()) {
+//     env.insert("PATH", env.value("PATH") + ":" + extra_path);
+//     proc->setProcessEnvironment(env);
+//   }
+// #endif
+//   qputenv("PATH", env.value("PATH").toLatin1());
+//   //****
+//   connect(proc, SIGNAL(readyReadStandardError()), this, SLOT(readFromStderr()));
+//   if ((comd == asymptote_command) || (comd == bibtex_command))
+//     connect(proc, SIGNAL(readyReadStandardOutput()), this,
+//             SLOT(readFromStdoutput()));
+//   if (checkViewerInstance &&
+//       ((comd == viewdvi_command) || (comd == viewps_command) ||
+//        (comd == viewpdf_command))) {
+//     connect(proc, SIGNAL(finished(int)), this, SLOT(SlotEndViewerProcess(int)));
+//     if (singleviewerinstance) {
+//       if (listViewerCommands.contains(commandline))
+//         return;
+//       else
+//         listViewerCommands.append(commandline);
+//     } else {
+//       listViewerCommands.clear();
+//     }
+//   } else {
+//     if (((comd != viewdvi_command) && (comd != viewps_command) &&
+//          (comd != viewpdf_command)))
+//       disableToolsActions();
+//     connect(proc, SIGNAL(finished(int)), this, SLOT(SlotEndProcess(int)));
+//   }
+//   OutputTextEdit->clear();
+//   OutputTableWidget->hide();
+//   OutputTextEdit->setMaximumHeight(splitter2->sizes().at(1));
+//   separatorline->hide();
 
-  // OutputTextEdit->insertLine(commandline+"\n");
-  proc->start(commandline);
-  if (!proc->waitForStarted(1000)) {
-    ERRPROCESS = true;
-    OutputTextEdit->insertLine(
-        "Error : could not start the command : " + commandline + "\n");
-    checkViewerInstance = false;
-    return;
-  } else
-    OutputTextEdit->insertLine("Process started\n");
-  stat2->setText(commandline.section(' ', 0, 0));
-  FINPROCESS = false;
-  STOPPROCESS = false;
-  if (waitendprocess) {
-    StopAct->setEnabled(true);
-    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-    while (!FINPROCESS) {
-      qApp->instance()->processEvents(QEventLoop::AllEvents);
-      if (STOPPROCESS && proc && proc->state() == QProcess::Running) {
-        proc->kill();
-        FINPROCESS = true;
-        ERRPROCESS = true;
-        stat2->setText("Ready");
-      }
-    }
-    QApplication::restoreOverrideCursor();
-    enableToolsActions();
-    StopAct->setEnabled(false);
-  }
-}
+//   // OutputTextEdit->insertLine(commandline+"\n");
+//   proc->start(commandline);
+//   if (!proc->waitForStarted(1000)) {
+//     ERRPROCESS = true;
+//     OutputTextEdit->insertLine(
+//         "Error : could not start the command : " + commandline + "\n");
+//     checkViewerInstance = false;
+//     return;
+//   } else
+//     OutputTextEdit->insertLine("Process started\n");
+//   stat2->setText(commandline.section(' ', 0, 0));
+//   FINPROCESS = false;
+//   STOPPROCESS = false;
+//   if (waitendprocess) {
+//     StopAct->setEnabled(true);
+//     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+//     while (!FINPROCESS) {
+//       qApp->instance()->processEvents(QEventLoop::AllEvents);
+//       if (STOPPROCESS && proc && proc->state() == QProcess::Running) {
+//         proc->kill();
+//         FINPROCESS = true;
+//         ERRPROCESS = true;
+//         stat2->setText("Ready");
+//       }
+//     }
+//     QApplication::restoreOverrideCursor();
+//     enableToolsActions();
+//     StopAct->setEnabled(false);
+//   }
+// }
 
-void Texmaker::readFromStderr() {
-  QByteArray result = proc->readAllStandardError();
-  QString t = QString(result);
-  t = t.simplified();
-  if (!t.isEmpty())
-    OutputTextEdit->insertLine(t + "\n");
-}
+// void Texmaker::readFromStderr() {
+//   QByteArray result = proc->readAllStandardError();
+//   QString t = QString(result);
+//   t = t.simplified();
+//   if (!t.isEmpty())
+//     OutputTextEdit->insertLine(t + "\n");
+// }
 
-void Texmaker::stopProcess() { STOPPROCESS = true; }
-void Texmaker::readFromStdoutput() {
-  QByteArray result = proc->readAllStandardOutput();
-  QString t = QString(result);
-  t = t.simplified();
-  if (!t.isEmpty())
-    OutputTextEdit->insertLine(t + "\n");
-}
+// void Texmaker::stopProcess() { STOPPROCESS = true; }
+// void Texmaker::readFromStdoutput() {
+//   QByteArray result = proc->readAllStandardOutput();
+//   QString t = QString(result);
+//   t = t.simplified();
+//   if (!t.isEmpty())
+//     OutputTextEdit->insertLine(t + "\n");
+// }
 
-void Texmaker::SlotEndProcess(int err) {
-  FINPROCESS = true;
-  enableToolsActions();
-  QString result =
-      ((err) ? "Process exited with error(s)" : "Process exited normally");
-  if (err) {
-    ERRPROCESS = true;
-    checkViewerInstance = false;
-  }
-  OutputTextEdit->insertLine(result);
-  stat2->setText("Ready");
-  // stat2->setText(QString(" %1 ").arg(tr("Ready")));
-}
+// void Texmaker::SlotEndProcess(int err) {
+//   FINPROCESS = true;
+//   enableToolsActions();
+//   QString result =
+//       ((err) ? "Process exited with error(s)" : "Process exited normally");
+//   if (err) {
+//     ERRPROCESS = true;
+//     checkViewerInstance = false;
+//   }
+//   OutputTextEdit->insertLine(result);
+//   stat2->setText("Ready");
+//   // stat2->setText(QString(" %1 ").arg(tr("Ready")));
+// }
 
-void Texmaker::SlotEndViewerProcess(int err) {
-  QString commandline =
-      static_cast<QProcess *>(sender())->property("command").toString();
-  if ((singleviewerinstance) && (listViewerCommands.contains(commandline)))
-    listViewerCommands.removeAll(commandline);
-  FINPROCESS = true;
-  enableToolsActions();
-  QString result =
-      ((err) ? "Process exited with error(s)" : "Process exited normally");
-  if (err) {
-    ERRPROCESS = true;
-    checkViewerInstance = false;
-  }
-  OutputTextEdit->insertLine(result);
-  // stat2->setText(QString(" %1 ").arg(tr("Ready")));
-}
+// void Texmaker::SlotEndViewerProcess(int err) {
+//   QString commandline =
+//       static_cast<QProcess *>(sender())->property("command").toString();
+//   if ((singleviewerinstance) && (listViewerCommands.contains(commandline)))
+//     listViewerCommands.removeAll(commandline);
+//   FINPROCESS = true;
+//   enableToolsActions();
+//   QString result =
+//       ((err) ? "Process exited with error(s)" : "Process exited normally");
+//   if (err) {
+//     ERRPROCESS = true;
+//     checkViewerInstance = false;
+//   }
+//   OutputTextEdit->insertLine(result);
+//   // stat2->setText(QString(" %1 ").arg(tr("Ready")));
+// }
 
-void Texmaker::QuickBuild() {
-  // stat2->setText(QString(" %1 ").arg(tr("Quick Build")));
-  ERRPROCESS = false;
-  checkViewerInstance = true;
-  QString finame = getName();
-  QFileInfo fi(finame);
-  if (!finame.startsWith("untitled") && finame != "" && fi.suffix() == "asy") {
-    QStringList asyCommandList = quick_asy_command.split("|");
-    for (int i = 0; i < asyCommandList.size(); ++i) {
-      if ((!ERRPROCESS) && (!asyCommandList.at(i).isEmpty())) {
-        RunCommand(asyCommandList.at(i), true);
-        if ((asyCommandList.at(i) == latex_command) ||
-            (asyCommandList.at(i) == pdflatex_command) ||
-            (asyCommandList.at(i) == xelatex_command) ||
-            (asyCommandList.at(i) == lualatex_command)) {
-          LoadLog();
-          if (showoutputview)
-            ViewLog();
-          if (!NoLatexErrors())
-            NextError();
-        }
-      } else {
-        checkViewerInstance = false;
-        return;
-      }
-    }
-  } else {
-    switch (quickmode) {
-    case 1: {
-      // stat2->setText(QString(" %1 ").arg("Latex"));
-      RunCommand(latex_command, true);
-      if (ERRPROCESS && !LogExists()) {
-        QMessageBox::warning(this, tr("Error"),
-                             tr("Could not start the command.") + "\n" +
-                                 latex_command);
-        checkViewerInstance = false;
-        return;
-      }
-      LoadLog();
-      if (showoutputview)
-        ViewLog();
-      if (NoLatexErrors()) {
-        // stat2->setText(QString(" %1 ").arg("Dvips"));
-        if (!ERRPROCESS)
-          RunCommand(dvips_command, true);
-        else {
-          checkViewerInstance = false;
-          return;
-        }
-        if (!ERRPROCESS)
-          ViewPS();
-        else {
-          checkViewerInstance = false;
-          return;
-        }
-      } else {
-        NextError();
-      }
-    } break;
-    case 2: {
-      // stat2->setText(QString(" %1 ").arg("Latex"));
-      RunCommand(latex_command, true);
-      if (ERRPROCESS && !LogExists()) {
-        QMessageBox::warning(this, tr("Error"),
-                             tr("Could not start the command.") + "\n" +
-                                 latex_command);
-        checkViewerInstance = false;
-        return;
-      }
-      LoadLog();
-      if (showoutputview)
-        ViewLog();
-      if (NoLatexErrors()) {
-        if (!ERRPROCESS)
-          ViewDvi();
-        else {
-          checkViewerInstance = false;
-          return;
-        }
-      } else {
-        NextError();
-      }
-    } break;
-    case 3: {
-      // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
-      RunCommand(pdflatex_command, true);
-      if (ERRPROCESS && !LogExists()) {
-        QMessageBox::warning(this, tr("Error"),
-                             tr("Could not start the command.") + "\n" +
-                                 pdflatex_command);
-        checkViewerInstance = false;
-        return;
-      }
-      LoadLog();
-      if (showoutputview)
-        ViewLog();
-      if (NoLatexErrors()) {
-        if (!ERRPROCESS)
-          ViewPDF();
-        else {
-          checkViewerInstance = false;
-          return;
-        }
-      } else {
-        NextError();
-      }
-    } break;
-    case 4: {
-      // stat2->setText(QString(" %1 ").arg("Latex"));
-      RunCommand(latex_command, true);
-      if (ERRPROCESS && !LogExists()) {
-        QMessageBox::warning(this, tr("Error"),
-                             tr("Could not start the command.") + "\n" +
-                                 latex_command);
-        checkViewerInstance = false;
-        return;
-      }
-      LoadLog();
-      if (showoutputview)
-        ViewLog();
-      if (NoLatexErrors()) {
-        // stat2->setText(QString(" %1 ").arg("Dvi to Pdf"));
-        if (!ERRPROCESS)
-          RunCommand(dvipdf_command, true);
-        else {
-          checkViewerInstance = false;
-          return;
-        }
-        if (!ERRPROCESS)
-          ViewPDF();
-        else {
-          checkViewerInstance = false;
-          return;
-        }
-      } else {
-        NextError();
-      }
-    } break;
-    case 5: {
-      // stat2->setText(QString(" %1 ").arg("Latex"));
-      RunCommand(latex_command, true);
-      if (ERRPROCESS && !LogExists()) {
-        QMessageBox::warning(this, tr("Error"),
-                             tr("Could not start the command.") + "\n" +
-                                 latex_command);
-        checkViewerInstance = false;
-        return;
-      }
-      LoadLog();
-      if (showoutputview)
-        ViewLog();
-      if (NoLatexErrors()) {
-        // stat2->setText(QString(" %1 ").arg("Dvips"));
-        if (!ERRPROCESS)
-          RunCommand(dvips_command, true);
-        else {
-          checkViewerInstance = false;
-          return;
-        }
-        // stat2->setText(QString(" %1 ").arg("Ps to Pdf"));
-        if (!ERRPROCESS)
-          RunCommand(ps2pdf_command, true);
-        else {
-          checkViewerInstance = false;
-          return;
-        }
-        if (!ERRPROCESS)
-          ViewPDF();
-      } else {
-        NextError();
-      }
-    } break;
-    case 6: {
-      QStringList commandList = userquick_command.split("|");
-      for (int i = 0; i < commandList.size(); ++i) {
-        if ((!ERRPROCESS) && (!commandList.at(i).isEmpty())) {
-          RunCommand(commandList.at(i), true);
-          if ((commandList.at(i) == latex_command) ||
-              (commandList.at(i) == pdflatex_command) ||
-              (commandList.at(i) == xelatex_command) ||
-              (commandList.at(i) == lualatex_command)) {
-            LoadLog();
-            if (showoutputview)
-              ViewLog();
-            if (!NoLatexErrors())
-              NextError();
-          }
-        } else {
-          checkViewerInstance = false;
-          return;
-        }
-      }
-    } break;
-    case 7: {
-      // stat2->setText(QString(" %1 ").arg("Latex"));
-      RunCommand(latex_command, true);
-      if (ERRPROCESS && !LogExists()) {
-        QMessageBox::warning(this, tr("Error"),
-                             tr("Could not start the command.") + "\n" +
-                                 latex_command);
-        checkViewerInstance = false;
-        return;
-      }
-      LoadLog();
-      if (showoutputview)
-        ViewLog();
-      if (NoLatexErrors()) {
-        // stat2->setText(QString(" %1 ").arg("Asymptote"));
-        if (!ERRPROCESS)
-          RunCommand(asymptote_command, true);
-        else {
-          checkViewerInstance = false;
-          return;
-        }
-        if (!ERRPROCESS) {
-          // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
-          RunCommand(latex_command, true);
-          if (ERRPROCESS && !LogExists()) {
-            QMessageBox::warning(this, tr("Error"),
-                                 tr("Could not start the command.") + "\n" +
-                                     latex_command);
-            checkViewerInstance = false;
-            return;
-          }
-          LoadLog();
-          if (showoutputview)
-            ViewLog();
-          if (NoLatexErrors()) {
-            RunCommand(latex_command, true);
-            if (ERRPROCESS && !LogExists()) {
-              QMessageBox::warning(this, tr("Error"),
-                                   tr("Could not start the command.") + "\n" +
-                                       latex_command);
-              checkViewerInstance = false;
-              return;
-            }
-            LoadLog();
-            if (showoutputview)
-              ViewLog();
-            if (NoLatexErrors()) {
-              // stat2->setText(QString(" %1 ").arg("Dvips"));
-              if (!ERRPROCESS)
-                RunCommand(dvips_command, true);
-              else {
-                checkViewerInstance = false;
-                return;
-              }
-              if (!ERRPROCESS)
-                ViewPS();
-              else {
-                checkViewerInstance = false;
-                return;
-              }
-            } else {
-              NextError();
-            }
-          } else {
-            NextError();
-          }
-        } else
-          return;
-        // 	  if (!ERRPROCESS)
-        // 	      {
-        // 	      //stat2->setText(QString(" %1 ").arg("Latex"));
-        // 	      RunCommand(latex_command,true);
-        // 	      if (ERRPROCESS && !LogExists())
-        // 		  {
-        // 		  QMessageBox::warning( this,tr("Error"),tr("Could not
-        // start the command.")); 		  checkViewerInstance=false; 		  return;
-        // 		  }
-        // 	      LoadLog();
-        // 	      if (showoutputview) ViewLog();
-        // 	      if (NoLatexErrors())
-        // 		  {
-        // 		  //stat2->setText(QString(" %1 ").arg("Dvips"));
-        // 		  if (!ERRPROCESS) RunCommand(dvips_command,true);
-        // 		  else {checkViewerInstance=false;return;}
-        // 		  if (!ERRPROCESS) ViewPS();
-        // 		  else {checkViewerInstance=false;return;}
-        // 		  }
-        // 	      else {NextError();}
-        // 	      }
-        // 	  else return;
-      } else {
-        NextError();
-      }
-    } break;
-    case 8: {
-      // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
-      RunCommand(pdflatex_command, true);
-      if (ERRPROCESS && !LogExists()) {
-        QMessageBox::warning(this, tr("Error"),
-                             tr("Could not start the command.") + "\n" +
-                                 pdflatex_command);
-        checkViewerInstance = false;
-        return;
-      }
-      LoadLog();
-      if (showoutputview)
-        ViewLog();
-      if (NoLatexErrors()) {
-        // stat2->setText(QString(" %1 ").arg("Asymptote"));
-        if (!ERRPROCESS)
-          RunCommand(asymptote_command, true);
-        else {
-          checkViewerInstance = false;
-          return;
-        }
-        if (!ERRPROCESS) {
-          // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
-          RunCommand(pdflatex_command, true);
-          if (ERRPROCESS && !LogExists()) {
-            QMessageBox::warning(this, tr("Error"),
-                                 tr("Could not start the command.") + "\n" +
-                                     pdflatex_command);
-            checkViewerInstance = false;
-            return;
-          }
-          LoadLog();
-          if (showoutputview)
-            ViewLog();
-          if (NoLatexErrors()) {
-            RunCommand(pdflatex_command, true);
-            if (ERRPROCESS && !LogExists()) {
-              QMessageBox::warning(this, tr("Error"),
-                                   tr("Could not start the command.") + "\n" +
-                                       pdflatex_command);
-              checkViewerInstance = false;
-              return;
-            }
-            LoadLog();
-            if (showoutputview)
-              ViewLog();
-            if (NoLatexErrors()) {
-              if (!ERRPROCESS)
-                ViewPDF();
-              else {
-                checkViewerInstance = false;
-                return;
-              }
-            } else {
-              NextError();
-            }
-          } else {
-            NextError();
-          }
-        } else
-          return;
-        // 	  if (!ERRPROCESS)
-        // 	      {
-        // 	      //stat2->setText(QString(" %1 ").arg("Pdf Latex"));
-        // 	      RunCommand(pdflatex_command,true);
-        // 	      if (ERRPROCESS && !LogExists())
-        // 		  {
-        // 		  QMessageBox::warning( this,tr("Error"),tr("Could not
-        // start the command.")); 		  checkViewerInstance=false; 		  return;
-        // 		  }
-        // 	      LoadLog();
-        // 	      if (showoutputview) ViewLog();
-        // 	      if (NoLatexErrors())
-        // 		  {
-        // 		  if (!ERRPROCESS) ViewPDF();
-        // 		  else {checkViewerInstance=false;return;}
-        // 		  }
-        // 	      else {NextError();}
-        // 	      }
-        // 	  else return;
-      } else {
-        NextError();
-      }
-    } break;
-    case 9: {
-      // stat2->setText(QString(" %1 ").arg("LatexMk"));
-      RunCommand(latexmk_command, true);
-      if (ERRPROCESS && !LogExists()) {
-        QMessageBox::warning(this, tr("Error"),
-                             tr("Could not start the command.") + "\n" +
-                                 latexmk_command);
-        checkViewerInstance = false;
-        return;
-      }
-      LoadLog();
-      if (showoutputview)
-        ViewLog();
-      if (NoLatexErrors()) {
-        if (!ERRPROCESS)
-          ViewPDF();
-        else {
-          checkViewerInstance = false;
-          return;
-        }
-      } else {
-        NextError();
-      }
-    } break;
-    case 10: {
-      // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
-      RunCommand(xelatex_command, true);
-      if (ERRPROCESS && !LogExists()) {
-        QMessageBox::warning(this, tr("Error"),
-                             tr("Could not start the command.") + "\n" +
-                                 xelatex_command);
-        checkViewerInstance = false;
-        return;
-      }
-      LoadLog();
-      if (showoutputview)
-        ViewLog();
-      if (NoLatexErrors()) {
-        if (!ERRPROCESS)
-          ViewPDF();
-        else {
-          checkViewerInstance = false;
-          return;
-        }
-      } else {
-        NextError();
-      }
-    } break;
-    case 11: {
-      // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
-      RunCommand(lualatex_command, true);
-      if (ERRPROCESS && !LogExists()) {
-        QMessageBox::warning(this, tr("Error"),
-                             tr("Could not start the command.") + "\n" +
-                                 lualatex_command);
-        checkViewerInstance = false;
-        return;
-      }
-      LoadLog();
-      if (showoutputview)
-        ViewLog();
-      if (NoLatexErrors()) {
-        if (!ERRPROCESS)
-          ViewPDF();
-        else {
-          checkViewerInstance = false;
-          return;
-        }
-      } else {
-        NextError();
-      }
-    } break;
-    case 12: {
-      // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
-      RunCommand(pdflatex_command, true);
-      if (ERRPROCESS && !LogExists()) {
-        QMessageBox::warning(this, tr("Error"),
-                             tr("Could not start the command.") + "\n" +
-                                 pdflatex_command);
-        checkViewerInstance = false;
-        return;
-      }
-      LoadLog();
-      if (showoutputview)
-        ViewLog();
-      if (NoLatexErrors()) {
-        // stat2->setText(QString(" %1 ").arg("Asymptote"));
-        if (!ERRPROCESS)
-          RunCommand(bibtex_command, true);
-        else {
-          checkViewerInstance = false;
-          return;
-        }
-        if (!ERRPROCESS) {
-          // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
-          RunCommand(pdflatex_command, true);
-          if (ERRPROCESS && !LogExists()) {
-            QMessageBox::warning(this, tr("Error"),
-                                 tr("Could not start the command.") + "\n" +
-                                     pdflatex_command);
-            checkViewerInstance = false;
-            return;
-          }
-          LoadLog();
-          if (showoutputview)
-            ViewLog();
-          if (NoLatexErrors()) {
-            RunCommand(pdflatex_command, true);
-            if (ERRPROCESS && !LogExists()) {
-              QMessageBox::warning(this, tr("Error"),
-                                   tr("Could not start the command.") + "\n" +
-                                       pdflatex_command);
-              checkViewerInstance = false;
-              return;
-            }
-            LoadLog();
-            if (showoutputview)
-              ViewLog();
-            if (NoLatexErrors()) {
-              if (!ERRPROCESS)
-                ViewPDF();
-              else {
-                checkViewerInstance = false;
-                return;
-              }
-            } else {
-              NextError();
-            }
-          } else {
-            NextError();
-          }
-        } else
-          return;
-      } else {
-        NextError();
-      }
-    } break;
-    case 13: {
-      // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
-      RunCommand(latex_command, true);
-      if (ERRPROCESS && !LogExists()) {
-        QMessageBox::warning(this, tr("Error"),
-                             tr("Could not start the command.") + "\n" +
-                                 latex_command);
-        checkViewerInstance = false;
-        return;
-      }
-      LoadLog();
-      if (showoutputview)
-        ViewLog();
-      if (NoLatexErrors()) {
-        // stat2->setText(QString(" %1 ").arg("Asymptote"));
-        if (!ERRPROCESS)
-          RunCommand(bibtex_command, true);
-        else {
-          checkViewerInstance = false;
-          return;
-        }
-        if (!ERRPROCESS) {
-          // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
-          RunCommand(latex_command, true);
-          if (ERRPROCESS && !LogExists()) {
-            QMessageBox::warning(this, tr("Error"),
-                                 tr("Could not start the command.") + "\n" +
-                                     latex_command);
-            checkViewerInstance = false;
-            return;
-          }
-          LoadLog();
-          if (showoutputview)
-            ViewLog();
-          if (NoLatexErrors()) {
-            RunCommand(latex_command, true);
-            if (ERRPROCESS && !LogExists()) {
-              QMessageBox::warning(this, tr("Error"),
-                                   tr("Could not start the command.") + "\n" +
-                                       latex_command);
-              checkViewerInstance = false;
-              return;
-            }
-            LoadLog();
-            if (showoutputview)
-              ViewLog();
-            if (NoLatexErrors()) {
-              // stat2->setText(QString(" %1 ").arg("Dvips"));
-              if (!ERRPROCESS)
-                RunCommand(dvips_command, true);
-              else {
-                checkViewerInstance = false;
-                return;
-              }
-              // stat2->setText(QString(" %1 ").arg("Ps to Pdf"));
-              if (!ERRPROCESS)
-                RunCommand(ps2pdf_command, true);
-              else {
-                checkViewerInstance = false;
-                return;
-              }
-              if (!ERRPROCESS)
-                ViewPDF();
-            } else {
-              NextError();
-            }
-          } else {
-            NextError();
-          }
-        } else
-          return;
-      } else {
-        NextError();
-      }
-    } break;
-    case 14: {
-      // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
-      RunCommand(sweave_command, true);
-      if (!ERRPROCESS)
-        RunCommand(pdflatex_command, true);
-      if (ERRPROCESS && !LogExists()) {
-        QMessageBox::warning(this, tr("Error"),
-                             tr("Could not start the command.") + "\n" +
-                                 sweave_command);
-        checkViewerInstance = false;
-        return;
-      }
-      LoadLog();
-      if (showoutputview)
-        ViewLog();
-      if (NoLatexErrors()) {
-        if (!ERRPROCESS)
-          ViewPDF();
-        else {
-          checkViewerInstance = false;
-          return;
-        }
-      } else {
-        NextError();
-      }
-    } break;
-    }
-    if (NoLatexErrors() && showoutputview)
-      ViewLog();
-  }
-  checkViewerInstance = false;
-}
+// void Texmaker::QuickBuild() {
+//   // stat2->setText(QString(" %1 ").arg(tr("Quick Build")));
+//   ERRPROCESS = false;
+//   checkViewerInstance = true;
+//   QString finame = getName();
+//   QFileInfo fi(finame);
+//   if (!finame.startsWith("untitled") && finame != "" && fi.suffix() == "asy") {
+//     QStringList asyCommandList = quick_asy_command.split("|");
+//     for (int i = 0; i < asyCommandList.size(); ++i) {
+//       if ((!ERRPROCESS) && (!asyCommandList.at(i).isEmpty())) {
+//         RunCommand(asyCommandList.at(i), true);
+//         if ((asyCommandList.at(i) == latex_command) ||
+//             (asyCommandList.at(i) == pdflatex_command) ||
+//             (asyCommandList.at(i) == xelatex_command) ||
+//             (asyCommandList.at(i) == lualatex_command)) {
+//           LoadLog();
+//           if (showoutputview)
+//             ViewLog();
+//           if (!NoLatexErrors())
+//             NextError();
+//         }
+//       } else {
+//         checkViewerInstance = false;
+//         return;
+//       }
+//     }
+//   } else {
+//     switch (quickmode) {
+//     case 1: {
+//       // stat2->setText(QString(" %1 ").arg("Latex"));
+//       RunCommand(latex_command, true);
+//       if (ERRPROCESS && !LogExists()) {
+//         QMessageBox::warning(this, tr("Error"),
+//                              tr("Could not start the command.") + "\n" +
+//                                  latex_command);
+//         checkViewerInstance = false;
+//         return;
+//       }
+//       LoadLog();
+//       if (showoutputview)
+//         ViewLog();
+//       if (NoLatexErrors()) {
+//         // stat2->setText(QString(" %1 ").arg("Dvips"));
+//         if (!ERRPROCESS)
+//           RunCommand(dvips_command, true);
+//         else {
+//           checkViewerInstance = false;
+//           return;
+//         }
+//         if (!ERRPROCESS)
+//           ViewPS();
+//         else {
+//           checkViewerInstance = false;
+//           return;
+//         }
+//       } else {
+//         NextError();
+//       }
+//     } break;
+//     case 2: {
+//       // stat2->setText(QString(" %1 ").arg("Latex"));
+//       RunCommand(latex_command, true);
+//       if (ERRPROCESS && !LogExists()) {
+//         QMessageBox::warning(this, tr("Error"),
+//                              tr("Could not start the command.") + "\n" +
+//                                  latex_command);
+//         checkViewerInstance = false;
+//         return;
+//       }
+//       LoadLog();
+//       if (showoutputview)
+//         ViewLog();
+//       if (NoLatexErrors()) {
+//         if (!ERRPROCESS)
+//           ViewDvi();
+//         else {
+//           checkViewerInstance = false;
+//           return;
+//         }
+//       } else {
+//         NextError();
+//       }
+//     } break;
+//     case 3: {
+//       // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
+//       RunCommand(pdflatex_command, true);
+//       if (ERRPROCESS && !LogExists()) {
+//         QMessageBox::warning(this, tr("Error"),
+//                              tr("Could not start the command.") + "\n" +
+//                                  pdflatex_command);
+//         checkViewerInstance = false;
+//         return;
+//       }
+//       LoadLog();
+//       if (showoutputview)
+//         ViewLog();
+//       if (NoLatexErrors()) {
+//         if (!ERRPROCESS)
+//           ViewPDF();
+//         else {
+//           checkViewerInstance = false;
+//           return;
+//         }
+//       } else {
+//         NextError();
+//       }
+//     } break;
+//     case 4: {
+//       // stat2->setText(QString(" %1 ").arg("Latex"));
+//       RunCommand(latex_command, true);
+//       if (ERRPROCESS && !LogExists()) {
+//         QMessageBox::warning(this, tr("Error"),
+//                              tr("Could not start the command.") + "\n" +
+//                                  latex_command);
+//         checkViewerInstance = false;
+//         return;
+//       }
+//       LoadLog();
+//       if (showoutputview)
+//         ViewLog();
+//       if (NoLatexErrors()) {
+//         // stat2->setText(QString(" %1 ").arg("Dvi to Pdf"));
+//         if (!ERRPROCESS)
+//           RunCommand(dvipdf_command, true);
+//         else {
+//           checkViewerInstance = false;
+//           return;
+//         }
+//         if (!ERRPROCESS)
+//           ViewPDF();
+//         else {
+//           checkViewerInstance = false;
+//           return;
+//         }
+//       } else {
+//         NextError();
+//       }
+//     } break;
+//     case 5: {
+//       // stat2->setText(QString(" %1 ").arg("Latex"));
+//       RunCommand(latex_command, true);
+//       if (ERRPROCESS && !LogExists()) {
+//         QMessageBox::warning(this, tr("Error"),
+//                              tr("Could not start the command.") + "\n" +
+//                                  latex_command);
+//         checkViewerInstance = false;
+//         return;
+//       }
+//       LoadLog();
+//       if (showoutputview)
+//         ViewLog();
+//       if (NoLatexErrors()) {
+//         // stat2->setText(QString(" %1 ").arg("Dvips"));
+//         if (!ERRPROCESS)
+//           RunCommand(dvips_command, true);
+//         else {
+//           checkViewerInstance = false;
+//           return;
+//         }
+//         // stat2->setText(QString(" %1 ").arg("Ps to Pdf"));
+//         if (!ERRPROCESS)
+//           RunCommand(ps2pdf_command, true);
+//         else {
+//           checkViewerInstance = false;
+//           return;
+//         }
+//         if (!ERRPROCESS)
+//           ViewPDF();
+//       } else {
+//         NextError();
+//       }
+//     } break;
+//     case 6: {
+//       QStringList commandList = userquick_command.split("|");
+//       for (int i = 0; i < commandList.size(); ++i) {
+//         if ((!ERRPROCESS) && (!commandList.at(i).isEmpty())) {
+//           RunCommand(commandList.at(i), true);
+//           if ((commandList.at(i) == latex_command) ||
+//               (commandList.at(i) == pdflatex_command) ||
+//               (commandList.at(i) == xelatex_command) ||
+//               (commandList.at(i) == lualatex_command)) {
+//             LoadLog();
+//             if (showoutputview)
+//               ViewLog();
+//             if (!NoLatexErrors())
+//               NextError();
+//           }
+//         } else {
+//           checkViewerInstance = false;
+//           return;
+//         }
+//       }
+//     } break;
+//     case 7: {
+//       // stat2->setText(QString(" %1 ").arg("Latex"));
+//       RunCommand(latex_command, true);
+//       if (ERRPROCESS && !LogExists()) {
+//         QMessageBox::warning(this, tr("Error"),
+//                              tr("Could not start the command.") + "\n" +
+//                                  latex_command);
+//         checkViewerInstance = false;
+//         return;
+//       }
+//       LoadLog();
+//       if (showoutputview)
+//         ViewLog();
+//       if (NoLatexErrors()) {
+//         // stat2->setText(QString(" %1 ").arg("Asymptote"));
+//         if (!ERRPROCESS)
+//           RunCommand(asymptote_command, true);
+//         else {
+//           checkViewerInstance = false;
+//           return;
+//         }
+//         if (!ERRPROCESS) {
+//           // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
+//           RunCommand(latex_command, true);
+//           if (ERRPROCESS && !LogExists()) {
+//             QMessageBox::warning(this, tr("Error"),
+//                                  tr("Could not start the command.") + "\n" +
+//                                      latex_command);
+//             checkViewerInstance = false;
+//             return;
+//           }
+//           LoadLog();
+//           if (showoutputview)
+//             ViewLog();
+//           if (NoLatexErrors()) {
+//             RunCommand(latex_command, true);
+//             if (ERRPROCESS && !LogExists()) {
+//               QMessageBox::warning(this, tr("Error"),
+//                                    tr("Could not start the command.") + "\n" +
+//                                        latex_command);
+//               checkViewerInstance = false;
+//               return;
+//             }
+//             LoadLog();
+//             if (showoutputview)
+//               ViewLog();
+//             if (NoLatexErrors()) {
+//               // stat2->setText(QString(" %1 ").arg("Dvips"));
+//               if (!ERRPROCESS)
+//                 RunCommand(dvips_command, true);
+//               else {
+//                 checkViewerInstance = false;
+//                 return;
+//               }
+//               if (!ERRPROCESS)
+//                 ViewPS();
+//               else {
+//                 checkViewerInstance = false;
+//                 return;
+//               }
+//             } else {
+//               NextError();
+//             }
+//           } else {
+//             NextError();
+//           }
+//         } else
+//           return;
+//         // 	  if (!ERRPROCESS)
+//         // 	      {
+//         // 	      //stat2->setText(QString(" %1 ").arg("Latex"));
+//         // 	      RunCommand(latex_command,true);
+//         // 	      if (ERRPROCESS && !LogExists())
+//         // 		  {
+//         // 		  QMessageBox::warning( this,tr("Error"),tr("Could not
+//         // start the command.")); 		  checkViewerInstance=false; 		  return;
+//         // 		  }
+//         // 	      LoadLog();
+//         // 	      if (showoutputview) ViewLog();
+//         // 	      if (NoLatexErrors())
+//         // 		  {
+//         // 		  //stat2->setText(QString(" %1 ").arg("Dvips"));
+//         // 		  if (!ERRPROCESS) RunCommand(dvips_command,true);
+//         // 		  else {checkViewerInstance=false;return;}
+//         // 		  if (!ERRPROCESS) ViewPS();
+//         // 		  else {checkViewerInstance=false;return;}
+//         // 		  }
+//         // 	      else {NextError();}
+//         // 	      }
+//         // 	  else return;
+//       } else {
+//         NextError();
+//       }
+//     } break;
+//     case 8: {
+//       // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
+//       RunCommand(pdflatex_command, true);
+//       if (ERRPROCESS && !LogExists()) {
+//         QMessageBox::warning(this, tr("Error"),
+//                              tr("Could not start the command.") + "\n" +
+//                                  pdflatex_command);
+//         checkViewerInstance = false;
+//         return;
+//       }
+//       LoadLog();
+//       if (showoutputview)
+//         ViewLog();
+//       if (NoLatexErrors()) {
+//         // stat2->setText(QString(" %1 ").arg("Asymptote"));
+//         if (!ERRPROCESS)
+//           RunCommand(asymptote_command, true);
+//         else {
+//           checkViewerInstance = false;
+//           return;
+//         }
+//         if (!ERRPROCESS) {
+//           // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
+//           RunCommand(pdflatex_command, true);
+//           if (ERRPROCESS && !LogExists()) {
+//             QMessageBox::warning(this, tr("Error"),
+//                                  tr("Could not start the command.") + "\n" +
+//                                      pdflatex_command);
+//             checkViewerInstance = false;
+//             return;
+//           }
+//           LoadLog();
+//           if (showoutputview)
+//             ViewLog();
+//           if (NoLatexErrors()) {
+//             RunCommand(pdflatex_command, true);
+//             if (ERRPROCESS && !LogExists()) {
+//               QMessageBox::warning(this, tr("Error"),
+//                                    tr("Could not start the command.") + "\n" +
+//                                        pdflatex_command);
+//               checkViewerInstance = false;
+//               return;
+//             }
+//             LoadLog();
+//             if (showoutputview)
+//               ViewLog();
+//             if (NoLatexErrors()) {
+//               if (!ERRPROCESS)
+//                 ViewPDF();
+//               else {
+//                 checkViewerInstance = false;
+//                 return;
+//               }
+//             } else {
+//               NextError();
+//             }
+//           } else {
+//             NextError();
+//           }
+//         } else
+//           return;
+//         // 	  if (!ERRPROCESS)
+//         // 	      {
+//         // 	      //stat2->setText(QString(" %1 ").arg("Pdf Latex"));
+//         // 	      RunCommand(pdflatex_command,true);
+//         // 	      if (ERRPROCESS && !LogExists())
+//         // 		  {
+//         // 		  QMessageBox::warning( this,tr("Error"),tr("Could not
+//         // start the command.")); 		  checkViewerInstance=false; 		  return;
+//         // 		  }
+//         // 	      LoadLog();
+//         // 	      if (showoutputview) ViewLog();
+//         // 	      if (NoLatexErrors())
+//         // 		  {
+//         // 		  if (!ERRPROCESS) ViewPDF();
+//         // 		  else {checkViewerInstance=false;return;}
+//         // 		  }
+//         // 	      else {NextError();}
+//         // 	      }
+//         // 	  else return;
+//       } else {
+//         NextError();
+//       }
+//     } break;
+//     case 9: {
+//       // stat2->setText(QString(" %1 ").arg("LatexMk"));
+//       RunCommand(latexmk_command, true);
+//       if (ERRPROCESS && !LogExists()) {
+//         QMessageBox::warning(this, tr("Error"),
+//                              tr("Could not start the command.") + "\n" +
+//                                  latexmk_command);
+//         checkViewerInstance = false;
+//         return;
+//       }
+//       LoadLog();
+//       if (showoutputview)
+//         ViewLog();
+//       if (NoLatexErrors()) {
+//         if (!ERRPROCESS)
+//           ViewPDF();
+//         else {
+//           checkViewerInstance = false;
+//           return;
+//         }
+//       } else {
+//         NextError();
+//       }
+//     } break;
+//     case 10: {
+//       // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
+//       RunCommand(xelatex_command, true);
+//       if (ERRPROCESS && !LogExists()) {
+//         QMessageBox::warning(this, tr("Error"),
+//                              tr("Could not start the command.") + "\n" +
+//                                  xelatex_command);
+//         checkViewerInstance = false;
+//         return;
+//       }
+//       LoadLog();
+//       if (showoutputview)
+//         ViewLog();
+//       if (NoLatexErrors()) {
+//         if (!ERRPROCESS)
+//           ViewPDF();
+//         else {
+//           checkViewerInstance = false;
+//           return;
+//         }
+//       } else {
+//         NextError();
+//       }
+//     } break;
+//     case 11: {
+//       // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
+//       RunCommand(lualatex_command, true);
+//       if (ERRPROCESS && !LogExists()) {
+//         QMessageBox::warning(this, tr("Error"),
+//                              tr("Could not start the command.") + "\n" +
+//                                  lualatex_command);
+//         checkViewerInstance = false;
+//         return;
+//       }
+//       LoadLog();
+//       if (showoutputview)
+//         ViewLog();
+//       if (NoLatexErrors()) {
+//         if (!ERRPROCESS)
+//           ViewPDF();
+//         else {
+//           checkViewerInstance = false;
+//           return;
+//         }
+//       } else {
+//         NextError();
+//       }
+//     } break;
+//     case 12: {
+//       // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
+//       RunCommand(pdflatex_command, true);
+//       if (ERRPROCESS && !LogExists()) {
+//         QMessageBox::warning(this, tr("Error"),
+//                              tr("Could not start the command.") + "\n" +
+//                                  pdflatex_command);
+//         checkViewerInstance = false;
+//         return;
+//       }
+//       LoadLog();
+//       if (showoutputview)
+//         ViewLog();
+//       if (NoLatexErrors()) {
+//         // stat2->setText(QString(" %1 ").arg("Asymptote"));
+//         if (!ERRPROCESS)
+//           RunCommand(bibtex_command, true);
+//         else {
+//           checkViewerInstance = false;
+//           return;
+//         }
+//         if (!ERRPROCESS) {
+//           // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
+//           RunCommand(pdflatex_command, true);
+//           if (ERRPROCESS && !LogExists()) {
+//             QMessageBox::warning(this, tr("Error"),
+//                                  tr("Could not start the command.") + "\n" +
+//                                      pdflatex_command);
+//             checkViewerInstance = false;
+//             return;
+//           }
+//           LoadLog();
+//           if (showoutputview)
+//             ViewLog();
+//           if (NoLatexErrors()) {
+//             RunCommand(pdflatex_command, true);
+//             if (ERRPROCESS && !LogExists()) {
+//               QMessageBox::warning(this, tr("Error"),
+//                                    tr("Could not start the command.") + "\n" +
+//                                        pdflatex_command);
+//               checkViewerInstance = false;
+//               return;
+//             }
+//             LoadLog();
+//             if (showoutputview)
+//               ViewLog();
+//             if (NoLatexErrors()) {
+//               if (!ERRPROCESS)
+//                 ViewPDF();
+//               else {
+//                 checkViewerInstance = false;
+//                 return;
+//               }
+//             } else {
+//               NextError();
+//             }
+//           } else {
+//             NextError();
+//           }
+//         } else
+//           return;
+//       } else {
+//         NextError();
+//       }
+//     } break;
+//     case 13: {
+//       // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
+//       RunCommand(latex_command, true);
+//       if (ERRPROCESS && !LogExists()) {
+//         QMessageBox::warning(this, tr("Error"),
+//                              tr("Could not start the command.") + "\n" +
+//                                  latex_command);
+//         checkViewerInstance = false;
+//         return;
+//       }
+//       LoadLog();
+//       if (showoutputview)
+//         ViewLog();
+//       if (NoLatexErrors()) {
+//         // stat2->setText(QString(" %1 ").arg("Asymptote"));
+//         if (!ERRPROCESS)
+//           RunCommand(bibtex_command, true);
+//         else {
+//           checkViewerInstance = false;
+//           return;
+//         }
+//         if (!ERRPROCESS) {
+//           // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
+//           RunCommand(latex_command, true);
+//           if (ERRPROCESS && !LogExists()) {
+//             QMessageBox::warning(this, tr("Error"),
+//                                  tr("Could not start the command.") + "\n" +
+//                                      latex_command);
+//             checkViewerInstance = false;
+//             return;
+//           }
+//           LoadLog();
+//           if (showoutputview)
+//             ViewLog();
+//           if (NoLatexErrors()) {
+//             RunCommand(latex_command, true);
+//             if (ERRPROCESS && !LogExists()) {
+//               QMessageBox::warning(this, tr("Error"),
+//                                    tr("Could not start the command.") + "\n" +
+//                                        latex_command);
+//               checkViewerInstance = false;
+//               return;
+//             }
+//             LoadLog();
+//             if (showoutputview)
+//               ViewLog();
+//             if (NoLatexErrors()) {
+//               // stat2->setText(QString(" %1 ").arg("Dvips"));
+//               if (!ERRPROCESS)
+//                 RunCommand(dvips_command, true);
+//               else {
+//                 checkViewerInstance = false;
+//                 return;
+//               }
+//               // stat2->setText(QString(" %1 ").arg("Ps to Pdf"));
+//               if (!ERRPROCESS)
+//                 RunCommand(ps2pdf_command, true);
+//               else {
+//                 checkViewerInstance = false;
+//                 return;
+//               }
+//               if (!ERRPROCESS)
+//                 ViewPDF();
+//             } else {
+//               NextError();
+//             }
+//           } else {
+//             NextError();
+//           }
+//         } else
+//           return;
+//       } else {
+//         NextError();
+//       }
+//     } break;
+//     case 14: {
+//       // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
+//       RunCommand(sweave_command, true);
+//       if (!ERRPROCESS)
+//         RunCommand(pdflatex_command, true);
+//       if (ERRPROCESS && !LogExists()) {
+//         QMessageBox::warning(this, tr("Error"),
+//                              tr("Could not start the command.") + "\n" +
+//                                  sweave_command);
+//         checkViewerInstance = false;
+//         return;
+//       }
+//       LoadLog();
+//       if (showoutputview)
+//         ViewLog();
+//       if (NoLatexErrors()) {
+//         if (!ERRPROCESS)
+//           ViewPDF();
+//         else {
+//           checkViewerInstance = false;
+//           return;
+//         }
+//       } else {
+//         NextError();
+//       }
+//     } break;
+//     }
+//     if (NoLatexErrors() && showoutputview)
+//       ViewLog();
+//   }
+//   checkViewerInstance = false;
+// }
 
-void Texmaker::Latex() {
-  // stat2->setText(QString(" %1 ").arg("Latex"));
-  RunCommand(latex_command, true);
-  LoadLog();
-  if (showoutputview)
-    ViewLog();
-  if (!NoLatexErrors())
-    NextError();
-}
+// void Texmaker::Latex() {
+//   // stat2->setText(QString(" %1 ").arg("Latex"));
+//   RunCommand(latex_command, true);
+//   LoadLog();
+//   if (showoutputview)
+//     ViewLog();
+//   if (!NoLatexErrors())
+//     NextError();
+// }
 
-void Texmaker::ViewDvi() {
-  // stat2->setText(QString(" %1 ").arg(tr("View Dvi file")));
-  RunCommand(viewdvi_command, false);
-}
+// void Texmaker::ViewDvi() {
+//   // stat2->setText(QString(" %1 ").arg(tr("View Dvi file")));
+//   RunCommand(viewdvi_command, false);
+// }
 
-void Texmaker::DviToPS() {
-  // stat2->setText(QString(" %1 ").arg("Dvips"));
-  RunCommand(dvips_command, false);
-}
+// void Texmaker::DviToPS() {
+//   // stat2->setText(QString(" %1 ").arg("Dvips"));
+//   RunCommand(dvips_command, false);
+// }
 
-void Texmaker::ViewPS() {
-  // stat2->setText(QString(" %1 ").arg(tr("View PS file")));
-  RunCommand(viewps_command, false);
-}
+// void Texmaker::ViewPS() {
+//   // stat2->setText(QString(" %1 ").arg(tr("View PS file")));
+//   RunCommand(viewps_command, false);
+// }
 
-void Texmaker::PDFLatex() {
-  // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
-  RunCommand(pdflatex_command, true);
-  LoadLog();
-  if (showoutputview)
-    ViewLog();
-  if (!NoLatexErrors())
-    NextError();
-}
+// void Texmaker::PDFLatex() {
+//   // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
+//   RunCommand(pdflatex_command, true);
+//   LoadLog();
+//   if (showoutputview)
+//     ViewLog();
+//   if (!NoLatexErrors())
+//     NextError();
+// }
 
-void Texmaker::ViewPDF() {
-  // stat2->setText(QString(" %1 ").arg(tr("View Pdf file")));
-  RunCommand(viewpdf_command, false);
-}
+// void Texmaker::ViewPDF() {
+//   // stat2->setText(QString(" %1 ").arg(tr("View Pdf file")));
+//   RunCommand(viewpdf_command, false);
+// }
 
-void Texmaker::MakeBib() {
-  // stat2->setText(QString(" %1 ").arg("Bibtex"));
-  RunCommand(bibtex_command, false);
-}
+// void Texmaker::MakeBib() {
+//   // stat2->setText(QString(" %1 ").arg("Bibtex"));
+//   RunCommand(bibtex_command, false);
+// }
 
-void Texmaker::MakeIndex() {
-  // stat2->setText(QString(" %1 ").arg("Make index"));
-  RunCommand(makeindex_command, false);
-}
+// void Texmaker::MakeIndex() {
+//   // stat2->setText(QString(" %1 ").arg("Make index"));
+//   RunCommand(makeindex_command, false);
+// }
 
-void Texmaker::PStoPDF() {
-  // stat2->setText(QString(" %1 ").arg("Ps -> Pdf"));
-  RunCommand(ps2pdf_command, false);
-}
+// void Texmaker::PStoPDF() {
+//   // stat2->setText(QString(" %1 ").arg("Ps -> Pdf"));
+//   RunCommand(ps2pdf_command, false);
+// }
 
-void Texmaker::DVItoPDF() {
-  // stat2->setText(QString(" %1 ").arg("Dvi -> Pdf"));
-  RunCommand(dvipdf_command, false);
-}
+// void Texmaker::DVItoPDF() {
+//   // stat2->setText(QString(" %1 ").arg("Dvi -> Pdf"));
+//   RunCommand(dvipdf_command, false);
+// }
 
-void Texmaker::MetaPost() {
-  // stat2->setText(QString(" %1 ").arg("Mpost"));
-  QString finame = getName();
-  QFileInfo fi(finame);
-  RunCommand(metapost_command + fi.completeBaseName() + "." + fi.suffix(),
-             false);
-}
+// void Texmaker::MetaPost() {
+//   // stat2->setText(QString(" %1 ").arg("Mpost"));
+//   QString finame = getName();
+//   QFileInfo fi(finame);
+//   RunCommand(metapost_command + fi.completeBaseName() + "." + fi.suffix(),
+//              false);
+// }
 
 void Texmaker::CleanAll() {
-  QString finame, f;
-  if (singlemode) {
-    finame = getName();
-  } else {
-    finame = MasterName;
-  }
-  if ((singlemode && !currentEditorView()) || finame.startsWith("untitled") ||
-      finame == "") {
-    QMessageBox::warning(this, tr("Error"), tr("Can't detect the file name"));
-    return;
-  }
-  fileSave();
-  QStringList extension =
-      QString(".log,.aux,.dvi,.lof,.lot,.bit,.idx,.glo,.bbl,.ilg,.toc,.ind,."
-              "out,.synctex.gz,.blg,.thm,.pre,.nlg,.nlo,.nls,.bcf,.snm,.nav,."
-              "vrb,.listing,.spx,.run.xml")
-          .split(",");
-  if (useoutputdir) {
-    QFileInfo fi(outputName(finame, ".pdf"));
-    if (QMessageBox::warning(
-            this, "Texmaker",
-            tr("Make a copy of the %1.pdf/ps document in the \"build\" "
-               "subdirectory and delete all the others %1.* files?")
-                .arg(fi.baseName()),
-            tr("Ok"), tr("Cancel")) == 0) {
-      QDirIterator iterator(QDir(fi.absolutePath()),
-                            QDirIterator::NoIteratorFlags);
-      while (iterator.hasNext()) {
-        QString entry(iterator.next());
-        if (QFileInfo(entry).suffix().toLower() == "pdf" &&
-            QFileInfo(entry).baseName() == fi.baseName()) {
-          copyFile(entry, QFileInfo(finame).absolutePath() + "/" +
-                              QFileInfo(entry).completeBaseName() + ".pdf");
-        } else if (QFileInfo(entry).suffix().toLower() == "ps" &&
-                   QFileInfo(entry).baseName() == fi.baseName()) {
-          copyFile(entry, QFileInfo(finame).absolutePath() + "/" +
-                              QFileInfo(entry).completeBaseName() + ".ps");
-        } else if (!QFileInfo(entry).isDir() &&
-                   QFileInfo(entry).baseName() == fi.baseName()) {
-          if (QFile::exists(entry)) {
-            QFile file(entry);
-            file.open(QIODevice::ReadOnly);
-            file.remove();
-          }
-        }
-      }
-    }
-  } else {
-    QFileInfo fi(finame);
-    if (QMessageBox::warning(this, "Texmaker",
-                             tr("Delete the output files generated by LaTeX ?"),
-                             tr("Delete Files"), tr("Cancel")) == 0) {
-      QDirIterator iterator(QDir(fi.absolutePath()),
-                            QDirIterator::NoIteratorFlags);
-      while (iterator.hasNext()) {
-        QString entry(iterator.next());
-        if (!QFileInfo(entry).isDir()) {
-          if (extension.contains("." +
-                                 QFileInfo(entry).completeSuffix().toLower()) &&
-              QFileInfo(entry).baseName() == fi.baseName()) {
-            if (QFile::exists(entry)) {
-              QFile file(entry);
-              file.open(QIODevice::ReadOnly);
-              file.remove();
-            }
-          }
-        }
-      }
-    }
-  }
+  //Should be done in another part
 }
 
 void Texmaker::AutoCleanAll() {
-  QString finame, f;
-  if (singlemode) {
-    finame = getName();
-  } else {
-    finame = MasterName;
-  }
-  if ((singlemode && !currentEditorView()) || finame.startsWith("untitled") ||
-      finame == "") {
-    // QMessageBox::warning( this,tr("Error"),tr("Can't detect the file name"));
-    return;
-  }
-  QStringList extension =
-      QString(".log,.aux,.dvi,.lof,.lot,.bit,.idx,.glo,.bbl,.ilg,.toc,.ind,."
-              "out,.synctex.gz,.blg,.thm,.pre,.nlg,.nlo,.nls,.bcf,.snm,.nav,."
-              "vrb,.listing,.spx,.run.xml")
-          .split(",");
-  if (useoutputdir) {
-    QFileInfo fi(outputName(finame, ".pdf"));
-
-    QDirIterator iterator(QDir(fi.absolutePath()),
-                          QDirIterator::NoIteratorFlags);
-    while (iterator.hasNext()) {
-      QString entry(iterator.next());
-      if (QFileInfo(entry).suffix().toLower() == "pdf" &&
-          QFileInfo(entry).baseName() == fi.baseName()) {
-        copyFile(entry, QFileInfo(finame).absolutePath() + "/" +
-                            QFileInfo(entry).completeBaseName() + ".pdf");
-      } else if (QFileInfo(entry).suffix().toLower() == "ps" &&
-                 QFileInfo(entry).baseName() == fi.baseName()) {
-        copyFile(entry, QFileInfo(finame).absolutePath() + "/" +
-                            QFileInfo(entry).completeBaseName() + ".ps");
-      } else if (!QFileInfo(entry).isDir() &&
-                 QFileInfo(entry).baseName() == fi.baseName()) {
-        if (QFile::exists(entry)) {
-          QFile file(entry);
-          file.open(QIODevice::ReadOnly);
-          file.remove();
-        }
-      }
-    }
-  } else {
-    QFileInfo fi(finame);
-    QDirIterator iterator(QDir(fi.absolutePath()),
-                          QDirIterator::NoIteratorFlags);
-    while (iterator.hasNext()) {
-      QString entry(iterator.next());
-      if (!QFileInfo(entry).isDir()) {
-        if (extension.contains("." +
-                               QFileInfo(entry).completeSuffix().toLower()) &&
-            QFileInfo(entry).baseName() == fi.baseName()) {
-          if (QFile::exists(entry)) {
-            QFile file(entry);
-            file.open(QIODevice::ReadOnly);
-            file.remove();
-          }
-        }
-      }
-    }
-  }
+  //No need for anything
 }
 
-void Texmaker::Asymptote() {
-  // stat2->setText(QString(" %1 ").arg("Asymptote"));
-  RunCommand(asymptote_command, false);
-}
+// void Texmaker::Asymptote() {
+//   // stat2->setText(QString(" %1 ").arg("Asymptote"));
+//   RunCommand(asymptote_command, false);
+// }
 
-void Texmaker::AsyFile(QString asyfile) {
-  QString commandline = asymptote_command;
-  QFileInfo fi(asyfile);
-  commandline.replace("%", "\"" + asyfile + "\"");
-  proc = new QProcess(this);
-  proc->setWorkingDirectory(fi.absolutePath());
-  proc->setProperty("command", commandline);
+// void Texmaker::AsyFile(QString asyfile) {
+//   QString commandline = asymptote_command;
+//   QFileInfo fi(asyfile);
+//   commandline.replace("%", "\"" + asyfile + "\"");
+//   proc = new QProcess(this);
+//   proc->setWorkingDirectory(fi.absolutePath());
+//   proc->setProperty("command", commandline);
 
-//****
-#if defined(Q_OS_MAC)
-  QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-  if (extra_path.isEmpty())
-    env.insert("PATH", env.value("PATH") +
-                           ":/Library/TeX/texbin:/Library/TeX/Distributions/"
-                           ".DefaultTeX/Contents/Programs/texbin:/usr/bin:/usr/"
-                           "sbin:/sbin:/usr/local/bin:/usr/texbin:/sw/bin:");
-  else
-    env.insert("PATH", env.value("PATH") +
-                           ":/Library/TeX/texbin:/Library/TeX/Distributions/"
-                           ".DefaultTeX/Contents/Programs/texbin:/usr/bin:/usr/"
-                           "sbin:/sbin:/usr/local/bin:/usr/texbin:/sw/bin:" +
-                           extra_path);
-  proc->setProcessEnvironment(env);
-#endif
-#if defined(Q_OS_WIN32)
-  QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-  if (!extra_path.isEmpty()) {
-    env.insert("PATH", env.value("PATH") + ";" + extra_path);
-    proc->setProcessEnvironment(env);
-  }
-#endif
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
-  QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-  if (!extra_path.isEmpty()) {
-    env.insert("PATH", env.value("PATH") + ":" + extra_path);
-    proc->setProcessEnvironment(env);
-  }
-#endif
-  qputenv("PATH", env.value("PATH").toLatin1());
-  //****
-  connect(proc, SIGNAL(readyReadStandardError()), this, SLOT(readFromStderr()));
-  // connect(proc, SIGNAL(readyReadStandardOutput()),this,
-  // SLOT(readFromStdoutput()));
-  connect(proc, SIGNAL(finished(int)), this, SLOT(SlotEndProcess(int)));
-  OutputTextEdit->clear();
-  OutputTableWidget->hide();
-  OutputTextEdit->setMaximumHeight(splitter2->sizes().at(1));
-  separatorline->hide();
-  // OutputTextEdit->insertLine(commandline+"\n");
-  proc->start(commandline);
-  if (!proc->waitForStarted(1000)) {
-    ERRPROCESS = true;
-    OutputTextEdit->insertLine(
-        "Error : could not start the command : " + commandline + "\n");
-    checkViewerInstance = false;
-    return;
-  } else
-    OutputTextEdit->insertLine("Process started\n");
-  FINPROCESS = false;
-  QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-  while (!FINPROCESS) {
-    qApp->instance()->processEvents(QEventLoop::ExcludeUserInputEvents);
-  }
-  QApplication::restoreOverrideCursor();
-}
+// //****
+// #if defined(Q_OS_MAC)
+//   QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+//   if (extra_path.isEmpty())
+//     env.insert("PATH", env.value("PATH") +
+//                            ":/Library/TeX/texbin:/Library/TeX/Distributions/"
+//                            ".DefaultTeX/Contents/Programs/texbin:/usr/bin:/usr/"
+//                            "sbin:/sbin:/usr/local/bin:/usr/texbin:/sw/bin:");
+//   else
+//     env.insert("PATH", env.value("PATH") +
+//                            ":/Library/TeX/texbin:/Library/TeX/Distributions/"
+//                            ".DefaultTeX/Contents/Programs/texbin:/usr/bin:/usr/"
+//                            "sbin:/sbin:/usr/local/bin:/usr/texbin:/sw/bin:" +
+//                            extra_path);
+//   proc->setProcessEnvironment(env);
+// #endif
+// #if defined(Q_OS_WIN32)
+//   QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+//   if (!extra_path.isEmpty()) {
+//     env.insert("PATH", env.value("PATH") + ";" + extra_path);
+//     proc->setProcessEnvironment(env);
+//   }
+// #endif
+// #if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
+//   QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+//   if (!extra_path.isEmpty()) {
+//     env.insert("PATH", env.value("PATH") + ":" + extra_path);
+//     proc->setProcessEnvironment(env);
+//   }
+// #endif
+//   qputenv("PATH", env.value("PATH").toLatin1());
+//   //****
+//   connect(proc, SIGNAL(readyReadStandardError()), this, SLOT(readFromStderr()));
+//   // connect(proc, SIGNAL(readyReadStandardOutput()),this,
+//   // SLOT(readFromStdoutput()));
+//   connect(proc, SIGNAL(finished(int)), this, SLOT(SlotEndProcess(int)));
+//   OutputTextEdit->clear();
+//   OutputTableWidget->hide();
+//   OutputTextEdit->setMaximumHeight(splitter2->sizes().at(1));
+//   separatorline->hide();
+//   // OutputTextEdit->insertLine(commandline+"\n");
+//   proc->start(commandline);
+//   if (!proc->waitForStarted(1000)) {
+//     ERRPROCESS = true;
+//     OutputTextEdit->insertLine(
+//         "Error : could not start the command : " + commandline + "\n");
+//     checkViewerInstance = false;
+//     return;
+//   } else
+//     OutputTextEdit->insertLine("Process started\n");
+//   FINPROCESS = false;
+//   QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+//   while (!FINPROCESS) {
+//     qApp->instance()->processEvents(QEventLoop::ExcludeUserInputEvents);
+//   }
+//   QApplication::restoreOverrideCursor();
+// }
 
-void Texmaker::LatexMk() {
-  // stat2->setText(QString(" %1 ").arg("LatexMk"));
-  RunCommand(latexmk_command, true);
-  LoadLog();
-  if (showoutputview)
-    ViewLog();
-  if (!NoLatexErrors())
-    NextError();
-}
+// void Texmaker::LatexMk() {
+//   // stat2->setText(QString(" %1 ").arg("LatexMk"));
+//   RunCommand(latexmk_command, true);
+//   LoadLog();
+//   if (showoutputview)
+//     ViewLog();
+//   if (!NoLatexErrors())
+//     NextError();
+// }
 
-void Texmaker::Sweave() {
-  // stat2->setText(QString(" %1 ").arg("LatexMk"));
-  RunCommand(sweave_command, false);
-}
+// void Texmaker::Sweave() {
+//   // stat2->setText(QString(" %1 ").arg("LatexMk"));
+//   RunCommand(sweave_command, false);
+// }
 
-void Texmaker::Xelatex() {
-  // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
-  RunCommand(xelatex_command, true);
-  LoadLog();
-  if (showoutputview)
-    ViewLog();
-  if (!NoLatexErrors())
-    NextError();
-}
+// void Texmaker::Xelatex() {
+//   // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
+//   RunCommand(xelatex_command, true);
+//   LoadLog();
+//   if (showoutputview)
+//     ViewLog();
+//   if (!NoLatexErrors())
+//     NextError();
+// }
 
-void Texmaker::Lualatex() {
-  // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
-  RunCommand(lualatex_command, true);
-  LoadLog();
-  if (showoutputview)
-    ViewLog();
-  if (!NoLatexErrors())
-    NextError();
-}
+// void Texmaker::Lualatex() {
+//   // stat2->setText(QString(" %1 ").arg("Pdf Latex"));
+//   RunCommand(lualatex_command, true);
+//   LoadLog();
+//   if (showoutputview)
+//     ViewLog();
+//   if (!NoLatexErrors())
+//     NextError();
+// }
 
-void Texmaker::UserTool1() {
-  QStringList commandList = UserToolCommand[0].split("|");
-  ERRPROCESS = false;
-  for (int i = 0; i < commandList.size(); ++i) {
-    if ((!ERRPROCESS) && (!commandList.at(i).isEmpty())) {
-      RunCommand(commandList.at(i), true);
-      if ((commandList.at(i) == latex_command) ||
-          (commandList.at(i) == pdflatex_command) ||
-          (commandList.at(i) == xelatex_command) ||
-          (commandList.at(i) == lualatex_command)) {
-        LoadLog();
-        if (showoutputview)
-          ViewLog();
-        if (!NoLatexErrors())
-          NextError();
-      }
-    } else
-      return;
-  }
-}
+// void Texmaker::UserTool1() {
+//   QStringList commandList = UserToolCommand[0].split("|");
+//   ERRPROCESS = false;
+//   for (int i = 0; i < commandList.size(); ++i) {
+//     if ((!ERRPROCESS) && (!commandList.at(i).isEmpty())) {
+//       RunCommand(commandList.at(i), true);
+//       if ((commandList.at(i) == latex_command) ||
+//           (commandList.at(i) == pdflatex_command) ||
+//           (commandList.at(i) == xelatex_command) ||
+//           (commandList.at(i) == lualatex_command)) {
+//         LoadLog();
+//         if (showoutputview)
+//           ViewLog();
+//         if (!NoLatexErrors())
+//           NextError();
+//       }
+//     } else
+//       return;
+//   }
+// }
 
-void Texmaker::UserTool2() {
-  QStringList commandList = UserToolCommand[1].split("|");
-  ERRPROCESS = false;
-  for (int i = 0; i < commandList.size(); ++i) {
-    if ((!ERRPROCESS) && (!commandList.at(i).isEmpty())) {
-      RunCommand(commandList.at(i), true);
-      if ((commandList.at(i) == latex_command) ||
-          (commandList.at(i) == pdflatex_command) ||
-          (commandList.at(i) == xelatex_command) ||
-          (commandList.at(i) == lualatex_command)) {
-        LoadLog();
-        if (showoutputview)
-          ViewLog();
-        if (!NoLatexErrors())
-          NextError();
-      }
-    } else
-      return;
-  }
-}
+// void Texmaker::UserTool2() {
+//   QStringList commandList = UserToolCommand[1].split("|");
+//   ERRPROCESS = false;
+//   for (int i = 0; i < commandList.size(); ++i) {
+//     if ((!ERRPROCESS) && (!commandList.at(i).isEmpty())) {
+//       RunCommand(commandList.at(i), true);
+//       if ((commandList.at(i) == latex_command) ||
+//           (commandList.at(i) == pdflatex_command) ||
+//           (commandList.at(i) == xelatex_command) ||
+//           (commandList.at(i) == lualatex_command)) {
+//         LoadLog();
+//         if (showoutputview)
+//           ViewLog();
+//         if (!NoLatexErrors())
+//           NextError();
+//       }
+//     } else
+//       return;
+//   }
+// }
 
-void Texmaker::UserTool3() {
-  QStringList commandList = UserToolCommand[2].split("|");
-  ERRPROCESS = false;
-  for (int i = 0; i < commandList.size(); ++i) {
-    if ((!ERRPROCESS) && (!commandList.at(i).isEmpty())) {
-      RunCommand(commandList.at(i), true);
-      if ((commandList.at(i) == latex_command) ||
-          (commandList.at(i) == pdflatex_command) ||
-          (commandList.at(i) == xelatex_command) ||
-          (commandList.at(i) == lualatex_command)) {
-        LoadLog();
-        if (showoutputview)
-          ViewLog();
-        if (!NoLatexErrors())
-          NextError();
-      }
-    } else
-      return;
-  }
-}
+// void Texmaker::UserTool3() {
+//   QStringList commandList = UserToolCommand[2].split("|");
+//   ERRPROCESS = false;
+//   for (int i = 0; i < commandList.size(); ++i) {
+//     if ((!ERRPROCESS) && (!commandList.at(i).isEmpty())) {
+//       RunCommand(commandList.at(i), true);
+//       if ((commandList.at(i) == latex_command) ||
+//           (commandList.at(i) == pdflatex_command) ||
+//           (commandList.at(i) == xelatex_command) ||
+//           (commandList.at(i) == lualatex_command)) {
+//         LoadLog();
+//         if (showoutputview)
+//           ViewLog();
+//         if (!NoLatexErrors())
+//           NextError();
+//       }
+//     } else
+//       return;
+//   }
+// }
 
-void Texmaker::UserTool4() {
-  QStringList commandList = UserToolCommand[3].split("|");
-  ERRPROCESS = false;
-  for (int i = 0; i < commandList.size(); ++i) {
-    if ((!ERRPROCESS) && (!commandList.at(i).isEmpty())) {
-      RunCommand(commandList.at(i), true);
-      if ((commandList.at(i) == latex_command) ||
-          (commandList.at(i) == pdflatex_command) ||
-          (commandList.at(i) == xelatex_command) ||
-          (commandList.at(i) == lualatex_command)) {
-        LoadLog();
-        if (showoutputview)
-          ViewLog();
-        if (!NoLatexErrors())
-          NextError();
-      }
-    } else
-      return;
-  }
-}
+// void Texmaker::UserTool4() {
+//   QStringList commandList = UserToolCommand[3].split("|");
+//   ERRPROCESS = false;
+//   for (int i = 0; i < commandList.size(); ++i) {
+//     if ((!ERRPROCESS) && (!commandList.at(i).isEmpty())) {
+//       RunCommand(commandList.at(i), true);
+//       if ((commandList.at(i) == latex_command) ||
+//           (commandList.at(i) == pdflatex_command) ||
+//           (commandList.at(i) == xelatex_command) ||
+//           (commandList.at(i) == lualatex_command)) {
+//         LoadLog();
+//         if (showoutputview)
+//           ViewLog();
+//         if (!NoLatexErrors())
+//           NextError();
+//       }
+//     } else
+//       return;
+//   }
+// }
 
-void Texmaker::UserTool5() {
-  QStringList commandList = UserToolCommand[4].split("|");
-  ERRPROCESS = false;
-  for (int i = 0; i < commandList.size(); ++i) {
-    if ((!ERRPROCESS) && (!commandList.at(i).isEmpty())) {
-      RunCommand(commandList.at(i), true);
-      if ((commandList.at(i) == latex_command) ||
-          (commandList.at(i) == pdflatex_command) ||
-          (commandList.at(i) == xelatex_command) ||
-          (commandList.at(i) == lualatex_command)) {
-        LoadLog();
-        if (showoutputview)
-          ViewLog();
-        if (!NoLatexErrors())
-          NextError();
-      }
-    } else
-      return;
-  }
-}
+// void Texmaker::UserTool5() {
+//   QStringList commandList = UserToolCommand[4].split("|");
+//   ERRPROCESS = false;
+//   for (int i = 0; i < commandList.size(); ++i) {
+//     if ((!ERRPROCESS) && (!commandList.at(i).isEmpty())) {
+//       RunCommand(commandList.at(i), true);
+//       if ((commandList.at(i) == latex_command) ||
+//           (commandList.at(i) == pdflatex_command) ||
+//           (commandList.at(i) == xelatex_command) ||
+//           (commandList.at(i) == lualatex_command)) {
+//         LoadLog();
+//         if (showoutputview)
+//           ViewLog();
+//         if (!NoLatexErrors())
+//           NextError();
+//       }
+//     } else
+//       return;
+//   }
+// }
 
-void Texmaker::OpenTerminal() {
-#if 0
-  QProcess process;
+// void Texmaker::OpenTerminal() {
 
-  QString finame;
-  if (singlemode) {
-    finame = getName();
-  } else {
-    finame = MasterName;
-  }
-  if ((singlemode && !currentEditorView()) || finame.startsWith("untitled") ||
-      finame == "") {
-    finame = QDir::homePath();
-  }
-  QFileInfo fi(finame);
+//   QProcess process;
 
-  const QString pwd = QDir::toNativeSeparators(
-      fi.isDir() ? fi.absoluteFilePath() : fi.absolutePath());
-  process.setWorkingDirectory(pwd);
-#if defined(Q_OS_WIN32)
-  const QString terminalEmulator = QString::fromLocal8Bit(qgetenv("COMSPEC"));
-#include <Windows.h>
-  STARTUPINFO si;
-  ZeroMemory(&si, sizeof(si));
-  si.cb = sizeof(si);
+//   QString finame;
+//   if (singlemode) {
+//     finame = getName();
+//   } else {
+//     finame = MasterName;
+//   }
+//   if ((singlemode && !currentEditorView()) || finame.startsWith("untitled") ||
+//       finame == "") {
+//     finame = QDir::homePath();
+//   }
+//   QFileInfo fi(finame);
 
-  PROCESS_INFORMATION pinfo;
-  ZeroMemory(&pinfo, sizeof(pinfo));
+//   const QString pwd = QDir::toNativeSeparators(
+//       fi.isDir() ? fi.absoluteFilePath() : fi.absolutePath());
+//   process.setWorkingDirectory(pwd);
+// #if defined(Q_OS_WIN32)
+//   const QString terminalEmulator = QString::fromLocal8Bit(qgetenv("COMSPEC"));
+// #include <Windows.h>
+//   STARTUPINFO si;
+//   ZeroMemory(&si, sizeof(si));
+//   si.cb = sizeof(si);
 
-  bool success = CreateProcessW(
-      0, (WCHAR *)terminalEmulator.utf16(), 0, 0, FALSE, CREATE_NEW_CONSOLE, 0,
-      pwd.isEmpty() ? 0 : (WCHAR *)pwd.utf16(), &si, &pinfo);
+//   PROCESS_INFORMATION pinfo;
+//   ZeroMemory(&pinfo, sizeof(pinfo));
 
-  if (success) {
-    CloseHandle(pinfo.hThread);
-    CloseHandle(pinfo.hProcess);
-  }
-#elif defined(Q_OS_MAC)
-  const QString terminalEmulator = QCoreApplication::applicationDirPath() +
-                                   "/../Resources/openTerminal.command";
-  process.startDetached(terminalEmulator, QStringList() << pwd);
-#else
-  const QString shell = QString::fromLocal8Bit(qgetenv("SHELL"));
-  if (!process.startDetached("konsole --workdir \"" + pwd + "\"")) {
-    if (!process.startDetached("gnome-terminal --working-directory=\"" + pwd +
-                               "\""))
-      process.startDetached("xterm -lc -u8 -e \"cd \'" + pwd + "\' && " +
-                            shell + "\"");
-  }
-#endif
-#endif
-}
+//   bool success = CreateProcessW(
+//       0, (WCHAR *)terminalEmulator.utf16(), 0, 0, FALSE, CREATE_NEW_CONSOLE, 0,
+//       pwd.isEmpty() ? 0 : (WCHAR *)pwd.utf16(), &si, &pinfo);
 
-void Texmaker::Export() {
-#if 0
-  if (!currentEditorView())
-    return;
-  QString finame;
-  if (singlemode) {
-    finame = getName();
-  } else {
-    finame = MasterName;
-  }
-  if ((singlemode && !currentEditorView()) || finame.startsWith("untitled") ||
-      finame == "") {
-    QMessageBox::warning(this, tr("Error"), tr("Can't detect the file name"));
-    return;
-  }
-  ExportDialog *exportDlg = new ExportDialog(this, finame);
-  exportDlg->ui.lineEditPath->setText(htlatex_command);
-  exportDlg->ui.lineEditOptions->setText(htlatex_options);
+//   if (success) {
+//     CloseHandle(pinfo.hThread);
+//     CloseHandle(pinfo.hProcess);
+//   }
+// #elif defined(Q_OS_MAC)
+//   const QString terminalEmulator = QCoreApplication::applicationDirPath() +
+//                                    "/../Resources/openTerminal.command";
+//   process.startDetached(terminalEmulator, QStringList() << pwd);
+// #else
+//   const QString shell = QString::fromLocal8Bit(qgetenv("SHELL"));
+//   if (!process.startDetached("konsole --workdir \"" + pwd + "\"")) {
+//     if (!process.startDetached("gnome-terminal --working-directory=\"" + pwd +
+//                                "\""))
+//       process.startDetached("xterm -lc -u8 -e \"cd \'" + pwd + "\' && " +
+//                             shell + "\"");
+//   }
+// #endif
+// }
 
-  if (exportDlg->exec()) {
-    htlatex_command = exportDlg->ui.lineEditPath->text();
-    htlatex_options = exportDlg->ui.lineEditOptions->text();
-  }
-#endif
-}
+// void Texmaker::Export() {
+// #if 0
+//   if (!currentEditorView())
+//     return;
+//   QString finame;
+//   if (singlemode) {
+//     finame = getName();
+//   } else {
+//     finame = MasterName;
+//   }
+//   if ((singlemode && !currentEditorView()) || finame.startsWith("untitled") ||
+//       finame == "") {
+//     QMessageBox::warning(this, tr("Error"), tr("Can't detect the file name"));
+//     return;
+//   }
+//   ExportDialog *exportDlg = new ExportDialog(this, finame);
+//   exportDlg->ui.lineEditPath->setText(htlatex_command);
+//   exportDlg->ui.lineEditOptions->setText(htlatex_options);
 
-void Texmaker::ConvertToUnicode() {
-#if 0
-  UnicodeDialog *uniDlg = new UnicodeDialog(this);
-  uniDlg->init(EditorFont, showline, edcolors(), hicolors());
-  uniDlg->exec();
-#endif
-}
+//   if (exportDlg->exec()) {
+//     htlatex_command = exportDlg->ui.lineEditPath->text();
+//     htlatex_options = exportDlg->ui.lineEditOptions->text();
+//   }
+// #endif
+// }
 
-void Texmaker::EditUserTool() {
+// void Texmaker::ConvertToUnicode() {
+// #if 0
+//   UnicodeDialog *uniDlg = new UnicodeDialog(this);
+//   uniDlg->init(EditorFont, showline, edcolors(), hicolors());
+//   uniDlg->exec();
+// #endif
+// }
+
+// void Texmaker::EditUserTool() {
   
-}
+// }
 
-void Texmaker::doCompile() {
+// void Texmaker::doCompile() {
   
-}
+// }
 
-void Texmaker::doView() {
+// void Texmaker::doView() {
   
-}
+// }
 
 void Texmaker::jumpToPdfline(int line) {}
 
 //////////////// MESSAGES - LOG FILE///////////////////////
 bool Texmaker::LogExists() {
-  QString finame;
-  if (singlemode) {
-    finame = getName();
-  } else {
-    finame = MasterName;
-  }
-  if ((singlemode && !currentEditorView()) || finame.startsWith("untitled") ||
-      finame == "") {
-    return false;
-  }
-  QString logname = outputName(finame, ".log");
-  // QFileInfo fi(finame);
-  // QString name=fi.absoluteFilePath();
-  // QString ext=fi.suffix();
-  // QString basename=name.left(name.length()-ext.length()-1);
-  // QString logname=basename+".log";
-  QFileInfo fic(logname);
-  if (fic.exists() && fic.isReadable())
-    return true;
-  else
+  // QString finame;
+  // if (singlemode) {
+  //   finame = getName();
+  // } else {
+  //   finame = MasterName;
+  // }
+  // if ((singlemode && !currentEditorView()) || finame.startsWith("untitled") ||
+  //     finame == "") {
+  //   return false;
+  // }
+  // QString logname = outputName(finame, ".log");
+  // // QFileInfo fi(finame);
+  // // QString name=fi.absoluteFilePath();
+  // // QString ext=fi.suffix();
+  // // QString basename=name.left(name.length()-ext.length()-1);
+  // // QString logname=basename+".log";
+  // QFileInfo fic(logname);
+  // if (fic.exists() && fic.isReadable())
+  //   return true;
+  // else
     return false;
 }
 
 void Texmaker::LoadLog() {
-  OutputTextEdit->clear();
-  logpresent = false;
-  QString finame;
-  if (singlemode) {
-    finame = getName();
-  } else {
-    finame = MasterName;
-  }
-  if ((singlemode && !currentEditorView()) || finame.startsWith("untitled") ||
-      finame == "") {
-    QMessageBox::warning(this, tr("Error"),
-                         tr("Could not start the command.") + "\n view log ");
-    ERRPROCESS = true;
-    return;
-  }
-  QString logname = outputName(finame, ".log");
-  // QFileInfo fi(finame);
-  // QString name=fi.absoluteFilePath();
-  // QString ext=fi.suffix();
-  // QString basename=name.left(name.length()-ext.length()-1);
-  // QString logname=basename+".log";
-  QString line;
-  QFileInfo fic(logname);
-  QTextCodec *codec = QTextCodec::codecForName(input_encoding.toLatin1());
-  if (!codec)
-    codec = QTextCodec::codecForLocale();
-  int li = 0;
-  if (fic.exists() && fic.isReadable()) {
-    OutputTextEdit->insertLine("LOG FILE :");
-    QFile f(logname);
-    if (f.open(QIODevice::ReadOnly)) {
-      QTextStream t(&f);
-      t.setCodec(codec);
-      //		OutputTextEdit->setPlainText( t.readAll() );
-      while ((!t.atEnd()) && (li < 100000)) {
-        li++;
-        line = t.readLine();
-        line = line.simplified();
-        if (!line.isEmpty())
-          OutputTextEdit->insertLine(line);
-      }
-    }
-    f.close();
-    LatexError();
-    logpresent = true;
-  } else {
-    QMessageBox::warning(this, tr("Error"), tr("Log File not found !"));
-  }
+  // OutputTextEdit->clear();
+  // logpresent = false;
+  // QString finame;
+  // if (singlemode) {
+  //   finame = getName();
+  // } else {
+  //   finame = MasterName;
+  // }
+  // if ((singlemode && !currentEditorView()) || finame.startsWith("untitled") ||
+  //     finame == "") {
+  //   QMessageBox::warning(this, tr("Error"),
+  //                        tr("Could not start the command.") + "\n view log ");
+  //   ERRPROCESS = true;
+  //   return;
+  // }
+  // QString logname = outputName(finame, ".log");
+  // // QFileInfo fi(finame);
+  // // QString name=fi.absoluteFilePath();
+  // // QString ext=fi.suffix();
+  // // QString basename=name.left(name.length()-ext.length()-1);
+  // // QString logname=basename+".log";
+  // QString line;
+  // QFileInfo fic(logname);
+  // QTextCodec *codec = QTextCodec::codecForName(input_encoding.toLatin1());
+  // if (!codec)
+  //   codec = QTextCodec::codecForLocale();
+  // int li = 0;
+  // if (fic.exists() && fic.isReadable()) {
+  //   OutputTextEdit->insertLine("LOG FILE :");
+  //   QFile f(logname);
+  //   if (f.open(QIODevice::ReadOnly)) {
+  //     QTextStream t(&f);
+  //     t.setCodec(codec);
+  //     //		OutputTextEdit->setPlainText( t.readAll() );
+  //     while ((!t.atEnd()) && (li < 100000)) {
+  //       li++;
+  //       line = t.readLine();
+  //       line = line.simplified();
+  //       if (!line.isEmpty())
+  //         OutputTextEdit->insertLine(line);
+  //     }
+  //   }
+  //   f.close();
+  //   LatexError();
+  //   logpresent = true;
+  // } else {
+  //   QMessageBox::warning(this, tr("Error"), tr("Log File not found !"));
+  // }
 }
 void Texmaker::ViewLog() {
   LoadLog();
@@ -10412,25 +10258,25 @@ void Texmaker::PreviousError() {
 }
 
 //////////////// HELP /////////////////
-void Texmaker::LatexHelp() {}
+// void Texmaker::LatexHelp() {}
 
-void Texmaker::UserManualHelp() {}
+// void Texmaker::UserManualHelp() {}
 
-void Texmaker::TexDocHelp() {}
+// void Texmaker::TexDocHelp() {}
 
 void Texmaker::HelpAbout() {
   AboutDialog *abDlg = new AboutDialog(this);
   abDlg->exec();
 }
 
-void Texmaker::CheckVersion() {}
+// void Texmaker::CheckVersion() {}
 
 // void Texmaker::Docufrlatex()
 // {
 // QDesktopServices::openUrl(QUrl("http://www.xm1math.net/doculatex/index.html"));
 // }
 
-void Texmaker::Doculatex() {}
+// void Texmaker::Doculatex() {}
 
 ////////////// OPTIONS //////////////////////////////////////
 void Texmaker::GeneralOptions() {
@@ -10752,7 +10598,7 @@ void Texmaker::GeneralOptions() {
 
     //ViewPdfPanelAct->setEnabled(false);
 
-    StackedViewers->hide();
+    //StackedViewers->hide();
 
     singleviewerinstance =
         confDlg->ui.checkBoxSingleInstanceViewer->isChecked();
@@ -11661,9 +11507,8 @@ void Texmaker::ToggleStructurePanel() { ShowStructView(true); }
 
 void Texmaker::ToggleLogPanel() { ShowOutputView(true); }
 
-void Texmaker::TogglePdfPanel() { ShowPdfView(true); }
 
-void Texmaker::ToggleSourcePanel() { ShowSourceView(true); }
+
 
 void Texmaker::ToggleFilesPanel() { ShowFilesView(true); }
 
@@ -11706,9 +11551,9 @@ void Texmaker::ShowOutputView(bool change) {
   ViewLogPanelAct->setChecked(showoutputview);
 }
 
-void Texmaker::ShowPdfView(bool change) {}
 
-void Texmaker::ShowSourceView(bool change) {}
+
+
 
 void Texmaker::ShowFilesView(bool change) {
   if (change)
@@ -12372,50 +12217,38 @@ bool Texmaker::copyFile(QString origin, QString destination) {
 // thedir.rmdir(name);
 // }
 
-void Texmaker::createBuildSubdirectory(QString fn) {
-  if (fn.isEmpty() || fn.startsWith("untitled"))
-    return;
-  QFileInfo fi(fn);
-  if (!fi.exists())
-    return;
-  QDir basedir(fi.absolutePath());
-  QDir outputdir(fi.absolutePath() + "/build");
-  if (outputdir.exists())
-    return;
-  basedir.mkdir("build");
-}
+// void Texmaker::createBuildSubdirectory(QString fn) {
+//   if (fn.isEmpty() || fn.startsWith("untitled"))
+//     return;
+//   QFileInfo fi(fn);
+//   if (!fi.exists())
+//     return;
+//   QDir basedir(fi.absolutePath());
+//   QDir outputdir(fi.absolutePath() + "/build");
+//   if (outputdir.exists())
+//     return;
+//   basedir.mkdir("build");
+// }
 
-QString Texmaker::outputName(QString finame, QString extension) {
-  return outputBaseName(finame) + extension;
-}
+// QString Texmaker::outputName(QString finame, QString extension) {
+//   return outputBaseName(finame) + extension;
+// }
 
-QString Texmaker::outputBaseName(QString finame) {
-  QString name = "";
-  QFileInfo fi(finame);
-  QString path = fi.absolutePath();
-  QString fn = fi.fileName();
-  if (useoutputdir)
-    name = path + "/build/" + fn;
-  else
-    name = fi.absoluteFilePath();
-  QString ext = fi.suffix();
-  QString basename = name.left(name.length() - ext.length() - 1);
-  return basename;
-}
+// QString Texmaker::outputBaseName(QString finame) {
+//   QString name = "";
+//   QFileInfo fi(finame);
+//   QString path = fi.absolutePath();
+//   QString fn = fi.fileName();
+//   if (useoutputdir)
+//     name = path + "/build/" + fn;
+//   else
+//     name = fi.absoluteFilePath();
+//   QString ext = fi.suffix();
+//   QString basename = name.left(name.length() - ext.length() - 1);
+//   return basename;
+// }
 
-bool Texmaker::gtkSession() {
-  bool result = false;
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
-  result = true; // 1 : no kde ; 2: kde ; 3 : kde4 ;
-  QString kdesession = ::getenv("KDE_FULL_SESSION");
-  QString kdeversion = ::getenv("KDE_SESSION_VERSION");
-  if (!kdesession.isEmpty())
-    result = false;
-  if (!kdeversion.isEmpty())
-    result = false;
-#endif
-  return result;
-}
+
 
 void Texmaker::setMasterDocument(const QString &fn) {
   if (singlemode && currentEditorView()) {
@@ -12443,4 +12276,3 @@ void Texmaker::setMasterDocument(const QString &fn) {
   }
 }
 
-void Texmaker::compareDocuments() {}
