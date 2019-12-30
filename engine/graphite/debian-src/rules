@@ -1,0 +1,53 @@
+#!/usr/bin/make -f
+
+export PYBUILD_NAME=graphite2
+
+%:
+	dh $@ --builddirectory=build
+	dh $@ --with python2,python3 --buildsystem=pybuild
+
+override_dh_strip:
+	dh_strip --dbg-package=libgraphite2-3-dbg
+
+override_dh_auto_build:
+	dh_auto_build
+	echo "Building docs"
+	dh_auto_build -- docs
+#	echo "Building perl module"
+#	cd perl && \
+#		perl Build.PL prefix=/usr && \
+#		./Build
+
+override_dh_auto_install:
+	dh_auto_install
+#	rm -rf debian/tmp/usr/bin
+#	cd perl && \
+#		./Build install destdir=$(CURDIR)/debian/libtext-graphite2-perl
+#	# hack
+#	cd $(CURDIR)/debian/libtext-graphite2-perl/usr && \
+#		mkdir share && mv man share
+#	cd $(CURDIR)/debian/libtext-graphite2-perl/usr/lib && \
+#		mv perl perl5 && cd perl5 && mv 5.*/* . && rm -rf 5.*
+#	find debian/libtext-graphite2-perl -type f -name .packlist | xargs rm -f
+
+override_dh_auto_test:
+	dh_auto_test
+#ifneq (nocheck,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
+#	cd perl && \
+#		LD_LIBRARY_PATH=$(CURDIR)/build/src ./Build test
+#endif
+
+override_dh_auto_clean:
+#	if [ -e perl/Build ]; then cd perl && \
+#		./Build clean; fi
+#	rm -rf perl/Build perl/_build
+	-find . -name "CTestCostData.txt" | xargs rm
+	-find . -name "LastTest.log"  | xargs rm
+	dh_auto_clean
+
+override_dh_auto_configure:
+	dh_auto_configure -- -DCMAKE_BUILD_TYPE:STRING=Release -DDISABLE_TRACING:bool=1
+
+override_dh_gencontrol:
+	dh_gencontrol -Nlibtext-graphite2-perl -O--builddirectory=build
+#	dh_gencontrol -plibtext-graphite2-perl -- -v`cat perl/META.yml | grep version: | tail -n 1 | awk '{ print $$2 }'`-`dpkg-parsechangelog  | grep urgency | awk '{ print $$2 }' | sed -e 's/(//' | sed -e 's/)//' | cut -d- -f2`

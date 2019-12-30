@@ -1,0 +1,43 @@
+#!/bin/bash
+HERE=`pwd`
+if [ ! -n "${TARGETS}" ]; then
+    TARGETS="lucid oneiric precise quantal"
+fi
+#PUBLISH='SIL'
+PUBLISH='LINGNET'
+#REVISION=`echo $BUILD_NUMBER | sed -e 's/[:-].*$//'`
+#VARIANT='lingnet'
+PRODUCT='graphite2'
+ZIPTYPE='gz'
+DEST=${HERE}/../output
+BUILDINGDIR=${HERE}/../building
+
+NO_DPUT=1
+
+BASE=$(dpkg-parsechangelog -lchangelog| grep ^Vers | cut -d\  -f2 | cut -d\- -f1 | cut -d\: -f2)
+
+echo "build archs: $BUILD_ARCHS"
+echo "base: $BASE"
+
+if [ "${BUILD_ARCHS:0:6}" = "source" ]; then
+    echo ">> cp tarball to ~/upstream"
+    cp $1/building/${PRODUCT}-${BASE}.tar.gz ~/upstream/${PRODUCT}_${BASE}.orig.tar.gz  || exit $?
+    rm -rf ${DEST}/results
+else
+    echo ">> non-source build"
+    rm ${BUILDINGDIR}/*build*
+    rm ${BUILDINGDIR}/*lucid*
+    rm ${BUILDINGDIR}/*precise*
+fi
+
+source /home/bob/pbuilder/build.common
+
+# create artifacts
+if [ "${BUILD_ARCHS:0:6}" = "source" ]; then
+    echo ">> copying files for artifacts"
+    mkdir ${DEST}/results || exit $?
+    cp /home/bob/pbuilder/results/lucid/${PRODUCT}_${BASE}-* ${DEST}/results || exit $?
+    cp /home/bob/pbuilder/results/lucid/${PRODUCT}_${BASE}.orig.tar.gz ${DEST}/results || exit $?
+    test -e ${DEST}/results/${PRODUCT}_${BASE}.orig.tar.gz || exit $?
+fi
+

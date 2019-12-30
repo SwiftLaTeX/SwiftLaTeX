@@ -1,0 +1,4 @@
+debian/tmp/usr/include
+debian/tmp/usr/lib/lib*.so
+debian/tmp/usr/lib/pkgconfig
+debian/tmp/usr/bin/gr2fonttest

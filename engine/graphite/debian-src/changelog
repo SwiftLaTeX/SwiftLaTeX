@@ -1,0 +1,213 @@
+graphite2 (1.3.13~palaso1ubuntu1) bionic; urgency=medium
+
+  * Minor bug fixes release
+
+ -- Martin Hosken <martin_hosken@sil.org>  Mon, 20 Dec 2018 13:04:23 +0700
+
+graphite2 (1.3.12~palaso1ubuntu1) bionic; urgency=medium
+
+  * Minor bug fixes release
+
+ -- Martin Hosken <martin_hosken@sil.org>  Mon, 14 Aug 2018 14:04:23 +0700
+
+graphite2 (1.3.11~palaso1ubuntu1) xenial; urgency=medium
+
+  * Minor bug fixes release
+
+ -- Martin Hosken <martin_hosken@sil.org>  Mon, 05 Mar 2018 11:04:03 +0700
+
+graphite2 (1.3.10~palaso1) xenial; urgency=medium
+
+  * Minor features and bug fix release
+
+ -- Martin Hosken <martin_hosken@sil.org>  Thu, 07 Jul 2016 09:02:07 +0100
+
+graphite2 (1.3.9~palaso1) xenial; urgency=medium
+
+  * Minor features and bug fix release
+
+ -- Martin Hosken <martin_hosken@sil.org>  Thu, 07 Jul 2016 09:02:07 +0100
+
+graphite2 (1.3.8~palaso1) trusty; urgency=medium
+
+  * New feature bug fix release
+
+ -- Martin Hosken <martin_hosken@sil.org>  Thu, 31 Mar 2016 10:38:39 +0700
+
+graphite2 (1.3.7~palaso1) trusty; urgency=medium
+
+  * New bug fix release
+
+ -- Martin Hosken <martin_hosken@sil.org>  Tue, 15 Mar 2016 13:39:35 +0700
+
+graphite2 (1.3.6-1~palaso1) trusty; urgency=medium
+
+  * New bug fix release
+
+ -- Martin Hosken <martin_hosken@sil.org>  Mon, 29 Feb 2016 11:17:04 +0700
+
+graphite2 (1.3.5-1~palaso1) trusty; urgency=medium
+
+  * New bug fix release
+
+ -- Martin Hosken <martin_hosken@sil.org>  Fri, 15 Jan 2016 10:59:57 +0700
+
+graphite2 (1.3.4-1~palaso1) trusty; urgency=medium
+
+  * New bug fix release
+
+ -- Martin Hosken <martin_hosken@sil.org>  Thu, 22 Oct 2015 14:36:40 +0700
+
+graphite2 (1.3.3-1~palaso1) trusty; urgency=medium
+
+  * New bug fix release
+
+ -- Martin Hosken <martin_hosken@sil.org>  Mon, 21 Sep 2015 11:37:45 +0700
+
+graphite2 (1.3.2-1~palaso1) trusty; urgency=medium
+
+  * New bug fix release
+
+ -- Martin Hosken <martin_hosken@sil.org>  Wed, 09 Sep 2015 14:46:49 +0700
+
+graphite2 (1.3.1-1~palaso1) trusty; urgency=medium
+
+  * New main source release. Mainly bug fixes.
+
+ -- Martin Hosken <martin_hosken@sil.org>  Mon, 31 Aug 2015 10:06:14 +0700
+
+graphite2 (1.3.0-1~palaso1) trusty; urgency=medium
+
+  * New main source release
+
+ -- Martin Hosken <martin_hosken@sil.org>  Thu, 30 Jul 2015 12:53:11 +0700
+
+graphite2 (1.2.3-1~palaso1) precise; urgency=low
+
+  * Bug fixes release
+
+ -- Martin Hosken <martin_hosken@sil.org>  Tue, 11 Jun 2013 12:53:29 +0100
+
+graphite2 (1.2.2-1~palaso1) precise; urgency=low
+
+  * New upstream release with added features and bug fixes
+
+ -- Martin Hosken <martin_hosken@sil.org>  Fri, 10 May 2013 12:01:09 +0100
+
+graphite2 (1.2.1-1~palaso1) precise; urgency=low
+
+  * New upstream release with bug fixes
+
+ -- Martin Hosken <martin_hosken@sil.org>  Tue, 26 Feb 2013 14:21:18 +0100
+
+graphite2 (1.2.0-1~palaso1) precise; urgency=low
+
+  * New upstream release with library API bump from 2.0.0 to 3.0.1 (v3 API with age of 1)
+
+ -- Martin Hosken <martin_hosken@sil.org>  Wed, 22 Aug 2012 13:33:27 +0700
+
+graphite2 (1.1.3-1~palaso1) lucid; urgency=low
+
+  * New upstream release
+
+ -- Daniel Glassey <daniel_glassey@sil.org>  Fri, 30 May 2012 13:03:26 +0700
+
+graphite2 (1.1.2-1~palaso1) lucid; urgency=low
+
+  * New upstream release
+
+ -- Daniel Glassey <daniel_glassey@sil.org>  Fri, 20 Apr 2012 11:02:56 +0700
+
+graphite2 (1.1.0-1) lucid; urgency=low
+
+  * New upstream release
+
+ -- Daniel Glassey <daniel_glassey@sil.org>  Mon, 06 Feb 2012 17:20:29 +0700
+
+graphite2 (1.0.3.real-1) unstable; urgency=low
+
+  * fixup upstream release for 1.0.3
+
+ -- Rene Engelhard <rene@debian.org>  Thu, 22 Sep 2011 20:59:53 +0200
+
+graphite2 (1.0.3-1) unstable; urgency=low
+
+  * New upstream release
+  * add libxml2-utils to B-D-I
+
+ -- Rene Engelhard <rene@debian.org>  Tue, 20 Sep 2011 00:28:27 +0200
+
+graphite2 (1.0.2-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Rene Engelhard <rene@debian.org>  Mon, 15 Aug 2011 13:29:41 +0000
+
+graphite2 (1.0.1-3) unstable; urgency=low
+
+  * debian/patches/fix-typedefs.diff: move ...
+  * debian/patches/words-bigendian-fixes.diff: ... here and add additional
+    upstream fix for setting -DWORDS_BIGENDIAN also for the tests...
+  * clean up Build-Depends:
+    + move asciidoc, dblatex, doxygen, docbook-xsl, latex-xcolor to B-D-I
+    + remove libxml2-utils
+
+ -- Rene Engelhard <rene@debian.org>  Wed, 10 Aug 2011 15:42:59 +0200
+
+graphite2 (1.0.1-2) unstable; urgency=low
+
+  * debian/patches/fix-typedefs.diff: fix Main.h typedefs for
+    WORDS_BIGENDIAN
+
+ -- Rene Engelhard <rene@debian.org>  Tue, 09 Aug 2011 17:47:10 +0000
+
+graphite2 (1.0.1-1) unstable; urgency=low
+
+  * New upstream release
+    - removes -nostdlibs (closes: #634810)
+
+  * build with -DDISABLE_TRACING:bool=1
+  * stop symlinking to Debian's fonts as they are not sufficient for the
+    tests
+  * update debian/copyright; mention ppport.h according to
+    http://pkg-perl.alioth.debian.org/copyright.html#devel__ppport
+  * fix libgraphite2-2.0.0's short description
+
+ -- Rene Engelhard <rene@debian.org>  Thu, 28 Jul 2011 12:54:36 +0000
+
+graphite2 (0.9.4.dfsg-4) unstable; urgency=low
+
+  * grr, remove dpkg-source generated patch which readds ppport.h...
+
+ -- Rene Engelhard <rene@debian.org>  Thu, 14 Jul 2011 14:50:55 +0200
+
+graphite2 (0.9.4.dfsg-3) unstable; urgency=low
+
+  * upload to unstable
+
+ -- Rene Engelhard <rene@debian.org>  Tue, 12 Jul 2011 16:58:19 +0000
+
+graphite2 (0.9.4.dfsg-2) experimental; urgency=low
+
+  * add missing build-dep on latex-xcolor
+
+ -- Rene Engelhard <rene@debian.org>  Sun, 10 Jul 2011 00:05:23 +0200
+
+graphite2 (0.9.4.dfsg-1) experimental; urgency=low
+
+  * remove perl/pport.h and tests/fonts/* from .orig
+
+  * debian/changelog: update
+  * debian/control: build-depend on ttf-sil-padauk, ttf-sil-scheherazade
+  * debian/rules: symlink to Debian's versions pf Padauk and Scheherazade,
+    though....
+  * debian/patches/disable_font_tests.diff: disable them (fail)
+  * debian/rules, debian/control: disable perl build
+
+ -- Rene Engelhard <rene@debian.org>  Sat, 09 Jul 2011 16:50:25 +0000
+
+graphite2 (0.9.4-1) experimental; urgency=low
+
+  * Initial release (closes: #617718)
+
+ -- Rene Engelhard <rene@debian.org>  Fri, 03 Jun 2011 11:08:48 +0000

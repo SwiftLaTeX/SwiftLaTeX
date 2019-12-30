@@ -1,0 +1,1384 @@
+[
+    {
+        "type" : "telemetry",
+        "silf" : 176039,
+        "states" : 41600,
+        "starts" : 62,
+        "transitions" : 117656,
+        "glyphs" : 137400,
+        "code" : 30143,
+        "misc" : 1932,
+        "total" : 504832
+    },
+    {
+        "id" : "013b-00-0830",
+        "passes" : [
+            {
+                "id" : 1,
+                "slotsdir" : "rtl",
+                "passdir" : "rtl",
+                "slots" : [
+                    {
+                        "id" : "013b-01-0a10",
+                        "gid" : 370,
+                        "charinfo" : { "original" : 0, "before" : 0, "after" : 0 },
+                        "origin" : [ 2534, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 1352, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0a90",
+                        "gid" : 370,
+                        "charinfo" : { "original" : 1, "before" : 1, "after" : 1 },
+                        "origin" : [ 1182, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 1352, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0b10",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 2, "before" : 2, "after" : 2 },
+                        "origin" : [ 1182, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0b90",
+                        "gid" : 472,
+                        "charinfo" : { "original" : 3, "before" : 3, "after" : 3 },
+                        "origin" : [ 297, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 885, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0c10",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 4, "before" : 4, "after" : 4 },
+                        "origin" : [ 297, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0c90",
+                        "gid" : 1052,
+                        "charinfo" : { "original" : 5, "before" : 5, "after" : 5 },
+                        "origin" : [ 297, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0d10",
+                        "gid" : 272,
+                        "charinfo" : { "original" : 6, "before" : 6, "after" : 6 },
+                        "origin" : [ 0, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 297, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0d90",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 7, "before" : 7, "after" : 7 },
+                        "origin" : [ 0, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    }
+                ]
+            },
+            {
+                "id" : 2,
+                "slotsdir" : "rtl",
+                "passdir" : "rtl",
+                "slots" : [
+                    {
+                        "id" : "013b-01-0a10",
+                        "gid" : 370,
+                        "charinfo" : { "original" : 0, "before" : 0, "after" : 0 },
+                        "origin" : [ 2534, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 1352, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0a90",
+                        "gid" : 370,
+                        "charinfo" : { "original" : 1, "before" : 1, "after" : 1 },
+                        "origin" : [ 1182, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 1352, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0b10",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 2, "before" : 2, "after" : 2 },
+                        "origin" : [ 1182, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0b90",
+                        "gid" : 472,
+                        "charinfo" : { "original" : 3, "before" : 3, "after" : 3 },
+                        "origin" : [ 297, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 885, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0c10",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 4, "before" : 4, "after" : 4 },
+                        "origin" : [ 297, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0c90",
+                        "gid" : 1052,
+                        "charinfo" : { "original" : 5, "before" : 5, "after" : 5 },
+                        "origin" : [ 297, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0d10",
+                        "gid" : 272,
+                        "charinfo" : { "original" : 6, "before" : 6, "after" : 6 },
+                        "origin" : [ 0, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 297, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0d90",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 7, "before" : 7, "after" : 7 },
+                        "origin" : [ 0, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    }
+                ],
+                "rules" : [
+                    {
+                        "considered" : [
+                            { "id" : 2, "failed" : false, "input" : { "start" : "013b-00-0c10", "length" : 2 } }
+                        ],
+                        "output" : {
+                            "range" : { "start" : "013b-00-0c10", "end" : "013b-00-0d10" },
+                            "slots" : [
+                                {
+                                    "id" : "013b-00-0e10",
+                                    "gid" : 1052,
+                                    "charinfo" : { "original" : 5, "before" : 5, "after" : 5 },
+                                    "origin" : [ 297, 0 ],
+                                    "shift" : [ 0, 0 ],
+                                    "advance" : [ 0, 0 ],
+                                    "insert" : true,
+                                    "break" : 30,
+                                    "user" : [ 0 ]
+                                },
+                                {
+                                    "id" : "013b-00-0c10",
+                                    "gid" : 1041,
+                                    "charinfo" : { "original" : 4, "before" : 4, "after" : 4 },
+                                    "origin" : [ 297, 0 ],
+                                    "shift" : [ 0, 0 ],
+                                    "advance" : [ 0, 0 ],
+                                    "insert" : true,
+                                    "break" : 30,
+                                    "user" : [ 0 ]
+                                }
+                            ],
+                            "postshift" : [ 0, 0 ]
+                        },
+                        "cursor" : "013b-00-0c10"
+                    }
+                ]
+            },
+            {
+                "id" : 3,
+                "slotsdir" : "rtl",
+                "passdir" : "rtl",
+                "slots" : [
+                    {
+                        "id" : "013b-01-0a10",
+                        "gid" : 370,
+                        "charinfo" : { "original" : 0, "before" : 0, "after" : 0 },
+                        "origin" : [ 2534, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 1352, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0a90",
+                        "gid" : 370,
+                        "charinfo" : { "original" : 1, "before" : 1, "after" : 1 },
+                        "origin" : [ 1182, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 1352, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0b10",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 2, "before" : 2, "after" : 2 },
+                        "origin" : [ 1182, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0b90",
+                        "gid" : 472,
+                        "charinfo" : { "original" : 3, "before" : 3, "after" : 3 },
+                        "origin" : [ 297, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 885, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0e10",
+                        "gid" : 1052,
+                        "charinfo" : { "original" : 5, "before" : 5, "after" : 5 },
+                        "origin" : [ 297, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0c10",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 4, "before" : 4, "after" : 4 },
+                        "origin" : [ 297, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0d10",
+                        "gid" : 272,
+                        "charinfo" : { "original" : 6, "before" : 6, "after" : 6 },
+                        "origin" : [ 0, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 297, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0d90",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 7, "before" : 7, "after" : 7 },
+                        "origin" : [ 0, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    }
+                ]
+            },
+            {
+                "id" : 4,
+                "slotsdir" : "rtl",
+                "passdir" : "rtl",
+                "slots" : [
+                    {
+                        "id" : "013b-01-0a10",
+                        "gid" : 370,
+                        "charinfo" : { "original" : 0, "before" : 0, "after" : 0 },
+                        "origin" : [ 2534, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 1352, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0a90",
+                        "gid" : 370,
+                        "charinfo" : { "original" : 1, "before" : 1, "after" : 1 },
+                        "origin" : [ 1182, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 1352, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0b10",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 2, "before" : 2, "after" : 2 },
+                        "origin" : [ 1182, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0b90",
+                        "gid" : 472,
+                        "charinfo" : { "original" : 3, "before" : 3, "after" : 3 },
+                        "origin" : [ 297, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 885, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0e10",
+                        "gid" : 1052,
+                        "charinfo" : { "original" : 5, "before" : 5, "after" : 5 },
+                        "origin" : [ 297, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0c10",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 4, "before" : 4, "after" : 4 },
+                        "origin" : [ 297, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0d10",
+                        "gid" : 272,
+                        "charinfo" : { "original" : 6, "before" : 6, "after" : 6 },
+                        "origin" : [ 0, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 297, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0d90",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 7, "before" : 7, "after" : 7 },
+                        "origin" : [ 0, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    }
+                ],
+                "rules" : [
+                    {
+                        "considered" : [
+                            { "id" : 14, "failed" : false, "input" : { "start" : "013b-01-0a10", "length" : 2 } }
+                        ],
+                        "output" : {
+                            "range" : { "start" : "013b-01-0a10", "end" : "013b-00-0b10" },
+                            "slots" : [
+                                {
+                                    "id" : "013b-01-0a10",
+                                    "gid" : 905,
+                                    "charinfo" : { "original" : 0, "before" : 0, "after" : 0 },
+                                    "origin" : [ 2560, 0 ],
+                                    "shift" : [ 0, 0 ],
+                                    "advance" : [ 360, 0 ],
+                                    "insert" : true,
+                                    "break" : 30,
+                                    "user" : [ 0 ]
+                                },
+                                {
+                                    "id" : "013b-00-0a90",
+                                    "gid" : 597,
+                                    "charinfo" : { "original" : 1, "before" : 1, "after" : 1 },
+                                    "origin" : [ 1182, 0 ],
+                                    "shift" : [ 0, 0 ],
+                                    "advance" : [ 1378, 0 ],
+                                    "insert" : true,
+                                    "break" : 30,
+                                    "user" : [ 0 ]
+                                }
+                            ],
+                            "postshift" : [ 0, 0 ]
+                        },
+                        "cursor" : "013b-00-0a90"
+                    },
+                    {
+                        "considered" : [
+                            { "id" : 13, "failed" : false, "input" : { "start" : "013b-00-0a90", "length" : 3 } }
+                        ],
+                        "output" : {
+                            "range" : { "start" : "013b-00-0a90", "end" : "013b-00-0e10" },
+                            "slots" : [
+                                {
+                                    "id" : "013b-00-0a90",
+                                    "gid" : 756,
+                                    "charinfo" : { "original" : 1, "before" : 1, "after" : 1 },
+                                    "origin" : [ 1147, 0 ],
+                                    "shift" : [ 0, 0 ],
+                                    "advance" : [ 367, 0 ],
+                                    "insert" : true,
+                                    "break" : 30,
+                                    "user" : [ 0 ]
+                                },
+                                {
+                                    "id" : "013b-00-0b10",
+                                    "gid" : 1041,
+                                    "charinfo" : { "original" : 2, "before" : 2, "after" : 2 },
+                                    "origin" : [ 1147, 0 ],
+                                    "shift" : [ 0, 0 ],
+                                    "advance" : [ 0, 0 ],
+                                    "insert" : true,
+                                    "break" : 30,
+                                    "user" : [ 0 ]
+                                },
+                                {
+                                    "id" : "013b-00-0b90",
+                                    "gid" : 699,
+                                    "charinfo" : { "original" : 3, "before" : 3, "after" : 3 },
+                                    "origin" : [ 297, 0 ],
+                                    "shift" : [ 0, 0 ],
+                                    "advance" : [ 850, 0 ],
+                                    "insert" : true,
+                                    "break" : 30,
+                                    "user" : [ 0 ]
+                                }
+                            ],
+                            "postshift" : [ 0, 0 ]
+                        },
+                        "cursor" : "013b-00-0b90"
+                    },
+                    {
+                        "considered" : [
+                            { "id" : 7, "failed" : false, "input" : { "start" : "013b-00-0b90", "length" : 4 } }
+                        ],
+                        "output" : {
+                            "range" : { "start" : "013b-00-0b90", "end" : "013b-00-0d90" },
+                            "slots" : [
+                                {
+                                    "id" : "013b-00-0b90",
+                                    "gid" : 1313,
+                                    "charinfo" : { "original" : 3, "before" : 3, "after" : 3 },
+                                    "origin" : [ 500, 0 ],
+                                    "shift" : [ 0, 0 ],
+                                    "advance" : [ 522, 0 ],
+                                    "insert" : true,
+                                    "break" : 30,
+                                    "user" : [ 0 ]
+                                },
+                                {
+                                    "id" : "013b-00-0e10",
+                                    "gid" : 1052,
+                                    "charinfo" : { "original" : 5, "before" : 5, "after" : 5 },
+                                    "origin" : [ 500, 0 ],
+                                    "shift" : [ 0, 0 ],
+                                    "advance" : [ 0, 0 ],
+                                    "insert" : true,
+                                    "break" : 30,
+                                    "user" : [ 0 ]
+                                },
+                                {
+                                    "id" : "013b-00-0c10",
+                                    "gid" : 1041,
+                                    "charinfo" : { "original" : 4, "before" : 4, "after" : 4 },
+                                    "origin" : [ 500, 0 ],
+                                    "shift" : [ 0, 0 ],
+                                    "advance" : [ 0, 0 ],
+                                    "insert" : true,
+                                    "break" : 30,
+                                    "user" : [ 0 ]
+                                },
+                                {
+                                    "id" : "013b-00-0d10",
+                                    "gid" : 1324,
+                                    "charinfo" : { "original" : 6, "before" : 6, "after" : 6 },
+                                    "origin" : [ 0, 0 ],
+                                    "shift" : [ 0, 0 ],
+                                    "advance" : [ 500, 0 ],
+                                    "insert" : true,
+                                    "break" : 30,
+                                    "user" : [ 0 ]
+                                }
+                            ],
+                            "postshift" : [ 0, 0 ]
+                        },
+                        "cursor" : "013b-00-0d10"
+                    }
+                ]
+            },
+            {
+                "id" : 5,
+                "slotsdir" : "rtl",
+                "passdir" : "rtl",
+                "slots" : [
+                    {
+                        "id" : "013b-01-0a10",
+                        "gid" : 905,
+                        "charinfo" : { "original" : 0, "before" : 0, "after" : 0 },
+                        "origin" : [ 1389, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 360, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0a90",
+                        "gid" : 756,
+                        "charinfo" : { "original" : 1, "before" : 1, "after" : 1 },
+                        "origin" : [ 1022, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 367, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0b10",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 2, "before" : 2, "after" : 2 },
+                        "origin" : [ 1022, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0b90",
+                        "gid" : 1313,
+                        "charinfo" : { "original" : 3, "before" : 3, "after" : 3 },
+                        "origin" : [ 500, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 522, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0e10",
+                        "gid" : 1052,
+                        "charinfo" : { "original" : 5, "before" : 5, "after" : 5 },
+                        "origin" : [ 500, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0c10",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 4, "before" : 4, "after" : 4 },
+                        "origin" : [ 500, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0d10",
+                        "gid" : 1324,
+                        "charinfo" : { "original" : 6, "before" : 6, "after" : 6 },
+                        "origin" : [ 0, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 500, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0d90",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 7, "before" : 7, "after" : 7 },
+                        "origin" : [ 0, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    }
+                ]
+            },
+            {
+                "id" : -1,
+                "slotsdir" : "rtl",
+                "passdir" : "rtl",
+                "slots" : [
+                    {
+                        "id" : "013b-01-0a10",
+                        "gid" : 905,
+                        "charinfo" : { "original" : 0, "before" : 0, "after" : 0 },
+                        "origin" : [ 1389, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 360, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0a90",
+                        "gid" : 756,
+                        "charinfo" : { "original" : 1, "before" : 1, "after" : 1 },
+                        "origin" : [ 1022, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 367, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0b10",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 2, "before" : 2, "after" : 2 },
+                        "origin" : [ 1022, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0b90",
+                        "gid" : 1313,
+                        "charinfo" : { "original" : 3, "before" : 3, "after" : 3 },
+                        "origin" : [ 500, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 522, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0e10",
+                        "gid" : 1052,
+                        "charinfo" : { "original" : 5, "before" : 5, "after" : 5 },
+                        "origin" : [ 500, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0c10",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 4, "before" : 4, "after" : 4 },
+                        "origin" : [ 500, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0d10",
+                        "gid" : 1324,
+                        "charinfo" : { "original" : 6, "before" : 6, "after" : 6 },
+                        "origin" : [ 0, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 500, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0d90",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 7, "before" : 7, "after" : 7 },
+                        "origin" : [ 0, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    }
+                ],
+                "rules" : []
+            },
+            {
+                "id" : 6,
+                "slotsdir" : "rtl",
+                "passdir" : "rtl",
+                "slots" : [
+                    {
+                        "id" : "013b-01-0a10",
+                        "gid" : 905,
+                        "charinfo" : { "original" : 0, "before" : 0, "after" : 0 },
+                        "origin" : [ 1389, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 360, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0a90",
+                        "gid" : 756,
+                        "charinfo" : { "original" : 1, "before" : 1, "after" : 1 },
+                        "origin" : [ 1022, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 367, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0b10",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 2, "before" : 2, "after" : 2 },
+                        "origin" : [ 1022, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0b90",
+                        "gid" : 1313,
+                        "charinfo" : { "original" : 3, "before" : 3, "after" : 3 },
+                        "origin" : [ 500, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 522, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0e10",
+                        "gid" : 1052,
+                        "charinfo" : { "original" : 5, "before" : 5, "after" : 5 },
+                        "origin" : [ 500, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0c10",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 4, "before" : 4, "after" : 4 },
+                        "origin" : [ 500, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0d10",
+                        "gid" : 1324,
+                        "charinfo" : { "original" : 6, "before" : 6, "after" : 6 },
+                        "origin" : [ 0, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 500, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0d90",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 7, "before" : 7, "after" : 7 },
+                        "origin" : [ 0, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    }
+                ],
+                "rules" : [
+                    {
+                        "considered" : [
+                            { "id" : 20, "failed" : false, "input" : { "start" : "013b-00-0a90", "length" : 2 } }
+                        ],
+                        "output" : {
+                            "range" : { "start" : "013b-00-0a90", "end" : "013b-00-0b90" },
+                            "slots" : [
+                                {
+                                    "id" : "013b-00-0a90",
+                                    "gid" : 756,
+                                    "charinfo" : { "original" : 1, "before" : 1, "after" : 1 },
+                                    "origin" : [ 1022, 0 ],
+                                    "shift" : [ 0, 0 ],
+                                    "advance" : [ 367, 0 ],
+                                    "insert" : true,
+                                    "break" : 30,
+                                    "user" : [ 0 ],
+                                    "children" : [ "013b-00-0b10" ]
+                                },
+                                {
+                                    "id" : "013b-00-0b10",
+                                    "gid" : 1041,
+                                    "charinfo" : { "original" : 2, "before" : 2, "after" : 2 },
+                                    "origin" : [ 1084, -392 ],
+                                    "shift" : [ 0, 0 ],
+                                    "advance" : [ 0, 0 ],
+                                    "insert" : true,
+                                    "break" : 30,
+                                    "parent" : { "id" : "013b-00-0a90", "level" : 0, "offset" : [ 62, -392 ] },
+                                    "user" : [ 0 ]
+                                }
+                            ],
+                            "postshift" : [ 0, 0 ]
+                        },
+                        "cursor" : "013b-00-0b10"
+                    },
+                    {
+                        "considered" : [
+                            { "id" : 2, "failed" : false, "input" : { "start" : "013b-00-0b90", "length" : 4 } }
+                        ],
+                        "output" : {
+                            "range" : { "start" : "013b-00-0b90", "end" : "013b-00-0d90" },
+                            "slots" : [
+                                {
+                                    "id" : "013b-00-0b90",
+                                    "gid" : 1313,
+                                    "charinfo" : { "original" : 3, "before" : 3, "after" : 3 },
+                                    "origin" : [ 500, 0 ],
+                                    "shift" : [ 0, 0 ],
+                                    "advance" : [ 522, 0 ],
+                                    "insert" : true,
+                                    "break" : 30,
+                                    "user" : [ 1 ],
+                                    "children" : [ "013b-00-0d10" ]
+                                },
+                                {
+                                    "id" : "013b-00-0e10",
+                                    "gid" : 1052,
+                                    "charinfo" : { "original" : 5, "before" : 5, "after" : 5 },
+                                    "origin" : [ 0, 0 ],
+                                    "shift" : [ 0, 0 ],
+                                    "advance" : [ 0, 0 ],
+                                    "insert" : true,
+                                    "break" : 30,
+                                    "user" : [ 0 ]
+                                },
+                                {
+                                    "id" : "013b-00-0c10",
+                                    "gid" : 1041,
+                                    "charinfo" : { "original" : 4, "before" : 4, "after" : 4 },
+                                    "origin" : [ 0, 0 ],
+                                    "shift" : [ 0, 0 ],
+                                    "advance" : [ 0, 0 ],
+                                    "insert" : true,
+                                    "break" : 30,
+                                    "user" : [ 0 ]
+                                },
+                                {
+                                    "id" : "013b-00-0d10",
+                                    "gid" : 1324,
+                                    "charinfo" : { "original" : 6, "before" : 6, "after" : 6 },
+                                    "origin" : [ 0, 0 ],
+                                    "shift" : [ 0, 0 ],
+                                    "advance" : [ 500, 0 ],
+                                    "insert" : true,
+                                    "break" : 30,
+                                    "parent" : { "id" : "013b-00-0b90", "level" : 0, "offset" : [ -500, 0 ] },
+                                    "user" : [ 0 ]
+                                }
+                            ],
+                            "postshift" : [ 0, 0 ]
+                        },
+                        "cursor" : "013b-00-0b90"
+                    },
+                    {
+                        "considered" : [
+                            { "id" : 2, "failed" : true, "input" : { "start" : "013b-00-0b90", "length" : 4 } },
+                            { "id" : 20, "failed" : false, "input" : { "start" : "013b-00-0b90", "length" : 2 } }
+                        ],
+                        "output" : {
+                            "range" : { "start" : "013b-00-0b90", "end" : "013b-00-0c10" },
+                            "slots" : [
+                                {
+                                    "id" : "013b-00-0b90",
+                                    "gid" : 1313,
+                                    "charinfo" : { "original" : 3, "before" : 3, "after" : 3 },
+                                    "origin" : [ 500, 0 ],
+                                    "shift" : [ 0, 0 ],
+                                    "advance" : [ 522, 0 ],
+                                    "insert" : true,
+                                    "break" : 30,
+                                    "user" : [ 1 ],
+                                    "children" : [ "013b-00-0d10", "013b-00-0e10" ]
+                                },
+                                {
+                                    "id" : "013b-00-0e10",
+                                    "gid" : 1052,
+                                    "charinfo" : { "original" : 5, "before" : 5, "after" : 5 },
+                                    "origin" : [ 604, 91 ],
+                                    "shift" : [ 0, 0 ],
+                                    "advance" : [ 0, 0 ],
+                                    "insert" : true,
+                                    "break" : 30,
+                                    "parent" : { "id" : "013b-00-0b90", "level" : 0, "offset" : [ 104, 91 ] },
+                                    "user" : [ 0 ]
+                                }
+                            ],
+                            "postshift" : [ 0, 0 ]
+                        },
+                        "cursor" : "013b-00-0e10"
+                    },
+                    {
+                        "considered" : [
+                            { "id" : 16, "failed" : false, "input" : { "start" : "013b-00-0e10", "length" : 2 } }
+                        ],
+                        "output" : {
+                            "range" : { "start" : "013b-00-0e10", "end" : "013b-00-0d10" },
+                            "slots" : [
+                                {
+                                    "id" : "013b-00-0e10",
+                                    "gid" : 1052,
+                                    "charinfo" : { "original" : 5, "before" : 5, "after" : 5 },
+                                    "origin" : [ 604, 91 ],
+                                    "shift" : [ 0, 0 ],
+                                    "advance" : [ 0, 0 ],
+                                    "insert" : true,
+                                    "break" : 30,
+                                    "parent" : { "id" : "013b-00-0b90", "level" : 0, "offset" : [ 104, 91 ] },
+                                    "user" : [ 0 ],
+                                    "children" : [ "013b-00-0c10" ]
+                                },
+                                {
+                                    "id" : "013b-00-0c10",
+                                    "gid" : 1041,
+                                    "charinfo" : { "original" : 4, "before" : 4, "after" : 4 },
+                                    "origin" : [ 602, 423 ],
+                                    "shift" : [ 0, 0 ],
+                                    "advance" : [ 0, 0 ],
+                                    "insert" : true,
+                                    "break" : 30,
+                                    "parent" : { "id" : "013b-00-0e10", "level" : 0, "offset" : [ -2, 332 ] },
+                                    "user" : [ 0 ]
+                                }
+                            ],
+                            "postshift" : [ 0, 0 ]
+                        },
+                        "cursor" : "013b-00-0c10"
+                    },
+                    {
+                        "considered" : [
+                            { "id" : 20, "failed" : false, "input" : { "start" : "013b-00-0d10", "length" : 2 } }
+                        ],
+                        "output" : {
+                            "range" : { "start" : "013b-00-0d10", "end" : "0000-00-0000" },
+                            "slots" : [
+                                {
+                                    "id" : "013b-00-0d10",
+                                    "gid" : 1324,
+                                    "charinfo" : { "original" : 6, "before" : 6, "after" : 6 },
+                                    "origin" : [ 36, 0 ],
+                                    "shift" : [ 0, 0 ],
+                                    "advance" : [ 500, 0 ],
+                                    "insert" : true,
+                                    "break" : 30,
+                                    "parent" : { "id" : "013b-00-0b90", "level" : 0, "offset" : [ -500, 0 ] },
+                                    "user" : [ 0 ],
+                                    "children" : [ "013b-00-0d90" ]
+                                },
+                                {
+                                    "id" : "013b-00-0d90",
+                                    "gid" : 1041,
+                                    "charinfo" : { "original" : 7, "before" : 7, "after" : 7 },
+                                    "origin" : [ 0, -24 ],
+                                    "shift" : [ 0, 0 ],
+                                    "advance" : [ 0, 0 ],
+                                    "insert" : true,
+                                    "break" : 30,
+                                    "parent" : { "id" : "013b-00-0d10", "level" : 0, "offset" : [ -36, -24 ] },
+                                    "user" : [ 0 ]
+                                }
+                            ],
+                            "postshift" : [ 0, 0 ]
+                        },
+                        "cursor" : "013b-00-0d90"
+                    }
+                ]
+            },
+            {
+                "id" : 7,
+                "slotsdir" : "rtl",
+                "passdir" : "rtl",
+                "slots" : [
+                    {
+                        "id" : "013b-01-0a10",
+                        "gid" : 905,
+                        "charinfo" : { "original" : 0, "before" : 0, "after" : 0 },
+                        "origin" : [ 1425, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 360, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0a90",
+                        "gid" : 756,
+                        "charinfo" : { "original" : 1, "before" : 1, "after" : 1 },
+                        "origin" : [ 1058, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 367, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ],
+                        "children" : [ "013b-00-0b10" ]
+                    },
+                    {
+                        "id" : "013b-00-0b10",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 2, "before" : 2, "after" : 2 },
+                        "origin" : [ 1120, -392 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "parent" : { "id" : "013b-00-0a90", "level" : 0, "offset" : [ 62, -392 ] },
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0b90",
+                        "gid" : 1313,
+                        "charinfo" : { "original" : 3, "before" : 3, "after" : 3 },
+                        "origin" : [ 536, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 522, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 1 ],
+                        "children" : [ "013b-00-0d10", "013b-00-0e10" ]
+                    },
+                    {
+                        "id" : "013b-00-0e10",
+                        "gid" : 1052,
+                        "charinfo" : { "original" : 5, "before" : 5, "after" : 5 },
+                        "origin" : [ 640, 91 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "parent" : { "id" : "013b-00-0b90", "level" : 0, "offset" : [ 104, 91 ] },
+                        "user" : [ 0 ],
+                        "children" : [ "013b-00-0c10" ]
+                    },
+                    {
+                        "id" : "013b-00-0c10",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 4, "before" : 4, "after" : 4 },
+                        "origin" : [ 638, 423 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "parent" : { "id" : "013b-00-0e10", "level" : 0, "offset" : [ -2, 332 ] },
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0d10",
+                        "gid" : 1324,
+                        "charinfo" : { "original" : 6, "before" : 6, "after" : 6 },
+                        "origin" : [ 36, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 500, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "parent" : { "id" : "013b-00-0b90", "level" : 0, "offset" : [ -500, 0 ] },
+                        "user" : [ 0 ],
+                        "children" : [ "013b-00-0d90" ]
+                    },
+                    {
+                        "id" : "013b-00-0d90",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 7, "before" : 7, "after" : 7 },
+                        "origin" : [ 0, -24 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "parent" : { "id" : "013b-00-0d10", "level" : 0, "offset" : [ -36, -24 ] },
+                        "user" : [ 0 ]
+                    }
+                ]
+            },
+            {
+                "id" : 8,
+                "slotsdir" : "rtl",
+                "passdir" : "rtl",
+                "slots" : [
+                    {
+                        "id" : "013b-01-0a10",
+                        "gid" : 905,
+                        "charinfo" : { "original" : 0, "before" : 0, "after" : 0 },
+                        "origin" : [ 1425, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 360, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0a90",
+                        "gid" : 756,
+                        "charinfo" : { "original" : 1, "before" : 1, "after" : 1 },
+                        "origin" : [ 1058, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 367, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 0 ],
+                        "children" : [ "013b-00-0b10" ]
+                    },
+                    {
+                        "id" : "013b-00-0b10",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 2, "before" : 2, "after" : 2 },
+                        "origin" : [ 1120, -392 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "parent" : { "id" : "013b-00-0a90", "level" : 0, "offset" : [ 62, -392 ] },
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0b90",
+                        "gid" : 1313,
+                        "charinfo" : { "original" : 3, "before" : 3, "after" : 3 },
+                        "origin" : [ 536, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 522, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "user" : [ 1 ],
+                        "children" : [ "013b-00-0d10", "013b-00-0e10" ]
+                    },
+                    {
+                        "id" : "013b-00-0e10",
+                        "gid" : 1052,
+                        "charinfo" : { "original" : 5, "before" : 5, "after" : 5 },
+                        "origin" : [ 640, 91 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "parent" : { "id" : "013b-00-0b90", "level" : 0, "offset" : [ 104, 91 ] },
+                        "user" : [ 0 ],
+                        "children" : [ "013b-00-0c10" ]
+                    },
+                    {
+                        "id" : "013b-00-0c10",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 4, "before" : 4, "after" : 4 },
+                        "origin" : [ 638, 423 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "parent" : { "id" : "013b-00-0e10", "level" : 0, "offset" : [ -2, 332 ] },
+                        "user" : [ 0 ]
+                    },
+                    {
+                        "id" : "013b-00-0d10",
+                        "gid" : 1324,
+                        "charinfo" : { "original" : 6, "before" : 6, "after" : 6 },
+                        "origin" : [ 36, 0 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 500, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "parent" : { "id" : "013b-00-0b90", "level" : 0, "offset" : [ -500, 0 ] },
+                        "user" : [ 0 ],
+                        "children" : [ "013b-00-0d90" ]
+                    },
+                    {
+                        "id" : "013b-00-0d90",
+                        "gid" : 1041,
+                        "charinfo" : { "original" : 7, "before" : 7, "after" : 7 },
+                        "origin" : [ 0, -24 ],
+                        "shift" : [ 0, 0 ],
+                        "advance" : [ 0, 0 ],
+                        "insert" : true,
+                        "break" : 30,
+                        "parent" : { "id" : "013b-00-0d10", "level" : 0, "offset" : [ -36, -24 ] },
+                        "user" : [ 0 ]
+                    }
+                ],
+                "rules" : []
+            }
+        ],
+        "outputdir" : "rtl",
+        "output" : [
+            {
+                "id" : "013b-01-0a10",
+                "gid" : 905,
+                "charinfo" : { "original" : 0, "before" : 0, "after" : 0 },
+                "origin" : [ 1425, 0 ],
+                "shift" : [ 0, 0 ],
+                "advance" : [ 360, 0 ],
+                "insert" : true,
+                "break" : 30,
+                "user" : [ 0 ]
+            },
+            {
+                "id" : "013b-00-0a90",
+                "gid" : 756,
+                "charinfo" : { "original" : 1, "before" : 1, "after" : 1 },
+                "origin" : [ 1058, 0 ],
+                "shift" : [ 0, 0 ],
+                "advance" : [ 367, 0 ],
+                "insert" : true,
+                "break" : 30,
+                "user" : [ 0 ],
+                "children" : [ "013b-00-0b10" ]
+            },
+            {
+                "id" : "013b-00-0b10",
+                "gid" : 1041,
+                "charinfo" : { "original" : 2, "before" : 2, "after" : 2 },
+                "origin" : [ 1120, -392 ],
+                "shift" : [ 0, 0 ],
+                "advance" : [ 0, 0 ],
+                "insert" : true,
+                "break" : 30,
+                "parent" : { "id" : "013b-00-0a90", "level" : 0, "offset" : [ 62, -392 ] },
+                "user" : [ 0 ]
+            },
+            {
+                "id" : "013b-00-0b90",
+                "gid" : 1313,
+                "charinfo" : { "original" : 3, "before" : 3, "after" : 3 },
+                "origin" : [ 536, 0 ],
+                "shift" : [ 0, 0 ],
+                "advance" : [ 522, 0 ],
+                "insert" : true,
+                "break" : 30,
+                "user" : [ 1 ],
+                "children" : [ "013b-00-0d10", "013b-00-0e10" ]
+            },
+            {
+                "id" : "013b-00-0e10",
+                "gid" : 1052,
+                "charinfo" : { "original" : 5, "before" : 5, "after" : 5 },
+                "origin" : [ 640, 91 ],
+                "shift" : [ 0, 0 ],
+                "advance" : [ 0, 0 ],
+                "insert" : true,
+                "break" : 30,
+                "parent" : { "id" : "013b-00-0b90", "level" : 0, "offset" : [ 104, 91 ] },
+                "user" : [ 0 ],
+                "children" : [ "013b-00-0c10" ]
+            },
+            {
+                "id" : "013b-00-0c10",
+                "gid" : 1041,
+                "charinfo" : { "original" : 4, "before" : 4, "after" : 4 },
+                "origin" : [ 638, 423 ],
+                "shift" : [ 0, 0 ],
+                "advance" : [ 0, 0 ],
+                "insert" : true,
+                "break" : 30,
+                "parent" : { "id" : "013b-00-0e10", "level" : 0, "offset" : [ -2, 332 ] },
+                "user" : [ 0 ]
+            },
+            {
+                "id" : "013b-00-0d10",
+                "gid" : 1324,
+                "charinfo" : { "original" : 6, "before" : 6, "after" : 6 },
+                "origin" : [ 36, 0 ],
+                "shift" : [ 0, 0 ],
+                "advance" : [ 500, 0 ],
+                "insert" : true,
+                "break" : 30,
+                "parent" : { "id" : "013b-00-0b90", "level" : 0, "offset" : [ -500, 0 ] },
+                "user" : [ 0 ],
+                "children" : [ "013b-00-0d90" ]
+            },
+            {
+                "id" : "013b-00-0d90",
+                "gid" : 1041,
+                "charinfo" : { "original" : 7, "before" : 7, "after" : 7 },
+                "origin" : [ 0, -24 ],
+                "shift" : [ 0, 0 ],
+                "advance" : [ 0, 0 ],
+                "insert" : true,
+                "break" : 30,
+                "parent" : { "id" : "013b-00-0d10", "level" : 0, "offset" : [ -36, -24 ] },
+                "user" : [ 0 ]
+            }
+        ],
+        "advance" : [ 0, 0 ],
+        "chars" : [
+            { "offset" : 0, "unicode" : 1576, "break" : 30, "flags" : 0, "slot" : { "before" : 0, "after" : 0 } },
+            { "offset" : 1, "unicode" : 1576, "break" : 30, "flags" : 0, "slot" : { "before" : 1, "after" : 1 } },
+            { "offset" : 2, "unicode" : 1614, "break" : 30, "flags" : 0, "slot" : { "before" : 2, "after" : 2 } },
+            { "offset" : 3, "unicode" : 1604, "break" : 30, "flags" : 0, "slot" : { "before" : 3, "after" : 3 } },
+            { "offset" : 4, "unicode" : 1614, "break" : 30, "flags" : 0, "slot" : { "before" : 5, "after" : 5 } },
+            { "offset" : 5, "unicode" : 1620, "break" : 30, "flags" : 0, "slot" : { "before" : 4, "after" : 4 } },
+            { "offset" : 6, "unicode" : 1575, "break" : 30, "flags" : 0, "slot" : { "before" : 6, "after" : 6 } },
+            { "offset" : 7, "unicode" : 1614, "break" : 30, "flags" : 0, "slot" : { "before" : 7, "after" : 7 } }
+        ]
+    }
+]

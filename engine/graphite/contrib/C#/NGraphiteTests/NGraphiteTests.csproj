@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E69A847E-B1FB-4F7F-9A5A-E4D08CA774C4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>NGraphiteTests</RootNamespace>
+    <AssemblyName>NGraphiteTests</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="nunit.core">
+      <Package>mono-nunit</Package>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <Package>mono-nunit</Package>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Graphite2ApiTests.cs" />
+    <Compile Include="FaceTests.cs" />
+    <Compile Include="TestConstants.cs" />
+    <Compile Include="FeatureRefTests.cs" />
+    <Compile Include="FeaturevalTests.cs" />
+    <Compile Include="FontTests.cs" />
+    <Compile Include="SegmentTests.cs" />
+    <Compile Include="CharInfoTests.cs" />
+    <Compile Include="SlotTests.cs" />
+    <Compile Include="GeneralTests.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\NGraphite\NGraphite.csproj">
+      <Project>{1283CDFA-D36D-44B4-9FDF-CE3EFD68A1A0}</Project>
+      <Name>NGraphite</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

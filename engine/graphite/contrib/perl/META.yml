@@ -1,0 +1,29 @@
+---
+abstract: "Interface to SIL's Graphite2 rendering engine"
+author:
+  - 'Simon Cozens <simon@cpan.org>'
+build_requires:
+  ExtUtils::CBuilder: 0
+configure_requires:
+  Module::Build: 0.36
+generated_by: 'Module::Build version 0.3623'
+license: Perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Text-Graphite2
+provides:
+  Text::Graphite2:
+    file: lib/Text/Gr2.pm
+    version: 0.01
+  Text::Gr2::Face:
+    file: lib/Text/Gr2/Face.pm
+  Text::Gr2::FeatureRef:
+    file: lib/Text/Gr2/FeatureRef.pm
+  Text::Gr2::Font:
+    file: lib/Text/Gr2/Font.pm
+  Text::Gr2::Segment:
+    file: lib/Text/Gr2/Segment.pm
+requires:
+  Test::More: 0
+version: 0.01

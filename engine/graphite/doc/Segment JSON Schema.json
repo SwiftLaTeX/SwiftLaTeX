@@ -1,0 +1,363 @@
+{
+    "type" : "array",
+    "title" : "Segment log",
+    "description" : "The log of Segment creation and justification passes",
+    "required" : true,
+    "items" :
+    {
+        "id" : "Segment",
+        "type" : "object",
+        "description" : "A Segment object with a passes log containing \
+                         positioned slot arrays",
+        "properties" :
+        {
+            "id" :
+            {
+                "id" : "UUID",
+                "type" : "string",
+                "title" : "uuid",
+                "description" : "A unique ID"
+            },
+
+            "passes" :
+            {
+                "type" : "array",
+                "title" : "Pass log",
+                "description" : "A log of passes run to create this segment",
+                "required" : true,
+                "additionalItems" : false,
+                "items" :
+                {
+                    "type" : "object",
+                    "title" : "Pass",
+                    "properties" :
+                    {
+                        "id" :
+                        {
+                            "type" : "integer",
+                            "title" : "Pass number",
+                            "description" : "The Pass as listed in dbg_engine code.\
+                                             -1 is a synthetic pass representing \
+                                             the bidi pass.",
+                            "required" : true,
+                            "minimum" : -1
+                        },
+
+                        "slotsdir" :
+                        {
+                            "type" : "string",
+                            "titie" : "Slot stream direction",
+                            "description" : "Direction (rtl or ltr) of slots in the slots array",
+                            "required" : true
+                        },
+
+                        "passdir" :
+                        {
+                            "type" : "string",
+                            "titie" : "Pass direction",
+                            "description" : "Processing direction (rtl or ltr) of the pass",
+                            "required" : true
+                        },
+
+                        "slots" :
+                        {
+                            "type" : "array",
+                            "title" : "Slot stream",
+                            "description" : "Slot stream at start of the pass.",
+                            "required" : true,
+                            "items" :
+                            {
+                                "id" : "Slot",
+                                "type" : "object",
+                                "title" : "Slot",
+                                "properties" :
+                                {
+                                    "id" :
+                                    {
+                                        "id" : "UUID",
+                                        "type" : "integer",
+                                        "title" : "Slot uuid",
+                                        "description" : "A unique ID for tracking Slot movement",
+                                        "minimim" : 0,
+                                        "maximum" : 65535
+                                    },
+
+                                    "gid" :
+                                    {
+                                        "type" : "integer",
+                                        "minimum" : 0,
+                                        "maxmimum" : 65535,
+                                        "required" : true
+                                    },
+
+                                    "charinfo" :
+                                    {
+                                        "type" : "object",
+                                        "title" : "Char info relations",
+                                        "required" : true,
+                                        "properties" :
+                                        {
+                                            "original" :
+                                            {
+                                                "id" : "Index",
+                                                "type" : "integer",
+                                                "required" : true
+                                            },
+
+                                            "before" : { "$ref" : "Index" },
+
+                                            "after" : { "$ref" : "Index" }
+                                        }
+                                    },
+
+                                    "origin" :
+                                    {
+                                        "id" : "Point",
+                                        "type" : "array",
+                                        "required" : true,
+                                        "title" : "position",
+                                        "description" : "A 2-tuple ordered x, y",
+                                        "items" :
+                                        [
+                                            { "type" : "number" },
+                                            { "type" : "number" }
+                                        ]
+                                    },
+
+                                    "shift" : { "$ref" : "Point" },
+
+                                    "advance" : { "$ref" : "Point" },
+
+                                    "insert" :
+                                    {
+                                        "type" : "boolean",
+                                        "title" : "Insert before",
+                                        "required" : true
+                                    },
+
+                                    "break" :
+                                    {
+                                        "id" : "BreakWeight",
+                                        "type" : "integer",
+                                        "title" : "Break Weight of associated character",
+                                        "required" : true,
+                                        "minimum" : -50,
+                                        "maximum" : 50
+                                    },
+
+                                    "bidi" :
+                                    {
+                                        "type" : "integer",
+                                        "title" : "Bidirection level",
+                                        "minimum" : 0,
+                                        "maxmimum" : 63
+                                    },
+
+                                    "justification" : { "type" : "number", "title" : "Justification width" },
+
+                                    "parent" :
+                                    {
+                                        "type" : "object",
+                                        "description" : "SlotRef to this slots \
+                                                         parent and offset from \
+                                                         the parent's origin",
+                                        "properties" :
+                                        {
+                                            "id" : { "$ref" : "UUID" },
+                                            "level" : { "type" : "integer", "minimum" : 0 },
+                                            "offset" : { "$ref" : "Point" }
+                                        }
+                                    },
+
+                                    "user" :
+                                    {
+                                        "type" : "array",
+                                        "title" : "User attributes array",
+                                        "required" : true,
+                                        "items" :
+                                        {
+                                            "type" : "integer",
+                                            "minimim" : 0,
+                                            "maximum" : 65535
+                                        }
+                                    },
+
+                                    "children" :
+                                    {
+                                        "type" : "array",
+                                        "items" : { "$ref" : "UUID" }
+                                    }
+                                }
+                            }
+                        },
+
+                        "constraint" : { "type" : "boolean", "title" : "Pass constraint result" },
+
+                        "rules" :
+                        {
+                            "type" : "array",
+                            "title" : "Rule log",
+                            "required" : true,
+                            "items" :
+                            {
+                                "id" : "RuleEvent",
+                                "type" : "object",
+                                "title" : "Rule event",
+                                "properties" :
+                                {
+                                    "considered" :
+                                    {
+                                        "type" : "array",
+                                        "title" : "Rules considered",
+                                        "required" : true,
+                                        "items" :
+                                        {
+                                            "id" : "Rule",
+                                            "type" : "object",
+                                            "properties" :
+                                            {
+                                                "id" :
+                                                {
+                                                    "type" : "integer",
+                                                    "required" : true,
+                                                    "minimum" : -1
+                                                },
+
+                                                "failed" : { "type" : "boolean", "required" : true },
+
+                                                "input" :
+                                                {
+                                                    "type" : "object",
+                                                    "title" : "Input slot range",
+                                                    "required" : true,
+                                                    "properties" :
+                                                    {
+                                                        "start" : { "$ref" : "UUID" },
+                                                        "length" :
+                                                        {
+                                                            "type" : "integer",
+                                                            "required" : true,
+                                                            "minimum" : 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                       }
+                                    },
+
+                                    "output" :
+                                    {
+                                        "type" : ["object", "null"],
+                                        "title" : "Output slots",
+                                        "required" : true,
+                                        "properties" :
+                                        {
+                                            "range" :
+                                            {
+                                                "type" : "object",
+                                                "title" : "Input slot range",
+                                                "description" : "Input slot range replaced by the output slots",
+                                                "required" : true,
+                                                "properties" :
+                                                {
+                                                    "start" : { "$ref" : "UUID" },
+                                                    "end" : { "$ref" : "UUID" }
+                                                }
+                                            },
+                                            "slots" :
+                                            {
+                                                "type" : "array",
+                                                "title" : "Rule output slots",
+                                                "description" : "Sub sequence of the \
+                                                                 output slots stream.",
+                                                "required" : true,
+                                                "items" : { "$ref" : "Slot" }
+                                            },
+                                            "postshift" :
+                                            {
+                                                "title" : "Output advance delta",
+                                                "description" : "The delta in the right\
+                                                                 side edge of output\
+                                                                 slot range.",
+                                                "required" : true,
+                                                "extends" : "Point"
+                                            },
+                                            "cursor" : { "$ref" : "UUID" }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+
+            "outputdir" :
+            {
+                "type" : "string",
+                "titie" : "Slot stream direction",
+                "description" : "Direction (rtl or ltr) of slots in the output array",
+                "required" : true
+            },
+
+            "output" :
+            {
+                "type" : "array",
+                "title" : "Final positioned output slots",
+                "description" : "Slot stream after the final pass has run.",
+                "required" : true,
+                "items" : { "$ref" : "Slot" }
+            },
+
+            "advance" : { "$ref" : "Advance" },
+
+            "chars" :
+            {
+                "type" : "array",
+                "title" : "CharInfo array",
+                "description" : "A array of CharInfo objects referneced by the \
+                                 slots",
+                "items" :
+                {
+                    "id" : "CharInfo",
+                    "type" : "object",
+                    "properties" :
+                    {
+                        "offset" : { "$ref" : "Index" },
+
+                        "unicode" :
+                        {
+                            "type" : "integer",
+                            "required" : true,
+                            "minimum" : 0,
+                            "maximum" : 1114111
+                        },
+
+                        "break" : { "$ref" : "BreakWeight" },
+
+                        "flags" :
+                        {
+                            "type" : "integer",
+                            "required" : true,
+                            "minimum" : 0,
+                            "maximum" : 3
+                        },
+
+                        "slot" :
+                        {
+                            "type" : "object",
+                            "title" : "Slot relations",
+                            "required" : true,
+                            "properties" :
+                            {
+                                "before" : { "$ref" : "Index" },
+                                "after" : { "$ref" : "Index" }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "additionalItems" : false
+}

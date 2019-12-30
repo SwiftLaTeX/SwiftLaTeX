@@ -1,0 +1,139 @@
+<authorgroup>
+ <author>
+  <firstname>Martin</firstname>
+  <surname>Hosken</surname>
+ </author>
+
+ <author>
+  <firstname>Sharon</firstname>
+  <surname>Correll</surname>
+ </author>
+</authorgroup>
+
+<revhistory>
+ <revision>
+  <revnumber>4.0</revnumber>
+  <date>25 Feb 2011</date>
+  <revremark>
+    Added version 2.0 of Glat table
+  </revremark>
+ </revision>
+
+ <revision>
+  <revnumber>3.0</revnumber>
+  <date>31 Jan 2006</date>
+  <revremark>
+    Added Sill table
+  </revremark>
+ </revision>
+
+ <revision>
+  <revnumber>2.0</revnumber>
+  <date>10 Feb 2004</date>
+  <revremark>
+    Added description of Feat table
+  </revremark>
+ </revision>
+
+ <revision>
+  <revnumber>1.5</revnumber>
+  <date>Jan 2004</date>
+  <revremark>
+    Added justification levels
+  </revremark>
+ </revision>
+
+ <revision>
+  <revnumber>1.4</revnumber>
+  <date>20 Aug 2003</date>
+  <revremark>
+    Added SILe table; changed title to Graphite Table Format
+  </revremark>
+ </revision>
+
+ <revision>
+  <revnumber>1.3</revnumber>
+  <date></date>
+  <revremark>
+    Added pass constraints
+  </revremark>
+ </revision>
+
+ <revision>
+  <revnumber>1.2</revnumber>
+  <date>22 Jul 2003</date>
+  <revremark>
+    Added fields for critical features.
+  </revremark>
+ </revision>
+
+ <revision>
+  <revnumber>1.1</revnumber>
+  <date>18 Mar 2003</date>
+  <revremark>
+    Changed Unicode field of PseudoMap class to ULONG
+  </revremark>
+ </revision>
+
+ <revision>
+  <revnumber>0.08</revnumber>
+  <date>18 Mar 2003</date>
+  <revremark>
+    Fixed problems with version numbers
+  </revremark>
+ </revision>
+
+ <revision>
+  <revnumber>0.07</revnumber>
+  <date>4 Feb 2002</date>
+  <revremark>
+    Reworked explanation of FSM behaviour
+  </revremark>
+ </revision>
+
+ <revision>
+  <revnumber>0.06</revnumber>
+  <date>22 Nov 2000</date>
+  <revremark>
+    Added constants and arrays for finite state machine rework (SIL_Pass table: min/maxRulePreContext, startStates, ruleSortKeys);
+    Added extraAscent and extraDescent (SIL_Sub table)
+  </revremark>
+ </revision>
+
+ <revision>
+  <revnumber>0.05</revnumber>
+  <date>11 Sept 2000</date>
+  <revremark>
+    Changed WinRend to Graphite
+  </revremark>
+ </revision>
+
+ <revision>
+  <revnumber>0.04</revnumber>
+  <date>18 Jan 2000</date>
+  <revremark>
+    Modifications based on actual implementation;
+    Added a LinearClass structure
+  </revremark>
+ </revision>
+
+ <revision>
+  <revnumber>0.03</revnumber>
+  <date>25 June 99</date>
+  <revremark>
+    Fill in details of state table;
+    Sort out Action class;
+    Add special glyph attribute indices;
+    Add Sild table;
+  </revremark>
+ </revision>
+
+ <revision>
+  <revnumber>0.02</revnumber>
+  <date>22 March 99</date>
+  <revremark>
+    Added debug information;
+    Changed version information from USHORT to FIXED to conform with TrueType convensions
+  </revremark>
+ </revision>
+</revhistory>

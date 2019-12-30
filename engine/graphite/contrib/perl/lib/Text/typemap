@@ -1,0 +1,45 @@
+###############################################################################
+##
+##    Typemap for Graphite2 objects
+##
+##    Copyright (c) 2011 Simon Cozens
+##    All rights reserved.
+##
+##    This typemap is designed specifically to make it easier to handle
+##    Perl-style blessed objects in XS.  In particular, it takes care of
+##    blessing the object into the correct class (even for derived classes).
+##
+##
+###############################################################################
+## vi:et:sw=4 ts=4
+
+TYPEMAP
+
+gr_uint32 T_U_LONG
+gr_uint16 T_U_SHORT
+gr_int16  T_IV
+gr_uint8  T_UV
+enum gr_encform T_IV
+enum gr_attrCode T_IV
+
+Text_Gr2_Face* T_PTROBJ_SPECIAL
+Text_Gr2_Font* T_PTROBJ_SPECIAL
+Text_Gr2_FeatureVal* T_PTROBJ_SPECIAL
+Text_Gr2_FeatureRef* T_PTROBJ_SPECIAL
+Text_Gr2_CharInfo* T_PTROBJ_SPECIAL
+Text_Gr2_Segment* T_PTROBJ_SPECIAL
+Text_Gr2_Slot* T_PTROBJ_SPECIAL
+
+INPUT
+T_PTROBJ_SPECIAL
+    if (sv_derived_from($arg, \"${(my $ntt=$ntype)=~s/_/::/g;$ntt=~s/Ptr//;\$ntt}\")) {
+        IV tmp = SvIV((SV*)SvRV($arg));
+        $var = INT2PTR($type,tmp);
+    }
+    else
+	croak(\"$var is not of type ${(my $ntt=$ntype)=~s/_/::/g;$ntt=~s/Ptr//;\$ntt}\")
+
+OUTPUT
+T_PTROBJ_SPECIAL
+    /* inherited new() */
+    sv_setref_pv($arg, "${(my $ntt=$ntype)=~s/_/::/g;$ntt=~s/Ptr//;\$ntt}\", (void*)$var);

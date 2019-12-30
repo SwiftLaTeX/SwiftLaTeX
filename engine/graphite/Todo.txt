@@ -1,0 +1,7 @@
+Expected changes to come:
+* Change regression testing to use binary diffs of fonts instead of font locations
+* Move to github
+* Reduce size of committed test/ tree
+
+Questions:
+* Do we support glyphid as a slot attribute?
