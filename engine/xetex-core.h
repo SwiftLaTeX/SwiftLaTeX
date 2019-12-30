@@ -16,7 +16,7 @@
 
 /* fontconfig */
 #ifndef XETEX_MAC
-#include <fontconfig/fontconfig.h>
+#include "fontconfig.h"
 #endif
 
 /* freetype */

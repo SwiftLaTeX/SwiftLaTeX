@@ -1,4 +1,4 @@
-/* tectonic/core-bridge.c: the C/C++ => Rust bridge
+/* tectonic/core-bridge.c: 
    Copyright 2017 the Tectonic Project
    Licensed under the MIT License.
 */
@@ -47,7 +47,6 @@ int tex_simple_main(tt_bridge_api_t *api, char *dump_name,
   int rv;
 
   halt_on_error_p = 1;
-  
   //in_initex_mode = 1;
   tectonic_global_bridge = api;
 

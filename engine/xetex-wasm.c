@@ -1,11 +1,14 @@
 // First of all, remove pdf_files_init/close from xetex-ini.c
 // And remove picture handling functions from xetex-pic.c
 #include "core-bridge.h"
+#ifdef NATIVE_BUILD
 #include <curl/curl.h>
+#endif
 #include <md5.h>
 #include <stdio.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include "core-memory.h"
 void issue_warning(void *context, char const *text) {
   fprintf(stderr, "%s\n", text);
 }
@@ -45,7 +48,6 @@ int get_data_md5(void *context, char const *data, size_t len, char *digest) {
   return 0;
 }
 void *output_open(void *context, char const *path, int is_gz) {
-
   return fopen(path, "w");
 }
 
@@ -69,15 +71,40 @@ int output_flush(void *context, void *handle) {
 int output_close(void *context, void *handle) { return fclose(handle); }
 
 #define MAXAVAILABLENAMESIZE 512
-#define KPSE_BASE_URL "https://www.swiftlatex.com/dl/tex"
 
+#ifndef NATIVE_BUILD
+#define TEXCACHEROOT "/tex/"
+int kpse_fetch_from_network(char *name_ret);
+static int existsInCacheDir(char *name)
+{
+    char kpseurl[MAXAVAILABLENAMESIZE] = {0};
+    sprintf(kpseurl, "%s%s", TEXCACHEROOT, name);
+    if( access( kpseurl, F_OK ) != -1 ) {
+        //printf("file available there %s\n", kpseurl);
+        strcpy(name, kpseurl);
+        return 1;
+    }
+    //printf("file no there %s\n", kpseurl);
+    return -1;
+}
+#else
+
+#define KPSE_BASE_URL "http://127.0.0.1:5000/tex"
+// #include <emscripten/fetch.h>
 static size_t curl_write_data(void *ptr, size_t size, size_t nmemb,
                               void *stream) {
   size_t written = fwrite(ptr, size, nmemb, (FILE *)stream);
   return written;
 }
 
-static int fetch_tex_file(char *name_ret) {
+static int kpse_fetch_from_network(char *name_ret) {
+
+  // If "/" or " " in the name_ret, failed instantly
+
+  if (strrchr(name_ret, '/') != NULL) {
+    return -1;
+  }
+
   CURL *curl;
   CURLcode curl_res;
   FILE *destfile;
@@ -92,9 +119,7 @@ static int fetch_tex_file(char *name_ret) {
 
   // Check 404 Cache
   strcpy(name_copy, name_ret);
-
   snprintf(name_ret, MAXAVAILABLENAMESIZE, "%s/%s.404", tmpfolder, name_copy);
-
   if (access(name_ret, F_OK) != -1) {
     return -1;
   }
@@ -153,30 +178,12 @@ static int fetch_tex_file(char *name_ret) {
     return -1;
   }
 }
+#endif
 
-char *kpse_find_file(const char *name, tt_input_format_type format) {
- //printf("Looking for %s\n", name);
-  if (name == NULL) {
-    return NULL;
-  }
-
-  if (strlen(name) > MAXAVAILABLENAMESIZE / 2) {
-    printf("This file name is too long, skpse would not be able to handle it");
-    return NULL;
-  }
-
-
-  
-
-  char *patched_name = malloc(MAXAVAILABLENAMESIZE);
-
-  memset(patched_name, 0, MAXAVAILABLENAMESIZE);
-
-  strcat(patched_name, name);
-
-  if (strrchr(patched_name, '.') == NULL) {
-
+static void fix_extension(char *patched_name, tt_input_format_type format)
+{
 #define SUFFIX(suf) strcat(patched_name, suf);
+  
     switch (format) {
     case TTIF_TFM:
       SUFFIX(".tfm");
@@ -233,21 +240,53 @@ char *kpse_find_file(const char *name, tt_input_format_type format) {
       fprintf(stderr, "Unknown format\n");
       break;
     }
-  }
 #undef SUFFIX
-  if (patched_name[0] == '/' ||
-      access(patched_name, F_OK) !=
-          -1) // If it is absolute path or it is already exists based on the
-              // current directory, copy & return
-  {
+
+}
+
+
+char *kpse_find_file(const char *name, tt_input_format_type format) {
+ //printf("Looking for %s\n", name);
+  if (name == NULL) {
+    return NULL;
+  }
+
+  if (strlen(name) > MAXAVAILABLENAMESIZE / 2) {
+    return NULL;
+  }
+
+  char* patched_name = xmalloc(MAXAVAILABLENAMESIZE);
+
+  strcat(patched_name, name);
+
+  if (access(patched_name, F_OK) != -1) {
     return patched_name;
   }
 
-  if (strrchr(patched_name, '/') == NULL && strrchr(patched_name, ' ') == NULL && fetch_tex_file(patched_name) == 0) //only download it if not "/" and " " in the directory
-  {
+  if (strrchr(patched_name, '.') == NULL) {
+    fix_extension(patched_name, format);
+  }
+
+  //Try again2
+  if (access(patched_name, F_OK) != -1) {
     return patched_name;
   }
-  free(patched_name); // We try our best, just leave it
+
+  #ifndef NATIVE_BUILD
+  if(existsInCacheDir(patched_name) == 1)
+  {
+      return patched_name;
+  }
+  #endif
+  
+  if (kpse_fetch_from_network(patched_name) ==
+      0) // Nope Try download it //Now we can ask for help to download the file
+  {
+    //printf("kpse_returning %s\n", patched_name);
+    return patched_name;
+  }
+
+  free(patched_name); // We try out bese, just leave it
   return NULL;
 }
 
@@ -307,8 +346,9 @@ int input_ungetc(void *context, void *handle, int ch) {
 
 int input_close(void *context, void *handle) { return fclose(handle); }
 
+
+tt_bridge_api_t ourapi;
 int main() {
-  tt_bridge_api_t ourapi;
   ourapi.issue_warning = issue_warning;
   ourapi.issue_error = issue_error;
   ourapi.get_file_md5 = get_file_md5;
@@ -326,7 +366,14 @@ int main() {
   ourapi.input_getc = input_getc;
   ourapi.input_ungetc = input_ungetc;
   ourapi.input_close = input_close;
-  tex_simple_main(&ourapi, "swiftlatex.fmt", "test.tex", 0);
-
   return 0;
 }
+
+int compileLaTeX() {  
+  return tex_simple_main(&ourapi, "swiftlatex.fmt", "_input_.tex", 0);
+}
+
+int comileBib() {
+  return bibtex_simple_main(&ourapi, "_input_.aux");
+}
+

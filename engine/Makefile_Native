@@ -9,7 +9,7 @@ CXX_LINK = $(CXX) -o $@ $(LDFLAGS)
 csources = xetex-io.c xetex-xetex0.c xetex-ini.c xetex-texmfmp.c xetex-errors.c \
 xetex-scaledmath.c xetex-output.c xetex-stringpool.c core-memory.c core-bridge.c \
 xetex-pagebuilder.c xetex-shipout.c xetex-math.c xetex-ext.c xetex-linebreak.c \
- xetex-pic.c bibtex.c md5.c xetex-wasm.c miniz.c
+ xetex-pic.c bibtex.c md5.c xetex-wasm.c
  
 cppsources = teckit-Engine.cpp xetex-XeTeXOTMath.cpp xetex-XeTeXLayoutInterface.cpp \
  xetex-XeTeXFontMgr.cpp xetex-XeTeXFontInst.cpp xetex-XeTeXFontMgr_FC.cpp
@@ -56,7 +56,7 @@ cppobjects = $(cppsources:.cpp=.o)
 graphiteobjects = $(graphitesources:.cpp=.o)
 
 swiftlatex: $(headers) $(cobjects) $(cppobjects) $(graphiteobjects)
-	$(CXX_LINK) $(cobjects) $(cppobjects) $(graphiteobjects) -lfreetype -lharfbuzz    -licuuc   -lharfbuzz-icu  -lcurl
+	$(CXX_LINK) $(cobjects) $(cppobjects) $(graphiteobjects) -lfreetype -lharfbuzz -lz   -licuuc   -lharfbuzz-icu  -lcurl
 
 $(cobjects): %.o: %.c
 	$(CC) -c $(CFLAGS) -I. -I/usr/include/freetype2 -I/usr/include/harfbuzz  $< -o $@

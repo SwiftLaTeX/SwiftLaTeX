@@ -68,7 +68,7 @@ int traceLevel = 1;
 #include <cstdlib>
 #include <cstring>
 
-#include "zlib.h"
+#include "miniz.h"
 
 static const UInt32 kNeedMoreInput = 0xfffffffeUL;
 static const UInt32 kInvalidChar = 0xfffffffdUL;
@@ -1244,9 +1244,9 @@ Converter::Converter(const Byte *inTable, UInt32 inTableSize, bool inForward,
         return;
       }
       int result =
-          uncompress(table, &uncompressedLen, inTable + 2 * sizeof(UInt32),
+          mz_uncompress(table, &uncompressedLen, inTable + 2 * sizeof(UInt32),
                      inTableSize - 2 * sizeof(UInt32));
-      if (result != Z_OK) {
+      if (result != MZ_OK) {
         status = kStatus_InvalidMapping;
         return;
       }
@@ -2032,10 +2032,10 @@ TECkit_Status WINAPI TECkit_GetMappingFlags(Byte *mapping, UInt32 mappingSize,
       // compressed mapping, so we need to decompress enough of it to read the
       // flags
       unsigned long uncompressedLen = sizeof(FileHeader);
-      int result = uncompress((Byte *)&header, &uncompressedLen,
+      int result = mz_uncompress((Byte *)&header, &uncompressedLen,
                               mapping + 2 * sizeof(UInt32),
                               mappingSize - 2 * sizeof(UInt32));
-      if (result != Z_BUF_ERROR)
+      if (result != MZ_BUF_ERROR)
         status = kStatus_InvalidMapping;
       fh = &header;
     }
@@ -2068,10 +2068,10 @@ TECkit_Status WINAPI TECkit_GetMappingName(Byte *mapping, UInt32 mappingSize,
       // the headerLength field, and then decompress the complete header to get
       // the names
       unsigned long uncompressedLen = sizeof(FileHeader);
-      int result = uncompress((Byte *)&header, &uncompressedLen,
+      int result = mz_uncompress((Byte *)&header, &uncompressedLen,
                               mapping + 2 * sizeof(UInt32),
                               mappingSize - 2 * sizeof(UInt32));
-      if (result != Z_BUF_ERROR)
+      if (result != MZ_BUF_ERROR)
         status = kStatus_InvalidMapping;
       else {
         fh = &header;
@@ -2080,10 +2080,10 @@ TECkit_Status WINAPI TECkit_GetMappingName(Byte *mapping, UInt32 mappingSize,
         if (buf == 0)
           status = kStatus_OutOfMemory;
         else {
-          result = uncompress((Byte *)buf, &uncompressedLen,
+          result = mz_uncompress((Byte *)buf, &uncompressedLen,
                               mapping + 2 * sizeof(UInt32),
                               mappingSize - 2 * sizeof(UInt32));
-          if (result != Z_BUF_ERROR)
+          if (result != MZ_BUF_ERROR)
             status = kStatus_InvalidMapping;
           fh = (const FileHeader *)buf;
         }
