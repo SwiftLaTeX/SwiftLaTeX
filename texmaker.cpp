@@ -71,9 +71,6 @@
 #include "aboutdialog.h"
 #include "addtagdialog.h"
 #include "arraydialog.h"
-
-
-#include "filechooser.h"
 #include "graphicfilechooser.h"
 #include "letterdialog.h"
 #include "quickbeamerdialog.h"
@@ -5904,56 +5901,65 @@ void Texmaker::InsertInclude() {
   if (!currentEditorView())
     return;
   QString currentDir = QDir::homePath();
+  QFileDialog *sfDlg = new QFileDialog(this, tr("Select a File"), currentDir, "TeX files (*.tex);;All files (*.*)");
+  sfDlg->setOptions(QFileDialog::DontResolveSymlinks);
+  sfDlg->show();
+  sfDlg->setAttribute(Qt::WA_DeleteOnClose);
+  connect(sfDlg, SIGNAL(fileSelected(const QString&)), this, SLOT(InsertIncludeDone(const QString&)));
+  // UpdateStructure();
+}
+
+void Texmaker::InsertIncludeDone(const QString& location) {
+  
+
+  QString fn = location;
+  
   QString finame;
   if (singlemode) {
     finame = getName();
   } else {
     finame = MasterName;
   }
-  QFileInfo fi(finame);
-  if (!finame.startsWith("untitled"))
-    currentDir = fi.absolutePath();
-  QDir rootdir = fi.dir();
-  FileChooser *sfDlg = new FileChooser(this, tr("Select a File"));
-  sfDlg->setFilter("TeX files (*.tex);;All files (*.*)");
-  sfDlg->setDir(currentDir);
-  if (sfDlg->exec()) {
-    QString fn = sfDlg->fileName();
-    QFileInfo fi(rootdir.relativeFilePath(fn));
-    QString suff = fi.suffix();
-    QString name = fi.filePath();
-    name = name.left(name.length() - suff.length() - 1);
-    InsertTag("\\include{" + name + "}", 9, 0);
-  }
-  // UpdateStructure();
+  QFileInfo finfo(finame);
+  QDir rootdir = finfo.dir();
+
+  QFileInfo fi(rootdir.relativeFilePath(fn));
+  QString suff = fi.suffix();
+  QString name = fi.filePath();
+  name = name.left(name.length() - suff.length() - 1);
+  InsertTag("\\include{" + name + "}", 9, 0);
 }
 
 void Texmaker::InsertInput() {
   if (!currentEditorView())
     return;
   QString currentDir = QDir::homePath();
+  QFileDialog *sfDlg = new QFileDialog(this, tr("Select a File"), currentDir, "TeX files (*.tex);;All files (*.*)");
+  sfDlg->setOptions(QFileDialog::DontResolveSymlinks);
+  sfDlg->show();
+  sfDlg->setAttribute(Qt::WA_DeleteOnClose);
+  connect(sfDlg, SIGNAL(fileSelected(const QString&)), this, SLOT(InsertIncludeDone(const QString&)));
+  
+  // UpdateStructure();
+}
+
+void Texmaker::InsertInputDone(const QString &location) {
+   QString fn = location;
+
   QString finame;
   if (singlemode) {
     finame = getName();
   } else {
     finame = MasterName;
   }
-  QFileInfo fi(finame);
-  if (!finame.startsWith("untitled"))
-    currentDir = fi.absolutePath();
-  QDir rootdir = fi.dir();
-  FileChooser *sfDlg = new FileChooser(this, tr("Select a File"));
-  sfDlg->setFilter("TeX files (*.tex);;All files (*.*)");
-  sfDlg->setDir(currentDir);
-  if (sfDlg->exec()) {
-    QString fn = sfDlg->fileName();
+  QFileInfo finfo(finame);
+  QDir rootdir = finfo.dir();
+
     QFileInfo fi(rootdir.relativeFilePath(fn));
     QString suff = fi.suffix();
     QString name = fi.filePath();
     name = name.left(name.length() - suff.length() - 1);
     InsertTag("\\input{" + name + "}", 7, 0);
-  }
-  // UpdateStructure();
 }
 
 void Texmaker::QuickTabular() {

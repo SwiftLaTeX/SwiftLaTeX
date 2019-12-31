@@ -66,7 +66,6 @@ HEADERS	+= texmaker.h \
 	lightgotolinewidget.h \
 	replacewidget.h \
 	structdialog.h \
-	filechooser.h \
 	graphicfilechooser.h \
 	tabbingdialog.h \
 	arraydialog.h \
@@ -132,7 +131,6 @@ SOURCES	+= main.cpp \
 	lightgotolinewidget.cpp \
 	replacewidget.cpp \
 	structdialog.cpp \
-	filechooser.cpp \
 	graphicfilechooser.cpp \
 	tabbingdialog.cpp \
 	arraydialog.cpp \
@@ -177,7 +175,6 @@ FORMS   += findwidget.ui\
 	gotolinewidget.ui \
 	replacewidget.ui \
 	structdialog.ui \
-	filechooser.ui \
 	graphicfilechooser.ui \
 	tabbingdialog.ui \
 	arraydialog.ui \

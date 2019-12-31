@@ -368,8 +368,9 @@ private slots:
   void InsertStructFromStringDone();
   void InsertImage();
   void InsertInclude();
+  void InsertIncludeDone(const QString&);
   void InsertInput();
-
+  void InsertInputDone(const QString&);
   void InsertBib1();
   void InsertBib2();
   void InsertBib3();
