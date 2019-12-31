@@ -116,14 +116,9 @@ Texmaker::Texmaker(QWidget *parent) : QMainWindow(parent) {
     spellChecker = 0;
 
 
-//Out Exec() to Show() Patch
-  confDlg = NULL;
+
   autosaveTimer = NULL;
-  spellDlg = NULL;
-  stDlg = NULL;
-  startDlg = NULL;
-  sfDlg = NULL;
-//
+
 
   // spellChecker=0;
   untitled_id = 1;
@@ -4181,15 +4176,12 @@ void Texmaker::editSpell() {
   if (!currentEditorView())
     return;
   if (spelldicExist()) {
-    if(spellDlg) {
-      spellDlg->deleteLater();
-      spellDlg = NULL;
-    }
-    spellDlg = new SpellerDialog(
+    
+    SpellerDialog *spellDlg = new SpellerDialog(
         this, currentEditorView()->editor, spell_ignored_words);
     connect(spellDlg, SIGNAL(accepted()), this, SLOT(editSpellDone()));
     spellDlg->show();
-    
+    spellDlg->setAttribute(Qt::WA_DeleteOnClose);
   } else {
     QMessageBox::warning(this, tr("Error"),
                          tr("Error : Can't open the dictionary"));
@@ -4198,6 +4190,7 @@ void Texmaker::editSpell() {
 }
 
 void Texmaker::editSpellDone() {
+    SpellerDialog *spellDlg = (SpellerDialog*)sender();
     spell_ignored_words = spellDlg->alwaysignoredwordList.join(",");
     currentEditorView()->editor->highlighter->SetAlwaysIgnoredWords(
           spell_ignored_words);
@@ -5805,19 +5798,18 @@ void Texmaker::InsertStruct() {
   QAction *action = qobject_cast<QAction *>(sender());
   if (action) {
     actData = action->data().toString();
-    if(stDlg) {
-      stDlg->deleteLater();
-      stDlg = NULL;
-    }
-    stDlg = new StructDialog(this, actData);
+    
+    StructDialog* stDlg = new StructDialog(this, actData);
     stDlg->setModal(true);
     stDlg->show();
+    stDlg->setAttribute(Qt::WA_DeleteOnClose);
     connect(stDlg, SIGNAL(accepted()), this, SLOT(InsertStructDone()));
   }
 }
 
 void Texmaker::InsertStructDone() {
     QString tag;
+    StructDialog* stDlg = (StructDialog*)(sender());
     QString actData = stDlg->windowTitle();
     if (stDlg->ui.checkBox->isChecked()) {
         tag = actData + "{";
@@ -5834,18 +5826,17 @@ void Texmaker::InsertStructFromString(const QString &text) {
   if (!currentEditorView())
     return;
   // currentEditorView()->editor->viewport()->setFocus();
-  if(stDlg) {
-      stDlg->deleteLater();
-      stDlg = NULL;
-    }
-    stDlg = new StructDialog(this, text);
+  
+    StructDialog* stDlg = new StructDialog(this, text);
     stDlg->setModal(true);
     stDlg->show();
+    stDlg->setAttribute(Qt::WA_DeleteOnClose);
     connect(stDlg, SIGNAL(accepted()), this, SLOT(InsertStructDone()));
 }
 
 void Texmaker::InsertStructFromStringDone() {
     QString tag;
+    StructDialog* stDlg = (StructDialog*)(sender());
     QString text = stDlg->windowTitle();
     if (stDlg->ui.checkBox->isChecked()) {
       tag = text + "{";
@@ -5863,10 +5854,8 @@ void Texmaker::InsertImage() {
   
   QString currentDir = QDir::homePath();
   
-  if(sfDlg) {
-    sfDlg->deleteLater();
-  }
-  sfDlg =
+  
+  GraphicFileChooser* sfDlg =
       new GraphicFileChooser(this, tr("Select an image File"));
   sfDlg->setFilter(
       "Graphic files (*.eps *.pdf *.png *.jpeg *.jpg *.tiff);;All files (*.*)");
@@ -5874,11 +5863,14 @@ void Texmaker::InsertImage() {
  
   sfDlg->show();
 
+  sfDlg->setAttribute(Qt::WA_DeleteOnClose);
+
   connect(sfDlg, SIGNAL(accepted()), this, SLOT(InsertImageDone()));
 
 }
 
 void Texmaker::InsertImageDone() {
+  GraphicFileChooser* sfDlg = (GraphicFileChooser*)(sender());
   QString tag;
   QString finame;
   if (singlemode) {
@@ -5973,6 +5965,20 @@ void Texmaker::InsertInputDone(const QString &location) {
 void Texmaker::QuickTabular() {
   if (!currentEditorView())
     return;
+ 
+  TabDialog *quickDlg = new TabDialog(this, "Tabular");
+  
+  quickDlg->show();
+
+  quickDlg->setAttribute(Qt::WA_DeleteOnClose);
+
+  connect(quickDlg, SIGNAL(accepted()), this, SLOT(QuickTabularDone()));
+}
+
+void Texmaker::QuickTabularDone(){
+
+  TabDialog *quickDlg = (TabDialog *)sender();
+
   QStringList borderlist, alignlist;
   borderlist << QString("|") << QString("||") << QString("") << QString("@{}");
   alignlist << QString("c") << QString("l") << QString("r") << QString("p{}")
@@ -5982,10 +5988,9 @@ void Texmaker::QuickTabular() {
   QString vs = "";
   QString el = "";
   QString tag;
-  TabDialog *quickDlg = new TabDialog(this, "Tabular");
   QTableWidgetItem *item = new QTableWidgetItem();
-  if (quickDlg->exec()) {
-    int y = quickDlg->ui.spinBoxRows->value();
+
+  int y = quickDlg->ui.spinBoxRows->value();
     int x = quickDlg->ui.spinBoxColumns->value();
     tag = QString("\\begin{tabular}{");
     for (int j = 0; j < x; j++) {
@@ -6083,8 +6088,8 @@ void Texmaker::QuickTabular() {
     if (tag.contains("arraybackslash"))
       tag = "% \\usepackage{array} is required\n" + tag;
     InsertTag(tag, 0, 0);
-  }
 }
+
 
 void Texmaker::QuickArray() {
   if (!currentEditorView())
@@ -6218,10 +6223,9 @@ void Texmaker::QuickXelatex() {
   if (!currentEditorView())
     fileNew();
  
-  if(startDlg) {
-    startDlg->deleteLater();
-  }
-  startDlg = new QuickXelatexDialog(this, "Quick Start");
+  
+  QuickXelatexDialog* startDlg = new QuickXelatexDialog(this, "Quick Start");
+  startDlg->setAttribute(Qt::WA_DeleteOnClose);
   startDlg->otherClassList = userClassList;
   startDlg->otherPaperList = userPaperList;
   startDlg->otherOptionsList = userOptionsList;
@@ -6255,6 +6259,7 @@ void Texmaker::QuickXelatex() {
 }
 
 void Texmaker::QuickXelatexDone() {
+  QuickXelatexDialog *startDlg = (QuickXelatexDialog *)sender();
     int li = 3;
     QString opt = "";
     QString optbabel = "";
@@ -9785,11 +9790,9 @@ void Texmaker::HelpAbout() {
 ////////////// OPTIONS //////////////////////////////////////
 void Texmaker::GeneralOptions() {
 
-  if(confDlg) {
-      confDlg->deleteLater();
-      confDlg = NULL;
-  }
-  confDlg = new ConfigDialog(this);
+  
+  ConfigDialog* confDlg = new ConfigDialog(this);
+  confDlg->setAttribute(Qt::WA_DeleteOnClose);
   // confDlg->ui.lineEditSvn->setText(svnPath);
   // confDlg->ui.checkBoxSvn->setChecked(svnEnable);
 
@@ -9952,6 +9955,7 @@ void Texmaker::GeneralOptions() {
 }
 
 void Texmaker::configurationDone() {
+  ConfigDialog* confDlg = (ConfigDialog*)(sender());
     listViewerCommands.clear();
     for (int row = 0; row < confDlg->ui.shorttableWidget->rowCount(); row++) {
       QString itemtext = confDlg->ui.shorttableWidget->item(row, 0)->text();

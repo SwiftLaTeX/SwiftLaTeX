@@ -258,11 +258,7 @@ private:
   QTimer *autosaveTimer;
 
 //Patch from Exec()
-  ConfigDialog *confDlg;
-  SpellerDialog *spellDlg;
-  StructDialog *stDlg;
-  QuickXelatexDialog *startDlg;
-  GraphicFileChooser *sfDlg;
+ 
 
 private slots:
   LatexEditorView *currentEditorView() const;
@@ -433,6 +429,7 @@ private slots:
   void ShowSizeMenu();
 
   void QuickTabular();
+  void QuickTabularDone();
   void QuickArray();
   void QuickTabbing();
   void QuickLetter();
