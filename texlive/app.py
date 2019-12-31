@@ -2,6 +2,7 @@ from flask import Flask, send_file
 import time
 import os.path
 import pykpathsea
+from flask_cors import cross_origin
 
 
 import re
@@ -10,6 +11,7 @@ startup_time = time.time()
 cache_hit_db = {}
 file_miss_db = {}
 app = Flask(__name__)
+
 regex = re.compile(r'[^a-zA-Z0-9 _\-\.]')
 
 
@@ -21,7 +23,9 @@ def index():
     return htmlString
 
 
+
 @app.route('/tex/<filename>')
+@cross_origin()
 def fetch_file(filename):
     if filename.endswith(".fmt"): #Dont do kpathsea search
         if os.path.exists(filename):

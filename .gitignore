@@ -15,4 +15,7 @@ engine/test/
 *.log
 *.aux
 wasmtex
+swiftlatex
+*.wasm
+swiftlatex.js
 .DS_Store
