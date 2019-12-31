@@ -71,7 +71,6 @@
 #include "aboutdialog.h"
 #include "addtagdialog.h"
 #include "arraydialog.h"
-#include "graphicfilechooser.h"
 #include "letterdialog.h"
 #include "quickbeamerdialog.h"
 
@@ -123,6 +122,7 @@ Texmaker::Texmaker(QWidget *parent) : QMainWindow(parent) {
   spellDlg = NULL;
   stDlg = NULL;
   startDlg = NULL;
+  sfDlg = NULL;
 //
 
   // spellChecker=0;
@@ -1060,13 +1060,13 @@ void Texmaker::setupMenus() {
   connect(Act, SIGNAL(triggered()), this, SLOT(fileCloseAll()));
   fileMenu->addAction(Act);
 
-  Act = new QAction(tr("Reload document from file"), this);
-  connect(Act, SIGNAL(triggered()), this, SLOT(fileReload()));
-  fileMenu->addAction(Act);
+  // Act = new QAction(tr("Reload document from file"), this);
+  // connect(Act, SIGNAL(triggered()), this, SLOT(fileReload()));
+  // fileMenu->addAction(Act);
 
-  Act = new QAction(tr("Reload all documents from file"), this);
-  connect(Act, SIGNAL(triggered()), this, SLOT(allReload()));
-  fileMenu->addAction(Act);
+  // Act = new QAction(tr("Reload all documents from file"), this);
+  // connect(Act, SIGNAL(triggered()), this, SLOT(allReload()));
+  // fileMenu->addAction(Act);
 
  
   fileMenu->addSeparator();
@@ -3957,9 +3957,9 @@ void Texmaker::CleanRecent() {
   UpdateRecentFile();
 }
 
-void Texmaker::filePrint() {
+// void Texmaker::filePrint() {
   
-}
+// }
 
 void Texmaker::fileOpenAndGoto(const QString &f, int line, bool focus) {
   load(f);
@@ -3992,54 +3992,54 @@ void Texmaker::getFocusToEditor() {
     currentEditorView()->editor->setFocus();
 }
 
-void Texmaker::fileReload() {
-  if (!currentEditorView())
-    return;
-  if (getName().startsWith("untitled"))
-    return;
-  QString f = filenames[currentEditorView()];
-  if (currentEditorView()->editor->document()->isModified()) {
-    switch (QMessageBox::warning(
-        this, "Texmaker",
-        tr("The document contains unsaved work."
-           "You will lose changes by reloading the document."),
-        tr("Reload the file"), tr("Cancel"), 0, 1)) {
-    case 0:
-      filenames.remove(currentEditorView());
-      comboFiles->removeItem(comboFiles->currentIndex());
-      delete OpenedFilesListWidget->currentItem();
-      delete currentEditorView();
-      load(f);
-      break;
-    case 1:
-    default:
-      return;
-      break;
-    }
-  } else {
-    filenames.remove(currentEditorView());
-    comboFiles->removeItem(comboFiles->currentIndex());
-    delete OpenedFilesListWidget->currentItem();
-    delete currentEditorView();
-    load(f);
-  }
-}
+// void Texmaker::fileReload() {
+//   if (!currentEditorView())
+//     return;
+//   if (getName().startsWith("untitled"))
+//     return;
+//   QString f = filenames[currentEditorView()];
+//   if (currentEditorView()->editor->document()->isModified()) {
+//     switch (QMessageBox::warning(
+//         this, "Texmaker",
+//         tr("The document contains unsaved work."
+//            "You will lose changes by reloading the document."),
+//         tr("Reload the file"), tr("Cancel"), 0, 1)) {
+//     case 0:
+//       filenames.remove(currentEditorView());
+//       comboFiles->removeItem(comboFiles->currentIndex());
+//       delete OpenedFilesListWidget->currentItem();
+//       delete currentEditorView();
+//       load(f);
+//       break;
+//     case 1:
+//     default:
+//       return;
+//       break;
+//     }
+//   } else {
+//     filenames.remove(currentEditorView());
+//     comboFiles->removeItem(comboFiles->currentIndex());
+//     delete OpenedFilesListWidget->currentItem();
+//     delete currentEditorView();
+//     load(f);
+//   }
+// }
 
-void Texmaker::allReload() {
-  LatexEditorView *temp = new LatexEditorView(
-      EditorView, EditorFont, svnEnable, showline, edcolors(), hicolors(),
-      inlinespellcheck, spell_ignored_words, spellChecker, tabspaces, tabwidth,
-      QKeySequence(keyToggleFocus), getName(), userTagsList);
-  temp = currentEditorView();
-  FilesMap::Iterator it;
-  FilesMap tempfilenames = filenames;
-  for (it = tempfilenames.begin(); it != tempfilenames.end(); ++it) {
-    EditorView->setCurrentIndex(EditorView->indexOf(it.key()));
-    fileReload();
-  }
-  EditorView->setCurrentIndex(EditorView->indexOf(temp));
-  UpdateCaption();
-}
+// void Texmaker::allReload() {
+//   LatexEditorView *temp = new LatexEditorView(
+//       EditorView, EditorFont, svnEnable, showline, edcolors(), hicolors(),
+//       inlinespellcheck, spell_ignored_words, spellChecker, tabspaces, tabwidth,
+//       QKeySequence(keyToggleFocus), getName(), userTagsList);
+//   temp = currentEditorView();
+//   FilesMap::Iterator it;
+//   FilesMap tempfilenames = filenames;
+//   for (it = tempfilenames.begin(); it != tempfilenames.end(); ++it) {
+//     EditorView->setCurrentIndex(EditorView->indexOf(it.key()));
+//     fileReload();
+//   }
+//   EditorView->setCurrentIndex(EditorView->indexOf(temp));
+//   UpdateCaption();
+// }
 
 void Texmaker::listSelectionActivated(int index) {
   disconnect(OpenedFilesListWidget, SIGNAL(itemClicked(QListWidgetItem *)),
@@ -5860,29 +5860,38 @@ void Texmaker::InsertStructFromStringDone() {
 void Texmaker::InsertImage() {
   if (!currentEditorView())
     return;
-  QString tag;
+  
   QString currentDir = QDir::homePath();
+  
+  if(sfDlg) {
+    sfDlg->deleteLater();
+  }
+  sfDlg =
+      new GraphicFileChooser(this, tr("Select an image File"));
+  sfDlg->setFilter(
+      "Graphic files (*.eps *.pdf *.png *.jpeg *.jpg *.tiff);;All files (*.*)");
+  sfDlg->setDir(currentDir);
+ 
+  sfDlg->show();
+
+  connect(sfDlg, SIGNAL(accepted()), this, SLOT(InsertImageDone()));
+
+}
+
+void Texmaker::InsertImageDone() {
+  QString tag;
   QString finame;
   if (singlemode) {
     finame = getName();
   } else {
     finame = MasterName;
   }
-  QFileInfo fi(finame);
-  if (!finame.startsWith("untitled"))
-    currentDir = fi.absolutePath();
-  QDir rootdir = fi.dir();
-  GraphicFileChooser *sfDlg =
-      new GraphicFileChooser(this, tr("Select an image File"));
-  sfDlg->setFilter(
-      "Graphic files (*.eps *.pdf *.png *.jpeg *.jpg *.tiff);;All files (*.*)");
-  sfDlg->setDir(currentDir);
-  if (sfDlg->exec()) {
-    QString fn = sfDlg->fileName();
-    QFileInfo fi(rootdir.relativeFilePath(fn));
-    if (!sfDlg->ui.moreButton->isChecked())
-      InsertTag("\\includegraphics[scale=1]{" + fi.filePath() + "} ", 26, 0);
-    else {
+  QFileInfo finfo(finame);
+  QDir rootdir = finfo.dir();
+  QString fn = sfDlg->fileName();
+  
+  QFileInfo fi(rootdir.relativeFilePath(fn));
+  
       tag = "\\begin{figure}[" + sfDlg->ui.lineEditPlacement->text() + "]\n";
       if (sfDlg->ui.comboBoxCaption->currentIndex() == 0)
         tag += "\\caption{" + sfDlg->ui.lineEditCaption->text() + "}\n";
@@ -5893,8 +5902,7 @@ void Texmaker::InsertImage() {
         tag += "\\caption{" + sfDlg->ui.lineEditCaption->text() + "}\n";
       tag += "\\end{figure}\n";
       InsertTag(tag, 0, 4);
-    }
-  }
+  
 }
 
 void Texmaker::InsertInclude() {

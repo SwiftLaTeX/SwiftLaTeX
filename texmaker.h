@@ -53,6 +53,7 @@
 #include "spellerdialog.h"
 #include "structdialog.h"
 #include "quickxelatexdialog.h"
+#include "graphicfilechooser.h"
 #ifdef INTERNAL_BROWSER
 #include "browser.h"
 #endif
@@ -261,7 +262,7 @@ private:
   SpellerDialog *spellDlg;
   StructDialog *stDlg;
   QuickXelatexDialog *startDlg;
-
+  GraphicFileChooser *sfDlg;
 
 private slots:
   LatexEditorView *currentEditorView() const;
@@ -282,11 +283,11 @@ private slots:
   void AddRecentFile(const QString &f);
   void UpdateRecentFile();
   void CleanRecent();
-  void filePrint();
+  //void filePrint();
   void fileOpenAndGoto(const QString &f, int line, bool focus);
   void getFocusToEditor();
-  void fileReload();
-  void allReload();
+  // void fileReload();
+  // void allReload();
   void listSelectionActivated(int index);
   void ComboFilesInsert(const QString &file);
   void ToggleMasterCurrent();
@@ -367,6 +368,7 @@ private slots:
   void InsertStructFromString(const QString &text);
   void InsertStructFromStringDone();
   void InsertImage();
+  void InsertImageDone();
   void InsertInclude();
   void InsertIncludeDone(const QString&);
   void InsertInput();

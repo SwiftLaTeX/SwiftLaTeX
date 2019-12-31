@@ -20,10 +20,10 @@ GraphicFileChooser::GraphicFileChooser(QWidget *parent, QString name)
   connect(ui.lineEdit, SIGNAL(textChanged(const QString &)), this,
           SIGNAL(fileNameChanged(const QString &)));
   connect(ui.pushButton, SIGNAL(clicked()), this, SLOT(chooseFile()));
-  ui.moreButton->setCheckable(true);
-  ui.moreButton->setAutoDefault(false);
-  connect(ui.moreButton, SIGNAL(toggled(bool)), this, SLOT(expand(bool)));
-  ui.extension->hide();
+  // ui.moreButton->setCheckable(true);
+  // ui.moreButton->setAutoDefault(false);
+  // connect(ui.moreButton, SIGNAL(toggled(bool)), this, SLOT(expand(bool)));
+  //ui.extension->hide();
   updateGeometry();
   setWindowTitle(name);
 }
@@ -35,14 +35,20 @@ QString GraphicFileChooser::fileName() const { return ui.lineEdit->text(); }
 
 void GraphicFileChooser::chooseFile() {
   QString fn;
-  fn = QFileDialog::getOpenFileName(this, tr("Select a File"), dir, filter);
+  QFileDialog *dialog = new QFileDialog(this, tr("Select a File"), dir, filter);
+  dialog->setAttribute(Qt::WA_DeleteOnClose);
+  dialog->show();
+  connect(dialog, SIGNAL(fileSelected(const QString&)), this, SLOT(chooseFileDone(const QString&)));
+  
+}
+void GraphicFileChooser::chooseFileDone(const QString &fn) {
   if (!fn.isEmpty()) {
     ui.lineEdit->setText(fn);
     emit fileNameChanged(fn);
   }
 }
 
-void GraphicFileChooser::expand(bool e) {
-  ui.extension->setVisible(e);
-  updateGeometry();
-}
+// void GraphicFileChooser::expand(bool e) {
+//   ui.extension->setVisible(e);
+//   updateGeometry();
+// }
