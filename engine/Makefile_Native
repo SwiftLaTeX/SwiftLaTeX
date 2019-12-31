@@ -1,6 +1,6 @@
 CC=clang
 CXX=clang++
-DEBUGFLAGS = -g 
+DEBUGFLAGS = -g -O3
 CFLAGS = $(DEBUGFLAGS) -DNATIVE_BUILD -I/usr/include/freetype2 -I/usr/include/harfbuzz -I.
 LDFLAGS =  $(DEBUGFLAGS)  
 CXX_LINK = $(CXX) -o $@ $(LDFLAGS) 

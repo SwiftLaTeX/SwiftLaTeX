@@ -78,10 +78,10 @@ int kpse_fetch_from_network(char *name_ret);
 static int existsInCacheDir(char *name)
 {
     char kpseurl[MAXAVAILABLENAMESIZE] = {0};
-    sprintf(kpseurl, "%s%s", TEXCACHEROOT, name);
+    snprintf(kpseurl, MAXAVAILABLENAMESIZE, "%s%s", TEXCACHEROOT, name);
     if( access( kpseurl, F_OK ) != -1 ) {
         //printf("file available there %s\n", kpseurl);
-        strcpy(name, kpseurl);
+        strncpy(name, kpseurl, MAXAVAILABLENAMESIZE);
         return 1;
     }
     //printf("file no there %s\n", kpseurl);
@@ -257,6 +257,8 @@ char *kpse_find_file(const char *name, tt_input_format_type format) {
 
   char* patched_name = xmalloc(MAXAVAILABLENAMESIZE);
 
+  memset(patched_name, 0, MAXAVAILABLENAMESIZE);
+
   strcat(patched_name, name);
 
   if (access(patched_name, F_OK) != -1) {
@@ -280,10 +282,18 @@ char *kpse_find_file(const char *name, tt_input_format_type format) {
   #endif
   
   if (kpse_fetch_from_network(patched_name) ==
-      0) // Nope Try download it //Now we can ask for help to download the file
+      1) 
   {
-    //printf("kpse_returning %s\n", patched_name);
-    return patched_name;
+    #ifndef NATIVE_BUILD
+      //Recheck the cache
+      if(existsInCacheDir(patched_name) == 1) {
+        printf("==>%s\n", patched_name);
+        return patched_name;
+      }
+      printf("==>failed\n");
+    #else
+      return patched_name;
+    #endif
   }
 
   free(patched_name); // We try out bese, just leave it
@@ -348,6 +358,19 @@ int input_close(void *context, void *handle) { return fclose(handle); }
 
 
 tt_bridge_api_t ourapi;
+
+int compileLaTeX() {  
+  return tex_simple_main(&ourapi, "swiftlatex.fmt", "_input_.tex", 0, 0);
+}
+
+int compileFormat(){
+  return tex_simple_main(&ourapi, "xelatex.fmt", "xelatex.ini", 0, 1); //xelatex.fmt does not matter
+}
+
+int comileBibtex() {
+  return bibtex_simple_main(&ourapi, "_input_.aux");
+}
+
 int main() {
   ourapi.issue_warning = issue_warning;
   ourapi.issue_error = issue_error;
@@ -366,18 +389,9 @@ int main() {
   ourapi.input_getc = input_getc;
   ourapi.input_ungetc = input_ungetc;
   ourapi.input_close = input_close;
+  //compileLaTeX();
   return 0;
 }
 
-int compileLaTeX() {  
-  return tex_simple_main(&ourapi, "swiftlatex.fmt", "_input_.tex", 0);
-}
 
-int compileLaTeXFormat(){
-  return tex_simple_main(&ourapi, "swiftlatex.fmt", "_input_.tex", 1);
-}
-
-int comileBibtex() {
-  return bibtex_simple_main(&ourapi, "_input_.aux");
-}
 

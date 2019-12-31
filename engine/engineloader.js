@@ -52,7 +52,7 @@ function buildLaTeXWorker(bin) {
 }
 
 
-function compileDocument(page, partial) {
+function compileLaTeX() {
 
     if (latexWorkerStatus !== "ready") {
         console.log("Instance not ready");
@@ -64,15 +64,27 @@ function compileDocument(page, partial) {
     return new Promise((resolve, reject) => {
         _promiseReject = reject;
         _promiseResolve = resolve;
+        latexWorker.postMessage({"cmd": "compilelatex"});
+    });
+}
 
-        if (partial) {
-            latexWorker.postMessage({"cmd": "compile", "page": page});
-        } else {
-            latexWorker.postMessage({"cmd": "compile"});
-        }
+function compileFormat() {
+
+    if (latexWorkerStatus !== "ready") {
+        console.log("Instance not ready");
+        return;
+    }
+    latexWorkerStatus = 'busy';
+    start_compile_time =  performance.now();
+
+    return new Promise((resolve, reject) => {
+        _promiseReject = reject;
+        _promiseResolve = resolve;
+        latexWorker.postMessage({"cmd": "compileformat"});
     });
 
 }
+
 
 
 function setEngineMainFile(filename) {

@@ -43,12 +43,12 @@ const char *tt_get_error_message(void) { return error_buf; }
  * setjmp aborts and error message extraction. */
 
 int tex_simple_main(tt_bridge_api_t *api, char *dump_name,
-                    char *input_file_name, time_t build_date, int in_initex_mode) {
+                    char *input_file_name, time_t build_date, int initex) {
   int rv;
 
   halt_on_error_p = 1;
-  in_initex_mode = in_initex_mode;
-  
+  in_initex_mode = initex;
+
   tectonic_global_bridge = api;
 
   if (setjmp(jump_buffer)) {

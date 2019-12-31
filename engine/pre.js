@@ -80,7 +80,7 @@ function exitEngine(status, isabort)
       }
       catch(err)
       {
-          console.error("Unable to get the output file, fallback to error routine");
+          console.error("No output file, it is normal for init mode or the document simply outputs nothing.");
           self.postMessage({'result':'ok', 'cmd':"compile", 'info':'Compilation finished, but no outputfile',
            'status':1,  'log': memlog});
           return;
@@ -116,7 +116,7 @@ function _ensure_bootstrap_link_exist()
 self['onmessage'] = function(ev) {
   let data = ev['data'];
   let cmd = data['cmd'];
-  if(cmd === 'compile')
+  if(cmd === 'compilelatex')
   {
         memlog = ""; //Clean the log
         _ensure_bootstrap_link_exist();
@@ -128,7 +128,13 @@ self['onmessage'] = function(ev) {
         }
         exitEngine(r, false); 
   }
-
+  else if(cmd === 'compileformat')
+  {
+        memlog = ""; //Clean the log
+        FS.chdir(WORKROOT);
+        let r = _compileFormat();
+        exitEngine(r, false); 
+  }
   else if(cmd === "mkdir") {
       try
       {
@@ -190,7 +196,7 @@ function kpse_fetch_from_network_impl(nameptr)
   }
 
   //self.postMessage({'result':'ok', 'type':'status', 'cmd':'texlivefetch', 'data':reqname});
-  const remote_endpoint = "https://www.swiftlatex.com/dl/tex/";
+  const remote_endpoint = "http://127.0.0.1:5000/tex/";
   let xhr = new XMLHttpRequest();
   xhr.open("GET", remote_endpoint + reqname, false);
   xhr.timeout = 15000;
