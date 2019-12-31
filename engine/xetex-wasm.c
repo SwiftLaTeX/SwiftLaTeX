@@ -373,6 +373,10 @@ int compileLaTeX() {
   return tex_simple_main(&ourapi, "swiftlatex.fmt", "_input_.tex", 0);
 }
 
+int compileLaTeXFormat(){
+  return tex_simple_main(&ourapi, "swiftlatex.fmt", "_input_.tex", 1);
+}
+
 int comileBibtex() {
   return bibtex_simple_main(&ourapi, "_input_.aux");
 }

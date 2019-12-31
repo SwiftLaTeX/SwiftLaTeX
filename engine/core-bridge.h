@@ -90,10 +90,7 @@ BEGIN_EXTERN_C
 
 const char *tt_get_error_message(void);
 int tex_simple_main(tt_bridge_api_t *api, char *dump_name,
-                    char *input_file_name, time_t build_date);
-int dvipdfmx_simple_main(tt_bridge_api_t *api, char *dviname, char *pdfname,
-                         bool compress, bool deterministic_tags,
-                         time_t build_date);
+                    char *input_file_name, time_t build_date, int inimode);
 int bibtex_simple_main(tt_bridge_api_t *api, char *aux_file_name);
 
 /* The internal, C/C++ interface: */

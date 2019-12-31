@@ -403,7 +403,8 @@ PlatformFontRef XeTeXFontMgr::findFont(const char *name, char *variant,
     begin_diagnostic();
     print_nl(' ');
     printcstring("-> ");
-    printcstring(getPlatformFontDesc(font->fontRef).c_str());
+    std::string tmpDesc = getPlatformFontDesc(font->fontRef);
+    printcstring(tmpDesc.c_str());
     end_diagnostic(0);
   }
 

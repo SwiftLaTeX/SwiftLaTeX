@@ -124,7 +124,7 @@ self['onmessage'] = function(ev) {
         let r = _compileLaTeX();
         if(r == 0)
         {
-            _compileBib();
+            _compileBibtex();
         }
         exitEngine(r, false); 
   }
