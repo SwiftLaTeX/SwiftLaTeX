@@ -1,8 +1,10 @@
-CC=gcc
-CXX=g++
+CC=emcc
+CXX=em++
 DEBUGFLAGS = -g 
-CFLAGS = $(DEBUGFLAGS) -DNATIVE_BUILD 
-LDFLAGS =  $(DEBUGFLAGS)  
+CFLAGS = $(DEBUGFLAGS) -Iprebuilt/graphite/include -s USE_FREETYPE=1 -s USE_ICU=1 -I prebuilt/graphite2/include -I prebuilt/harfbuzz/include
+LDFLAGS =  $(DEBUGFLAGS)  --js-library library.js -s USE_FREETYPE=1 -s USE_ICU=1 \
+ prebuilt/graphite2/libgraphite2.a prebuilt/harfbuzz/libharfbuzz.a  --pre-js pre.js \
+ -s EXPORTED_FUNCTIONS='["_comileBibtex", "_compileLaTeX", "_main"]' -s NO_EXIT_RUNTIME=1
 CXX_LINK = $(CXX) -o $@ $(LDFLAGS) 
 
 
@@ -12,8 +14,7 @@ xetex-pagebuilder.c xetex-shipout.c xetex-math.c xetex-ext.c xetex-linebreak.c \
  xetex-pic.c bibtex.c md5.c xetex-wasm.c miniz.c
  
 cppsources = teckit-Engine.cpp xetex-XeTeXOTMath.cpp xetex-XeTeXLayoutInterface.cpp \
- xetex-XeTeXFontMgr.cpp xetex-XeTeXFontInst.cpp xetex-XeTeXFontMgr_FC.cpp
-
+ xetex-XeTeXFontMgr.cpp xetex-XeTeXFontInst.cpp xetex-XeTeXFontMgr_FC.cpp icustubdata.cpp
 
 headers = xetex-XeTeXFontMgr.h xetex-XeTeXLayoutInterface.h xetex-XeTeXOTMath.h xetex-XeTeXFontMgr_FC.h \
 			xetex-XeTeXFontInst.h xetex-xetexd.h xetex-web.h xetex-swap.h xetex-stringpool.h xetex-ext.h \
@@ -24,18 +25,15 @@ cobjects = $(csources:.c=.o)
 
 cppobjects = $(cppsources:.cpp=.o)
 
-
-swiftlatex: $(headers) $(cobjects) $(cppobjects) 
-	$(CXX_LINK) $(cobjects) $(cppobjects) -lfreetype -licuuc -lcurl
+swiftlatex.js: $(headers) $(cobjects) $(cppobjects) $(graphiteobjects)
+	$(CXX_LINK) $(cobjects) $(cppobjects) $(graphiteobjects) 
 
 $(cobjects): %.o: %.c
-	$(CC) -c $(CFLAGS) -I. -I/usr/include/freetype2   $< -o $@
+	$(CC) -c $(CFLAGS) -I. $< -o $@
 
 $(cppobjects): %.o: %.cpp
-	$(CXX) -c $(CFLAGS) -I. -I/usr/include/freetype2  $< -o $@
-
-
+	$(CXX) -std=c++11 -c $(CFLAGS) -I.  $< -o $@
 
 clean:
-	rm -f *.o swiftlatex
+	rm -f *.o  swiftlatex*
 	

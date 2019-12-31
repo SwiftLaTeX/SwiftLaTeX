@@ -10956,7 +10956,7 @@ void do_locale_linebreaks(int32_t s, int32_t len) {
     }
     set_native_metrics(cur_list.tail, (INTPAR(xetex_use_glyph_metrics) > 0));
   } else {
-
+    fprintf(stderr, "locale linebreak is not supported yet, crash ahead\n");
     use_skip = GLUEPAR(xetex_linebreak_skip) != 0;
     use_penalty = INTPAR(xetex_linebreak_penalty) != 0 || !use_skip;
     linebreak_start(main_f, INTPAR(xetex_linebreak_locale), native_text + s,

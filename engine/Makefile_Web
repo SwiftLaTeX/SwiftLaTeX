@@ -1,48 +1,20 @@
 CC=emcc
 CXX=em++
 DEBUGFLAGS = -g 
-CFLAGS = $(DEBUGFLAGS) -s USE_FREETYPE=1 -s USE_HARFBUZZ=1 -s USE_ZLIB=1 -s USE_ICU=1 -I graphite2/include -I graphite2/src 
-LDFLAGS =  $(DEBUGFLAGS)  --js-library library.js  --pre-js pre.js -s EXPORTED_FUNCTIONS='["_compileBib", "_compileLaTeX", "_main"]' -s NO_EXIT_RUNTIME=1
+CFLAGS = $(DEBUGFLAGS) -Iprebuilt/graphite/include -s USE_FREETYPE=1 -s USE_ICU=1 -I prebuilt/graphite2/include -I prebuilt/harfbuzz/include
+LDFLAGS =  $(DEBUGFLAGS)  --js-library library.js -s USE_FREETYPE=1 -s USE_ICU=1 \
+ prebuilt/graphite2/libgraphite2.a prebuilt/harfbuzz/libharfbuzz.a  --pre-js pre.js \
+ -s EXPORTED_FUNCTIONS='["_comileBibtex", "_compileLaTeX", "_main"]' -s NO_EXIT_RUNTIME=1
 CXX_LINK = $(CXX) -o $@ $(LDFLAGS) 
 
 
 csources = xetex-io.c xetex-xetex0.c xetex-ini.c xetex-texmfmp.c xetex-errors.c \
 xetex-scaledmath.c xetex-output.c xetex-stringpool.c core-memory.c core-bridge.c \
 xetex-pagebuilder.c xetex-shipout.c xetex-math.c xetex-ext.c xetex-linebreak.c \
- xetex-pic.c bibtex.c md5.c xetex-wasm.c
+ xetex-pic.c bibtex.c md5.c xetex-wasm.c miniz.c
  
 cppsources = teckit-Engine.cpp xetex-XeTeXOTMath.cpp xetex-XeTeXLayoutInterface.cpp \
- xetex-XeTeXFontMgr.cpp xetex-XeTeXFontInst.cpp xetex-XeTeXFontMgr_FC.cpp
-
-graphitesources = graphite2/src/call_machine.cpp \
-graphite2/src/gr_char_info.cpp \
-graphite2/src/gr_features.cpp \
-graphite2/src/gr_face.cpp \
-graphite2/src/gr_font.cpp \
-graphite2/src/gr_logging.cpp \
-graphite2/src/gr_segment.cpp \
-graphite2/src/gr_slot.cpp \
-graphite2/src/CmapCache.cpp \
-graphite2/src/Code.cpp \
-graphite2/src/Collider.cpp \
-graphite2/src/Decompressor.cpp \
-graphite2/src/Face.cpp \
-graphite2/src/FeatureMap.cpp \
-graphite2/src/Font.cpp \
-graphite2/src/GlyphFace.cpp \
-graphite2/src/GlyphCache.cpp \
-graphite2/src/Intervals.cpp \
-graphite2/src/Justifier.cpp \
-graphite2/src/NameTable.cpp \
-graphite2/src/Pass.cpp \
-graphite2/src/Position.cpp \
-graphite2/src/Segment.cpp \
-graphite2/src/Silf.cpp \
-graphite2/src/Slot.cpp \
-graphite2/src/Sparse.cpp \
-graphite2/src/TtfUtil.cpp \
-graphite2/src/UtfCodec.cpp
-
+ xetex-XeTeXFontMgr.cpp xetex-XeTeXFontInst.cpp xetex-XeTeXFontMgr_FC.cpp icustubdata.cpp
 
 headers = xetex-XeTeXFontMgr.h xetex-XeTeXLayoutInterface.h xetex-XeTeXOTMath.h xetex-XeTeXFontMgr_FC.h \
 			xetex-XeTeXFontInst.h xetex-xetexd.h xetex-web.h xetex-swap.h xetex-stringpool.h xetex-ext.h \
@@ -53,9 +25,7 @@ cobjects = $(csources:.c=.o)
 
 cppobjects = $(cppsources:.cpp=.o)
 
-graphiteobjects = $(graphitesources:.cpp=.o)
-
-swiftlatex: $(headers) $(cobjects) $(cppobjects) $(graphiteobjects)
+swiftlatex.js: $(headers) $(cobjects) $(cppobjects) $(graphiteobjects)
 	$(CXX_LINK) $(cobjects) $(cppobjects) $(graphiteobjects) 
 
 $(cobjects): %.o: %.c
@@ -64,9 +34,6 @@ $(cobjects): %.o: %.c
 $(cppobjects): %.o: %.cpp
 	$(CXX) -std=c++11 -c $(CFLAGS) -I.  $< -o $@
 
-$(graphiteobjects): %.o: %.cpp
-	$(CXX) -std=c++11 -c $(CFLAGS) -I. -DGRAPHITE2_NFILEFACE -DGRAPHITE2_NTRACING $< -o $@
-
 clean:
-	rm -f *.o graphite2/src/*.o swiftlatex
+	rm -f *.o  swiftlatex*
 	
