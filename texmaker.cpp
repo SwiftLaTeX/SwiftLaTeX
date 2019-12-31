@@ -94,12 +94,6 @@ Texmaker::Texmaker(QWidget *parent) : QMainWindow(parent) {
   ReadSettings();
 
   QString tempDir = QDir::tempPath();
-#if defined(Q_OS_UNIX) || defined(Q_OS_MAC)
-  QString path =
-      QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
-  if (QDir().mkpath(path))
-    tempDir = path;
-#endif
   QString prefixFile = QDir::homePath();
   prefixFile = "tks_temp_" + prefixFile.section('/', -1);
   prefixFile = QString(QUrl::toPercentEncoding(prefixFile));
@@ -121,12 +115,7 @@ Texmaker::Texmaker(QWidget *parent) : QMainWindow(parent) {
   // spellChecker=0;
   untitled_id = 1;
 
-#if defined(Q_OS_MAC)
-  setWindowIcon(QIcon(":/images/logo128.png"));
-// MacSupport::addFullscreen(this);
-#else
   setWindowIcon(getIcon(":/images/appicon.png"));
-#endif
   QApplication::setOrganizationName("SwiftLaTeX");
   QApplication::setApplicationName("SwiftLaTeX");
 
@@ -523,20 +512,8 @@ Texmaker::Texmaker(QWidget *parent) : QMainWindow(parent) {
   translationList.clear();
   translationList.append(QString("en"));
 
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
-#ifdef USB_VERSION
   QDir transdir(QCoreApplication::applicationDirPath());
-#else
-  QDir transdir(PREFIX "/share/texmaker");
-#endif
 
-#endif
-#if defined(Q_OS_MAC)
-  QDir transdir(QCoreApplication::applicationDirPath() + "/../Resources");
-#endif
-#if defined(Q_OS_WIN32)
-  QDir transdir(QCoreApplication::applicationDirPath());
-#endif
   foreach (QFileInfo qmFileInfo,
            transdir.entryInfoList(QStringList("texmaker_*.qm"),
                                   QDir::Files | QDir::Readable,
@@ -2333,11 +2310,8 @@ void Texmaker::setupMenus() {
   }
   optionsMenu->addSeparator();
 #endif
-#if defined(Q_OS_MAC)
-  settingsMenu = optionsMenu->addMenu(tr("Manage Settings File"));
-#else
+
   settingsMenu = optionsMenu->addMenu(tr("Settings File"));
-#endif
   Act = new QAction(tr("Reset Settings"), this);
   connect(Act, SIGNAL(triggered()), this, SLOT(DeleteSettings()));
   settingsMenu->addAction(Act);
@@ -2890,25 +2864,8 @@ void Texmaker::load(const QString &f) {
     return;
   }
 
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
-
-#ifdef USB_VERSION
   QString dicDir = QCoreApplication::applicationDirPath() + "/";
-#else
-#ifdef DEBIAN_SPELLDIR
-  QString dicDir = PREFIX "/share/myspell/dicts/";
-#else
-  QString dicDir = PREFIX "/share/texmaker/";
-#endif
-#endif
 
-#endif
-#if defined(Q_OS_MAC)
-  QString dicDir = QCoreApplication::applicationDirPath() + "/../Resources/";
-#endif
-#if defined(Q_OS_WIN32)
-  QString dicDir = QCoreApplication::applicationDirPath() + "/";
-#endif
   QRegExp reSpell("% *!TEX +spellcheck *= *([^\\r\\n\\x2029]+)[\\r\\n\\x2029]",
                   Qt::CaseInsensitive);
   pos = reSpell.indexIn(codec->toUnicode(peekBytes));
@@ -3011,7 +2968,6 @@ void Texmaker::load(const QString &f) {
     setMasterDocument(rootFilePath);
   }
 
-#if !defined(Q_OS_MAC)
   show();
   if (windowState() == Qt::WindowMinimized)
     setWindowState(windowState() & ~Qt::WindowMinimized | Qt::WindowActive);
@@ -3022,7 +2978,7 @@ void Texmaker::load(const QString &f) {
 //#ifdef Q_WS_WIN
 //        if (IsIconic (this->winId())) ShowWindow(this->winId(), SW_RESTORE);
 //#endif
-#endif
+
   if (winmaximized)
     setWindowState(windowState() & Qt::WindowMaximized | Qt::WindowActive);
   edit->editor->setFocus();
@@ -3043,14 +2999,14 @@ void Texmaker::setLine(const QString &line) {
 void Texmaker::insertFromCommandLine(const QString &entity) {
   if (currentEditorView()) {
     currentEditorView()->editor->insertPlainText(entity);
-#if !defined(Q_OS_MAC)
+
     show();
     if (windowState() == Qt::WindowMinimized)
       setWindowState(windowState() & ~Qt::WindowMinimized | Qt::WindowActive);
     qApp->setActiveWindow(this);
     activateWindow();
     setFocus();
-#endif
+
     if (winmaximized)
       setWindowState(windowState() & Qt::WindowMaximized | Qt::WindowActive);
     currentEditorView()->editor->setFocus();
@@ -3970,11 +3926,11 @@ void Texmaker::fileOpenAndGoto(const QString &f, int line, bool focus) {
 }
 
 void Texmaker::getFocusToEditor() {
-#if !defined(Q_OS_MAC)
+
   show();
   if (windowState() == Qt::WindowMinimized)
     setWindowState(windowState() & ~Qt::WindowMinimized | Qt::WindowActive);
-#endif
+
   show();
   if (windowState() == Qt::WindowMinimized)
     setWindowState(windowState() & ~Qt::WindowMinimized | Qt::WindowActive);
@@ -4423,14 +4379,7 @@ void Texmaker::ReadSettings() {
   splitter3state = config->value("Splitter3State").toByteArray();
   
   lastScale = config->value("PdfView/Scale", 10).toFloat() / 100.0;
-#if defined(Q_OS_WIN32)
-  if (xf.contains("Courier New", Qt::CaseInsensitive))
-    deft = "Courier New";
-  else
-    deft = qApp->font().family();
-  QString fam = config->value("Editor/Font Family", deft).toString();
-  int si = config->value("Editor/Font Size", 10).toInt();
-#else
+
   if (xf.contains("DejaVu Sans Mono", Qt::CaseInsensitive))
     deft = "DejaVu Sans Mono";
   else if (xf.contains("Lucida Sans Typewriter", Qt::CaseInsensitive))
@@ -4439,7 +4388,7 @@ void Texmaker::ReadSettings() {
     deft = qApp->font().family();
   QString fam = config->value("Editor/Font Family", deft).toString();
   int si = config->value("Editor/Font Size", qApp->font().pointSize()).toInt();
-#endif
+
   QFont F(fam, si);
   EditorFont = F;
 
@@ -4539,21 +4488,8 @@ void Texmaker::ReadSettings() {
 
   lastDocument = config->value("Files/Last Document", "").toString();
   lastTemplate = config->value("Files/Last Template", "").toString();
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
-
-#ifdef USB_VERSION
   QString scriptDir = QCoreApplication::applicationDirPath() + "/";
-#else
-  QString scriptDir = PREFIX "/share/texmaker/";
-#endif
-#endif
 
-#if defined(Q_OS_MAC)
-  QString scriptDir = QCoreApplication::applicationDirPath() + "/../Resources/";
-#endif
-#if defined(Q_OS_WIN32)
-  QString scriptDir = QCoreApplication::applicationDirPath() + "/";
-#endif
   lastScript = config->value("Files/Last Script", scriptDir).toString();
   recentFilesList = config->value("Files/Recent Files New").toStringList();
 
@@ -4683,25 +4619,8 @@ void Texmaker::ReadSettings() {
   else
     beamer_babel = config->value("Beamer/BabelDefault", "").toString();
 
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
-
-#ifdef USB_VERSION
   QString dicDir = QCoreApplication::applicationDirPath() + "/";
-#else
-#ifdef DEBIAN_SPELLDIR
-  QString dicDir = PREFIX "/share/myspell/dicts/";
-#else
-  QString dicDir = PREFIX "/share/texmaker/";
-#endif
-#endif
 
-#endif
-#if defined(Q_OS_MAC)
-  QString dicDir = QCoreApplication::applicationDirPath() + "/../Resources/";
-#endif
-#if defined(Q_OS_WIN32)
-  QString dicDir = QCoreApplication::applicationDirPath() + "/";
-#endif
   QString defaultDic = dicDir + QString(QLocale::system().name()) + ".dic";
   QFileInfo fi(defaultDic);
   if (!fi.exists() || !fi.isReadable())
