@@ -4337,14 +4337,11 @@ void Texmaker::unfoldEnclosing() {
 /////////////// CONFIG ////////////////////
 void Texmaker::ReadSettings() {
 
-#ifdef USB_VERSION
+
   QSettings *config =
       new QSettings(QCoreApplication::applicationDirPath() + "/texmaker.ini",
                     QSettings::IniFormat, this); // for USB-stick version :
-#else
-  QSettings *config = new QSettings(QSettings::IniFormat, QSettings::UserScope,
-                                    "xm1", "texmaker", this);
-#endif
+
   settingsFileName = config->fileName();
   if (!config->contains("IniMode")) {
     delete config;
@@ -4670,13 +4667,10 @@ void Texmaker::ReadSettings() {
 
 void Texmaker::SaveSettings() {
   SaveLastSession();
-#ifdef USB_VERSION
+
   QSettings config(QCoreApplication::applicationDirPath() + "/texmaker.ini",
                    QSettings::IniFormat); // for USB-stick version
-#else
-  QSettings config(QSettings::IniFormat, QSettings::UserScope, "xm1",
-                   "texmaker");
-#endif
+
 
   config.setValue("IniMode", true);
   config.beginGroup("texmaker");
@@ -4685,11 +4679,12 @@ void Texmaker::SaveSettings() {
 
   config.setValue("GUI/Style", modern_style);
   config.setValue("GUI/New Version", true);
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
+
+
   config.setValue("X11/Style", x11style);
   config.setValue("X11/Font Family", x11fontfamily);
   config.setValue("X11/Font Size", x11fontsize);
-#endif
+
 
   config.setValue("MainWindowState", saveState(0));
   config.setValue("MainWindowMaximized",
@@ -10484,24 +10479,10 @@ void Texmaker::initCompleter() {
   QAbstractItemModel *model;
   QFile tagsfile(":/completion/completion.txt");
 
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
 
-#ifdef USB_VERSION
   QFile userTagsfile(QCoreApplication::applicationDirPath() +
                      "/completion.txt");
-#else
-  QFile userTagsfile(PREFIX "/share/texmaker/completion.txt");
-#endif
 
-#endif
-#if defined(Q_OS_MAC)
-  QFile userTagsfile(QCoreApplication::applicationDirPath() +
-                     "/../Resources/completion.txt");
-#endif
-#if defined(Q_OS_WIN32)
-  QFile userTagsfile(QCoreApplication::applicationDirPath() +
-                     "/completion.txt");
-#endif
   if (!tagsfile.open(QFile::ReadOnly))
     model = new QStringListModel(completer);
 
