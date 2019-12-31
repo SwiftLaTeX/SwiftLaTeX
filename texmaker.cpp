@@ -85,9 +85,7 @@
 #include "usermenudialog.h"
 #include "versiondialog.h"
 
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
-#include "x11fontdialog.h"
-#endif
+
 
 Texmaker::Texmaker(QWidget *parent) : QMainWindow(parent) {
   eraseSettings = false;
@@ -2312,11 +2310,11 @@ void Texmaker::setupMenus() {
 // appearanceGroup->addAction(Act);
 // if (!modern_style) Act->setChecked(true);
 // appearanceMenu->addAction(Act);
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
-  Act = new QAction(tr("Change Interface Font"), this);
-  connect(Act, SIGNAL(triggered()), this, SLOT(SetInterfaceFont()));
-  optionsMenu->addAction(Act);
-#endif
+// #if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
+//   Act = new QAction(tr("Change Interface Font"), this);
+//   connect(Act, SIGNAL(triggered()), this, SLOT(SetInterfaceFont()));
+//   optionsMenu->addAction(Act);
+// #endif
 #if defined(NO_WEBBUILD)
   optionsMenu->addSeparator();
   translationMenu = optionsMenu->addMenu(tr("Interface Language"));
@@ -10261,20 +10259,20 @@ void Texmaker::gotoPrevDocument() {
     EditorView->setCurrentIndex(cPage);
 }
 
-void Texmaker::SetInterfaceFont() {
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
-  X11FontDialog *xfdlg = new X11FontDialog(this);
-  int ft = xfdlg->ui.comboBoxFont->findText(x11fontfamily, Qt::MatchExactly);
-  xfdlg->ui.comboBoxFont->setCurrentIndex(ft);
-  xfdlg->ui.spinBoxSize->setValue(x11fontsize);
-  if (xfdlg->exec()) {
-    x11fontfamily = xfdlg->ui.comboBoxFont->currentText();
-    x11fontsize = xfdlg->ui.spinBoxSize->value();
-    QFont x11Font(x11fontfamily, x11fontsize);
-    QApplication::setFont(x11Font);
-  }
-#endif
-}
+// void Texmaker::SetInterfaceFont() {
+// #if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
+//   X11FontDialog *xfdlg = new X11FontDialog(this);
+//   int ft = xfdlg->ui.comboBoxFont->findText(x11fontfamily, Qt::MatchExactly);
+//   xfdlg->ui.comboBoxFont->setCurrentIndex(ft);
+//   xfdlg->ui.spinBoxSize->setValue(x11fontsize);
+//   if (xfdlg->exec()) {
+//     x11fontfamily = xfdlg->ui.comboBoxFont->currentText();
+//     x11fontsize = xfdlg->ui.spinBoxSize->value();
+//     QFont x11Font(x11fontfamily, x11fontsize);
+//     QApplication::setFont(x11Font);
+//   }
+// #endif
+// }
 
 void Texmaker::gotoBookmark1() {
   if (!currentEditorView())

@@ -233,9 +233,7 @@ metainfo.path = $${METAINFODIR}
 
 
 INSTALLS = target
-HEADERS	+= x11fontdialog.h 
-SOURCES	+= x11fontdialog.cpp 
-FORMS += x11fontdialog.ui
+
 
 utilities.files = doc/doc10.png \
 	doc/doc11.png \

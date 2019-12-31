@@ -501,7 +501,7 @@ private slots:
   void gotoNextDocument();
   void gotoPrevDocument();
 
-  void SetInterfaceFont();
+  //void SetInterfaceFont();
 
   void gotoBookmark1();
   void gotoBookmark2();
