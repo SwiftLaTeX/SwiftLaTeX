@@ -16,6 +16,7 @@
 #include "keysequencedialog.h"
 #include <QListWidgetItem>
 #include <QTableWidgetItem>
+#include <QFileDialog>
 
 class ConfigDialog : public QDialog {
   Q_OBJECT
@@ -31,13 +32,17 @@ public slots:
 private slots:
   void createIcons();
   void browseAspell();
+  void browseAspellDone(const QString& location);
   void configureShortCut(QTableWidgetItem *item);
-  void configureKeyToggle();
+  void configureShortCutDone();
+  //void configureKeyToggle();
   void restoreColors();
   void darkColors();
 
 private:
   KeySequenceDialog *keydlg;
+  QTableWidgetItem *adjustingWidgetItem;
+  QFileDialog *fileDialog;
 };
 
 #endif

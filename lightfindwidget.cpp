@@ -45,8 +45,10 @@ void LightFindWidget::doFind() {
   if (ui.checkRegExp->isChecked()) {
     QRegExp regex(ui.comboFind->currentText());
     if (!regex.isValid()) {
-      QMessageBox::warning(this, tr("Error"),
-                           tr("Invalid regular expression."));
+      QMessageBox *msgBox = new QMessageBox;
+      msgBox->setText("Oops, no result found.");
+      msgBox->show();
+      msgBox->setAttribute(Qt::WA_DeleteOnClose);
       return;
     }
   }

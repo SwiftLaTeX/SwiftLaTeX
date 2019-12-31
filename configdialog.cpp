@@ -23,6 +23,10 @@
 
 ConfigDialog::ConfigDialog(QWidget *parent) : QDialog(parent) {
   setModal(true);
+
+  keydlg = NULL;
+  fileDialog = NULL;
+
   ui.setupUi(this);
 
   ui.contentsWidget->setIconSize(QSize(64, 64));
@@ -142,8 +146,8 @@ ConfigDialog::ConfigDialog(QWidget *parent) : QDialog(parent) {
 
   connect(ui.shorttableWidget, SIGNAL(itemClicked(QTableWidgetItem *)), this,
           SLOT(configureShortCut(QTableWidgetItem *)));
-  connect(ui.pushButtonToggleFocus, SIGNAL(clicked()), this,
-          SLOT(configureKeyToggle()));
+  // connect(ui.pushButtonToggleFocus, SIGNAL(clicked()), this,
+  //         SLOT(configureKeyToggle()));
 
   createIcons();
   ui.contentsWidget->setCurrentRow(0);
@@ -250,12 +254,22 @@ void ConfigDialog::browseAspell() {
 #if defined(Q_OS_WIN32)
   QDir spelldir(QCoreApplication::applicationDirPath());
 #endif
-  QString location = QFileDialog::getOpenFileName(
-      this, tr("Browse dictionary"), spelldir.absolutePath(),
-      "Dictionary (*.dic)", 0, QFileDialog::DontResolveSymlinks);
+
+  if(fileDialog) {
+    fileDialog->deleteLater();
+  }
+  fileDialog = new QFileDialog(this, "Select a dictionary file", spelldir.absolutePath(), "Dictionary (*.dic)");
+  fileDialog->setOptions(QFileDialog::DontResolveSymlinks);
+  connect(fileDialog, SIGNAL(fileSelected(const QString&)), this, SLOT(browseAspellDone(const QString&)));
+  fileDialog->show();
+}
+
+void ConfigDialog::browseAspellDone(const QString& in) {
+  QString location = in;
   if (!location.isEmpty()) {
+
     location.replace(QString("\\"), QString("/"));
-    //	location="\""+location+"\"";
+    //  location="\""+location+"\"";
     ui.lineEditAspellCommand->setText(location);
   }
 }
@@ -585,49 +599,52 @@ void ConfigDialog::darkColors() {
 // }
 
 void ConfigDialog::configureShortCut(QTableWidgetItem *item) {
-  QString shortcut, data, newshortcut;
+  QString shortcut, data;
   if (item) {
     shortcut = item->text();
     data = item->data(Qt::UserRole).toString();
     if (data == "key") {
+      if(keydlg) {
+        keydlg->deleteLater();
+      }
       keydlg = new KeySequenceDialog(this);
       keydlg->setKeySequence(QKeySequence(shortcut));
       keydlg->setModal(true);
+      adjustingWidgetItem  = item;
       keydlg->show();
-      if (keydlg->exec()) {
-        newshortcut = keydlg->ui.lineEdit->text();
-        if (!newshortcut.isEmpty()) {
-          item->setText(newshortcut);
-          item->setData(Qt::UserRole, QString("key"));
-        } else {
-          item->setText("none");
-          item->setData(Qt::UserRole, QString("key"));
-        }
-      }
-      delete (keydlg);
+      connect(keydlg, SIGNAL(accepted()), this, SLOT(configureShortCutDone()));
     }
   }
 }
 
-void ConfigDialog::configureShortCutDone(QTableWidgetItem *item) {
-
-}
-
-void ConfigDialog::configureKeyToggle() {
-  QString shortcut, data, newshortcut;
-  shortcut = ui.pushButtonToggleFocus->text();
-  keydlg = new KeySequenceDialog(this);
-  keydlg->setKeySequence(QKeySequence(shortcut));
-  if (keydlg->exec()) {
+void ConfigDialog::configureShortCutDone() {
+    QString newshortcut;
     newshortcut = keydlg->ui.lineEdit->text();
     if (!newshortcut.isEmpty()) {
-      ui.pushButtonToggleFocus->setText(newshortcut);
+          adjustingWidgetItem->setText(newshortcut);
+          adjustingWidgetItem->setData(Qt::UserRole, QString("key"));
     } else {
-      ui.pushButtonToggleFocus->setText("none");
+          adjustingWidgetItem->setText("none");
+          adjustingWidgetItem->setData(Qt::UserRole, QString("key"));
     }
-  }
-  delete (keydlg);
+    adjustingWidgetItem = NULL;
 }
+
+// void ConfigDialog::configureKeyToggle() {
+//   QString shortcut, data, newshortcut;
+//   shortcut = ui.pushButtonToggleFocus->text();
+//   keydlg = new KeySequenceDialog(this);
+//   keydlg->setKeySequence(QKeySequence(shortcut));
+//   if (keydlg->exec()) {
+//     newshortcut = keydlg->ui.lineEdit->text();
+//     if (!newshortcut.isEmpty()) {
+//       ui.pushButtonToggleFocus->setText(newshortcut);
+//     } else {
+//       ui.pushButtonToggleFocus->setText("none");
+//     }
+//   }
+//   delete (keydlg);
+// }
 
 //void ConfigDialog::userQuickWizard() {
   // QStringList usualNames, usualCommands;
