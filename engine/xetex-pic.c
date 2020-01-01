@@ -65,12 +65,12 @@ typedef struct {
 
 int count_pdf_file_pages(void) {
   int pages = 1;
-  // rust_input_handle_t handle;
+  rust_input_handle_t handle;
   // pdf_file *pf;
 
-  // handle = ttstub_input_open (name_of_file, TTIF_PICT, 0);
-  // if (handle == NULL)
-  //     return 0;
+  handle = ttstub_input_open (name_of_file, TTIF_PICT, 0);
+  if (handle == NULL)
+      return 0;
 
   // if ((pf = pdf_open(name_of_file, handle)) == NULL) {
   //     /* TODO: issue warning */
@@ -80,7 +80,7 @@ int count_pdf_file_pages(void) {
 
   // pages = pdf_doc_get_page_count(pf);
   // pdf_close(pf);
-  // ttstub_input_close(handle);
+  ttstub_input_close(handle);
   return pages;
 }
 
@@ -211,6 +211,7 @@ static int find_pic_file(char **path, real_rect *bounds, int pdfBoxType,
                          int page) {
   int err = 0;
 
+  int parser_failed = 1;
   
   rust_input_handle_t handle;
 
@@ -228,15 +229,25 @@ static int find_pic_file(char **path, real_rect *bounds, int pdfBoxType,
   int read_num = ttstub_input_read(handle, data, 254);
 
   if(read_num > 0 && memcmp(data, "swiftlatex", 10) == 0) {
-      ttstub_input_read(handle, data, 254);
-      bounds->wd = atoi(data);
-      ttstub_input_read(handle, data, 254);
-      bounds->ht = atoi(data);
-  } else {
-    printf("failed to parse image files");
+      char * pch;
+      pch = strtok (data, "\n");
+      if(pch != NULL) {
+        pch = strtok(data, "\n");
+        if(pch != NULL) {
+          bounds->wd = (float)(atoi(pch)) * 72.7 / 72.0;
+          pch = strtok(data, "\n");
+          if(pch != NULL) {
+            bounds->ht = (float)(atoi(pch)) * 72.7 / 72.0;
+            parser_failed = 0;
+          }
+        }
+      }
+  } 
+
+  if(parser_failed) {
+    fprintf(stderr, "failed to parse image files\n");
     bounds->wd = 100;
     bounds->ht = 100;
-    //err = 1;
   }
   
   if (err == 0) {
