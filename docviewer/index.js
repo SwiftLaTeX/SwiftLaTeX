@@ -39,15 +39,26 @@ exports.__esModule = true;
 var fs = require("fs");
 var src_1 = require("./src");
 var stream_1 = require("stream");
+var fonts = "";
+fonts = fonts + "@font-face { font-family: esint10; src: url('./esint10.ttf'); }\n";
+fs.readdirSync('./bakoma/').forEach(function (file) {
+    var name = file;
+    fonts = fonts + ("@font-face { font-family: " + name + "; src: url('bakoma/" + file + "'); }\n");
+});
+fs.writeFileSync("fonts.css", fonts);
+//execSync("latex sample/sample.tex");
 var filename = 'test.xdv';
 var stream = fs.createReadStream(filename, { highWaterMark: 256 });
 var html = "";
 html = html + "<!doctype html>\n";
 html = html + "<html lang=en>\n";
 html = html + "<head>\n";
+html = html + '<link rel="stylesheet" type="text/css" href="fonts.css">\n';
+html = html + '<link rel="stylesheet" type="text/css" href="base.css">\n';
 html = html + "</head>\n";
 html = html + '<body>\n';
 html = html + '<div style="position: absolute;">\n';
+//html = html + dviParser( buffer );
 var myWritable = new stream_1.Writable({
     write: function (chunk, encoding, callback) {
         html = html + chunk;

@@ -1,5 +1,7 @@
 "use strict";
+//  var path = execSync('kpsewhich ' + name + '.tfm').toString().split("\n")[0];
 exports.__esModule = true;
+var index_1 = require("./tfm/index");
 var Position = /** @class */ (function () {
     function Position(properties) {
         if (properties) {
@@ -18,10 +20,6 @@ var Position = /** @class */ (function () {
 }());
 var DviFont = /** @class */ (function () {
     function DviFont(properties) {
-        this.name = properties.name;
-        this.checksum = properties.checksum;
-        this.scaleFactor = properties.scaleFactor;
-        this.designSize = properties.designSize;
     }
     return DviFont;
 }());
@@ -70,6 +68,23 @@ var Machine = /** @class */ (function () {
     };
     Machine.prototype.loadFont = function (properties) {
         var f = new DviFont(properties);
+        f.name = properties.name;
+        f.checksum = properties.checksum;
+        f.scaleFactor = properties.scaleFactor;
+        f.designSize = properties.designSize;
+        f.metrics = index_1.loadFont(properties.name);
+        return f;
+    };
+    Machine.prototype.loadNativeFont = function (properties) {
+        var f = new DviFont(properties);
+        f.name = properties.name;
+        f.designSize = properties.fontsize;
+        f.faceindex = properties.faceindex;
+        f.rbga = properties.rgba;
+        f.extend = properties.extend;
+        f.slant = properties.slant;
+        f.embolden = properties.embolden;
+        f.metrics = null;
         return f;
     };
     return Machine;

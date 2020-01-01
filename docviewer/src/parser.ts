@@ -462,6 +462,7 @@ class SetFont extends DviCommand {
   }
 
   execute(machine : Machine) {
+    console.log("Setting mainfont to " + this.k);
     if (machine.fonts[this.k]) {
       machine.setFont(machine.fonts[this.k]);
     } else
@@ -520,6 +521,7 @@ class FontDefinition extends DviCommand {
   }
   
   execute(machine : Machine) {
+    console.log("Defining Local Font name: " + this.n + " index: " + this.k);
     machine.fonts[this.k] = machine.loadFont({
       name: this.n,
       checksum: this.c,
@@ -637,11 +639,15 @@ class NativeFontDefinition extends DviCommand {
       this.opcode = Opcode.define_native_font;
     }
     execute(machine: Machine) {
-      machine.fonts[this.fontnumber] = machine.loadFont({
+      console.log("Defining Native Font name: " + this.filename + " index: " + this.fontnumber);
+      machine.fonts[this.fontnumber] = machine.loadNativeFont({
         name: this.filename,
-        checksum: "",
-        scaleFactor: 1,
-        designSize: this.fontsize
+        fontsize: this.fontsize,
+        faceindex: this.faceindex,
+        rbga: this.rbga,
+        extend: this.extend,
+        slant: this.slant,
+        embolden: this.embolden
       });
     }
     toString(): string {
@@ -967,20 +973,24 @@ function parseCommand( opcode : Opcode, buffer : Buffer ) : Command | void {
           res.rbga = buffer.readUInt32BE(length);
           length += 4;
           
+          
       }
       if((flag & XDV_FLAG_EXTEND) != 0) {
           res.extend = buffer.readUInt32BE(length) / 65536.0;
           length += 4;
+          
       }
       if((flag & XDV_FLAG_SLANT) != 0) {
           res.slant = buffer.readUInt32BE(length) / 65536.0;
           length += 4;
+         
       }
       if((flag & XDV_FLAG_EMBOLDEN) != 0) {
           res.embolden = buffer.readUInt32BE(length) / 65536.0;
           length += 4;
+          
       }
-      res.length = length;
+      res.length = length + 1;
       return res;
     }
     case Opcode.set_glyphs:
@@ -1012,6 +1022,8 @@ function parseCommand( opcode : Opcode, buffer : Buffer ) : Command | void {
       }
       res.glyphLocations = glyphLocations;
       res.glyphIds = glyphIDs;
+      res.length = 6 + count * 10 + 1;
+      console.log(res);
       return res;
     }
       
@@ -1028,33 +1040,36 @@ export async function* dviParser(stream) {
     
   for await (const chunk of stream) {
     buffer = Buffer.concat([buffer, chunk]);
-    let offset = 0;
+  }
     
-    while(offset < buffer.length) {
+  let offset = 0;
+    
+  while(offset < buffer.length) {
       let opcode : Opcode = buffer.readUInt8(offset);
 
       if (isAfterPostamble) {
-	if (opcode == 223) {
-	  offset++;
-	  continue;
-	} else {
-	  throw Error('Only 223 bytes are permitted after the post-postamble.');
-	}
+          if (opcode == 223) {
+            offset++;
+            continue;
+          } else {
+            throw Error('Only 223 bytes are permitted after the post-postamble.');
+          }
       }
 
       let command = parseCommand( opcode, buffer.slice(offset+1) );
+
       if (command) {
-	yield command;
-	offset += command.length;
+          yield command;
+          offset += command.length;
 
-	if (command.opcode == Opcode.post_post)
-	  isAfterPostamble = true;
-      } else
-	break;
-    }
+          if (command.opcode == Opcode.post_post)
+            isAfterPostamble = true;
+              } else
+          break;
+      }
 
-    buffer = buffer.slice(offset);
-  }
+      
+    
 }
 
 export async function execute(commands, machine) {

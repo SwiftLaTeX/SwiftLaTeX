@@ -4,7 +4,10 @@
   "description": "Convert DVI to HTML5/CSS",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "scripts": {},
+  "scripts": {
+    "prepare": "npm run build",
+    "build": "node tools/tfm2json.js && tsc"
+  },
   "files": [
     "lib/**/*"
   ],

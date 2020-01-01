@@ -1,4 +1,7 @@
+//  var path = execSync('kpsewhich ' + name + '.tfm').toString().split("\n")[0];
 
+import { Tfm } from './tfm/tfm';
+import { loadFont } from './tfm/index';
 
 export interface Rule {
   a : number;
@@ -32,12 +35,15 @@ export class DviFont {
   checksum: number;
   scaleFactor: number;
   designSize: number;
+  metrics: Tfm;
+  faceindex: number;
+  rbga: number;
+  extend: number;
+  slant: number;
+  embolden: number;
   
   constructor(properties : DviFont) {
-    this.name = properties.name;
-    this.checksum = properties.checksum;
-    this.scaleFactor = properties.scaleFactor;
-    this.designSize = properties.designSize;
+    
   }
 }
 
@@ -103,14 +109,30 @@ export class Machine {
   // Returns the width of the text
   putText( text : Buffer ) : number {
     return 0;
-  }
-
- 
+  }  
 
   loadFont( properties : any ) : DviFont {
     var f = new DviFont(properties);
-    
+    f.name = properties.name;
+    f.checksum = properties.checksum;
+    f.scaleFactor = properties.scaleFactor;
+    f.designSize = properties.designSize;
+    f.metrics = loadFont(properties.name);
     return f;
   }
+
+  loadNativeFont( properties : any ) : DviFont {
+    var f = new DviFont(properties);
+    f.name = properties.name;
+    f.designSize = properties.fontsize;
+    f.faceindex = properties.faceindex;
+    f.rbga =  properties.rgba;
+    f.extend = properties.extend;
+    f.slant = properties.slant;
+    f.embolden = properties.embolden;
+    f.metrics = null;
+    return f;
+  }
+
 }
 

@@ -480,6 +480,7 @@ var SetFont = /** @class */ (function (_super) {
         return _this;
     }
     SetFont.prototype.execute = function (machine) {
+        console.log("Setting mainfont to " + this.k);
         if (machine.fonts[this.k]) {
             machine.setFont(machine.fonts[this.k]);
         }
@@ -524,6 +525,7 @@ var FontDefinition = /** @class */ (function (_super) {
         return _this;
     }
     FontDefinition.prototype.execute = function (machine) {
+        console.log("Defining Local Font name: " + this.n + " index: " + this.k);
         machine.fonts[this.k] = machine.loadFont({
             name: this.n,
             checksum: this.c,
@@ -601,11 +603,15 @@ var NativeFontDefinition = /** @class */ (function (_super) {
         return _this;
     }
     NativeFontDefinition.prototype.execute = function (machine) {
-        machine.fonts[this.fontnumber] = machine.loadFont({
+        console.log("Defining Native Font name: " + this.filename + " index: " + this.fontnumber);
+        machine.fonts[this.fontnumber] = machine.loadNativeFont({
             name: this.filename,
-            checksum: "",
-            scaleFactor: 1,
-            designSize: this.fontsize
+            fontsize: this.fontsize,
+            faceindex: this.faceindex,
+            rbga: this.rbga,
+            extend: this.extend,
+            slant: this.slant,
+            embolden: this.embolden
         });
     };
     NativeFontDefinition.prototype.toString = function () {
@@ -911,7 +917,7 @@ function parseCommand(opcode, buffer) {
                     res.embolden = buffer.readUInt32BE(length_1) / 65536.0;
                     length_1 += 4;
                 }
-                res.length = length_1;
+                res.length = length_1 + 1;
                 return res;
             }
         case Opcode.set_glyphs:
@@ -942,6 +948,8 @@ function parseCommand(opcode, buffer) {
                 }
                 res.glyphLocations = glyphLocations;
                 res.glyphIds = glyphIDs;
+                res.length = 6 + count * 10 + 1;
+                console.log(res);
                 return res;
             }
         case Opcode.set_text_and_glyphs:
@@ -951,7 +959,7 @@ function parseCommand(opcode, buffer) {
 }
 function dviParser(stream) {
     return __asyncGenerator(this, arguments, function dviParser_1() {
-        var buffer, isAfterPostamble, stream_1, stream_1_1, chunk, offset, opcode, command, e_1_1;
+        var buffer, isAfterPostamble, stream_1, stream_1_1, chunk, e_1_1, offset, opcode, command;
         var e_1, _a;
         return __generator(this, function (_b) {
             switch (_b.label) {
@@ -960,61 +968,60 @@ function dviParser(stream) {
                     isAfterPostamble = false;
                     _b.label = 1;
                 case 1:
-                    _b.trys.push([1, 12, 13, 18]);
+                    _b.trys.push([1, 6, 7, 12]);
                     stream_1 = __asyncValues(stream);
                     _b.label = 2;
                 case 2: return [4 /*yield*/, __await(stream_1.next())];
                 case 3:
-                    if (!(stream_1_1 = _b.sent(), !stream_1_1.done)) return [3 /*break*/, 11];
+                    if (!(stream_1_1 = _b.sent(), !stream_1_1.done)) return [3 /*break*/, 5];
                     chunk = stream_1_1.value;
                     buffer = Buffer.concat([buffer, chunk]);
-                    offset = 0;
                     _b.label = 4;
-                case 4:
-                    if (!(offset < buffer.length)) return [3 /*break*/, 9];
+                case 4: return [3 /*break*/, 2];
+                case 5: return [3 /*break*/, 12];
+                case 6:
+                    e_1_1 = _b.sent();
+                    e_1 = { error: e_1_1 };
+                    return [3 /*break*/, 12];
+                case 7:
+                    _b.trys.push([7, , 10, 11]);
+                    if (!(stream_1_1 && !stream_1_1.done && (_a = stream_1["return"]))) return [3 /*break*/, 9];
+                    return [4 /*yield*/, __await(_a.call(stream_1))];
+                case 8:
+                    _b.sent();
+                    _b.label = 9;
+                case 9: return [3 /*break*/, 11];
+                case 10:
+                    if (e_1) throw e_1.error;
+                    return [7 /*endfinally*/];
+                case 11: return [7 /*endfinally*/];
+                case 12:
+                    offset = 0;
+                    _b.label = 13;
+                case 13:
+                    if (!(offset < buffer.length)) return [3 /*break*/, 18];
                     opcode = buffer.readUInt8(offset);
                     if (isAfterPostamble) {
                         if (opcode == 223) {
                             offset++;
-                            return [3 /*break*/, 4];
+                            return [3 /*break*/, 13];
                         }
                         else {
                             throw Error('Only 223 bytes are permitted after the post-postamble.');
                         }
                     }
                     command = parseCommand(opcode, buffer.slice(offset + 1));
-                    if (!command) return [3 /*break*/, 7];
+                    if (!command) return [3 /*break*/, 16];
                     return [4 /*yield*/, __await(command)];
-                case 5: return [4 /*yield*/, _b.sent()];
-                case 6:
+                case 14: return [4 /*yield*/, _b.sent()];
+                case 15:
                     _b.sent();
                     offset += command.length;
                     if (command.opcode == Opcode.post_post)
                         isAfterPostamble = true;
-                    return [3 /*break*/, 8];
-                case 7: return [3 /*break*/, 9];
-                case 8: return [3 /*break*/, 4];
-                case 9:
-                    buffer = buffer.slice(offset);
-                    _b.label = 10;
-                case 10: return [3 /*break*/, 2];
-                case 11: return [3 /*break*/, 18];
-                case 12:
-                    e_1_1 = _b.sent();
-                    e_1 = { error: e_1_1 };
-                    return [3 /*break*/, 18];
-                case 13:
-                    _b.trys.push([13, , 16, 17]);
-                    if (!(stream_1_1 && !stream_1_1.done && (_a = stream_1["return"]))) return [3 /*break*/, 15];
-                    return [4 /*yield*/, __await(_a.call(stream_1))];
-                case 14:
-                    _b.sent();
-                    _b.label = 15;
-                case 15: return [3 /*break*/, 17];
-                case 16:
-                    if (e_1) throw e_1.error;
-                    return [7 /*endfinally*/];
-                case 17: return [7 /*endfinally*/];
+                    return [3 /*break*/, 17];
+                case 16: return [3 /*break*/, 18];
+                case 17: return [3 /*break*/, 13];
                 case 18: return [2 /*return*/];
             }
         });
