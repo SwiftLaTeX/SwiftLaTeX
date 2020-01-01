@@ -6006,63 +6006,75 @@ void Texmaker::QuickTabularDone(){
 void Texmaker::QuickArray() {
   if (!currentEditorView())
     return;
-  QString al;
+  
   ArrayDialog *arrayDlg = new ArrayDialog(this, "Array");
+  arrayDlg->setAttribute(Qt::WA_DeleteOnClose);
+  arrayDlg->show();
+  connect(arrayDlg, SIGNAL(accepted()), this, SLOT(QuickArrayDone()));
+}
+
+void Texmaker::QuickArrayDone(){
+  ArrayDialog *arrayDlg = (ArrayDialog*)(sender());
+  QString al;
   QTableWidgetItem *item = new QTableWidgetItem();
-  if (arrayDlg->exec()) {
-    int y = arrayDlg->ui.spinBoxRows->value();
-    int x = arrayDlg->ui.spinBoxColumns->value();
-    QString env = arrayDlg->ui.comboEnvironment->currentText();
-    QString tag = QString("\\begin{") + env + "}";
-    if (env == "array") {
-      tag += "{";
-      if ((arrayDlg->ui.comboAlignment->currentIndex()) == 0)
-        al = QString("c");
-      if ((arrayDlg->ui.comboAlignment->currentIndex()) == 1)
-        al = QString("l");
-      if ((arrayDlg->ui.comboAlignment->currentIndex()) == 2)
-        al = QString("r");
-      for (int j = 0; j < x; j++) {
-        tag += al;
+  int y = arrayDlg->ui.spinBoxRows->value();
+      int x = arrayDlg->ui.spinBoxColumns->value();
+      QString env = arrayDlg->ui.comboEnvironment->currentText();
+      QString tag = QString("\\begin{") + env + "}";
+      if (env == "array") {
+        tag += "{";
+        if ((arrayDlg->ui.comboAlignment->currentIndex()) == 0)
+          al = QString("c");
+        if ((arrayDlg->ui.comboAlignment->currentIndex()) == 1)
+          al = QString("l");
+        if ((arrayDlg->ui.comboAlignment->currentIndex()) == 2)
+          al = QString("r");
+        for (int j = 0; j < x; j++) {
+          tag += al;
+        }
+        tag += "}";
       }
-      tag += "}";
-    }
-    tag += QString("\n");
-    for (int i = 0; i < y - 1; i++) {
+      tag += QString("\n");
+      for (int i = 0; i < y - 1; i++) {
+        for (int j = 0; j < x - 1; j++) {
+          item = arrayDlg->ui.tableWidget->item(i, j);
+          if (item)
+            tag += item->text() + QString(" & ");
+          else
+            tag += QString(0x2022) + QString(" & ");
+        }
+        item = arrayDlg->ui.tableWidget->item(i, x - 1);
+        if (item)
+          tag += item->text() + QString(" \\\\ \n");
+        else
+          tag += QString(0x2022) + QString(" \\\\ \n");
+      }
       for (int j = 0; j < x - 1; j++) {
-        item = arrayDlg->ui.tableWidget->item(i, j);
+        item = arrayDlg->ui.tableWidget->item(y - 1, j);
         if (item)
           tag += item->text() + QString(" & ");
         else
           tag += QString(0x2022) + QString(" & ");
       }
-      item = arrayDlg->ui.tableWidget->item(i, x - 1);
+      item = arrayDlg->ui.tableWidget->item(y - 1, x - 1);
       if (item)
-        tag += item->text() + QString(" \\\\ \n");
+        tag += item->text() + QString("\n\\end{") + env + "} ";
       else
-        tag += QString(0x2022) + QString(" \\\\ \n");
-    }
-    for (int j = 0; j < x - 1; j++) {
-      item = arrayDlg->ui.tableWidget->item(y - 1, j);
-      if (item)
-        tag += item->text() + QString(" & ");
-      else
-        tag += QString(0x2022) + QString(" & ");
-    }
-    item = arrayDlg->ui.tableWidget->item(y - 1, x - 1);
-    if (item)
-      tag += item->text() + QString("\n\\end{") + env + "} ";
-    else
-      tag += QString(0x2022) + QString("\n\\end{") + env + "} ";
-    InsertTag(tag, 0, 0);
-  }
+        tag += QString(0x2022) + QString("\n\\end{") + env + "} ";
+      InsertTag(tag, 0, 0);
 }
 
 void Texmaker::QuickTabbing() {
   if (!currentEditorView())
     return;
   TabbingDialog *tabDlg = new TabbingDialog(this, "Tabbing");
-  if (tabDlg->exec()) {
+  tabDlg->show();
+  tabDlg->setAttribute(Qt::WA_DeleteOnClose);
+  connect(tabDlg, SIGNAL(accepted()), this, SLOT(QuickTabbingDone()));
+}
+
+void Texmaker::QuickTabbingDone() {
+  TabbingDialog *tabDlg = (TabbingDialog *)(sender());
     int x = tabDlg->ui.spinBoxColumns->value();
     int y = tabDlg->ui.spinBoxRows->value();
     QString s = tabDlg->ui.lineEdit->text();
@@ -6082,18 +6094,24 @@ void Texmaker::QuickTabbing() {
     }
     tag += QString(0x2022) + QString("\n\\end{tabbing} ");
     InsertTag(tag, 0, 2);
-  }
-}
+} 
 
 void Texmaker::QuickLetter() {
   if (!currentEditorView())
     return;
   QString tag = QString("\\documentclass[");
   LetterDialog *ltDlg = new LetterDialog(this, "Letter");
+  ltDlg->setAttribute(Qt::WA_DeleteOnClose);
   int f = ltDlg->ui.comboBoxEncoding->findText(
       document_encoding, Qt::MatchExactly | Qt::MatchCaseSensitive);
   ltDlg->ui.comboBoxEncoding->setCurrentIndex(f);
-  if (ltDlg->exec()) {
+  ltDlg->show();
+  connect(ltDlg, SIGNAL(accepted()), this, SLOT(QuickLetterDone()));
+}
+
+void Texmaker::QuickLetterDone() {
+    LetterDialog *ltDlg = (LetterDialog *)(sender());
+    QString tag = QString("\\documentclass[");
     tag += ltDlg->ui.comboBoxPt->currentText() + QString(",");
     tag += ltDlg->ui.comboBoxPaper->currentText() + QString("]{letter}");
     tag += QString("\n");
@@ -6123,10 +6141,8 @@ void Texmaker::QuickLetter() {
     } else {
       InsertTag(tag, 9, 2);
     }
-  }
+
 }
-
-
 
 void Texmaker::QuickXelatex() {
   
@@ -6246,13 +6262,10 @@ void Texmaker::QuickXelatexDone() {
 }
 
 void Texmaker::QuickBeamer() {
-  QString opt = "";
-  QString optbabel = "";
-  int f;
-  QString fontenc = "";
+  
   if (!currentEditorView())
     fileNew();
-  QString tag = QString("\\documentclass[");
+  int f;
   QuickBeamerDialog *beamDlg = new QuickBeamerDialog(this, "Quick Start");
   beamDlg->Init();
   f = beamDlg->ui.comboBoxTheme->findText(
@@ -6273,62 +6286,25 @@ void Texmaker::QuickBeamer() {
   beamDlg->ui.checkBoxBabel->setChecked(babel_package);
   beamDlg->ui.listWidgetBabel->setEnabled(babel_package);
   beamDlg->ui.lineEditAuthor->setText(beamer_author);
-  if (beamDlg->exec()) {
-    tag += beamDlg->ui.comboBoxSize->currentText();
+  beamDlg->show();
+  beamDlg->setAttribute(Qt::WA_DeleteOnClose);
+  connect(beamDlg, SIGNAL(accepted()), this, SLOT(QuickBeamerDone()));
+}
+
+void Texmaker::QuickBeamerDone() {
+  QuickBeamerDialog *beamDlg = (QuickBeamerDialog *)(sender());
+  QString opt = "";
+  QString optbabel = "";
+  QString fontenc = "";
+  QString tag = QString("\\documentclass[");
+  tag += beamDlg->ui.comboBoxSize->currentText();
     tag += QString("]{beamer}\n");
     tag += "\\usetheme{" + beamDlg->ui.comboBoxTheme->currentText() + "}\n";
-    if (beamDlg->ui.comboBoxEncoding->currentText() != "NONE")
-      tag += QString("\\usepackage[") +
-             beamDlg->ui.comboBoxEncoding->currentText() +
-             QString("]{inputenc}");
-    tag += QString("\n");
+    
     if (beamDlg->ui.comboBoxEncoding->currentText().startsWith("utf8x")) {
       tag += QString("\\usepackage{ucs}\n");
     }
-    if (beamDlg->ui.checkBoxBabel->isChecked()) {
-      QList<QListWidgetItem *> babelItems =
-          beamDlg->ui.listWidgetBabel->selectedItems();
-      for (int i = 0; i < babelItems.size(); ++i) {
-        if (babelItems.at(i)) {
-          if ((babelItems.at(i)->text() == "arabic") && fontenc.isEmpty())
-            fontenc = "LAE,LFE";
-          else if ((babelItems.at(i)->text() == "russian") && fontenc.isEmpty())
-            fontenc = "OT1";
-          else if ((babelItems.at(i)->text() == "slovak") && fontenc.isEmpty())
-            fontenc = "IL2";
-          else if ((babelItems.at(i)->text() == "francais") &&
-                   fontenc.isEmpty())
-            fontenc = "T1";
-          else if ((babelItems.at(i)->text() == "french") && fontenc.isEmpty())
-            fontenc = "T1";
-          else if ((babelItems.at(i)->text() == "frenchb") && fontenc.isEmpty())
-            fontenc = "T1";
-          else if ((babelItems.at(i)->text() == "german") && fontenc.isEmpty())
-            fontenc = "T1";
-          else if ((babelItems.at(i)->text() == "portuguese") &&
-                   fontenc.isEmpty())
-            fontenc = "T1";
-          else if ((babelItems.at(i)->text() == "icelandic") &&
-                   fontenc.isEmpty())
-            fontenc = "T1";
-          else if ((babelItems.at(i)->text() == "czech") && fontenc.isEmpty())
-            fontenc = "T1";
-          else if ((babelItems.at(i)->text() == "magyar") && fontenc.isEmpty())
-            fontenc = "T1";
-          else if ((babelItems.at(i)->text() == "finnish") && fontenc.isEmpty())
-            fontenc = "T1";
-          if (i == 0) {
-            optbabel += babelItems.at(i)->text();
-            beamer_babel = babelItems.at(i)->text();
-          } else
-            optbabel += QString(",") + babelItems.at(i)->text();
-        }
-      }
-      tag += QString("\\usepackage[" + optbabel + "]{babel}\n");
-      if (!fontenc.isEmpty()) {
-        tag += QString("\\usepackage[" + fontenc + "]{fontenc}\n");
-      }
-    }
+    
     if (beamDlg->ui.checkBoxAMS->isChecked()) {
       tag += QString("\\usepackage{amsmath}\n\\usepackage{amsfonts}"
                      "\n\\usepackage{amssymb}\n");
@@ -6387,7 +6363,6 @@ void Texmaker::QuickBeamer() {
     babel_package = beamDlg->ui.checkBoxBabel->isChecked();
     graphicx_package = beamDlg->ui.checkBoxGraphicx->isChecked();
     beamer_author = beamDlg->ui.lineEditAuthor->text();
-  }
 }
 
 void Texmaker::InsertBib1() {
@@ -7615,15 +7590,22 @@ void Texmaker::InsertUserTag10() {
 }
 
 void Texmaker::EditUserMenu() {
-  QAction *Act;
+  
   UserMenuDialog *umDlg = new UserMenuDialog(this, tr("Edit User &Tags"));
+  umDlg->setAttribute(Qt::WA_DeleteOnClose);
   for (int i = 0; i <= 9; i++) {
     umDlg->Name[i] = UserMenuName[i];
     umDlg->Tag[i] = UserMenuTag[i];
   }
   umDlg->init();
-  if (umDlg->exec()) {
-    for (int i = 0; i <= 9; i++) {
+  umDlg->show();
+  connect(umDlg, SIGNAL(accepted()), this, SLOT(EditUserMenuDone()));
+}
+
+void Texmaker::EditUserMenuDone() {
+  UserMenuDialog *umDlg = (UserMenuDialog *)(sender());
+  QAction *Act;
+  for (int i = 0; i <= 9; i++) {
       UserMenuName[i] = umDlg->Name[i];
       UserMenuTag[i] = umDlg->Tag[i];
     }
@@ -7672,7 +7654,6 @@ void Texmaker::EditUserMenu() {
     Act = new QAction(tr("Edit User &Tags"), this);
     connect(Act, SIGNAL(triggered()), this, SLOT(EditUserMenu()));
     user11Menu->addAction(Act);
-  }
 }
 
 void Texmaker::SectionCommand() {

@@ -416,6 +416,7 @@ private slots:
   void InsertUserTag9();
   void InsertUserTag10();
   void EditUserMenu();
+  void EditUserMenuDone();
 
   void SectionCommand();
   void OtherCommand();
@@ -431,11 +432,15 @@ private slots:
   void QuickTabular();
   void QuickTabularDone();
   void QuickArray();
+  void QuickArrayDone();
   void QuickTabbing();
+  void QuickTabbingDone();
   void QuickLetter();
+  void QuickLetterDone();
   void QuickXelatex();
   void QuickXelatexDone();
   void QuickBeamer();
+  void QuickBeamerDone();
 
   //void RunCommand(QString comd, bool waitendprocess);
   // void readFromStderr();
