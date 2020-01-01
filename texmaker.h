@@ -266,12 +266,13 @@ private slots:
   void fileNewFromFile();
   void fileNewFromFileDone(const QString&);
   void fileOpen();
+  void fileOpenDone(const QStringList&);
   void checkModifiedOutsideAll();
   void fileSave();
   void fileSaveAll();
   void fileBackupAll();
   void fileSaveAs();
-  void fileSaveACopy();
+  void fileSaveAsDone(const QString &fn);
   void fileClose();
   void fileCloseRequested(int index);
   void fileCloseAll();
@@ -321,7 +322,8 @@ private slots:
   void SaveSettings();
   void DeleteSettings();
   void CopySettings();
-  void ReplaceSettings();
+  void CopySettingsDone(const QString &);
+  //void ReplaceSettings();
 
   void NewDocumentStatus(bool m);
   void UpdateCaption();
@@ -574,6 +576,7 @@ private slots:
   void splitter2Changed();
 
   void SaveSession();
+  void SaveSessionDone(const QString &fn);
   void LoadSessionFile(const QString &fn);
   void LoadSession();
   void SaveLastSession();

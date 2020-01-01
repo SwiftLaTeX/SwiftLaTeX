@@ -1016,9 +1016,9 @@ void Texmaker::setupMenus() {
   connect(Act, SIGNAL(triggered()), this, SLOT(fileSaveAll()));
   fileMenu->addAction(Act);
 
-  Act = new QAction(tr("Save A Copy"), this);
-  connect(Act, SIGNAL(triggered()), this, SLOT(fileSaveACopy()));
-  fileMenu->addAction(Act);
+  // Act = new QAction(tr("Save A Copy"), this);
+  // connect(Act, SIGNAL(triggered()), this, SLOT(fileSaveACopy()));
+  // fileMenu->addAction(Act);
 
   Act = new QAction(getIcon(":/images/fileclose.png"), tr("Close"), this);
   Act->setShortcut(Qt::CTRL + Qt::Key_W);
@@ -2318,9 +2318,9 @@ void Texmaker::setupMenus() {
   Act = new QAction(tr("Save a copy of the settings file"), this);
   connect(Act, SIGNAL(triggered()), this, SLOT(CopySettings()));
   settingsMenu->addAction(Act);
-  Act = new QAction(tr("Replace the settings file by a new one"), this);
-  connect(Act, SIGNAL(triggered()), this, SLOT(ReplaceSettings()));
-  settingsMenu->addAction(Act);
+  // Act = new QAction(tr("Replace the settings file by a new one"), this);
+  // connect(Act, SIGNAL(triggered()), this, SLOT(ReplaceSettings()));
+  // settingsMenu->addAction(Act);
 
   helpMenu = menuBar()->addMenu(tr("&Help"));
 
@@ -3164,16 +3164,23 @@ void Texmaker::fileOpen() {
     if (fi.exists() && fi.isReadable())
       currentDir = fi.absolutePath();
   }
-  QStringList filesNames = QFileDialog::getOpenFileNames(
+  QFileDialog *dialog = new QFileDialog(
       this, tr("Open File"), currentDir,
       "TeX files (*.tex *.bib *.sty *.cls *.mp *.Rnw *.asy);;All files (*.*)");
-  foreach (const QString &fn, filesNames) {
+
+  dialog->show();
+
+  dialog->setAttribute(Qt::WA_DeleteOnClose);
+
+  connect(dialog, SIGNAL(filesSelected(const QStringList&)), this, SLOT(filesOpenDone(const QStringList&)));
+  
+}
+
+void Texmaker::fileOpenDone(const QStringList &selected) {
+  foreach (const QString &fn, selected) {
     if (!fn.isEmpty())
       load(fn);
   }
-  // if ((filesNames.count() == 1) && embedinternalpdf && builtinpdfview &&
-  //     showpdfview) {
-  // }
   if (currentEditorView())
     currentEditorView()->editor->setFocus();
 }
@@ -3525,9 +3532,19 @@ void Texmaker::fileSaveAs() {
     if (fi.exists() && fi.isReadable())
       currentDir = fi.absolutePath();
   }
-  QString fn = QFileDialog::getSaveFileName(
-      this, tr("Save As"), currentDir,
+  
+
+  QFileDialog *sfDlg = new QFileDialog(this, tr("Save As"), currentDir,
       "TeX files (*.tex *.bib *.sty *.cls *.mp *.Rnw *.asy);;All files (*.*)");
+  sfDlg->setAcceptMode(QFileDialog::AcceptSave);
+  sfDlg->setAttribute(Qt::WA_DeleteOnClose);
+  sfDlg->show();
+  connect(sfDlg, SIGNAL(fileSelected(const QString&)), this, SLOT(fileSaveAsDone(const QString&)));
+  
+}
+
+void Texmaker::fileSaveAsDone(const QString &in) {
+  QString fn = in;
   if (!fn.isEmpty()) {
     if (!fn.contains('.'))
       fn += ".tex";
@@ -3592,32 +3609,32 @@ void Texmaker::fileBackupAll() {
   QApplication::restoreOverrideCursor();
 }
 
-void Texmaker::fileSaveACopy() {
-  if (!currentEditorView())
-    return;
-  QString currentDir = QDir::homePath();
-  if (!lastDocument.isEmpty()) {
-    QFileInfo fi(lastDocument);
-    if (fi.exists() && fi.isReadable())
-      currentDir = fi.absolutePath();
-  }
-  QString fn = QFileDialog::getSaveFileName(
-      this, tr("Save As"), currentDir,
-      "TeX files (*.tex *.bib *.sty *.cls *.mp *.Rnw *.asy);;All files (*.*)");
-  if (!fn.isEmpty()) {
-    if (!fn.contains('.'))
-      fn += ".tex";
-    QFile file(fn);
-    if (file.open(QIODevice::WriteOnly)) {
-      QTextStream ts(&file);
-      QTextCodec *codec = QTextCodec::codecForName(
-          currentEditorView()->editor->getEncoding().toLatin1());
-      ts.setCodec(codec ? codec : QTextCodec::codecForLocale());
-      ts << currentEditorView()->editor->toPlainText();
-      file.close();
-    }
-  }
-}
+// void Texmaker::fileSaveACopy() {
+//   if (!currentEditorView())
+//     return;
+//   QString currentDir = QDir::homePath();
+//   if (!lastDocument.isEmpty()) {
+//     QFileInfo fi(lastDocument);
+//     if (fi.exists() && fi.isReadable())
+//       currentDir = fi.absolutePath();
+//   }
+//   QString fn = QFileDialog::getSaveFileName(
+//       this, tr("Save As"), currentDir,
+//       "TeX files (*.tex *.bib *.sty *.cls *.mp *.Rnw *.asy);;All files (*.*)");
+//   if (!fn.isEmpty()) {
+//     if (!fn.contains('.'))
+//       fn += ".tex";
+//     QFile file(fn);
+//     if (file.open(QIODevice::WriteOnly)) {
+//       QTextStream ts(&file);
+//       QTextCodec *codec = QTextCodec::codecForName(
+//           currentEditorView()->editor->getEncoding().toLatin1());
+//       ts.setCodec(codec ? codec : QTextCodec::codecForLocale());
+//       ts << currentEditorView()->editor->toPlainText();
+//       file.close();
+//     }
+//   }
+// }
 
 void Texmaker::fileClose() {
   if (!currentEditorView())
@@ -3785,23 +3802,23 @@ void Texmaker::fileExit() {
       file.open(QIODevice::ReadOnly);
       file.remove();
     }
-    if (replaceSettings) {
-      QString from_file = QFileDialog::getOpenFileName(
-          this, tr("Select a File"), QDir::homePath(),
-          "Setting files (*.ini);;All files (*.*)");
-      if (!from_file.isEmpty() && QFile::exists(from_file)) {
-        if (!settingsFileName.isEmpty() && QFile::exists(settingsFileName)) {
-          QFile file(settingsFileName);
-          file.open(QIODevice::ReadOnly);
-          file.remove();
-          QFile fichier_or(from_file);
-          fichier_or.copy(settingsFileName);
-        }
-      } else {
-        replaceSettings = false;
-        return;
-      }
-    }
+    // if (replaceSettings) {
+    //   QString from_file = QFileDialog::getOpenFileName(
+    //       this, tr("Select a File"), QDir::homePath(),
+    //       "Setting files (*.ini);;All files (*.*)");
+    //   if (!from_file.isEmpty() && QFile::exists(from_file)) {
+    //     if (!settingsFileName.isEmpty() && QFile::exists(settingsFileName)) {
+    //       QFile file(settingsFileName);
+    //       file.open(QIODevice::ReadOnly);
+    //       file.remove();
+    //       QFile fichier_or(from_file);
+    //       fichier_or.copy(settingsFileName);
+    //     }
+    //   } else {
+    //     replaceSettings = false;
+    //     return;
+    //   }
+    // }
     qApp->quit();
   } else {
     eraseSettings = false;
@@ -4888,11 +4905,18 @@ void Texmaker::DeleteSettings() {
 void Texmaker::CopySettings() {
   QFileInfo fi_or(settingsFileName);
   if (fi_or.exists()) {
-    QFile fichier_or(settingsFileName);
-    QString to_file =
-        QFileDialog::getSaveFileName(this, tr("Save As"), QDir::homePath(),
+    QFileDialog *sfDlg = new QFileDialog(this, tr("Save As"), QDir::homePath(),
                                      "Setting files (*.ini);;All files (*.*)");
-    if (!to_file.isEmpty()) {
+    sfDlg->setAcceptMode(QFileDialog::AcceptSave);
+    sfDlg->setAttribute(Qt::WA_DeleteOnClose);
+    sfDlg->show();
+    connect(sfDlg, SIGNAL(fileSelected(const QString&)), this, SLOT(CopySettingsDone(const QString&)));
+  }
+}
+
+void Texmaker::CopySettingsDone(const QString &to_file) {
+  if (!to_file.isEmpty()) {
+      QFile fichier_or(settingsFileName);
       QFileInfo fi_dest(to_file);
       if (fi_dest.exists()) {
         QFile fichier_dest(to_file);
@@ -4901,26 +4925,25 @@ void Texmaker::CopySettings() {
       } else {
         fichier_or.copy(to_file);
       }
-    }
   }
 }
 
-void Texmaker::ReplaceSettings() {
-  switch (QMessageBox::warning(
-      this, "Texmaker",
-      tr("Replace settings file by a new one?\n(Texmaker will be closed and "
-         "you will have to restart it)"),
-      tr("Ok"), tr("Cancel"), 0, 1)) {
-  case 0:
-    replaceSettings = true;
-    fileExit();
-    break;
-  case 1:
-  default:
-    return;
-    break;
-  }
-}
+// void Texmaker::ReplaceSettings() {
+//   switch (QMessageBox::warning(
+//       this, "Texmaker",
+//       tr("Replace settings file by a new one?\n(Texmaker will be closed and "
+//          "you will have to restart it)"),
+//       tr("Ok"), tr("Cancel"), 0, 1)) {
+//   case 0:
+//     replaceSettings = true;
+//     fileExit();
+//     break;
+//   case 1:
+//   default:
+//     return;
+//     break;
+//   }
+// }
 
 
 
@@ -9714,8 +9737,8 @@ void Texmaker::PreviousError() {
 
 void Texmaker::HelpAbout() {
   AboutDialog *abDlg = new AboutDialog(this);
-  abDlg->show();
   abDlg->setModal(true);
+  abDlg->show();
   abDlg->setAttribute(Qt::WA_DeleteOnClose);
 }
 
@@ -11218,9 +11241,19 @@ void Texmaker::SaveSession() {
     if (fi.exists() && fi.isReadable())
       currentDir = fi.absolutePath();
   }
-  QString fn =
-      QFileDialog::getSaveFileName(this, tr("Save"), currentDir,
+  
+
+  QFileDialog *sfDlg = new QFileDialog(this, tr("Save"), currentDir,
                                    "Texmaker session (*.tks);;All files (*.*)");
+  sfDlg->setAcceptMode(QFileDialog::AcceptSave);
+  sfDlg->setAttribute(Qt::WA_DeleteOnClose);
+  sfDlg->show();
+  connect(sfDlg, SIGNAL(fileSelected(const QString&)), this, SLOT(SaveSessionDone(const QString&)));
+  
+}
+
+void Texmaker::SaveSessionDone(const QString &in) {
+  QString fn = in;
   if (!fn.isEmpty()) {
     if (!fn.contains('.'))
       fn += ".tks";
