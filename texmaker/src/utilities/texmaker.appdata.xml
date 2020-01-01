@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+ <id>texmaker.desktop</id>
+ <metadata_license>CC0-1.0</metadata_license>
+ <project_license>GPL-2.0</project_license>
+ <name>Texmaker</name>
+​  <summary>Latex editor</summary>
+ <description>
+    <p>
+    Texmaker is a clean, powerful and highly configurable LaTeX editor.
+    </p>
+    <p>
+    Texmaker integrates many tools needed to develop documents with LaTeX,
+    in just one application.
+    </p>
+    <p>
+    It has some nice features such as syntax highlighting, insertion of 370
+    mathematical symbols with only one click, a structure view of the
+    document for easier navigation.
+    </p>
+ </description>
+<screenshots>
+  <screenshot type="default">
+    <image height="758" width="1280">http://www.xm1math.net/texmaker/assets/img/texmaker_top_linux.png</image>
+    <caption>Source editor and PDF preview side by side</caption>
+  </screenshot>
+</screenshots>
+<provides>
+​    <binary>texmaker</binary>
+​  </provides>
+<launchable type="desktop-id">texmaker.desktop</launchable>
+ <url type="homepage">http://www.xm1math.net/texmaker/</url>
+ <project_group>Qt</project_group>
+ <developer_name>Pascal Brachet</developer_name>
+   <releases>
+​    <release version="5.0.3" date="2018-10-30">
+​      <description>
+​        <p>New pdf engine and design</p>
+​      </description>
+​    </release>
+​  </releases>
+</component>
