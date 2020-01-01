@@ -24,7 +24,7 @@
 #include <QKeyEvent>
 #include <QLineEdit>
 #include <QMenu>
-#include <QMessageBox>
+#include "qmessageboxweb.h"
 #include <QMetaProperty>
 #include <QMimeData>
 #include <QModelIndex>
@@ -444,7 +444,7 @@ QString LightLatexEditor::beginningLine() {
 void LightLatexEditor::load(const QString &f) {
   QFile file(f);
   if (!file.open(QIODevice::ReadOnly)) {
-    QMessageBox::warning(this, tr("Error"),
+    QMessageBoxWeb::warning(this, tr("Error"),
                          tr("You do not have read permission to this file."));
     return;
   }
@@ -543,7 +543,7 @@ void LightLatexEditor::load(const QString &f) {
   }
 
   if (hasDecodingError) {
-      QMessageBox::warning(this, "Unsupported Encoding", "Only unicode encoding is supported");
+      QMessageBoxWeb::warning(this, "Unsupported Encoding", "Only unicode encoding is supported");
       return;
   }
 

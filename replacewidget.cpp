@@ -10,7 +10,7 @@
  ***************************************************************************/
 
 #include "replacewidget.h"
-#include <QMessageBox>
+#include "qmessageboxweb.h"
 
 ReplaceWidget::ReplaceWidget(QWidget *parent) : QWidget(parent) {
   ui.setupUi(this);
@@ -47,7 +47,7 @@ void ReplaceWidget::doReplace() {
   if (ui.checkRegExp->isChecked()) {
     QRegExp regex(ui.comboFind->currentText());
     if (!regex.isValid()) {
-      QMessageBox::warning(this, tr("Error"),
+      QMessageBoxWeb::warning(this, tr("Error"),
                            tr("Invalid regular expression."));
       return;
     }
@@ -63,7 +63,7 @@ void ReplaceWidget::doReplace() {
           endpos);
       if (result > -1) {
         startpos = result;
-        switch (QMessageBox::warning(this, "Texmaker",
+        switch (QMessageBoxWeb::warningWith(this, "Texmaker",
                                      tr("Replace this occurence ? "), tr("Yes"),
                                      tr("No"), tr("Cancel"), 0, 2)) {
         case 0:
@@ -120,7 +120,7 @@ void ReplaceWidget::doReplaceAll() {
   if (ui.checkRegExp->isChecked()) {
     QRegExp regex(ui.comboFind->currentText());
     if (!regex.isValid()) {
-      QMessageBox::warning(this, tr("Error"),
+      QMessageBoxWeb::warning(this, tr("Error"),
                            tr("Invalid regular expression."));
       return;
     }
@@ -203,7 +203,7 @@ void ReplaceWidget::updateSelection(bool e) {
       endpos = c.selectionEnd();
       deltacol = 0;
     } else {
-      QMessageBox::warning(
+      QMessageBoxWeb::warning(
           this, "Texmaker",
           tr("Text must be selected before checking this option."));
       startpos = -1;

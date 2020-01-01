@@ -284,8 +284,8 @@ private slots:
   //void filePrint();
   void fileOpenAndGoto(const QString &f, int line, bool focus);
   void getFocusToEditor();
-  // void fileReload();
-  // void allReload();
+  void fileReload();
+  void allReload();
   void listSelectionActivated(int index);
   void ComboFilesInsert(const QString &file);
   void ToggleMasterCurrent();

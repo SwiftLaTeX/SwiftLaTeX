@@ -36,7 +36,7 @@
 #include <QTextLayout>
 #include <QtCore>
 //#include <QPlatformInputContext>
-
+#include "qmessageboxweb.h"
 #include "blockdata.h"
 
 QMap<QAction *, QString> spellingLookup;
@@ -2834,7 +2834,7 @@ return blockBoundingGeometry(block).translated(contentOffset());
 
 /*** SCRIPT ***/
 void LatexEditor::ExecuteScript(QString location) {
-  QMessageBox::warning(this, "No-Script",
+  QMessageBoxWeb::warning(this, "No-Script",
                        "Script support is currently disabled");
 }
 

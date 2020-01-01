@@ -34,7 +34,7 @@
 #include <QLocale>
 #include <QMainWindow>
 #include <QMenuBar>
-#include <QMessageBox>
+#include "qmessageboxweb.h"
 #include <QProcess>
 #include <QProcessEnvironment>
 #include <QSettings>
@@ -1030,13 +1030,13 @@ void Texmaker::setupMenus() {
   connect(Act, SIGNAL(triggered()), this, SLOT(fileCloseAll()));
   fileMenu->addAction(Act);
 
-  // Act = new QAction(tr("Reload document from file"), this);
-  // connect(Act, SIGNAL(triggered()), this, SLOT(fileReload()));
-  // fileMenu->addAction(Act);
+  Act = new QAction(tr("Reload document from file"), this);
+  connect(Act, SIGNAL(triggered()), this, SLOT(fileReload()));
+  fileMenu->addAction(Act);
 
-  // Act = new QAction(tr("Reload all documents from file"), this);
-  // connect(Act, SIGNAL(triggered()), this, SLOT(allReload()));
-  // fileMenu->addAction(Act);
+  Act = new QAction(tr("Reload all documents from file"), this);
+  connect(Act, SIGNAL(triggered()), this, SLOT(allReload()));
+  fileMenu->addAction(Act);
 
  
   fileMenu->addSeparator();
@@ -2737,7 +2737,7 @@ void Texmaker::load(const QString &f) {
 
   QFile file(f);
   if (!file.open(QIODevice::ReadOnly)) {
-    QMessageBox::warning(this, tr("Error"),
+    QMessageBoxWeb::warning(this, tr("Error"),
                          tr("You do not have read permission to this file."));
     return;
   }
@@ -2860,7 +2860,7 @@ void Texmaker::load(const QString &f) {
     //   text = codec->toUnicode(buf);
     // } else
     //   return;
-    QMessageBox::warning(this, "Unsupported Encoding", "Only unicode encoding is supported");
+    QMessageBoxWeb::warning(this, "Unsupported Encoding", "Only unicode encoding is supported");
     return;
   }
 
@@ -3090,7 +3090,7 @@ void Texmaker::fileNewFromFileDone(const QString &fn) {
     return;
   QFile file(fn);
   if (!file.open(QIODevice::ReadOnly)) {
-    QMessageBox::warning(this, tr("Error"),
+    QMessageBoxWeb::warning(this, tr("Error"),
                          tr("You do not have read permission to this file."));
     return;
   }
@@ -3235,7 +3235,7 @@ void Texmaker::checkModifiedOutsideAll() {
       fn = *filenames.find(currentEditorView());
       if (isCurrentModifiedOutside()) {
         QFileInfo fi(fn);
-        choice = QMessageBox::warning(
+        choice = QMessageBoxWeb::warning(
             this, "Texmaker",
             tr("The document has been changed outside Texmaker."
                "Do you want to reload it (and discard your changes) or save it "
@@ -3415,7 +3415,7 @@ void Texmaker::fileSave() {
     fn = *filenames.find(currentEditorView());
     if (isCurrentModifiedOutside()) {
       QFileInfo fi(fn);
-      switch (QMessageBox::warning(
+      switch (QMessageBoxWeb::warning(
           this, "Texmaker",
           tr("The document has been changed outside Texmaker."
              "Do you want to reload it (and discard your changes) or save it "
@@ -3443,7 +3443,7 @@ void Texmaker::fileSave() {
     }
     QFile file(fn);
     if (!file.open(QIODevice::WriteOnly)) {
-      QMessageBox::warning(this, tr("Error"),
+      QMessageBoxWeb::warning(this, tr("Error"),
                            tr("The file could not be saved. Please check if "
                               "you have write permission."));
       return;
@@ -3472,7 +3472,7 @@ bool Texmaker::currentfileSaved() {
     fn = *filenames.find(currentEditorView());
     if (isCurrentModifiedOutside()) {
       QFileInfo fi(fn);
-      switch (QMessageBox::warning(
+      switch (QMessageBoxWeb::warning(
           this, "Texmaker",
           tr("The document has been changed outside Texmaker."
              "Do you want to reload it (and discard your changes) or save it "
@@ -3501,7 +3501,7 @@ bool Texmaker::currentfileSaved() {
     QFile file(fn);
     if (!file.open(QIODevice::WriteOnly)) {
       if (currentEditorView()->editor->document()->isModified()) {
-        QMessageBox::warning(this, tr("Error"),
+        QMessageBoxWeb::warning(this, tr("Error"),
                              tr("The file could not be saved. Please check if "
                                 "you have write permission."));
         return false;
@@ -3643,13 +3643,13 @@ void Texmaker::fileClose() {
     int query;
     QString locale = TexmakerApp::instance()->language.left(2);
     if (locale == "en") {
-      query = QMessageBox::warning(this, "Texmaker",
+      query = QMessageBoxWeb::warning(this, "Texmaker",
                                    "The document contains unsaved work. "
                                    "Do you want to save it before closing?",
                                    "Save and Close", "Close without saving",
                                    "Cancel", 0, 2);
     } else {
-      query = QMessageBox::warning(
+      query = QMessageBoxWeb::warning(
           this, "Texmaker",
           tr("The document contains unsaved work. "
              "Do you want to save it before closing?"),
@@ -3695,13 +3695,13 @@ void Texmaker::fileCloseAll() {
   while (currentEditorView() && go) {
     if (currentEditorView()->editor->document()->isModified()) {
       if (locale == "en") {
-        query = QMessageBox::warning(this, "Texmaker",
+        query = QMessageBoxWeb::warning(this, "Texmaker",
                                      "The document contains unsaved work. "
                                      "Do you want to save it before closing?",
                                      "Save and Close", "Close without saving",
                                      "Cancel", 0, 2);
       } else {
-        query = QMessageBox::warning(
+        query = QMessageBoxWeb::warning(
             this, "Texmaker",
             tr("The document contains unsaved work. "
                "Do you want to save it before closing?"),
@@ -3755,13 +3755,13 @@ void Texmaker::fileExit() {
   while (currentEditorView() && accept) {
     if (currentEditorView()->editor->document()->isModified()) {
       if (locale == "en") {
-        query = QMessageBox::warning(this, "Texmaker",
+        query = QMessageBoxWeb::warning(this, "Texmaker",
                                      "The document contains unsaved work. "
                                      "Do you want to save it before closing?",
                                      "Save and Close", "Close without saving",
                                      "Cancel", 0, 2);
       } else {
-        query = QMessageBox::warning(
+        query = QMessageBoxWeb::warning(
             this, "Texmaker",
             tr("The document contains unsaved work. "
                "Do you want to save it before closing?"),
@@ -3844,13 +3844,13 @@ void Texmaker::closeEvent(QCloseEvent *e) {
   while (currentEditorView() && accept) {
     if (currentEditorView()->editor->document()->isModified()) {
       if (locale == "en") {
-        query = QMessageBox::warning(this, "Texmaker",
+        query = QMessageBoxWeb::warning(this, "Texmaker",
                                      "The document contains unsaved work. "
                                      "Do you want to save it before closing?",
                                      "Save and Close", "Close without saving",
                                      "Cancel", 0, 2);
       } else {
-        query = QMessageBox::warning(
+        query = QMessageBoxWeb::warning(
             this, "Texmaker",
             tr("The document contains unsaved work. "
                "Do you want to save it before closing?"),
@@ -3967,54 +3967,54 @@ void Texmaker::getFocusToEditor() {
     currentEditorView()->editor->setFocus();
 }
 
-// void Texmaker::fileReload() {
-//   if (!currentEditorView())
-//     return;
-//   if (getName().startsWith("untitled"))
-//     return;
-//   QString f = filenames[currentEditorView()];
-//   if (currentEditorView()->editor->document()->isModified()) {
-//     switch (QMessageBox::warning(
-//         this, "Texmaker",
-//         tr("The document contains unsaved work."
-//            "You will lose changes by reloading the document."),
-//         tr("Reload the file"), tr("Cancel"), 0, 1)) {
-//     case 0:
-//       filenames.remove(currentEditorView());
-//       comboFiles->removeItem(comboFiles->currentIndex());
-//       delete OpenedFilesListWidget->currentItem();
-//       delete currentEditorView();
-//       load(f);
-//       break;
-//     case 1:
-//     default:
-//       return;
-//       break;
-//     }
-//   } else {
-//     filenames.remove(currentEditorView());
-//     comboFiles->removeItem(comboFiles->currentIndex());
-//     delete OpenedFilesListWidget->currentItem();
-//     delete currentEditorView();
-//     load(f);
-//   }
-// }
+void Texmaker::fileReload() {
+  if (!currentEditorView())
+    return;
+  if (getName().startsWith("untitled"))
+    return;
+  QString f = filenames[currentEditorView()];
+  if (currentEditorView()->editor->document()->isModified()) {
+    switch (QMessageBoxWeb::warning(
+        this, "Texmaker",
+        tr("The document contains unsaved work."
+           "You will lose changes by reloading the document."),
+        tr("Reload the file"), tr("Cancel"), 0, 1)) {
+    case 0:
+      filenames.remove(currentEditorView());
+      comboFiles->removeItem(comboFiles->currentIndex());
+      delete OpenedFilesListWidget->currentItem();
+      delete currentEditorView();
+      load(f);
+      break;
+    case 1:
+    default:
+      return;
+      break;
+    }
+  } else {
+    filenames.remove(currentEditorView());
+    comboFiles->removeItem(comboFiles->currentIndex());
+    delete OpenedFilesListWidget->currentItem();
+    delete currentEditorView();
+    load(f);
+  }
+}
 
-// void Texmaker::allReload() {
-//   LatexEditorView *temp = new LatexEditorView(
-//       EditorView, EditorFont, svnEnable, showline, edcolors(), hicolors(),
-//       inlinespellcheck, spell_ignored_words, spellChecker, tabspaces, tabwidth,
-//       QKeySequence(keyToggleFocus), getName(), userTagsList);
-//   temp = currentEditorView();
-//   FilesMap::Iterator it;
-//   FilesMap tempfilenames = filenames;
-//   for (it = tempfilenames.begin(); it != tempfilenames.end(); ++it) {
-//     EditorView->setCurrentIndex(EditorView->indexOf(it.key()));
-//     fileReload();
-//   }
-//   EditorView->setCurrentIndex(EditorView->indexOf(temp));
-//   UpdateCaption();
-// }
+void Texmaker::allReload() {
+  LatexEditorView *temp = new LatexEditorView(
+      EditorView, EditorFont, svnEnable, showline, edcolors(), hicolors(),
+      inlinespellcheck, spell_ignored_words, spellChecker, tabspaces, tabwidth,
+      QKeySequence(keyToggleFocus), getName(), userTagsList);
+  temp = currentEditorView();
+  FilesMap::Iterator it;
+  FilesMap tempfilenames = filenames;
+  for (it = tempfilenames.begin(); it != tempfilenames.end(); ++it) {
+    EditorView->setCurrentIndex(EditorView->indexOf(it.key()));
+    fileReload();
+  }
+  EditorView->setCurrentIndex(EditorView->indexOf(temp));
+  UpdateCaption();
+}
 
 void Texmaker::listSelectionActivated(int index) {
   disconnect(OpenedFilesListWidget, SIGNAL(itemClicked(QListWidgetItem *)),
@@ -4163,7 +4163,7 @@ void Texmaker::editSpell() {
     spellDlg->show();
     spellDlg->setAttribute(Qt::WA_DeleteOnClose);
   } else {
-    QMessageBox::warning(this, tr("Error"),
+    QMessageBoxWeb::warning(this, tr("Error"),
                          tr("Error : Can't open the dictionary"));
     return;
   }
@@ -9682,7 +9682,7 @@ void Texmaker::NextError() {
     }
   }
   if (logpresent && onlyErrorList.isEmpty()) {
-    QMessageBox::information(this, "Texmaker",
+    QMessageBoxWeb::warning(this, "Texmaker",
                              tr("No LaTeX errors detected !"));
     OutputTextEdit->setCursorPosition(0, 0);
   }
@@ -9722,7 +9722,7 @@ void Texmaker::PreviousError() {
     }
   }
   if (logpresent && onlyErrorList.isEmpty()) {
-    QMessageBox::information(this, "Texmaker",
+    QMessageBoxWeb::warning(this, "Texmaker",
                              tr("No LaTeX errors detected !"));
     OutputTextEdit->setCursorPosition(0, 0);
   }
@@ -10162,7 +10162,7 @@ void Texmaker::ToggleMode() {
   if (singlemode && currentEditorView()) {
     MasterName = getName();
     if (MasterName.startsWith("untitled") || MasterName == "") {
-      QMessageBox::warning(this, tr("Error"),
+      QMessageBoxWeb::warning(this, tr("Error"),
                            tr("Could not start the command.") +
                                "\nno valid name for the master document");
       return;
@@ -10680,7 +10680,7 @@ void Texmaker::updateTranslation() {
   QAction *action = qobject_cast<QAction *>(sender());
   QString lang = action->text();
   TexmakerApp::instance()->language = lang;
-  QMessageBox::information(this, "Texmaker",
+  QMessageBoxWeb::information(this, "Texmaker",
                            tr("The language setting will take effect after "
                               "restarting the application."));
 #endif
@@ -11259,7 +11259,7 @@ void Texmaker::SaveSessionDone(const QString &in) {
       fn += ".tks";
     QFile fic(fn);
     if (!fic.open(QIODevice::WriteOnly)) {
-      QMessageBox::warning(this, tr("Error"),
+      QMessageBoxWeb::warning(this, tr("Error"),
                            tr("The file could not be saved. Please check if "
                               "you have write permission."));
       return;
@@ -11329,7 +11329,7 @@ void Texmaker::LoadSession() {
 void Texmaker::LoadSessionFile(const QString &fn) {
   QFile fic(fn);
   if (!fic.open(QIODevice::ReadOnly)) {
-    QMessageBox::warning(this, tr("Error"),
+    QMessageBoxWeb::warning(this, tr("Error"),
                          tr("You do not have read permission to this file."));
     return;
   }
@@ -11460,7 +11460,7 @@ void Texmaker::LoadLastSession() {
     return;
   QFile fic(sessionTempFile);
   if (!fic.open(QIODevice::ReadOnly)) {
-    QMessageBox::warning(this, tr("Error"),
+    QMessageBoxWeb::warning(this, tr("Error"),
                          tr("You do not have read permission to this file."));
     return;
   }
@@ -11614,7 +11614,7 @@ void Texmaker::setMasterDocument(const QString &fn) {
   if (singlemode && currentEditorView()) {
     MasterName = fn;
     if (MasterName.startsWith("untitled") || MasterName == "") {
-      QMessageBox::warning(this, tr("Error"),
+      QMessageBoxWeb::warning(this, tr("Error"),
                            tr("Could not start the command.") +
                                "\nno valid name for the master document");
       return;

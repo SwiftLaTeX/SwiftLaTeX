@@ -86,6 +86,7 @@ HEADERS	+= texmaker.h \
 	usertagslistwidget.h \
 	addtagdialog.h \
 	quickbeamerdialog.h \
+	qmessageboxweb.h \
 	hunspell/affentry.hxx \
 	hunspell/affixmgr.hxx \
 	hunspell/atypes.hxx \
@@ -105,6 +106,7 @@ HEADERS	+= texmaker.h \
 	hunspell/hunzip.hxx \
 	hunspell/replist.hxx \
 	hunspell/w_char.hxx \
+
 	
 	
 SOURCES	+= main.cpp \
@@ -150,6 +152,7 @@ SOURCES	+= main.cpp \
 	usertagslistwidget.cpp \
 	addtagdialog.cpp \
 	quickbeamerdialog.cpp \
+	qmessageboxweb.cpp \
 	hunspell/affentry.cxx \
 	hunspell/affixmgr.cxx \
 	hunspell/csutil.cxx \

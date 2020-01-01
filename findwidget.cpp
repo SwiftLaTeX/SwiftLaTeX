@@ -15,6 +15,7 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QTextCursor>
+#include "qmessageboxweb.h"
 
 FindWidget::FindWidget(QWidget *parent) : QWidget(parent) {
   ui.setupUi(this);
@@ -48,7 +49,7 @@ void FindWidget::doFind() {
   if (ui.checkRegExp->isChecked()) {
     QRegExp regex(ui.comboFind->currentText());
     if (!regex.isValid()) {
-      QMessageBox::warning(this, tr("Error"),
+      QMessageBoxWeb::warning(this, tr("Error"),
                            tr("Invalid regular expression."));
       return;
     }
@@ -117,7 +118,7 @@ void FindWidget::updateSelection(bool e) {
       startpos = c.selectionStart();
       endpos = c.selectionEnd();
     } else {
-      QMessageBox::warning(
+      QMessageBoxWeb::warning(
           this, "Texmaker",
           tr("Text must be selected before checking this option."));
       startpos = -1;
