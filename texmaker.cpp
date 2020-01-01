@@ -3074,9 +3074,18 @@ void Texmaker::fileNewFromFile() {
     if (fi.exists() && fi.isReadable())
       currentDir = fi.absolutePath();
   }
-  QString fn = QFileDialog::getOpenFileName(
-      this, tr("Open File"), currentDir,
+  QFileDialog *dialog = new QFileDialog( this, tr("Open File"), currentDir,
       "TeX files (*.tex *.bib *.sty *.cls *.mp *.Rnw *.asy);;All files (*.*)");
+
+  dialog->setAttribute(Qt::WA_DeleteOnClose);
+
+  dialog->show();
+
+  connect(dialog, SIGNAL(fileSelected(const QString &)), this, SLOT(fileNewFromFileDone(const QString&)));
+  
+}
+
+void Texmaker::fileNewFromFileDone(const QString &fn) {
   if (fn.isEmpty())
     return;
   QFile file(fn);
@@ -11270,12 +11279,18 @@ void Texmaker::LoadSession() {
     if (fi.exists() && fi.isReadable())
       currentDir = fi.absolutePath();
   }
-  QString fn =
-      QFileDialog::getOpenFileName(this, tr("Open File"), currentDir,
-                                   "Texmaker session (*.tks);;All files (*.*)");
-  if (fn.isEmpty())
-    return;
-  LoadSessionFile(fn);
+
+  QFileDialog *sfDlg = new QFileDialog(this, tr("Open File"), currentDir,
+                                    "Texmaker session (*.tks);;All files (*.*)");
+  sfDlg->setAttribute(Qt::WA_DeleteOnClose);
+  sfDlg->show();
+  connect(sfDlg, SIGNAL(fileSelected(const QString&)), this, SLOT(LoadSessionFile(const QString&)));
+  // QString fn =
+  //     QFileDialog::getOpenFileName(this, tr("Open File"), currentDir,
+  //                                  "Texmaker session (*.tks);;All files (*.*)");
+  // if (fn.isEmpty())
+  //   return;
+  // LoadSessionFile(fn);
 }
 
 void Texmaker::LoadSessionFile(const QString &fn) {

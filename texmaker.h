@@ -264,6 +264,7 @@ private slots:
   LatexEditorView *currentEditorView() const;
   void fileNew();
   void fileNewFromFile();
+  void fileNewFromFileDone(const QString&);
   void fileOpen();
   void checkModifiedOutsideAll();
   void fileSave();
