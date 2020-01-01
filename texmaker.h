@@ -421,8 +421,11 @@ private slots:
   void SectionCommand();
   void OtherCommand();
   void InsertCite();
+  void InsertCiteDone();
   void InsertRef();
+  void InsertRefDone();
   void InsertPageRef();
+  void InsertPageRefDone();
   void SizeCommand();
 
   void ShowSectionMenu();
@@ -518,7 +521,9 @@ private slots:
 
   void RemoveUserTag();
   void AddUserTag();
+  void AddUserTagDone();
   void ChangeUserTag();
+  void ChangeUserTagDone();
   void UpdateUserTag();
 
   void ModifyShortcuts();
@@ -546,6 +551,7 @@ private slots:
   void ShowFilesView(bool change);
   void ToggleFullScreen();
   void EditUserCompletion();
+  void EditUserCompletionDone();
   void addBibFiles(QString param);
   void addIncludeFiles(QString param);
   void loadIncludeFiles(QString param, QString extension);

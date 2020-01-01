@@ -7700,42 +7700,81 @@ void Texmaker::OtherCommand() {
 
 void Texmaker::InsertCite() {
   // UpdateStructure();
-  QString tag = "";
+  
   RefDialog *refDlg = new RefDialog(this, "Bibliography Items");
+  refDlg->setAttribute(Qt::WA_DeleteOnClose);
   refDlg->ui.comboBox->addItems(bibitem);
   refDlg->ui.label->setText("Items");
-  if (!bibitem.isEmpty() && refDlg->exec()) {
-    tag = "\\cite{" + refDlg->ui.comboBox->currentText() + "}";
-    InsertTag(tag, tag.length(), 0);
-  } else
+  if (!bibitem.isEmpty()) 
+  {
+      refDlg->show();
+      connect(refDlg, SIGNAL(accepted()), this, SLOT(InsertCiteDone()));
+  } 
+  else 
+  {
+    refDlg->close();
     InsertTag("\\cite{}", 6, 0);
+    OutputTextEdit->insertLine("\\cite{bibiliography item}");
+  }
+  
+}
+
+void Texmaker::InsertCiteDone() {
+  RefDialog *refDlg = (RefDialog*)(sender());
+  QString tag = "";
+  tag = "\\cite{" + refDlg->ui.comboBox->currentText() + "}";
+  InsertTag(tag, tag.length(), 0);
   OutputTextEdit->insertLine("\\cite{bibiliography item}");
 }
 
 void Texmaker::InsertRef() {
   // UpdateStructure();
-  QString tag = "";
+ 
   RefDialog *refDlg = new RefDialog(this, "Labels");
+  refDlg->setAttribute(Qt::WA_DeleteOnClose);
   refDlg->ui.comboBox->addItems(labelitem);
-  if (!labelitem.isEmpty() && refDlg->exec()) {
+  if (!labelitem.isEmpty()) {
+      refDlg->show();
+      connect(refDlg, SIGNAL(accepted()), this, SLOT(InsertRefDone()));
+  } else {
+    refDlg->close();
+    InsertTag("\\ref{}", 5, 0);
+    OutputTextEdit->insertLine("\\ref{key}");
+  }
+  
+}
+
+void Texmaker::InsertRefDone() {
+    QString tag = "";
+    RefDialog *refDlg = (RefDialog*)(sender());
     tag = "\\ref{" + refDlg->ui.comboBox->currentText() + "}";
     InsertTag(tag, tag.length(), 0);
-  } else
-    InsertTag("\\ref{}", 5, 0);
-  OutputTextEdit->insertLine("\\ref{key}");
+    OutputTextEdit->insertLine("\\ref{key}");
 }
 
 void Texmaker::InsertPageRef() {
   // UpdateStructure();
-  QString tag = "";
+ 
   RefDialog *refDlg = new RefDialog(this, "Labels");
+  refDlg->setAttribute(Qt::WA_DeleteOnClose);
   refDlg->ui.comboBox->addItems(labelitem);
-  if (!labelitem.isEmpty() && refDlg->exec()) {
-    tag = "\\pageref{" + refDlg->ui.comboBox->currentText() + "}";
-    InsertTag(tag, tag.length(), 0);
-  } else
+  if (!labelitem.isEmpty()) {
+    refDlg->show();
+    connect(refDlg, SIGNAL(accepted()), this, SLOT(InsertPageRefDone()));
+  } else {
+    refDlg->close();
     InsertTag("\\pageref{}", 9, 0);
-  OutputTextEdit->insertLine("\\pageref{key}");
+    OutputTextEdit->insertLine("\\pageref{key}");
+  }
+  
+}
+
+void Texmaker::InsertPageRefDone() {
+   QString tag = "";
+   RefDialog *refDlg = (RefDialog*)(sender());
+   tag = "\\pageref{" + refDlg->ui.comboBox->currentText() + "}";
+   InsertTag(tag, tag.length(), 0);
+   OutputTextEdit->insertLine("\\pageref{key}");
 }
 
 void Texmaker::SizeCommand() {
@@ -10298,10 +10337,16 @@ void Texmaker::RemoveUserTag() {
 
 void Texmaker::AddUserTag() {
   AddTagDialog *atDlg = new AddTagDialog(this);
-  QString item, code;
+  atDlg->setAttribute(Qt::WA_DeleteOnClose);
+  atDlg->show();
+  connect(atDlg, SIGNAL(accepted()), this, SLOT(AddUserTagDone()));
+}
+
+void Texmaker::AddUserTagDone() {
+  AddTagDialog *atDlg = (AddTagDialog *)(sender());
+   QString item, code;
   QString trigger = "";
-  if (atDlg->exec()) {
-    item = atDlg->ui.itemEdit->text();
+  item = atDlg->ui.itemEdit->text();
     code = atDlg->ui.tagEdit->toPlainText();
     trigger = atDlg->ui.triggerEdit->text();
     if (!item.isEmpty() && !code.isEmpty()) {
@@ -10318,7 +10363,6 @@ void Texmaker::AddUserTag() {
         }
       }
     }
-  }
 }
 
 void Texmaker::UpdateUserTag() {
@@ -10380,8 +10424,22 @@ void Texmaker::ChangeUserTag() {
         atDlg->ui.itemEdit->setText(item);
         atDlg->ui.tagEdit->setPlainText(code);
         atDlg->ui.triggerEdit->setText(trigger);
-        if (atDlg->exec()) {
-          item = atDlg->ui.itemEdit->text();
+        atDlg->setProperty("usertagindex", index);
+        atDlg->show();
+        atDlg->setAttribute(Qt::WA_DeleteOnClose);
+        connect(atDlg, SIGNAL(accepted()), this, SLOT(ChangeUserTagDone()));
+      }
+    }
+  }
+}
+
+void Texmaker::ChangeUserTagDone() {
+  AddTagDialog *atDlg = ( AddTagDialog *)(sender());
+   QString item = "";
+  QString code = "";
+  QString trigger = "";
+  int index = atDlg->property("usertagindex").toInt();
+        item = atDlg->ui.itemEdit->text();
           code = atDlg->ui.tagEdit->toPlainText();
           trigger = atDlg->ui.triggerEdit->text();
           if (!item.isEmpty() && !code.isEmpty()) {
@@ -10398,10 +10456,6 @@ void Texmaker::ChangeUserTag() {
               }
             }
           }
-        }
-      }
-    }
-  }
 }
 
 void Texmaker::ModifyShortcuts() {
@@ -10837,6 +10891,7 @@ void Texmaker::ToggleFullScreen() {
 void Texmaker::EditUserCompletion() {
   UserCompletionDialog *ucDlg =
       new UserCompletionDialog(this, userCompletionList);
+  ucDlg->setAttribute(Qt::WA_DeleteOnClose);
   QTextCodec *codec = QTextCodec::codecForName("UTF-8");
   QFile tagsfile(":/completion/completion.txt");
   if (tagsfile.open(QFile::ReadOnly)) {
@@ -10844,7 +10899,13 @@ void Texmaker::EditUserCompletion() {
     tscompleter.setCodec(codec);
     ucDlg->ui.plainTextEdit->setPlainText(tscompleter.readAll());
   }
-  if (ucDlg->exec()) {
+  ucDlg->show();
+  connect(ucDlg, SIGNAL(accepted()), this, SLOT(EditUserCompletionDone()));
+}
+
+
+void Texmaker::EditUserCompletionDone(){
+    UserCompletionDialog *ucDlg = (UserCompletionDialog *)(sender());
     userCompletionList = ucDlg->userlist;
     initCompleter();
     updateCompleter();
@@ -10855,7 +10916,6 @@ void Texmaker::EditUserCompletion() {
         currentEditorView()->editor->setCompleter(0);
       currentEditorView()->editor->matchAll();
     }
-  }
 }
 
 void Texmaker::addBibFiles(QString param) {
