@@ -1,0 +1,11 @@
+version: '3.3'
+services:
+    apt-web:
+        restart: always
+        image: swiftlatex/swiftlatex
+        container_name: swiftlatex
+        ports:
+            - 80:3000
+        environment:
+          - OAUTH_REDIRECT_URI=http://localhost/oauth/login_cb
+          

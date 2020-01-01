@@ -1,0 +1,7 @@
+*.o
+*.fmt
+*.xdv
+*.log
+*.aux
+test/
+graphite/build

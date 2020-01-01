@@ -1,0 +1,175 @@
+
+
+<html>
+<head>
+    <title>SwiftLaTeX editor</title>
+    <link href="css/thirdpartys/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/thirdpartys/font-awesome.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/thirdpartys/nprogress.min.css">
+    <link rel="stylesheet" href="css/thirdpartys/jstree.css"/>
+    <link href="css/viewer.css" rel="stylesheet">
+    <link href="css/editor.css" rel="stylesheet">
+    <link href="css/ide.css" rel="stylesheet">
+
+</head>
+<body>
+<div style="display:none" id="fontpool"></div>
+<input type="file" id="fileuploader" accept=".txt,.tex,.bib,.bst,.cls,.pdf,.jpg,.png,.sty,.bbx" style="display: none"
+       multiple/>
+<input type="file" id="zipuploader" accept=".zip" style="display: none"/>
+<canvas style='display:none' id='pdfcanvas'></canvas>
+<div class="container-fluid">
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto" id='menubar'>
+                <li class="nav-item active">
+                    <a class="nav-link" href="index.html">SwiftLaTeX <span class="sr-only">(current)</span></a>
+                </li>
+
+
+            </ul>
+            <form class="form-inline my-2 my-sm-0">
+                <button class="btn btn-sm btn-outline-success my-2 my-sm-0 mr-sm-2" id="prevpagebtn">Prev</button>
+                <input class="form-control form-control-sm mr-sm-2 col-md-3" type="text" placeholder="0/0"
+                       aria-label="Search" id="pagecontrol">
+                <button class="btn btn-sm btn-outline-success my-2 my-sm-0" id="nextpagebtn">Next</button>
+            </form>
+
+        </div>
+    </nav>
+
+
+    <div class="grid">
+        <div class="row" id="viewerrow">
+            <div class="embed-responsive">
+                <div id="fileTreeView">
+                </div>
+                <div id="viewer"></div>
+            </div>
+        </div>
+        <div class="row" id="editorrow">
+            <div class="embed-responsive">
+                <pre id="editor"></pre>
+            </div>
+
+        </div>
+
+    </div>
+    <div id="statusBar">
+        <span id="fileStatus"></span>
+        <span id="systemStatus"></span>
+        <span id="errorStatus"></span>
+    </div>
+</div>
+
+<!--Log Modal-->
+<div class="modal" tabindex="-1" role="dialog" id="logmodal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detailed Log:</h5>
+                <button type="button" class="close" data-dismiss="modal">x</button>
+            </div>
+            <div class="modal-body">
+                <p id="logstatus"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Main File Modal-->
+<div class="modal" tabindex="-1" role="dialog" id="mainfilemodal">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Please select a main tex file for your project.</h5>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <select id="mainfileoptions" class="form-control">
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--error modal -->
+<div id="alert-modal" class="modal fade">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Oops! Fatal Error Detected!</h4>
+            </div>
+            <div id="alert-modal-body" class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="window.location.reload();">
+                    Refresh?
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--history modal -->
+<div id="history-modal" class="modal fade">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">History Version</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <select id="historyfileoptions" class="form-control">
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="downloadhistorybtn" data-dismiss="modal">Revert
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+<script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+<script src="https://apis.google.com/js/api.js"></script>
+<script src="js/thirdpartys/reconnecting-websocket.min.js"></script>
+<script src="js/thirdpartys/sharedb-client.min.js"></script>
+<script src="js/thirdpartys/ot-text.min.js"></script>
+
+<script src="js/thirdpartys/dexie.js"></script>
+<script src="js/thirdpartys/jquery-3.4.1.min.js"></script>
+<script src="js/thirdpartys/bootstrap.min.js"></script>
+<script src="js/thirdpartys/split.min.js"></script>
+<script src="js/thirdpartys/nprogress.min.js"></script>
+<script src="js/thirdpartys/Dropbox-sdk.min.js"></script>
+<script src="js/thirdpartys/ace.js"></script>
+<script src="js/thirdpartys/jstree.js"></script>
+<script src="js/thirdpartys/jszip.min.js"></script>
+<script src="js/thirdpartys/diff.js"></script>
+<script src="js/storage/dropboxbackend.js"></script>
+<script src="js/storage/googlebackend.js"></script>
+<script src="js/storage/localbackend.js"></script>
+<script src="js/storage/swiftfilesystem.js"></script>
+<script src="js/pdflatexclient.js"></script>
+<script src="js/logparser/latexlogparser.js"></script>
+<script src="js/pathutils.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/viewer.js"></script>
+<script src="js/memfsloader.js"></script>
+<script src="js/filemanager.js"></script>
+<script src="js/ide.js"></script>
+</html>

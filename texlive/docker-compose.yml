@@ -1,0 +1,8 @@
+version: '3.3'
+services:
+    apt-web:
+        restart: always
+        image: swiftlatex/apt
+        container_name: apt
+        ports:
+            - 5000:5000

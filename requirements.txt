@@ -1,0 +1,9 @@
+requests>0.1
+flask>0.1
+Jinja2 > 2.8
+gunicorn > 0.1
+gevent > 0.1
+requests > 0.1
+dropbox > 0.1
+statsd > 0.1
+
