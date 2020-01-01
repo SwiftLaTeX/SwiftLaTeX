@@ -1,10 +1,11 @@
 CC=emcc
 CXX=em++
-DEBUGFLAGS = -g 
+DEBUGFLAGS = -O3
 CFLAGS = $(DEBUGFLAGS) -Iprebuilt/graphite/include -s USE_FREETYPE=1 -s USE_ICU=1 -I prebuilt/graphite2/include -I prebuilt/harfbuzz/include
 LDFLAGS =  $(DEBUGFLAGS)  --js-library library.js -s USE_FREETYPE=1 -s USE_ICU=1 \
  prebuilt/graphite2/libgraphite2.a prebuilt/harfbuzz/libharfbuzz.a  --pre-js pre.js \
- -s EXPORTED_FUNCTIONS='["_comileBibtex", "_compileLaTeX", "_main"]' -s NO_EXIT_RUNTIME=1
+ -s EXPORTED_FUNCTIONS='["_comileBibtex", "_compileLaTeX", "_compileFormat", "_main"]' -s NO_EXIT_RUNTIME=1 \
+  -s WASM=1 -s ALLOW_MEMORY_GROWTH=1
 CXX_LINK = $(CXX) -o $@ $(LDFLAGS) 
 
 
