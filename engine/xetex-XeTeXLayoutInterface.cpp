@@ -56,6 +56,7 @@ struct XeTeXLayoutEngine_rec {
   hb_language_t language;
   hb_feature_t *features;
   char **ShaperList; // the requested shapers
+  bool shaperListToFree;
   char *shaper;      // the actually used shaper
   int nFeatures;
   uint32_t rgbValue;
@@ -623,6 +624,7 @@ XeTeXLayoutEngine createLayoutEngine(PlatformFontRef fontRef, XeTeXFont font,
   result->script = script;
   result->features = features;
   result->ShaperList = shapers;
+  result->shaperListToFree = false;
   result->shaper = NULL;
   result->nFeatures = nFeatures;
   result->rgbValue = rgbValue;
@@ -648,6 +650,11 @@ void deleteLayoutEngine(XeTeXLayoutEngine engine) {
   hb_buffer_destroy(engine->hbBuffer);
   delete engine->font;
   free(engine->shaper);
+  if(engine->shaperListToFree) {
+    free(engine->ShaperList);
+    engine->shaperListToFree = false;
+    engine->ShaperList = NULL;
+  }
   delete engine;
 }
 
@@ -707,6 +714,7 @@ int layoutChars(XeTeXLayoutEngine engine, uint16_t chars[], int32_t offset,
     engine->ShaperList = (char **)xcalloc(2, sizeof(char *));
     engine->ShaperList[0] = (char *)"ot";
     engine->ShaperList[1] = NULL;
+    engine->shaperListToFree = true;
   }
 
   shape_plan =

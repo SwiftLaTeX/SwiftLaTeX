@@ -282,7 +282,7 @@ char *kpse_find_file(const char *name, tt_input_format_type format) {
   #endif
   
   if (kpse_fetch_from_network(patched_name) ==
-      1) 
+      0) 
   {
     #ifndef NATIVE_BUILD
       //Recheck the cache
@@ -360,7 +360,7 @@ int input_close(void *context, void *handle) { return fclose(handle); }
 tt_bridge_api_t ourapi;
 
 int compileLaTeX() {  
-  return tex_simple_main(&ourapi, "swiftlatex.fmt", "_input_.tex", 0, 0);
+  return tex_simple_main(&ourapi, "swiftlatex.fmt", "test.tex", 0, 0);
 }
 
 int compileFormat(){
@@ -389,7 +389,8 @@ int main() {
   ourapi.input_getc = input_getc;
   ourapi.input_ungetc = input_ungetc;
   ourapi.input_close = input_close;
-  //compileLaTeX();
+  compileLaTeX();
+
   return 0;
 }
 
