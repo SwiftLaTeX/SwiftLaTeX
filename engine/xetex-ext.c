@@ -1606,6 +1606,9 @@ void measure_native_node(void *pNode, int use_glyph_metrics) {
 
       node_width(node) = D2Fix(width);
       native_glyph_count(node) = totalGlyphCount;
+      if(native_glyph_info_ptr(node)) {
+        free(native_glyph_info_ptr(node));
+      }
       native_glyph_info_ptr(node) = glyph_info;
 
       free(glyphs);
