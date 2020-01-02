@@ -17386,6 +17386,10 @@ lab70: /*main_loop */ /*1069: */
                                  (INTPAR(xetex_use_glyph_metrics) > 0));
               t = mem[temp_ptr + 1].b32.s1 - mem[main_pp + 1].b32.s1 -
                   mem[cur_list.tail + 1].b32.s1;
+              if(NATIVE_NODE_glyph_info_ptr(temp_ptr)) {
+                  NATIVE_NODE_glyph_info_ptr(temp_ptr) =
+                  mfree(NATIVE_NODE_glyph_info_ptr(temp_ptr));
+              }
               free_node(temp_ptr, mem[temp_ptr + 4].b16.s3);
               if (t != mem[font_glue[main_f] + 1].b32.s1) {
                 temp_ptr = new_kern(t - mem[font_glue[main_f] + 1].b32.s1);
