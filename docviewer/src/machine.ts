@@ -111,6 +111,11 @@ export class Machine {
     return 0;
   }  
 
+  // Returns the width of the text
+  putNativeText( text : Buffer ) : number {
+    return 0;
+  }  
+
   loadFont( properties : any ) : DviFont {
     var f = new DviFont(properties);
     f.name = properties.name;

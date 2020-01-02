@@ -66,6 +66,10 @@ var Machine = /** @class */ (function () {
     Machine.prototype.putText = function (text) {
         return 0;
     };
+    // Returns the width of the text
+    Machine.prototype.putNativeText = function (text) {
+        return 0;
+    };
     Machine.prototype.loadFont = function (properties) {
         var f = new DviFont(properties);
         f.name = properties.name;

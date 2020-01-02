@@ -462,7 +462,7 @@ class SetFont extends DviCommand {
   }
 
   execute(machine : Machine) {
-    console.log("Setting mainfont to " + this.k);
+    //console.log("Setting mainfont to " + this.k);
     if (machine.fonts[this.k]) {
       machine.setFont(machine.fonts[this.k]);
     } else
@@ -521,7 +521,7 @@ class FontDefinition extends DviCommand {
   }
   
   execute(machine : Machine) {
-    console.log("Defining Local Font name: " + this.n + " index: " + this.k);
+    //console.log("Defining Local Font name: " + this.n + " index: " + this.k);
     machine.fonts[this.k] = machine.loadFont({
       name: this.n,
       checksum: this.c,
@@ -639,7 +639,7 @@ class NativeFontDefinition extends DviCommand {
       this.opcode = Opcode.define_native_font;
     }
     execute(machine: Machine) {
-      console.log("Defining Native Font name: " + this.filename + " index: " + this.fontnumber);
+      //console.log("Defining Native Font name: " + this.filename + " index: " + this.fontnumber);
       machine.fonts[this.fontnumber] = machine.loadNativeFont({
         name: this.filename,
         fontsize: this.fontsize,

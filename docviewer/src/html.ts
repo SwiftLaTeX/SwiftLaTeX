@@ -70,6 +70,14 @@ export default class HTMLMachine extends Machine {
     this.output.write(`<span style="background: ${this.color}; position: absolute; top: ${top}pt; left: ${left}pt; width:${b}pt; height: ${a}pt;"></span>\n`);
   }
     
+  _to_legal_unicode (c : number): number {
+    if ((c <= 0x20) || (c >= 0x7F && c <= 0xA0) || (c == 0xAD)) {
+      return c + 0xE000;
+    } else {
+      return c;
+    }
+  }
+
   putText( text : Buffer ) : number {
     
         let textWidth = 0;
@@ -78,21 +86,23 @@ export default class HTMLMachine extends Machine {
 
         var htmlText = "";
         
+        
         for( let i = 0; i < text.length; i++ ) {
           let c = text[i];
+          //console.log(c);
           let metrics = this.font.metrics.characters[c];
           if (metrics === undefined)
             throw Error(`Could not find font metric for ${c}`);
                 
-                textWidth += metrics.width;
-                textHeight = Math.max(textHeight, metrics.height);
-                textDepth = Math.max(textDepth, metrics.depth);
+          textWidth += metrics.width;
+          textHeight = Math.max(textHeight, metrics.height);
+          textDepth = Math.max(textDepth, metrics.depth);
 
-                if (c < 32) {
-            htmlText += `&#${127 + c + 32 + 4};`;
-                } else {
-            htmlText += String.fromCharCode(c);
-                }
+          c = this._to_legal_unicode(c);
+          
+          htmlText += String.fromCharCode(c);
+         
+          //console.log(c);
         }
         
         // tfm is based on 1/2^16 pt units, rather than dviunit which is 10^−7 meters
@@ -117,9 +127,11 @@ export default class HTMLMachine extends Machine {
         }
         
         return textWidth * dviUnitsPerFontUnit * this.font.scaleFactor / this.font.designSize;
-     
-    
-      
   }
+
+
+  putNativeText( text : Buffer ) : number {
+    return 0;
+  }  
 }
 

@@ -8,8 +8,8 @@ import TextMachine from "./text";
 export var Machines = { HTML: HTMLMachine,
 			text: TextMachine };
 
-import { dviParser, execute, mergeText } from "./parser";
-export { dviParser, execute, mergeText };
+import { dviParser, execute } from "./parser";
+export { dviParser, execute };
 
 export var specials = {
   color: color,
@@ -18,7 +18,7 @@ export var specials = {
 };
 
 export async function dvi2html( dviStream, htmlStream ) {
-  let parser = papersize(svg(color(mergeText(dviParser(dviStream)))));
+  let parser = papersize(svg(color(dviParser(dviStream))));
 
   let machine = new HTMLMachine( htmlStream );
 

@@ -61,6 +61,14 @@ var HTMLMachine = /** @class */ (function (_super) {
         var top = bottom - a;
         this.output.write("<span style=\"background: " + this.color + "; position: absolute; top: " + top + "pt; left: " + left + "pt; width:" + b + "pt; height: " + a + "pt;\"></span>\n");
     };
+    HTMLMachine.prototype._to_legal_unicode = function (c) {
+        if ((c <= 0x20) || (c >= 0x7F && c <= 0xA0) || (c == 0xAD)) {
+            return c + 0xE000;
+        }
+        else {
+            return c;
+        }
+    };
     HTMLMachine.prototype.putText = function (text) {
         var textWidth = 0;
         var textHeight = 0;
@@ -68,18 +76,16 @@ var HTMLMachine = /** @class */ (function (_super) {
         var htmlText = "";
         for (var i = 0; i < text.length; i++) {
             var c = text[i];
+            //console.log(c);
             var metrics = this.font.metrics.characters[c];
             if (metrics === undefined)
                 throw Error("Could not find font metric for " + c);
             textWidth += metrics.width;
             textHeight = Math.max(textHeight, metrics.height);
             textDepth = Math.max(textDepth, metrics.depth);
-            if (c < 32) {
-                htmlText += "&#" + (127 + c + 32 + 4) + ";";
-            }
-            else {
-                htmlText += String.fromCharCode(c);
-            }
+            c = this._to_legal_unicode(c);
+            htmlText += String.fromCharCode(c);
+            //console.log(c);
         }
         // tfm is based on 1/2^16 pt units, rather than dviunit which is 10^−7 meters
         var dviUnitsPerFontUnit = this.font.metrics.designSize / 1048576.0 * 65536 / 1048576;
@@ -99,6 +105,9 @@ var HTMLMachine = /** @class */ (function (_super) {
             this.output.write("<text alignment-baseline=\"baseline\" y=\"" + bottom + "\" x=\"" + left + "\" style=\"font-family: " + this.font.name + ";\" font-size=\"" + fontsize + "\">" + htmlText + "</text>\n");
         }
         return textWidth * dviUnitsPerFontUnit * this.font.scaleFactor / this.font.designSize;
+    };
+    HTMLMachine.prototype.putNativeText = function (text) {
+        return 0;
     };
     return HTMLMachine;
 }(machine_1.Machine));

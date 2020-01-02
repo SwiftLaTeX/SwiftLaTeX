@@ -480,7 +480,7 @@ var SetFont = /** @class */ (function (_super) {
         return _this;
     }
     SetFont.prototype.execute = function (machine) {
-        console.log("Setting mainfont to " + this.k);
+        //console.log("Setting mainfont to " + this.k);
         if (machine.fonts[this.k]) {
             machine.setFont(machine.fonts[this.k]);
         }
@@ -525,7 +525,7 @@ var FontDefinition = /** @class */ (function (_super) {
         return _this;
     }
     FontDefinition.prototype.execute = function (machine) {
-        console.log("Defining Local Font name: " + this.n + " index: " + this.k);
+        //console.log("Defining Local Font name: " + this.n + " index: " + this.k);
         machine.fonts[this.k] = machine.loadFont({
             name: this.n,
             checksum: this.c,
@@ -603,7 +603,7 @@ var NativeFontDefinition = /** @class */ (function (_super) {
         return _this;
     }
     NativeFontDefinition.prototype.execute = function (machine) {
-        console.log("Defining Native Font name: " + this.filename + " index: " + this.fontnumber);
+        //console.log("Defining Native Font name: " + this.filename + " index: " + this.fontnumber);
         machine.fonts[this.fontnumber] = machine.loadNativeFont({
             name: this.filename,
             fontsize: this.fontsize,

@@ -46,7 +46,6 @@ exports.Machines = { HTML: html_1["default"],
 var parser_1 = require("./parser");
 exports.dviParser = parser_1.dviParser;
 exports.execute = parser_1.execute;
-exports.mergeText = parser_1.mergeText;
 exports.specials = {
     color: color_1["default"],
     svg: svg_1["default"],
@@ -58,7 +57,7 @@ function dvi2html(dviStream, htmlStream) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    parser = papersize_1["default"](svg_1["default"](color_1["default"](parser_1.mergeText(parser_1.dviParser(dviStream)))));
+                    parser = papersize_1["default"](svg_1["default"](color_1["default"](parser_1.dviParser(dviStream))));
                     machine = new html_1["default"](htmlStream);
                     return [4 /*yield*/, parser_1.execute(parser, machine)];
                 case 1:
