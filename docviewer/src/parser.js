@@ -845,15 +845,20 @@ function parseCommand(opcode, buffer) {
             var den = buffer.readUInt32BE(5);
             var mag = buffer.readUInt32BE(9);
             var k = buffer.readUInt8(13);
-            if (buffer.length < 14 + k)
+            if (buffer.length < 14 + k + 8)
                 throw Error("not enough bytes to process opcode " + opcode);
+            var comment = buffer.slice(14, 14 + k).toString();
+            var pageheight = buffer.readUInt32BE(14 + k);
+            var pagewidth = buffer.readUInt32BE(18 + k);
             return new Preamble({
                 i: i,
                 num: num,
                 den: den,
                 mag: mag,
-                x: buffer.slice(14, 14 + k).toString(),
-                length: 14 + k + 1
+                x: comment,
+                page_height: pageheight,
+                page_width: pagewidth,
+                length: 14 + k + 8 + 1
             });
         }
         case Opcode.post:
