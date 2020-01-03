@@ -614,6 +614,9 @@ static void hlist_out(void) {
                 dvi_out(SET1);
               dvi_out(c);
               cur_h += FONT_CHARACTER_WIDTH(f, c);
+              #define FONT_CHARACTER_HEIGHT(f, c)  FONT_CHARINFO_HEIGHT(f, FONT_CHARACTER_INFO(f, c))
+              #define FONT_CHARACTER_DEPTH(f, c)  FONT_CHARINFO_DEPTH(f, FONT_CHARACTER_INFO(f, c))
+              printf("funny %d %d %c\n", FONT_CHARACTER_HEIGHT(f,c), FONT_CHARACTER_DEPTH(f,c), c);
             }
           }
         }
