@@ -133,6 +133,7 @@ static jmp_buf error_jmpbuf, recover_jmpbuf;
 #define aux_stack_size 20
 #define MAX_BIB_FILES 20
 #define POOL_SIZE 65000L
+#define MIN_CROSSREFS 2
 #define MAX_STRINGS 35307
 #define MAX_CITES 750
 #define WIZ_FN_SPACE 3000
@@ -7063,6 +7064,7 @@ tt_history_t bibtex_main(const char *aux_file_name) {
   max_glob_strs = MAX_GLOB_STRS;
   max_fields = MAX_FIELDS;
   max_cites = MAX_CITES;
+  min_crossrefs = MIN_CROSSREFS;
   wiz_fn_space = WIZ_FN_SPACE;
   lit_stk_size = LIT_STK_SIZE;
 
