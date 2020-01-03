@@ -4,140 +4,140 @@ import { Tfm } from './tfm/tfm';
 import { loadFont } from './tfm/index';
 
 export interface Rule {
-  a : number;
-  b : number;
+    a: number;
+    b: number;
 }
 
 class Position {
-  h: number;
-  v: number;
-  w: number;
-  x: number;
-  y: number;
-  z: number;
-  
-  constructor(properties? : Position) {
-    if (properties) {
-      this.h = properties.h;
-      this.v = properties.v;
-      this.w = properties.w;
-      this.x = properties.x;
-      this.y = properties.y;
-      this.z = properties.z;
-    } else {
-      this.h = this.v = this.w = this.x = this.y = this.z = 0;      
+    h: number;
+    v: number;
+    w: number;
+    x: number;
+    y: number;
+    z: number;
+
+    constructor(properties?: Position) {
+        if (properties) {
+            this.h = properties.h;
+            this.v = properties.v;
+            this.w = properties.w;
+            this.x = properties.x;
+            this.y = properties.y;
+            this.z = properties.z;
+        } else {
+            this.h = this.v = this.w = this.x = this.y = this.z = 0;
+        }
     }
-  }
 }
 
 export class DviFont {
-  name: string;
-  checksum: number;
-  scaleFactor: number;
-  designSize: number;
-  metrics: Tfm;
-  faceindex: number;
-  rbga: number;
-  extend: number;
-  slant: number;
-  embolden: number;
-  
-  constructor(properties : DviFont) {
-    
-  }
+    name: string;
+    checksum: number;
+    scaleFactor: number;
+    designSize: number;
+    metrics: Tfm;
+    faceindex: number;
+    rbga: number;
+    extend: number;
+    slant: number;
+    embolden: number;
+
+    constructor(properties: DviFont) {
+
+    }
 }
 
 export class Machine {
-  fonts : DviFont[];
-  font : DviFont;
-  stack : Position[];
-  position : Position;
+    fonts: DviFont[];
+    font: DviFont;
+    stack: Position[];
+    position: Position;
 
-  constructor () {
-    this.fonts = [];
-  }
-  
-  preamble ( numerator : number, denominator : number, magnification : number, comment : string ) {
-  }
+    constructor() {
+        this.fonts = [];
+    }
 
-  pushColor( c : string ) {
-  }
+    preamble(numerator: number, denominator: number, magnification: number, comment: string) {
+    }
 
-  popColor( ) {
-  }  
+    pushColor(c: string) {
+    }
 
-  setPapersize( width : number, height : number ) {
-  }
-    
-  push() {
-    this.stack.push(new Position(this.position));
-  }
+    popColor() {
+    }
 
-  pop() {
-    this.position = this.stack.pop();
-  }
+    setPapersize(width: number, height: number) {
+    }
 
-  beginPage( page : any ) {
-    this.stack = [];
-    this.position = new Position();
-  }
+    push() {
+        this.stack.push(new Position(this.position));
+    }
 
-  endPage() { }  
+    pop() {
+        this.position = this.stack.pop();
+    }
 
-  post( p : any ) { }
-  
-  postPost( p : any ) { }
-  
-  putRule( rule : Rule ) {
-  }
+    beginPage(page: any) {
+        this.stack = [];
+        this.position = new Position();
+    }
 
-  moveRight( distance : number ) {
-    this.position.h += distance;
-  }
+    endPage() { }
 
-  moveDown( distance : number ) {
-    this.position.v += distance;
-  }
+    post(p: any) { }
 
-  setFont( font : DviFont ) {
-    this.font = font;
-  }
+    postPost(p: any) { }
 
-  putSVG( svg : string ) {
-  }
-  
-  // Returns the width of the text
-  putText( text : Buffer ) : number {
-    return 0;
-  }  
+    putRule(rule: Rule) {
+    }
 
-  // Returns the width of the text
-  putNativeText( text : Buffer ) : number {
-    return 0;
-  }  
+    moveRight(distance: number) {
+        this.position.h += distance;
+    }
 
-  loadFont( properties : any ) : DviFont {
-    var f = new DviFont(properties);
-    f.name = properties.name;
-    f.checksum = properties.checksum;
-    f.scaleFactor = properties.scaleFactor;
-    f.designSize = properties.designSize;
-    f.metrics = loadFont(properties.name);
-    return f;
-  }
+    moveDown(distance: number) {
+        this.position.v += distance;
+    }
 
-  loadNativeFont( properties : any ) : DviFont {
-    var f = new DviFont(properties);
-    f.name = properties.name;
-    f.designSize = properties.fontsize;
-    f.faceindex = properties.faceindex;
-    f.rbga =  properties.rgba;
-    f.extend = properties.extend;
-    f.slant = properties.slant;
-    f.embolden = properties.embolden;
-    f.metrics = null;
-    return f;
-  }
+    setFont(font: DviFont) {
+        this.font = font;
+    }
+
+    putSVG(svg: string) {
+    }
+
+    // Returns the width of the text
+    putText(text: Buffer): number {
+        return 0;
+    }
+
+    // Returns the width of the text
+    putNativeText(text: Buffer): number {
+        return 0;
+    }
+
+    loadFont(properties: any): DviFont {
+        var f = new DviFont(properties);
+        f.name = properties.name;
+        f.checksum = properties.checksum;
+        f.scaleFactor = properties.scaleFactor;
+        f.designSize = properties.designSize;
+        f.metrics = loadFont(properties.name);
+        return f;
+    }
+
+    loadNativeFont(properties: any): DviFont {
+        var f = new DviFont(properties);
+        f.name = properties.name;
+        f.designSize = properties.fontsize;
+        f.faceindex = properties.faceindex;
+        f.rbga = properties.rgba;
+        f.extend = properties.extend;
+        f.slant = properties.slant;
+        f.embolden = properties.embolden;
+        f.metrics = null;
+        return f;
+    }
 
 }
 

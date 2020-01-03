@@ -9,8 +9,8 @@ import { Writable } from 'stream';
 
 let fonts = "";
 fs.readdirSync('./fonts/output').forEach(file => {
-  let name = file.replace(/.woff/, '');
-  fonts = fonts + `@font-face { font-family: ${name}; src: url('fonts/output/${file}'); }\n`;
+    let name = file.replace(/.woff/, '');
+    fonts = fonts + `@font-face { font-family: ${name}; src: url('fonts/output/${file}'); }\n`;
 });
 fs.writeFileSync("fonts.css", fonts);
 
@@ -30,20 +30,20 @@ html = html + '<div style="position: absolute;">\n';
 //html = html + dviParser( buffer );
 
 const myWritable = new Writable({
-  write(chunk, encoding, callback) {
-    html = html + chunk;
-    callback();
-  }
+    write(chunk, encoding, callback) {
+        html = html + chunk;
+        callback();
+    }
 });
 
 async function main() {
-  await dvi2html( stream, myWritable );
-  
-  html = html + '</div>\n';
-  html = html + '</body>\n';
-  html = html + "</html>\n";
+    await dvi2html(stream, myWritable);
 
-  fs.writeFileSync("index.html", html);
+    html = html + '</div>\n';
+    html = html + '</body>\n';
+    html = html + "</html>\n";
+
+    fs.writeFileSync("index.html", html);
 }
 
 main()
