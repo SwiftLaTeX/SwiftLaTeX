@@ -101,6 +101,7 @@ export class Machine {
 
     setFont(font: DviFont) {
         this.font = font;
+        //console.log(font);
     }
 
     putSVG(svg: string) {

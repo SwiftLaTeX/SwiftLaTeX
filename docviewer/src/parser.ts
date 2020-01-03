@@ -96,7 +96,7 @@ class PutChar extends DviCommand {
     }
 
     execute(machine: Machine) {
-        machine.putText(Buffer.from([this.c]));
+        //machine.putText(Buffer.from([this.c]));
     }
 
     toString(): string {
@@ -700,6 +700,7 @@ type Command =
 function parseCommand(opcode: Opcode, buffer: Buffer): Command | void {
 
     if ((opcode >= Opcode.set_char) && (opcode < Opcode.set1)) {
+        //throw Error(`SwiftLaTeX does not generate simple setchar`);
         return new SetChar({ c: opcode, length: 1 });
     }
 
@@ -737,11 +738,12 @@ function parseCommand(opcode: Opcode, buffer: Buffer): Command | void {
         case Opcode.put2:
         case Opcode.put3:
         case Opcode.put4:
-            if (buffer.length < opcode - Opcode.put_char + 1) throw Error(`not enough bytes to process opcode ${opcode}`);
-            return new PutChar({
-                c: buffer.readIntBE(0, opcode - Opcode.put_char + 1),
-                length: opcode - Opcode.put_char + 1 + 1
-            });
+            throw Error(`SwiftLaTeX engine does not generate put_char`);
+            // if (buffer.length < opcode - Opcode.put_char + 1) throw Error(`not enough bytes to process opcode ${opcode}`);
+            // return new PutChar({
+            //     c: buffer.readIntBE(0, opcode - Opcode.put_char + 1),
+            //     length: opcode - Opcode.put_char + 1 + 1
+            // });
 
         case Opcode.put_rule:
             if (buffer.length < 8) throw Error(`not enough bytes to process opcode ${opcode}`);
@@ -1029,7 +1031,7 @@ function parseCommand(opcode: Opcode, buffer: Buffer): Command | void {
                 res.glyphLocations = glyphLocations;
                 res.glyphIds = glyphIDs;
                 res.length = 6 + count * 10 + 1;
-                console.log(res);
+                //console.log(res);
                 return res;
             }
 

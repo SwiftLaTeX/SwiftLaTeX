@@ -59,6 +59,7 @@ var Machine = /** @class */ (function () {
     };
     Machine.prototype.setFont = function (font) {
         this.font = font;
+        //console.log(font);
     };
     Machine.prototype.putSVG = function (svg) {
     };
