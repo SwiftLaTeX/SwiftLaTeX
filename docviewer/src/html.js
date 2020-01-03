@@ -69,30 +69,25 @@ var HTMLMachine = /** @class */ (function (_super) {
             return c;
         }
     };
-    HTMLMachine.prototype.putText = function (text) {
+    HTMLMachine.prototype.setChar = function (c, text_height, text_width) {
         var textWidth = 0;
         var textHeight = 0;
         var textDepth = 0;
-        var htmlText = "";
-        for (var i = 0; i < text.length; i++) {
-            var c = text[i];
-            //console.log(c);
-            var metrics = this.font.metrics.characters[c];
-            if (metrics === undefined)
-                throw Error("Could not find font metric for " + c);
-            textWidth += metrics.width;
-            textHeight = Math.max(textHeight, metrics.height);
-            textDepth = Math.max(textDepth, metrics.depth);
-            c = this._to_legal_unicode(c);
-            htmlText += String.fromCharCode(c);
-            //console.log(c);
-        }
+        //console.log(c);
+        var metrics = this.font.metrics.characters[c];
+        if (metrics === undefined)
+            throw Error("Could not find font metric for " + c);
+        textWidth += metrics.width;
+        textHeight = Math.max(textHeight, metrics.height);
+        textDepth = Math.max(textDepth, metrics.depth);
+        c = this._to_legal_unicode(c);
+        var htmlText = String.fromCharCode(c);
+        //console.log(c);
         // tfm is based on 1/2^16 pt units, rather than dviunit which is 10^−7 meters
         var dviUnitsPerFontUnit = this.font.metrics.designSize / 1048576.0 * 65536 / 1048576;
         var left = this.position.h * this.pointsPerDviUnit;
-        var width = textWidth * this.pointsPerDviUnit * dviUnitsPerFontUnit;
-        var height = textHeight * this.pointsPerDviUnit * dviUnitsPerFontUnit;
-        var depth = textDepth * this.pointsPerDviUnit * dviUnitsPerFontUnit;
+        var width = text_width * this.pointsPerDviUnit;
+        var height = text_height * this.pointsPerDviUnit;
         var top = this.position.v * this.pointsPerDviUnit;
         var fontsize = this.font.designSize / 65536.0;
         if (this.svgDepth == 0) {

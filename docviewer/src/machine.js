@@ -64,7 +64,7 @@ var Machine = /** @class */ (function () {
     Machine.prototype.putSVG = function (svg) {
     };
     // Returns the width of the text
-    Machine.prototype.putText = function (text) {
+    Machine.prototype.setChar = function (text, text_height, text_width) {
         return 0;
     };
     // Returns the width of the text

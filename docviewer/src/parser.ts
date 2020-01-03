@@ -114,15 +114,15 @@ class SetChar extends DviCommand {
     opcode: Opcode.set_char;
 
     c: number;
-
+    text_height: number;
+    text_width: number;
     constructor(properties) {
         super(properties);
         this.opcode = Opcode.set_char;
     }
 
     execute(machine: Machine) {
-        var text = Buffer.from([this.c]);
-        var width = machine.putText(text);
+        var width = machine.setChar(this.c, this.text_height, this.text_width);
         machine.moveRight(width);
     }
 
@@ -131,22 +131,22 @@ class SetChar extends DviCommand {
     }
 }
 
-class SetText extends DviCommand {
-    t: Buffer;
+// class SetText extends DviCommand {
+//     t: Buffer;
 
-    constructor(properties) {
-        super(properties);
-    }
+//     constructor(properties) {
+//         super(properties);
+//     }
 
-    execute(machine: Machine) {
-        var width = machine.putText(this.t);
-        machine.moveRight(width);
-    }
+//     execute(machine: Machine) {
+//         var width = machine.putText(this.t);
+//         machine.moveRight(width);
+//     }
 
-    toString() {
-        return `SetText { t: "${this.t.toString()}" }`;
-    }
-}
+//     toString() {
+//         return `SetText { t: "${this.t.toString()}" }`;
+//     }
+// }
 
 // 137	put_rule	a[4], b[4]	typeset a rule
 
@@ -544,8 +544,6 @@ class Preamble extends DviCommand {
     den: number;
     mag: number;
     x: string;
-    page_height: number;
-    page_width: number;
     constructor(properties) {
         super(properties);
         this.opcode = Opcode.pre;
@@ -700,8 +698,8 @@ type Command =
 function parseCommand(opcode: Opcode, buffer: Buffer): Command | void {
 
     if ((opcode >= Opcode.set_char) && (opcode < Opcode.set1)) {
-        //throw Error(`SwiftLaTeX does not generate simple setchar`);
-        return new SetChar({ c: opcode, length: 1 });
+        throw Error(`SwiftLaTeX does not generate simple setchar`);
+        //return new SetChar({ c: opcode, length: 1 });
     }
 
     if ((opcode >= Opcode.fnt) && (opcode < Opcode.fnt1))
@@ -715,15 +713,19 @@ function parseCommand(opcode: Opcode, buffer: Buffer): Command | void {
 
     switch (opcode) {
         case Opcode.set1:
+            if (buffer.length <  9)
+                throw Error(`not enough bytes to process opcode ${opcode}`);
+            return new SetChar({
+                c: buffer.readUInt8(0),
+                text_height: buffer.readUInt32BE(1),
+                text_width: buffer.readUInt32BE(5),
+                length: 9 + 1
+            });
+
         case Opcode.set2:
         case Opcode.set3:
         case Opcode.set4:
-            if (buffer.length < opcode - Opcode.set1 + 1)
-                throw Error(`not enough bytes to process opcode ${opcode}`);
-            return new SetChar({
-                c: buffer.readUIntBE(0, opcode - Opcode.set1 + 1),
-                length: opcode - Opcode.set1 + 1 + 1
-            });
+            throw Error(`SwiftLaTeX does not generate set_char234`);
 
         case Opcode.set_rule:
             if (buffer.length < 8)
@@ -914,17 +916,14 @@ function parseCommand(opcode: Opcode, buffer: Buffer): Command | void {
             let k = buffer.readUInt8(13);
             if (buffer.length < 14 + k + 8) throw Error(`not enough bytes to process opcode ${opcode}`);
             let comment = buffer.slice(14, 14 + k).toString();
-            let pageheight = buffer.readUInt32BE(14 + k);
-            let pagewidth = buffer.readUInt32BE(18 + k);
             return new Preamble({
                 i: i,
                 num: num,
                 den: den,
                 mag: mag,
                 x: comment,
-                page_height: pageheight,
-                page_width: pagewidth,
-                length: 14 + k + 8 + 1
+                
+                length: 14 + k  + 1
             });
         }
 
@@ -1107,11 +1106,11 @@ export async function* merge(commands, filter, merge) {
     if (queue.length > 0) yield* merge(queue);
 }
 
-export function mergeText(commands) {
-    return merge(commands,
-        command => (command instanceof SetChar),
-        function*(queue) {
-            let text = Buffer.from(queue.map(command => command.c));
-            yield new SetText({ t: text });
-        });
-}
+// export function mergeText(commands) {
+//     return merge(commands,
+//         command => (command instanceof SetChar),
+//         function*(queue) {
+//             let text = Buffer.from(queue.map(command => command.c));
+//             yield new SetText({ t: text });
+//         });
+// }

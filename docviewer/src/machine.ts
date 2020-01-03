@@ -108,7 +108,7 @@ export class Machine {
     }
 
     // Returns the width of the text
-    putText(text: Buffer): number {
+    setChar(text: number, text_height:number, text_width:number): number {
         return 0;
     }
 

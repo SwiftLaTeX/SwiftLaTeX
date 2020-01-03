@@ -78,42 +78,39 @@ export default class HTMLMachine extends Machine {
         }
     }
 
-    putText(text: Buffer): number {
+    setChar(c: number, text_height:number, text_width:number): number {
 
         let textWidth = 0;
         let textHeight = 0;
         let textDepth = 0;
 
-        var htmlText = "";
+        
 
 
-        for (let i = 0; i < text.length; i++) {
-            let c = text[i];
+        
             //console.log(c);
-            let metrics = this.font.metrics.characters[c];
-            if (metrics === undefined)
-                throw Error(`Could not find font metric for ${c}`);
+        let metrics = this.font.metrics.characters[c];
+        if (metrics === undefined)
+             throw Error(`Could not find font metric for ${c}`);
 
-            textWidth += metrics.width;
-            textHeight = Math.max(textHeight, metrics.height);
-            textDepth = Math.max(textDepth, metrics.depth);
+        textWidth += metrics.width;
+        textHeight = Math.max(textHeight, metrics.height);
+        textDepth = Math.max(textDepth, metrics.depth);
 
             c = this._to_legal_unicode(c);
 
-            htmlText += String.fromCharCode(c);
+            let htmlText = String.fromCharCode(c);
 
             //console.log(c);
-        }
+        
 
         // tfm is based on 1/2^16 pt units, rather than dviunit which is 10^−7 meters
         var dviUnitsPerFontUnit = this.font.metrics.designSize / 1048576.0 * 65536 / 1048576;
 
        
         let left = this.position.h * this.pointsPerDviUnit;
-
-        let width = textWidth * this.pointsPerDviUnit * dviUnitsPerFontUnit;
-        let height = textHeight * this.pointsPerDviUnit * dviUnitsPerFontUnit;
-        let depth = textDepth * this.pointsPerDviUnit * dviUnitsPerFontUnit;
+        let width = text_width * this.pointsPerDviUnit;
+        let height = text_height * this.pointsPerDviUnit;
         let top = this.position.v * this.pointsPerDviUnit;
         let fontsize = this.font.designSize/65536.0;
         if (this.svgDepth == 0) {

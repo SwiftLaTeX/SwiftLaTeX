@@ -194,8 +194,7 @@ var SetChar = /** @class */ (function (_super) {
         return _this;
     }
     SetChar.prototype.execute = function (machine) {
-        var text = Buffer.from([this.c]);
-        var width = machine.putText(text);
+        var width = machine.setChar(this.c, this.text_height, this.text_width);
         machine.moveRight(width);
     };
     SetChar.prototype.toString = function () {
@@ -203,20 +202,19 @@ var SetChar = /** @class */ (function (_super) {
     };
     return SetChar;
 }(DviCommand));
-var SetText = /** @class */ (function (_super) {
-    __extends(SetText, _super);
-    function SetText(properties) {
-        return _super.call(this, properties) || this;
-    }
-    SetText.prototype.execute = function (machine) {
-        var width = machine.putText(this.t);
-        machine.moveRight(width);
-    };
-    SetText.prototype.toString = function () {
-        return "SetText { t: \"" + this.t.toString() + "\" }";
-    };
-    return SetText;
-}(DviCommand));
+// class SetText extends DviCommand {
+//     t: Buffer;
+//     constructor(properties) {
+//         super(properties);
+//     }
+//     execute(machine: Machine) {
+//         var width = machine.putText(this.t);
+//         machine.moveRight(width);
+//     }
+//     toString() {
+//         return `SetText { t: "${this.t.toString()}" }`;
+//     }
+// }
 // 137	put_rule	a[4], b[4]	typeset a rule
 var PutRule = /** @class */ (function (_super) {
     __extends(PutRule, _super);
@@ -644,8 +642,8 @@ var SetGlyph = /** @class */ (function (_super) {
 }(DviCommand));
 function parseCommand(opcode, buffer) {
     if ((opcode >= Opcode.set_char) && (opcode < Opcode.set1)) {
-        //throw Error(`SwiftLaTeX does not generate simple setchar`);
-        return new SetChar({ c: opcode, length: 1 });
+        throw Error("SwiftLaTeX does not generate simple setchar");
+        //return new SetChar({ c: opcode, length: 1 });
     }
     if ((opcode >= Opcode.fnt) && (opcode < Opcode.fnt1))
         return new SetFont({ k: opcode - 171, length: 1 });
@@ -656,15 +654,18 @@ function parseCommand(opcode, buffer) {
     }
     switch (opcode) {
         case Opcode.set1:
+            if (buffer.length < 9)
+                throw Error("not enough bytes to process opcode " + opcode);
+            return new SetChar({
+                c: buffer.readUInt8(0),
+                text_height: buffer.readUInt32BE(1),
+                text_width: buffer.readUInt32BE(5),
+                length: 9 + 1
+            });
         case Opcode.set2:
         case Opcode.set3:
         case Opcode.set4:
-            if (buffer.length < opcode - Opcode.set1 + 1)
-                throw Error("not enough bytes to process opcode " + opcode);
-            return new SetChar({
-                c: buffer.readUIntBE(0, opcode - Opcode.set1 + 1),
-                length: opcode - Opcode.set1 + 1 + 1
-            });
+            throw Error("SwiftLaTeX does not generate set_char234");
         case Opcode.set_rule:
             if (buffer.length < 8)
                 throw Error("not enough bytes to process opcode " + opcode);
@@ -849,17 +850,13 @@ function parseCommand(opcode, buffer) {
             if (buffer.length < 14 + k + 8)
                 throw Error("not enough bytes to process opcode " + opcode);
             var comment = buffer.slice(14, 14 + k).toString();
-            var pageheight = buffer.readUInt32BE(14 + k);
-            var pagewidth = buffer.readUInt32BE(18 + k);
             return new Preamble({
                 i: i,
                 num: num,
                 den: den,
                 mag: mag,
                 x: comment,
-                page_height: pageheight,
-                page_width: pagewidth,
-                length: 14 + k + 8 + 1
+                length: 14 + k + 1
             });
         }
         case Opcode.post:
@@ -1140,19 +1137,11 @@ function merge(commands, filter, merge) {
     });
 }
 exports.merge = merge;
-function mergeText(commands) {
-    return merge(commands, function (command) { return (command instanceof SetChar); }, function (queue) {
-        var text;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    text = Buffer.from(queue.map(function (command) { return command.c; }));
-                    return [4 /*yield*/, new SetText({ t: text })];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-exports.mergeText = mergeText;
+// export function mergeText(commands) {
+//     return merge(commands,
+//         command => (command instanceof SetChar),
+//         function*(queue) {
+//             let text = Buffer.from(queue.map(command => command.c));
+//             yield new SetText({ t: text });
+//         });
+// }
