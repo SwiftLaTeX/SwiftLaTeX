@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <time.h>
 #include "core-memory.h"
 void issue_warning(void *context, char const *text) {
   fprintf(stderr, "%s\n", text);
@@ -360,11 +361,11 @@ int input_close(void *context, void *handle) { return fclose(handle); }
 tt_bridge_api_t ourapi;
 
 int compileLaTeX() {  
-  return tex_simple_main(&ourapi, "swiftlatex.fmt", "test.tex", 0, 0);
+  return tex_simple_main(&ourapi, "swiftlatex.fmt", "test.tex", time(0), 0);
 }
 
 int compileFormat(){
-  return tex_simple_main(&ourapi, "xelatex.fmt", "xelatex.ini", 0, 1); //xelatex.fmt does not matter
+  return tex_simple_main(&ourapi, "xelatex.fmt", "xelatex.ini", time(0), 1); //xelatex.fmt does not matter
 }
 
 int comileBibtex() {

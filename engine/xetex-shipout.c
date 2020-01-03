@@ -196,6 +196,9 @@ void ship_out(int32_t p) {
     dvi_out(l);
     for (s = 0; s < l; s++)
       dvi_out(output_comment[s]);
+
+    dvi_four(cur_page_height);
+    dvi_four(cur_page_width);
   }
 
   /* ... resuming 662 ... Emit per-page preamble. */
@@ -610,8 +613,8 @@ static void hlist_out(void) {
           if (font_bc[f] <= c) {
             if (FONT_CHARACTER_INFO(f, c).s3 >
                 0) { /* if (char_exists(orig_char_info(f)(c))) */
-              if (c >= 128)
-                dvi_out(SET1);
+              // if (c >= 128)
+              dvi_out(SET1);
               dvi_out(c);
               cur_h += FONT_CHARACTER_WIDTH(f, c);
               #define FONT_CHARACTER_HEIGHT(f, c)  FONT_CHARINFO_HEIGHT(f, FONT_CHARACTER_INFO(f, c))
