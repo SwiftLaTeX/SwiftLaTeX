@@ -74,18 +74,17 @@ var HTMLMachine = /** @class */ (function (_super) {
         var textHeight = 0;
         c = this._to_legal_unicode(c);
         var htmlText = String.fromCharCode(c);
-        var css_left = this.position.h * this.pointsPerDviUnit;
-        var css_width = text_width * this.pointsPerDviUnit;
-        var css_height = text_height * this.pointsPerDviUnit;
-        var css_top = this.position.v * this.pointsPerDviUnit;
-        var css_fontsize = this.font.designSize / 65536.0;
+        var cssleft = this.position.h * this.pointsPerDviUnit;
+        var cssheight = text_height * this.pointsPerDviUnit;
+        var csstop = this.position.v * this.pointsPerDviUnit;
+        var fontsize = this.font.designSize / 65536.0;
         if (this.svgDepth == 0) {
-            this.output.write("<span style=\"line-height: 0; color: " + this.color + "; font-family: " + this.font.name + "; font-size: " + css_fontsize + "pt; \n                position: absolute; top: " + (css_top - css_height) + "pt; left: " + css_left + "pt; overflow: visible;\">\n                <span style=\"margin-top: -" + css_fontsize + "pt; line-height: " + 0 + "pt; height: " + css_fontsize + "pt;\n                display: inline-block; vertical-align: baseline; \">" + htmlText + "</span>\n                <span style=\"display: inline-block; vertical-align: " + css_height + "pt; height: " + 0 + "pt;\n                 line-height: 0;\"></span></span>\n");
+            this.output.write("<span style=\"line-height: 0; color: " + this.color + "; font-family: " + this.font.name + "; font-size: " + fontsize + "pt; position: absolute; top: " + (csstop - cssheight) + "pt; left: " + cssleft + "pt; overflow: visible;\"><span style=\"margin-top: -" + fontsize + "pt; line-height: " + 0 + "pt; height: " + fontsize + "pt; display: inline-block; vertical-align: baseline; \">" + htmlText + "</span><span style=\"display: inline-block; vertical-align: " + cssheight + "pt; height: " + 0 + "pt; line-height: 0;\"></span></span>\n");
         }
         else {
             var bottom = this.position.v * this.pointsPerDviUnit;
             // No 'pt' on fontsize since those units are potentially scaled
-            this.output.write("<text alignment-baseline=\"baseline\" y=\"" + bottom + "\" x=\"" + css_left + "\"\n             style=\"font-family: " + this.font.name + ";\"\n              font-size=\"" + css_fontsize + "\">" + htmlText + "</text>\n");
+            this.output.write("<text alignment-baseline=\"baseline\" y=\"" + bottom + "\" x=\"" + cssleft + "\" style=\"font-family: " + this.font.name + ";\" font-size=\"" + fontsize + "\">" + htmlText + "</text>\n");
         }
         return text_width;
     };
