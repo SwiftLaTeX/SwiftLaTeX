@@ -1,7 +1,5 @@
 //  var path = execSync('kpsewhich ' + name + '.tfm').toString().split("\n")[0];
 
-import { Tfm } from './tfm/tfm';
-import { loadFont } from './tfm/index';
 
 export interface Rule {
     a: number;
@@ -35,7 +33,6 @@ export class DviFont {
     checksum: number;
     scaleFactor: number;
     designSize: number;
-    metrics: Tfm;
     faceindex: number;
     rbga: number;
     extend: number;
@@ -123,7 +120,6 @@ export class Machine {
         f.checksum = properties.checksum;
         f.scaleFactor = properties.scaleFactor;
         f.designSize = properties.designSize;
-        f.metrics = loadFont(properties.name);
         return f;
     }
 
@@ -136,7 +132,6 @@ export class Machine {
         f.extend = properties.extend;
         f.slant = properties.slant;
         f.embolden = properties.embolden;
-        f.metrics = null;
         return f;
     }
 

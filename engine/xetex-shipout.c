@@ -196,9 +196,6 @@ void ship_out(int32_t p) {
     dvi_out(l);
     for (s = 0; s < l; s++)
       dvi_out(output_comment[s]);
-
-    dvi_four(cur_page_height);
-    dvi_four(cur_page_width);
   }
 
   /* ... resuming 662 ... Emit per-page preamble. */
@@ -616,10 +613,11 @@ static void hlist_out(void) {
               // if (c >= 128)
               dvi_out(SET1);
               dvi_out(c);
+              /* SwiftLaTeX patch */
+              dvi_four(FONT_CHARACTER_HEIGHT(f,c));
+              dvi_four(FONT_CHARACTER_WIDTH(f,c));
+              /* SwiftLaTeX patch */
               cur_h += FONT_CHARACTER_WIDTH(f, c);
-              #define FONT_CHARACTER_HEIGHT(f, c)  FONT_CHARINFO_HEIGHT(f, FONT_CHARACTER_INFO(f, c))
-              #define FONT_CHARACTER_DEPTH(f, c)  FONT_CHARINFO_DEPTH(f, FONT_CHARACTER_INFO(f, c))
-              printf("funny %d %d %c\n", FONT_CHARACTER_HEIGHT(f,c), FONT_CHARACTER_DEPTH(f,c), c);
             }
           }
         }

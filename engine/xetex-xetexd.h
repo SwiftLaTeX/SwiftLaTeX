@@ -361,7 +361,8 @@ typedef union {
   font_info[italic_base[f] + (info).s1 / 4].b32.s1
 #define FONT_CHARACTER_WIDTH(f, c)                                             \
   FONT_CHARINFO_WIDTH(f, FONT_CHARACTER_INFO(f, c))
-
+#define FONT_CHARACTER_HEIGHT(f, c)  FONT_CHARINFO_HEIGHT(f, FONT_CHARACTER_INFO(f, c))
+#define FONT_CHARACTER_DEPTH(f, c)  FONT_CHARINFO_DEPTH(f, FONT_CHARACTER_INFO(f, c))
 #define TOKEN_LIST_ref_count(p) mem[p].b32.s0
 
 /* e-TeX extended marks stuff ... not sure where to put these */

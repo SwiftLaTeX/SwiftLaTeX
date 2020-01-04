@@ -27,5 +27,3 @@ export async function dvi2html( dviStream, htmlStream ) {
   return machine;
 }
 
-import { tfmData } from "./tfm/index";
-export { tfmData };

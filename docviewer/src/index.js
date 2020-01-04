@@ -68,5 +68,3 @@ function dvi2html(dviStream, htmlStream) {
     });
 }
 exports.dvi2html = dvi2html;
-var index_1 = require("./tfm/index");
-exports.tfmData = index_1.tfmData;

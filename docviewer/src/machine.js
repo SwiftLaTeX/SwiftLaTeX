@@ -1,7 +1,6 @@
 "use strict";
 //  var path = execSync('kpsewhich ' + name + '.tfm').toString().split("\n")[0];
 exports.__esModule = true;
-var index_1 = require("./tfm/index");
 var Position = /** @class */ (function () {
     function Position(properties) {
         if (properties) {
@@ -77,7 +76,6 @@ var Machine = /** @class */ (function () {
         f.checksum = properties.checksum;
         f.scaleFactor = properties.scaleFactor;
         f.designSize = properties.designSize;
-        f.metrics = index_1.loadFont(properties.name);
         return f;
     };
     Machine.prototype.loadNativeFont = function (properties) {
@@ -89,7 +87,6 @@ var Machine = /** @class */ (function () {
         f.extend = properties.extend;
         f.slant = properties.slant;
         f.embolden = properties.embolden;
-        f.metrics = null;
         return f;
     };
     return Machine;
