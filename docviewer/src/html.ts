@@ -89,7 +89,7 @@ export default class HTMLMachine extends Machine {
         let csstop = this.position.v * this.pointsPerDviUnit;
         let fontsize = this.font.designSize/65536.0;
         if (this.svgDepth == 0) {
-            this.output.write(`<span style="line-height: 0; color: ${this.color}; font-family: ${this.font.name}; font-size: ${fontsize}pt; position: absolute; top: ${csstop - cssheight}pt; left: ${cssleft}pt; overflow: visible;"><span style="margin-top: -${fontsize}pt; line-height: ${0}pt; height: ${fontsize}pt; display: inline-block; vertical-align: baseline; ">${htmlText}</span><span style="display: inline-block; vertical-align: ${cssheight}pt; height: ${0}pt; line-height: 0;"></span></span>\n`);
+            this.output.write(`<div style="line-height: 0; color: ${this.color}; font-family: ${this.font.name}; font-size: ${fontsize}pt; position: absolute; top: ${csstop - cssheight}pt; left: ${cssleft}pt;">${htmlText}<span style="display: inline-block; vertical-align: ${cssheight}pt; "></span></div>\n`);
         } else {
             let bottom = this.position.v * this.pointsPerDviUnit;
             // No 'pt' on fontsize since those units are potentially scaled
@@ -100,7 +100,7 @@ export default class HTMLMachine extends Machine {
     }
 
 
-    putNativeText(text: Buffer): number {
+    setNativeText(text: Buffer): number {
         return 0;
     }
 }

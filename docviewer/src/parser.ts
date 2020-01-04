@@ -667,14 +667,15 @@ class _glyphLocation {
 }
 
 class SetGlyph extends DviCommand {
-    opcode: Opcode.set_glyphs;
+    opcode: Opcode.set_text_and_glyphs;
     width: number;
     count: number;
+    texts: number[];
     glyphLocations: _glyphLocation[];
     glyphIds: number[];
     constructor(properties: any) {
         super(properties);
-        this.opcode = Opcode.set_glyphs;
+        this.opcode = Opcode.set_text_and_glyphs;
     }
     execute(machine: Machine) {
 
@@ -1001,41 +1002,48 @@ function parseCommand(opcode: Opcode, buffer: Buffer): Command | void {
                 return res;
             }
         case Opcode.set_glyphs:
+            throw Error('Not implemented. 253, SwiftLaTeX does not generate it.');
+            
+        case Opcode.set_text_and_glyphs:
             {
 
                 if (buffer.length < 16)
                     throw Error(`not enough bytes to process opcode ${opcode}`);
                 let width = buffer.readUInt32BE(0);
                 let count = buffer.readUInt16BE(4);
-                let glyphLocations: _glyphLocation[] = [];
-                let glyphIDs: number[] = [];
+                console.log(`How many count? ${count}`);
+                if (buffer.length < 6 + count * 12)
+                    throw Error(`not enough bytes to process opcode ${opcode} ${buffer.length} ${count}`);
                 let res = new SetGlyph({
                     width: width,
                     count: count,
                 });
-                if (buffer.length < 6 + count * 10)
-                    throw Error(`not enough bytes to process opcode ${opcode} ${buffer.length} ${count}`);
+                let texts: number[] = [];
+                let glyphLocations: _glyphLocation[] = [];
+                let glyphIDs: number[] = [];
+                for(let j = 0; j < count; j ++) {
+                    texts.push(buffer.readUInt16BE(6 + j * 2));
+                }
+                
                 for (let j = 0; j < count; j++) {
                     let glyphLocation: _glyphLocation = new _glyphLocation();
-                    let xoffset = buffer.readUInt32BE(6 + j * 8);
-                    let yoffset = buffer.readUInt32BE(6 + j * 8 + 4);
+                    let xoffset = buffer.readUInt32BE(6 + count * 2 +j * 8);
+                    let yoffset = buffer.readUInt32BE(6 + count * 2 + j * 8 + 4);
                     glyphLocation.xoffset = xoffset;
                     glyphLocation.yoffset = yoffset;
                     glyphLocations.push(glyphLocation);
                 }
                 for (let j = 0; j < count; j++) {
-                    let glyphID = buffer.readUInt16BE(6 + count * 8 + j * 2);
+                    let glyphID = buffer.readUInt16BE(6 + count * 10 + j * 2);
                     glyphIDs.push(glyphID);
                 }
                 res.glyphLocations = glyphLocations;
                 res.glyphIds = glyphIDs;
-                res.length = 6 + count * 10 + 1;
-                //console.log(res);
+                res.texts = texts;
+                res.length = 6 + count * 12 + 1;
+                console.log(res);
                 return res;
             }
-
-        case Opcode.set_text_and_glyphs:
-            throw Error('Not implemented. 254');
     }
 
     throw Error(`routine for ${opcode} is not implemented`);
@@ -1064,7 +1072,7 @@ export async function* dviParser(stream) {
         }
 
         let command = parseCommand(opcode, buffer.slice(offset + 1));
-
+        console.log(command);
         if (command) {
             yield command;
             offset += command.length;

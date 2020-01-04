@@ -110,7 +110,7 @@ export class Machine {
     }
 
     // Returns the width of the text
-    putNativeText(text: Buffer): number {
+    setNativeText(text: Buffer): number {
         return 0;
     }
 
