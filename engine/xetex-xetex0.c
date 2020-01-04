@@ -10654,10 +10654,11 @@ int32_t new_native_word_node(internal_font_number f, int32_t n) {
   q = get_node(l);
   NODE_type(q) = WHATSIT_NODE;
 
-  if (INTPAR(xetex_generate_actual_text) > 0)
+  //Forcing it to use native_word_node_at;
+  //if (INTPAR(xetex_generate_actual_text) > 0)
     NODE_subtype(q) = NATIVE_WORD_NODE_AT;
-  else
-    NODE_subtype(q) = NATIVE_WORD_NODE;
+  //else
+  //  NODE_subtype(q) = NATIVE_WORD_NODE;
 
   NATIVE_NODE_size(q) = l;
   NATIVE_NODE_font(q) = f;

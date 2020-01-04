@@ -1002,7 +1002,45 @@ function parseCommand(opcode: Opcode, buffer: Buffer): Command | void {
                 return res;
             }
         case Opcode.set_glyphs:
-            throw Error('Not implemented. 253, SwiftLaTeX does not generate it.');
+        {
+            if (buffer.length < 16)
+                    throw Error(`not enough bytes to process opcode ${opcode}`);
+                let width = buffer.readUInt32BE(0);
+                let count = buffer.readUInt16BE(4);
+                console.log(`How many count? ${count}`);
+                if (buffer.length < 6 + count * 12)
+                    throw Error(`not enough bytes to process opcode ${opcode} ${buffer.length} ${count}`);
+                let res = new SetGlyph({
+                    width: width,
+                    count: count,
+                });
+                let texts: number[] = [];
+                let glyphLocations: _glyphLocation[] = [];
+                let glyphIDs: number[] = [];
+                for(let j = 0; j < count; j ++) {
+                    texts.push(buffer.readUInt16BE(6 + j * 2));
+                }
+                
+                for (let j = 0; j < count; j++) {
+                    let glyphLocation: _glyphLocation = new _glyphLocation();
+                    let xoffset = buffer.readUInt32BE(6 + count * 2 +j * 8);
+                    let yoffset = buffer.readUInt32BE(6 + count * 2 + j * 8 + 4);
+                    glyphLocation.xoffset = xoffset;
+                    glyphLocation.yoffset = yoffset;
+                    glyphLocations.push(glyphLocation);
+                }
+                for (let j = 0; j < count; j++) {
+                    let glyphID = buffer.readUInt16BE(6 + count * 10 + j * 2);
+                    glyphIDs.push(glyphID);
+                }
+                res.glyphLocations = glyphLocations;
+                res.glyphIds = glyphIDs;
+                res.texts = texts;
+                res.length = 6 + count * 12 + 1;
+                console.log(res);
+                return res;
+            
+        }
             
         case Opcode.set_text_and_glyphs:
             {

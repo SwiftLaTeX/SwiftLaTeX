@@ -1181,7 +1181,7 @@ int make_font_def(int32_t f) {
   fontDefLength = 4   /* size */
                   + 2 /* flags */
                   + 1 /* name length */
-                  + filenameLen + 4 /* face index */;
+                  + filenameLen + 4 + 4 + 4/* face index, height, depth */;
 
   if ((font_flags[f] & FONT_FLAGS_COLORED) != 0) {
     fontDefLength += 4; /* 32-bit RGBA value */
@@ -1220,6 +1220,12 @@ int make_font_def(int32_t f) {
   cp += filenameLen;
 
   *(uint32_t *)cp = SWAP32(index);
+  cp += 4;
+
+  *(uint32_t *)cp = SWAP32(height_base[f]);
+  cp += 4;
+
+  *(uint32_t *)cp = SWAP32(depth_base[f]);
   cp += 4;
 
   if ((font_flags[f] & FONT_FLAGS_COLORED) != 0) {
