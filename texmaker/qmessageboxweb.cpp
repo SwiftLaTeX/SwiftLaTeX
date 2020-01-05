@@ -14,10 +14,18 @@ void QMessageBoxWeb::warning(QWidget *parent, const QString &title, const QStrin
 
 
 
+extern "C" {
+  extern int javascriptconfirm(const char *text);
+  extern int javascriptprompt(const char *text);
+}
 
 int QMessageBoxWeb::warningWith3Buttons(QWidget *parent, const QString &title, const QString &text, const QString &b1,  const QString &b2, const QString &b3, int a1, int a2) {
 	#ifdef __EMSCRIPTEN__
-	return 0;
+	if(b3 == QString::null) {
+		return javascriptconfirm(text.toStdString().c_str());
+	} else {
+		return javascriptprompt(text.toStdString().c_str());
+	}
 	#else
 		return QMessageBox::warning(parent, title, text, b1, b2, b3, a1, a2);
 	#endif
