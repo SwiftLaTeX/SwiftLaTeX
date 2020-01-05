@@ -1111,7 +1111,7 @@ export async function* dviParser(stream) {
         }
 
         let command = parseCommand(opcode, buffer.slice(offset + 1));
-        //console.log(command);
+        console.log(command);
         if (command) {
             yield command;
             offset += command.length;

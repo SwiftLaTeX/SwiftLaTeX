@@ -1056,6 +1056,7 @@ function dviParser(stream) {
                         }
                     }
                     command = parseCommand(opcode, buffer.slice(offset + 1));
+                    console.log(command);
                     if (!command) return [3 /*break*/, 16];
                     return [4 /*yield*/, __await(command)];
                 case 14: return [4 /*yield*/, _b.sent()];
