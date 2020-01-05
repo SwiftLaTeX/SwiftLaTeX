@@ -99,7 +99,8 @@ var HTMLMachine = /** @class */ (function (_super) {
         var csstop = this.position.v * this.pointsPerDviUnit;
         var fontsize = this.font.designSize;
         var lineheight = (this.font.height + this.font.depth) / 1048576.0;
-        this.output.write("<span style=\"line-height: " + lineheight + "; color: " + this.color + "; white-space:pre; font-family: " + this.font.name + "; font-size: " + fontsize + "pt; position: absolute; top: " + (csstop - lineheight * fontsize) + "pt; left: " + cssleft + "pt;\">" + htmlText + "</span>\n");
+        var textheight = lineheight * fontsize;
+        this.output.write("<span style=\"line-height: " + lineheight + "; color: " + this.color + "; white-space:pre; font-family: " + this.font.name + "; font-size: " + fontsize + "pt; position: absolute; top: " + (csstop - textheight) + "pt; left: " + cssleft + "pt;\">" + htmlText + "</span>\n");
         return width;
     };
     return HTMLMachine;
