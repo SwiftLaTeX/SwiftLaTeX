@@ -99,7 +99,7 @@ var HTMLMachine = /** @class */ (function (_super) {
         var csstop = this.position.v * this.pointsPerDviUnit;
         var fontsize = this.font.designSize;
         var lineheight = (this.font.height + this.font.depth) / 1048576.0;
-        var textheight = lineheight * fontsize;
+        var textheight = lineheight * fontsize; /*Todo, not sure whether it is correct*/
         this.output.write("<span style=\"line-height: " + lineheight + "; color: " + this.color + "; white-space:pre; font-family: " + this.font.name + "; font-size: " + fontsize + "pt; position: absolute; top: " + (csstop - textheight) + "pt; left: " + cssleft + "pt;\">" + htmlText + "</span>\n");
         return width;
     };
