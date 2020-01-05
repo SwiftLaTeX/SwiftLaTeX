@@ -606,6 +606,8 @@ var NativeFontDefinition = /** @class */ (function (_super) {
             name: this.filename,
             fontsize: this.fontsize,
             faceindex: this.faceindex,
+            height: this.height,
+            depth: this.depth,
             rbga: this.rbga,
             extend: this.extend,
             slant: this.slant,
@@ -628,15 +630,19 @@ var _glyphLocation = /** @class */ (function () {
 }());
 var SetGlyph = /** @class */ (function (_super) {
     __extends(SetGlyph, _super);
+    // glyphLocations: _glyphLocation[];
+    // glyphIds: number[];
     function SetGlyph(properties) {
         var _this = _super.call(this, properties) || this;
         _this.opcode = Opcode.set_text_and_glyphs;
         return _this;
     }
     SetGlyph.prototype.execute = function (machine) {
+        var width = machine.setNativeText(this.text, this.width);
+        machine.moveRight(width);
     };
     SetGlyph.prototype.toString = function () {
-        return "SetGlyph { count: " + this.count + " }";
+        return "SetGlyph { count: " + this.textcount + " }";
     };
     return SetGlyph;
 }(DviCommand));
@@ -891,10 +897,14 @@ function parseCommand(opcode, buffer) {
                 var filenamelen = buffer.readUInt8(10);
                 var filename = buffer.slice(11, 11 + filenamelen).toString();
                 var faceindex = buffer.readUInt32BE(11 + filenamelen);
+                var height = buffer.readUInt32BE(11 + filenamelen + 4);
+                var depth = buffer.readUInt32BE(11 + filenamelen + 8);
                 var res = new NativeFontDefinition({
                     fontnumber: fontnum,
                     fontsize: fontsize,
                     flag: flag,
+                    height: height,
+                    depth: depth,
                     filenamelen: filenamelen,
                     filename: filename,
                     faceindex: faceindex
@@ -903,7 +913,7 @@ function parseCommand(opcode, buffer) {
                 var XDV_FLAG_EXTEND = 0x1000;
                 var XDV_FLAG_SLANT = 0x2000;
                 var XDV_FLAG_EMBOLDEN = 0x4000;
-                var length_1 = 15 + filenamelen;
+                var length_1 = 23 + filenamelen;
                 if ((flag & XDV_FLAGS_COLORED) != 0) {
                     res.rbga = buffer.readUInt32BE(length_1);
                     length_1 += 4;
@@ -924,43 +934,71 @@ function parseCommand(opcode, buffer) {
                 return res;
             }
         case Opcode.set_glyphs:
-            throw Error('Not implemented. 253, SwiftLaTeX does not generate it.');
-        case Opcode.set_text_and_glyphs:
             {
                 if (buffer.length < 16)
                     throw Error("not enough bytes to process opcode " + opcode);
                 var width = buffer.readUInt32BE(0);
-                var count = buffer.readUInt16BE(4);
-                console.log("How many count? " + count);
-                if (buffer.length < 6 + count * 12)
-                    throw Error("not enough bytes to process opcode " + opcode + " " + buffer.length + " " + count);
+                var glyphcount = buffer.readUInt16BE(4);
+                if (glyphcount != 1)
+                    throw Error("SwiftLaTeX only generate single glyphs");
+                console.log("Warning, set glyph is not fully implemented");
                 var res = new SetGlyph({
+                    text: [126],
+                    textcount: 1,
                     width: width,
-                    count: count
+                    glyphcount: glyphcount,
+                    length: 17
                 });
-                var texts = [];
-                var glyphLocations = [];
-                var glyphIDs = [];
-                for (var j = 0; j < count; j++) {
-                    texts.push(buffer.readUInt16BE(6 + j * 2));
+                //console.log(res);
+                return res;
+            }
+        case Opcode.set_text_and_glyphs:
+            {
+                if (buffer.length < 16)
+                    throw Error("not enough bytes to process opcode " + opcode);
+                var textcount = buffer.readUInt16BE(0);
+                if (buffer.length < 2 + textcount * 2)
+                    throw Error("not enough bytes to process opcode " + opcode + " for textcount");
+                var text = [];
+                for (var j = 0; j < textcount; j++) {
+                    var n = buffer.readUInt16BE(2 + j * 2);
+                    text.push(n);
                 }
-                for (var j = 0; j < count; j++) {
-                    var glyphLocation = new _glyphLocation();
-                    var xoffset = buffer.readUInt32BE(6 + count * 2 + j * 8);
-                    var yoffset = buffer.readUInt32BE(6 + count * 2 + j * 8 + 4);
-                    glyphLocation.xoffset = xoffset;
-                    glyphLocation.yoffset = yoffset;
-                    glyphLocations.push(glyphLocation);
-                }
-                for (var j = 0; j < count; j++) {
-                    var glyphID = buffer.readUInt16BE(6 + count * 10 + j * 2);
-                    glyphIDs.push(glyphID);
-                }
-                res.glyphLocations = glyphLocations;
-                res.glyphIds = glyphIDs;
-                res.texts = texts;
-                res.length = 6 + count * 12 + 1;
-                console.log(res);
+                var width = buffer.readUInt32BE(2 + textcount * 2);
+                var glyphcount = buffer.readUInt16BE(2 + textcount * 2 + 4);
+                //console.log(`How many count? ${glyphcount}`);
+                if (buffer.length < 2 + textcount * 2 + 6 + glyphcount * 10)
+                    throw Error("not enough bytes to process opcode " + opcode + " " + buffer.length + " " + glyphcount);
+                var res = new SetGlyph({
+                    text: text,
+                    textcount: textcount,
+                    width: width,
+                    glyphcount: glyphcount,
+                    length: 2 + textcount * 2 + 6 + glyphcount * 10 + 1
+                });
+                // let texts: number[] = [];
+                // let glyphLocations: _glyphLocation[] = [];
+                // let glyphIDs: number[] = [];
+                // for(let j = 0; j < count; j ++) {
+                //     texts.push(buffer.readUInt16BE(6 + j * 2));
+                // }
+                // for (let j = 0; j < count; j++) {
+                //     let glyphLocation: _glyphLocation = new _glyphLocation();
+                //     let xoffset = buffer.readUInt32BE(6 + count * 2 +j * 8);
+                //     let yoffset = buffer.readUInt32BE(6 + count * 2 + j * 8 + 4);
+                //     glyphLocation.xoffset = xoffset;
+                //     glyphLocation.yoffset = yoffset;
+                //     glyphLocations.push(glyphLocation);
+                // }
+                // for (let j = 0; j < count; j++) {
+                //     let glyphID = buffer.readUInt16BE(6 + count * 10 + j * 2);
+                //     glyphIDs.push(glyphID);
+                // }
+                // res.glyphLocations = glyphLocations;
+                // res.glyphIds = glyphIDs;
+                // res.texts = texts;
+                // res.length = 6 + count * 12 + 1;
+                //console.log(res);
                 return res;
             }
     }
@@ -1020,7 +1058,6 @@ function dviParser(stream) {
                         }
                     }
                     command = parseCommand(opcode, buffer.slice(offset + 1));
-                    console.log(command);
                     if (!command) return [3 /*break*/, 16];
                     return [4 /*yield*/, __await(command)];
                 case 14: return [4 /*yield*/, _b.sent()];

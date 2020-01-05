@@ -24,6 +24,8 @@ export default class HTMLMachine extends Machine {
     setPapersize(width: number, height: number) {
         this.paperwidth = width;
         this.paperheight = height;
+        console.log(this.paperwidth);
+        console.log(this.paperheight);
     }
 
     putSVG(svg: string) {
@@ -100,8 +102,18 @@ export default class HTMLMachine extends Machine {
     }
 
 
-    setNativeText(text: Buffer): number {
-        return 0;
+    setNativeText(text: number[], width: number): number {
+        let htmlText = "";
+        for(let j = 0; j < text.length; j ++) {
+            htmlText += String.fromCharCode(text[j]);
+        }
+        let cssleft = this.position.h * this.pointsPerDviUnit;
+        let csstop = this.position.v * this.pointsPerDviUnit;
+        let fontsize = this.font.designSize;
+        let lineheight = (this.font.height + this.font.depth)/1048576.0;
+
+        this.output.write(`<span style="line-height: ${lineheight}; color: ${this.color}; white-space:pre; font-family: ${this.font.name}; font-size: ${fontsize}pt; position: absolute; top: ${csstop - lineheight * fontsize}pt; left: ${cssleft}pt;">${htmlText}</span>\n`);
+        return width;
     }
 }
 

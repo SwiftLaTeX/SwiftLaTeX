@@ -34,6 +34,8 @@ export class DviFont {
     scaleFactor: number;
     designSize: number;
     faceindex: number;
+    height: number;
+    depth: number;
     rbga: number;
     extend: number;
     slant: number;
@@ -110,7 +112,7 @@ export class Machine {
     }
 
     // Returns the width of the text
-    setNativeText(text: Buffer): number {
+    setNativeText(text: number[], width: number): number {
         return 0;
     }
 
@@ -128,6 +130,8 @@ export class Machine {
         f.name = properties.name;
         f.designSize = properties.fontsize;
         f.faceindex = properties.faceindex;
+        f.height = properties.height;
+        f.depth = properties.depth;
         f.rbga = properties.rgba;
         f.extend = properties.extend;
         f.slant = properties.slant;

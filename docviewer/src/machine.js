@@ -67,7 +67,7 @@ var Machine = /** @class */ (function () {
         return 0;
     };
     // Returns the width of the text
-    Machine.prototype.setNativeText = function (text) {
+    Machine.prototype.setNativeText = function (text, width) {
         return 0;
     };
     Machine.prototype.loadFont = function (properties) {
@@ -83,6 +83,8 @@ var Machine = /** @class */ (function () {
         f.name = properties.name;
         f.designSize = properties.fontsize;
         f.faceindex = properties.faceindex;
+        f.height = properties.height;
+        f.depth = properties.depth;
         f.rbga = properties.rgba;
         f.extend = properties.extend;
         f.slant = properties.slant;

@@ -12,6 +12,7 @@ fs.readdirSync('./fonts/output').forEach(file => {
     let name = file.replace(/.woff/, '');
     fonts = fonts + `@font-face { font-family: ${name}; src: url('fonts/output/${file}'); }\n`;
 });
+fonts +=  `@font-face { font-family: lmroman10-regular; src: url('lmroman10-regular.otf'); }\n`;
 fs.writeFileSync("fonts.css", fonts);
 
 let filename = 'test.xdv';
