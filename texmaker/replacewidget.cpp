@@ -63,7 +63,7 @@ void ReplaceWidget::doReplace() {
           endpos);
       if (result > -1) {
         startpos = result;
-        switch (QMessageBoxWeb::warningWith(this, "Texmaker",
+        switch (QMessageBoxWeb::warningWith3Buttons(this, "Texmaker",
                                      tr("Replace this occurence ? "), tr("Yes"),
                                      tr("No"), tr("Cancel"), 0, 2)) {
         case 0:
@@ -87,7 +87,7 @@ void ReplaceWidget::doReplace() {
                ui.comboFind->currentText(), ui.checkCase->isChecked(),
                ui.checkWords->isChecked(), ui.radioForward->isChecked(),
                !ui.checkBegin->isChecked(), ui.checkRegExp->isChecked())) {
-      switch (QMessageBox::warning(this, "Texmaker",
+      switch (QMessageBoxWeb::warningWith3Buttons(this, "Texmaker",
                                    tr("Replace this occurence ? "), tr("Yes"),
                                    tr("No"), tr("Cancel"), 0, 2)) {
       case 0:

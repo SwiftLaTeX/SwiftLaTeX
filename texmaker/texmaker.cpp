@@ -76,14 +76,11 @@
 
 
 #include "refdialog.h"
-
-
 #include "tabbingdialog.h"
 #include "tabdialog.h"
 #include "theme.h"
 #include "usercompletiondialog.h"
 #include "usermenudialog.h"
-#include "versiondialog.h"
 
 
 
@@ -3235,7 +3232,7 @@ void Texmaker::checkModifiedOutsideAll() {
       fn = *filenames.find(currentEditorView());
       if (isCurrentModifiedOutside()) {
         QFileInfo fi(fn);
-        choice = QMessageBoxWeb::warning(
+        choice = QMessageBoxWeb::warningWith3Buttons(
             this, "Texmaker",
             tr("The document has been changed outside Texmaker."
                "Do you want to reload it (and discard your changes) or save it "
@@ -3415,7 +3412,7 @@ void Texmaker::fileSave() {
     fn = *filenames.find(currentEditorView());
     if (isCurrentModifiedOutside()) {
       QFileInfo fi(fn);
-      switch (QMessageBoxWeb::warning(
+      switch (QMessageBoxWeb::warningWith3Buttons(
           this, "Texmaker",
           tr("The document has been changed outside Texmaker."
              "Do you want to reload it (and discard your changes) or save it "
@@ -3472,7 +3469,7 @@ bool Texmaker::currentfileSaved() {
     fn = *filenames.find(currentEditorView());
     if (isCurrentModifiedOutside()) {
       QFileInfo fi(fn);
-      switch (QMessageBoxWeb::warning(
+      switch (QMessageBoxWeb::warningWith3Buttons(
           this, "Texmaker",
           tr("The document has been changed outside Texmaker."
              "Do you want to reload it (and discard your changes) or save it "
@@ -3643,13 +3640,13 @@ void Texmaker::fileClose() {
     int query;
     QString locale = TexmakerApp::instance()->language.left(2);
     if (locale == "en") {
-      query = QMessageBoxWeb::warning(this, "Texmaker",
+      query = QMessageBoxWeb::warningWith3Buttons(this, "Texmaker",
                                    "The document contains unsaved work. "
                                    "Do you want to save it before closing?",
                                    "Save and Close", "Close without saving",
                                    "Cancel", 0, 2);
     } else {
-      query = QMessageBoxWeb::warning(
+      query = QMessageBoxWeb::warningWith3Buttons(
           this, "Texmaker",
           tr("The document contains unsaved work. "
              "Do you want to save it before closing?"),
@@ -3695,13 +3692,13 @@ void Texmaker::fileCloseAll() {
   while (currentEditorView() && go) {
     if (currentEditorView()->editor->document()->isModified()) {
       if (locale == "en") {
-        query = QMessageBoxWeb::warning(this, "Texmaker",
+        query = QMessageBoxWeb::warningWith3Buttons(this, "Texmaker",
                                      "The document contains unsaved work. "
                                      "Do you want to save it before closing?",
                                      "Save and Close", "Close without saving",
                                      "Cancel", 0, 2);
       } else {
-        query = QMessageBoxWeb::warning(
+        query = QMessageBoxWeb::warningWith3Buttons(
             this, "Texmaker",
             tr("The document contains unsaved work. "
                "Do you want to save it before closing?"),
@@ -3755,13 +3752,13 @@ void Texmaker::fileExit() {
   while (currentEditorView() && accept) {
     if (currentEditorView()->editor->document()->isModified()) {
       if (locale == "en") {
-        query = QMessageBoxWeb::warning(this, "Texmaker",
+        query = QMessageBoxWeb::warningWith3Buttons(this, "Texmaker",
                                      "The document contains unsaved work. "
                                      "Do you want to save it before closing?",
                                      "Save and Close", "Close without saving",
                                      "Cancel", 0, 2);
       } else {
-        query = QMessageBoxWeb::warning(
+        query = QMessageBoxWeb::warningWith3Buttons(
             this, "Texmaker",
             tr("The document contains unsaved work. "
                "Do you want to save it before closing?"),
@@ -3844,13 +3841,13 @@ void Texmaker::closeEvent(QCloseEvent *e) {
   while (currentEditorView() && accept) {
     if (currentEditorView()->editor->document()->isModified()) {
       if (locale == "en") {
-        query = QMessageBoxWeb::warning(this, "Texmaker",
+        query = QMessageBoxWeb::warningWith3Buttons(this, "Texmaker",
                                      "The document contains unsaved work. "
                                      "Do you want to save it before closing?",
                                      "Save and Close", "Close without saving",
                                      "Cancel", 0, 2);
       } else {
-        query = QMessageBoxWeb::warning(
+        query = QMessageBoxWeb::warningWith3Buttons(
             this, "Texmaker",
             tr("The document contains unsaved work. "
                "Do you want to save it before closing?"),
@@ -3974,11 +3971,11 @@ void Texmaker::fileReload() {
     return;
   QString f = filenames[currentEditorView()];
   if (currentEditorView()->editor->document()->isModified()) {
-    switch (QMessageBoxWeb::warning(
+    switch (QMessageBoxWeb::warningWith3Buttons(
         this, "Texmaker",
         tr("The document contains unsaved work."
            "You will lose changes by reloading the document."),
-        tr("Reload the file"), tr("Cancel"), 0, 1)) {
+        tr("Reload the file"), tr("Cancel"), QString::null, 0, 1)) {
     case 0:
       filenames.remove(currentEditorView());
       comboFiles->removeItem(comboFiles->currentIndex());
@@ -4887,10 +4884,10 @@ void Texmaker::SaveSettings() {
 }
 
 void Texmaker::DeleteSettings() {
-  switch (QMessageBox::warning(this, "Texmaker",
+  switch (QMessageBoxWeb::warningWith3Buttons(this, "Texmaker",
                                tr("Delete settings file?\n(Texmaker will be "
                                   "closed and you will have to restart it)"),
-                               tr("Ok"), tr("Cancel"), 0, 1)) {
+                               tr("Ok"), tr("Cancel"), QString::null, 0, 1)) {
   case 0:
     eraseSettings = true;
     fileExit();
