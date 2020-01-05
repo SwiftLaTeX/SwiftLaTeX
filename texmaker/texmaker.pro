@@ -513,3 +513,5 @@ INSTALLS += utilities
 ICON = texmaker.icns
 QMAKE_INFO_PLIST =Info.plist
 }
+
+QMAKE_LFLAGS += "--js-library library.js"

@@ -1,7 +1,5 @@
 #include "qmessageboxweb.h"
-#ifdef __EMSCRIPTEN__
-#include <emscripten.h>
-#endif
+
 void QMessageBoxWeb::warning(QWidget *parent, const QString &title, const QString &text) {
 	QMessageBox *mbox = new QMessageBox(parent);
 	mbox->setWindowTitle(title);
