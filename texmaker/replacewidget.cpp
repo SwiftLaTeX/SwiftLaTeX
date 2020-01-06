@@ -52,44 +52,44 @@ void ReplaceWidget::doReplace() {
       return;
     }
   }
-  bool go = true;
+  //bool go = true;
   int result = -1;
 
   if (ui.checkSelection->isChecked()) {
-    while (go && (startpos > -1) && (endpos > -1)) {
+    if ((startpos > -1) && (endpos > -1)) {
       result = editor->searchInSelection(
           ui.comboFind->currentText(), ui.checkCase->isChecked(),
           ui.checkWords->isChecked(), ui.checkRegExp->isChecked(), startpos,
           endpos);
+
       if (result > -1) {
         startpos = result;
         switch (QMessageBoxWeb::warningWith3Buttons(this, "Texmaker",
-                                     tr("Replace this occurence ? "), tr("Yes"),
-                                     tr("No"), tr("Cancel"), 0, 2)) {
-        case 0:
-          replaceSelection();
-          ui.checkBegin->setChecked(false);
-          break;
-        case 1:
-          ui.checkBegin->setChecked(false);
-          break;
-        case 2:
-          go = false;
-          ui.checkSelection->setChecked(false);
-          break;
+                                     tr("Replace this occurence? "), tr("Yes"),
+                                     tr("No"), QString::null, 0, 1)) {
+          case 0:
+            replaceSelection();
+            ui.checkBegin->setChecked(false);
+            break;
+          case 1:
+            ui.checkBegin->setChecked(false);
+            break;
         }
-      } else
+      } else {
         ui.checkSelection->setChecked(false);
+      }
+      
     }
+    
   } else {
-    while (go &&
+    if (
            editor->search(
                ui.comboFind->currentText(), ui.checkCase->isChecked(),
                ui.checkWords->isChecked(), ui.radioForward->isChecked(),
                !ui.checkBegin->isChecked(), ui.checkRegExp->isChecked())) {
       switch (QMessageBoxWeb::warningWith3Buttons(this, "Texmaker",
                                    tr("Replace this occurence ? "), tr("Yes"),
-                                   tr("No"), tr("Cancel"), 0, 2)) {
+                                   tr("No"),  QString::null, 0, 1)) {
       case 0:
         editor->replace(ui.comboReplace->currentText(),
                         ui.checkRegExp->isChecked(),
@@ -99,13 +99,9 @@ void ReplaceWidget::doReplace() {
       case 1:
         ui.checkBegin->setChecked(false);
         break;
-      case 2:
-        go = false;
-        break;
       }
     }
-    if (go)
-      ui.checkBegin->setChecked(true);
+    ui.checkBegin->setChecked(true);
   }
 }
 

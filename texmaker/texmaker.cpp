@@ -11078,7 +11078,8 @@ void Texmaker::customContentsMenuStructure(const QPoint &pos) {
   menu->addAction(viewAsyAct);
 
   QPoint globalPos = LeftPanelToolBar->mapToGlobal(pos);
-  menu->exec(globalPos);
+  menu->popup(globalPos);
+  menu->setAttribute(Qt::WA_DeleteOnClose);
 }
 
 void Texmaker::TogglePstricks() {

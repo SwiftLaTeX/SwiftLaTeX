@@ -944,9 +944,9 @@ void LatexEditor::contextMenuEvent(QContextMenuEvent *e) {
   //     for (int i = 0; i < imActions.size(); ++i)
   //     menu->addAction(imActions.at(i));
   //     }
-
-  menu->exec(e->globalPos());
-  delete menu;
+  menu->setAttribute(Qt::WA_DeleteOnClose); 
+  menu->popup(e->globalPos());
+  
 }
 
 void LatexEditor::correctWord() {
