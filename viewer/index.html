@@ -1,212 +1,87 @@
 <!doctype html>
 <html lang=en>
 <head>
-<style>
-@font-face { font-family: cmb10; src: url('fonts/output/cmb10.woff'); }
-@font-face { font-family: cmbsy10; src: url('fonts/output/cmbsy10.woff'); }
-@font-face { font-family: cmbsy6; src: url('fonts/output/cmbsy6.woff'); }
-@font-face { font-family: cmbsy7; src: url('fonts/output/cmbsy7.woff'); }
-@font-face { font-family: cmbsy8; src: url('fonts/output/cmbsy8.woff'); }
-@font-face { font-family: cmbsy9; src: url('fonts/output/cmbsy9.woff'); }
-@font-face { font-family: cmbx10; src: url('fonts/output/cmbx10.woff'); }
-@font-face { font-family: cmbx12; src: url('fonts/output/cmbx12.woff'); }
-@font-face { font-family: cmbx5; src: url('fonts/output/cmbx5.woff'); }
-@font-face { font-family: cmbx6; src: url('fonts/output/cmbx6.woff'); }
-@font-face { font-family: cmbx7; src: url('fonts/output/cmbx7.woff'); }
-@font-face { font-family: cmbx8; src: url('fonts/output/cmbx8.woff'); }
-@font-face { font-family: cmbx9; src: url('fonts/output/cmbx9.woff'); }
-@font-face { font-family: cmbxsl10; src: url('fonts/output/cmbxsl10.woff'); }
-@font-face { font-family: cmbxti10; src: url('fonts/output/cmbxti10.woff'); }
-@font-face { font-family: cmcsc10; src: url('fonts/output/cmcsc10.woff'); }
-@font-face { font-family: cmcsc8; src: url('fonts/output/cmcsc8.woff'); }
-@font-face { font-family: cmcsc9; src: url('fonts/output/cmcsc9.woff'); }
-@font-face { font-family: cmdunh10; src: url('fonts/output/cmdunh10.woff'); }
-@font-face { font-family: cmex10; src: url('fonts/output/cmex10.woff'); }
-@font-face { font-family: cmex7; src: url('fonts/output/cmex7.woff'); }
-@font-face { font-family: cmex8; src: url('fonts/output/cmex8.woff'); }
-@font-face { font-family: cmex9; src: url('fonts/output/cmex9.woff'); }
-@font-face { font-family: cmff10; src: url('fonts/output/cmff10.woff'); }
-@font-face { font-family: cmfi10; src: url('fonts/output/cmfi10.woff'); }
-@font-face { font-family: cmfib8; src: url('fonts/output/cmfib8.woff'); }
-@font-face { font-family: cminch; src: url('fonts/output/cminch.woff'); }
-@font-face { font-family: cmitt10; src: url('fonts/output/cmitt10.woff'); }
-@font-face { font-family: cmmi10; src: url('fonts/output/cmmi10.woff'); }
-@font-face { font-family: cmmi12; src: url('fonts/output/cmmi12.woff'); }
-@font-face { font-family: cmmi5; src: url('fonts/output/cmmi5.woff'); }
-@font-face { font-family: cmmi6; src: url('fonts/output/cmmi6.woff'); }
-@font-face { font-family: cmmi7; src: url('fonts/output/cmmi7.woff'); }
-@font-face { font-family: cmmi8; src: url('fonts/output/cmmi8.woff'); }
-@font-face { font-family: cmmi9; src: url('fonts/output/cmmi9.woff'); }
-@font-face { font-family: cmmib10; src: url('fonts/output/cmmib10.woff'); }
-@font-face { font-family: cmmib6; src: url('fonts/output/cmmib6.woff'); }
-@font-face { font-family: cmmib7; src: url('fonts/output/cmmib7.woff'); }
-@font-face { font-family: cmmib8; src: url('fonts/output/cmmib8.woff'); }
-@font-face { font-family: cmmib9; src: url('fonts/output/cmmib9.woff'); }
-@font-face { font-family: cmr10; src: url('fonts/output/cmr10.woff'); }
-@font-face { font-family: cmr12; src: url('fonts/output/cmr12.woff'); }
-@font-face { font-family: cmr17; src: url('fonts/output/cmr17.woff'); }
-@font-face { font-family: cmr5; src: url('fonts/output/cmr5.woff'); }
-@font-face { font-family: cmr6; src: url('fonts/output/cmr6.woff'); }
-@font-face { font-family: cmr7; src: url('fonts/output/cmr7.woff'); }
-@font-face { font-family: cmr8; src: url('fonts/output/cmr8.woff'); }
-@font-face { font-family: cmr9; src: url('fonts/output/cmr9.woff'); }
-@font-face { font-family: cmsl10; src: url('fonts/output/cmsl10.woff'); }
-@font-face { font-family: cmsl12; src: url('fonts/output/cmsl12.woff'); }
-@font-face { font-family: cmsl8; src: url('fonts/output/cmsl8.woff'); }
-@font-face { font-family: cmsl9; src: url('fonts/output/cmsl9.woff'); }
-@font-face { font-family: cmsltt10; src: url('fonts/output/cmsltt10.woff'); }
-@font-face { font-family: cmss10; src: url('fonts/output/cmss10.woff'); }
-@font-face { font-family: cmss12; src: url('fonts/output/cmss12.woff'); }
-@font-face { font-family: cmss17; src: url('fonts/output/cmss17.woff'); }
-@font-face { font-family: cmss8; src: url('fonts/output/cmss8.woff'); }
-@font-face { font-family: cmss9; src: url('fonts/output/cmss9.woff'); }
-@font-face { font-family: cmssbx10; src: url('fonts/output/cmssbx10.woff'); }
-@font-face { font-family: cmssdc10; src: url('fonts/output/cmssdc10.woff'); }
-@font-face { font-family: cmssi10; src: url('fonts/output/cmssi10.woff'); }
-@font-face { font-family: cmssi12; src: url('fonts/output/cmssi12.woff'); }
-@font-face { font-family: cmssi17; src: url('fonts/output/cmssi17.woff'); }
-@font-face { font-family: cmssi8; src: url('fonts/output/cmssi8.woff'); }
-@font-face { font-family: cmssi9; src: url('fonts/output/cmssi9.woff'); }
-@font-face { font-family: cmssq8; src: url('fonts/output/cmssq8.woff'); }
-@font-face { font-family: cmssqi8; src: url('fonts/output/cmssqi8.woff'); }
-@font-face { font-family: cmsy10; src: url('fonts/output/cmsy10.woff'); }
-@font-face { font-family: cmsy5; src: url('fonts/output/cmsy5.woff'); }
-@font-face { font-family: cmsy6; src: url('fonts/output/cmsy6.woff'); }
-@font-face { font-family: cmsy7; src: url('fonts/output/cmsy7.woff'); }
-@font-face { font-family: cmsy8; src: url('fonts/output/cmsy8.woff'); }
-@font-face { font-family: cmsy9; src: url('fonts/output/cmsy9.woff'); }
-@font-face { font-family: cmtcsc10; src: url('fonts/output/cmtcsc10.woff'); }
-@font-face { font-family: cmtex10; src: url('fonts/output/cmtex10.woff'); }
-@font-face { font-family: cmtex8; src: url('fonts/output/cmtex8.woff'); }
-@font-face { font-family: cmtex9; src: url('fonts/output/cmtex9.woff'); }
-@font-face { font-family: cmti10; src: url('fonts/output/cmti10.woff'); }
-@font-face { font-family: cmti12; src: url('fonts/output/cmti12.woff'); }
-@font-face { font-family: cmti7; src: url('fonts/output/cmti7.woff'); }
-@font-face { font-family: cmti8; src: url('fonts/output/cmti8.woff'); }
-@font-face { font-family: cmti9; src: url('fonts/output/cmti9.woff'); }
-@font-face { font-family: cmtt10; src: url('fonts/output/cmtt10.woff'); }
-@font-face { font-family: cmtt12; src: url('fonts/output/cmtt12.woff'); }
-@font-face { font-family: cmtt8; src: url('fonts/output/cmtt8.woff'); }
-@font-face { font-family: cmtt9; src: url('fonts/output/cmtt9.woff'); }
-@font-face { font-family: cmu10; src: url('fonts/output/cmu10.woff'); }
-@font-face { font-family: cmvtt10; src: url('fonts/output/cmvtt10.woff'); }
-@font-face { font-family: euex10; src: url('fonts/output/euex10.woff'); }
-@font-face { font-family: euex7; src: url('fonts/output/euex7.woff'); }
-@font-face { font-family: euex8; src: url('fonts/output/euex8.woff'); }
-@font-face { font-family: euex9; src: url('fonts/output/euex9.woff'); }
-@font-face { font-family: eufb10; src: url('fonts/output/eufb10.woff'); }
-@font-face { font-family: eufb5; src: url('fonts/output/eufb5.woff'); }
-@font-face { font-family: eufb7; src: url('fonts/output/eufb7.woff'); }
-@font-face { font-family: eufm10; src: url('fonts/output/eufm10.woff'); }
-@font-face { font-family: eufm5; src: url('fonts/output/eufm5.woff'); }
-@font-face { font-family: eufm7; src: url('fonts/output/eufm7.woff'); }
-@font-face { font-family: eurb10; src: url('fonts/output/eurb10.woff'); }
-@font-face { font-family: eurb5; src: url('fonts/output/eurb5.woff'); }
-@font-face { font-family: eurb7; src: url('fonts/output/eurb7.woff'); }
-@font-face { font-family: eurm10; src: url('fonts/output/eurm10.woff'); }
-@font-face { font-family: eurm5; src: url('fonts/output/eurm5.woff'); }
-@font-face { font-family: eurm7; src: url('fonts/output/eurm7.woff'); }
-@font-face { font-family: eusb10; src: url('fonts/output/eusb10.woff'); }
-@font-face { font-family: eusb5; src: url('fonts/output/eusb5.woff'); }
-@font-face { font-family: eusb7; src: url('fonts/output/eusb7.woff'); }
-@font-face { font-family: eusm10; src: url('fonts/output/eusm10.woff'); }
-@font-face { font-family: eusm5; src: url('fonts/output/eusm5.woff'); }
-@font-face { font-family: eusm7; src: url('fonts/output/eusm7.woff'); }
-@font-face { font-family: msam10; src: url('fonts/output/msam10.woff'); }
-@font-face { font-family: msam5; src: url('fonts/output/msam5.woff'); }
-@font-face { font-family: msam6; src: url('fonts/output/msam6.woff'); }
-@font-face { font-family: msam7; src: url('fonts/output/msam7.woff'); }
-@font-face { font-family: msam8; src: url('fonts/output/msam8.woff'); }
-@font-face { font-family: msam9; src: url('fonts/output/msam9.woff'); }
-@font-face { font-family: msbm10; src: url('fonts/output/msbm10.woff'); }
-@font-face { font-family: msbm5; src: url('fonts/output/msbm5.woff'); }
-@font-face { font-family: msbm6; src: url('fonts/output/msbm6.woff'); }
-@font-face { font-family: msbm7; src: url('fonts/output/msbm7.woff'); }
-@font-face { font-family: msbm8; src: url('fonts/output/msbm8.woff'); }
-@font-face { font-family: msbm9; src: url('fonts/output/msbm9.woff'); }
-@font-face { font-family: lmroman10-regular; src: url('lmroman10-regular.otf'); }
-@font-face { font-family: lmroman9-regular; src: url('lmroman9-regular.otf'); }
-</style></head>
+</head>
 <body>
 <div style="position: absolute;">
-<span style="line-height: 0.8071861267089844; color: undefined; white-space:pre; font-family: lmroman9-bold; font-size: 9pt; position: absolute; top: 55.735324859619126pt; left: 214.1329956054687pt;">Abstract</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 100.49999999999997pt;">In</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 112.4564514160156pt;">this</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 130.8929290771484pt;">article,</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 162.2612609863281pt;">I</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 169.07832336425778pt;">shall</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 191.1147766113281pt;">discuss</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 222.49324035644526pt;">some</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 246.05969238281244pt;">of</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 256.99015808105463pt;">the</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 273.3206176757812pt;">fundamental</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 327.1630706787109pt;">topics</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 354.33854675292963pt;">in</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 365.5299987792968pt;">pro-</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 83.3112506866455pt; left: 86.99999999999999pt;">ducing</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 83.3112506866455pt; left: 118.05482482910153pt;">a</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 83.3112506866455pt; left: 127.00567626953122pt;">structured</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 83.3112506866455pt; left: 173.05450439453122pt;">document.</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 83.3112506866455pt; left: 223.03100585937494pt;">This</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 83.3112506866455pt; left: 245.39183044433588pt;">document</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 83.3112506866455pt; left: 289.2896575927734pt;">itself</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 83.3112506866455pt; left: 312.9465026855468pt;">does</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 83.3112506866455pt; left: 335.05532836914057pt;">not</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 83.3112506866455pt; left: 352.7451782226562pt;">go</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 83.3112506866455pt; left: 366.3220062255859pt;">into</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 86.99999999999999pt;">much</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 113.39396667480466pt;">depth,</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 144.3524017333984pt;">but</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 163.05136108398435pt;">is</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 174.09132385253903pt;">instead</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 207.74829101562494pt;">the</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 225.42124938964838pt;">output</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 257.4852142333984pt;">of</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 269.75817871093744pt;">an</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 284.3441314697265pt;">example</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 322.3121032714843pt;">of</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 334.5850677490234pt;">how</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 355.5880279541015pt;">to</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 368.6349945068359pt;">im-</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 86.99999999999999pt;">plement</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 124.01007080078122pt;">structure.</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 172.69125366210935pt;">Its</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 188.16432189941403pt;">L</span>
-<span style="line-height: 0.5336236953735352; color: undefined; white-space:pre; font-family: lmroman6-regular; font-size: 6pt; position: absolute; top: 107.48925209045407pt; left: 190.70231628417966pt;">A</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 194.72837829589838pt;">T</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 107.25074958801267pt; left: 199.90605163574213pt;">E</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 205.07205200195307pt;">X</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 216.90010070800776pt;">source,</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 250.06767272949213pt;">when</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 276.0257415771484pt;">in</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 288.62780761718744pt;">used</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 311.5528717041015pt;">with</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 334.43293762207026pt;">my</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 351.6430053710937pt;">tutorial</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 116.31125068664548pt; left: 86.99999999999999pt;">(http://www.comp.leeds.ac.uk/andyr/misc/latex/latextutorial2.html)</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 116.31125068664548pt; left: 371.3880004882812pt;">pro-</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 127.31125068664548pt; left: 86.99999999999999pt;">vides</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 127.31125068664548pt; left: 110.43600463867185pt;">all</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 127.31125068664548pt; left: 123.29701232910153pt;">the</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 127.31125068664548pt; left: 139.23602294921872pt;">relevant</span>
-<span style="line-height: 0.7987499237060547; color: undefined; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 127.31125068664548pt; left: 174.21002197265622pt;">information.</span>
-<span style="line-height: 1.2833986282348633; color: undefined; white-space:pre; font-family: lmroman12-bold; font-size: 14.399993896484375pt; position: absolute; top: 149.10405904173965pt; left: 61.999999999999986pt;">1</span>
-<span style="line-height: 1.2833986282348633; color: undefined; white-space:pre; font-family: lmroman12-bold; font-size: 14.399993896484375pt; position: absolute; top: 149.10405904173965pt; left: 84.50718688964842pt;">hello</span>
-<span style="line-height: 0.8856239318847656; color: undefined; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 180.64174652099607pt; left: 61.999999999999986pt;">There's</span>
-<span style="line-height: 0.8856239318847656; color: undefined; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 180.64174652099607pt; left: 97.63000488281247pt;">a</span>
-<span style="line-height: 0.8856239318847656; color: undefined; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 180.64174652099607pt; left: 105.96000671386716pt;">picture</span>
-<span style="line-height: 0.8856239318847656; color: undefined; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 180.64174652099607pt; left: 139.88000488281247pt;">of</span>
-<span style="line-height: 0.8856239318847656; color: undefined; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 180.64174652099607pt; left: 151.2700042724609pt;">a</span>
-<span style="line-height: 0.8856239318847656; color: undefined; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 180.64174652099607pt; left: 159.6000061035156pt;">galaxy</span>
-<span style="line-height: 0.8856239318847656; color: undefined; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 180.64174652099607pt; left: 191.2700042724609pt;">below</span>
-<div data-url="universe.jpg" style="top: 193.6896469531249pt; left: 76.99999999999999pt; position: absolute; height:301.78423pt; width:201.18948pt; background-color:grey;"></div><span style="line-height: 0.8856239318847656; color: undefined; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 498.61763763427723pt; left: 76.99999999999999pt;">There's</span>
-<span style="line-height: 0.8856239318847656; color: undefined; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 498.61763763427723pt; left: 112.63000488281247pt;">a</span>
-<span style="line-height: 0.8856239318847656; color: undefined; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 498.61763763427723pt; left: 120.96000671386716pt;">picture</span>
-<span style="line-height: 0.8856239318847656; color: undefined; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 498.61763763427723pt; left: 154.88000488281247pt;">of</span>
-<span style="line-height: 0.8856239318847656; color: undefined; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 498.61763763427723pt; left: 166.2700042724609pt;">a</span>
-<span style="line-height: 0.8856239318847656; color: undefined; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 498.61763763427723pt; left: 174.6000061035156pt;">galaxy</span>
-<span style="line-height: 0.8856239318847656; color: undefined; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 498.61763763427723pt; left: 206.27000427246088pt;">above</span>
-<span style="line-height: 0.8856239318847656; color: undefined; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 624.1437606811522pt; left: 231.99999999999994pt;">1</span>
+<span style="line-height: 0.8071861267089844; color: black; white-space:pre; font-family: lmroman9-bold; font-size: 9pt; position: absolute; top: 55.735324859619126pt; left: 214.1329956054687pt;">Abstract</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 100.49999999999997pt;">In</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 112.4564514160156pt;">this</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 130.8929290771484pt;">article,</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 162.2612609863281pt;">I</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 169.07832336425778pt;">shall</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 191.1147766113281pt;">discuss</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 222.49324035644526pt;">some</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 246.05969238281244pt;">of</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 256.99015808105463pt;">the</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 273.3206176757812pt;">fundamental</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 327.1630706787109pt;">topics</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 354.33854675292963pt;">in</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 72.3112506866455pt; left: 365.5299987792968pt;">pro-</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 83.3112506866455pt; left: 86.99999999999999pt;">ducing</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 83.3112506866455pt; left: 118.05482482910153pt;">a</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 83.3112506866455pt; left: 127.00567626953122pt;">structured</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 83.3112506866455pt; left: 173.05450439453122pt;">document.</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 83.3112506866455pt; left: 223.03100585937494pt;">This</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 83.3112506866455pt; left: 245.39183044433588pt;">document</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 83.3112506866455pt; left: 289.2896575927734pt;">itself</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 83.3112506866455pt; left: 312.9465026855468pt;">does</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 83.3112506866455pt; left: 335.05532836914057pt;">not</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 83.3112506866455pt; left: 352.7451782226562pt;">go</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 83.3112506866455pt; left: 366.3220062255859pt;">into</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 86.99999999999999pt;">much</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 113.39396667480466pt;">depth,</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 144.3524017333984pt;">but</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 163.05136108398435pt;">is</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 174.09132385253903pt;">instead</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 207.74829101562494pt;">the</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 225.42124938964838pt;">output</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 257.4852142333984pt;">of</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 269.75817871093744pt;">an</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 284.3441314697265pt;">example</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 322.3121032714843pt;">of</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 334.5850677490234pt;">how</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 355.5880279541015pt;">to</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 94.31125068664548pt; left: 368.6349945068359pt;">im-</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 86.99999999999999pt;">plement</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 124.01007080078122pt;">structure.</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 172.69125366210935pt;">Its</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 188.16432189941403pt;">L</span>
+<span style="line-height: 0.5336236953735352; color: black; white-space:pre; font-family: lmroman6-regular; font-size: 6pt; position: absolute; top: 107.48925209045407pt; left: 190.70231628417966pt;">A</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 194.72837829589838pt;">T</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 107.25074958801267pt; left: 199.90605163574213pt;">E</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 205.07205200195307pt;">X</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 216.90010070800776pt;">source,</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 250.06767272949213pt;">when</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 276.0257415771484pt;">in</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 288.62780761718744pt;">used</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 311.5528717041015pt;">with</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 334.43293762207026pt;">my</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 105.31125068664548pt; left: 351.6430053710937pt;">tutorial</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 116.31125068664548pt; left: 86.99999999999999pt;">(http://www.comp.leeds.ac.uk/andyr/misc/latex/latextutorial2.html)</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 116.31125068664548pt; left: 371.3880004882812pt;">pro-</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 127.31125068664548pt; left: 86.99999999999999pt;">vides</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 127.31125068664548pt; left: 110.43600463867185pt;">all</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 127.31125068664548pt; left: 123.29701232910153pt;">the</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 127.31125068664548pt; left: 139.23602294921872pt;">relevant</span>
+<span style="line-height: 0.7987499237060547; color: black; white-space:pre; font-family: lmroman9-regular; font-size: 9pt; position: absolute; top: 127.31125068664548pt; left: 174.21002197265622pt;">information.</span>
+<span style="line-height: 1.2833986282348633; color: black; white-space:pre; font-family: lmroman12-bold; font-size: 14.399993896484375pt; position: absolute; top: 149.10405904173965pt; left: 61.999999999999986pt;">1</span>
+<span style="line-height: 1.2833986282348633; color: black; white-space:pre; font-family: lmroman12-bold; font-size: 14.399993896484375pt; position: absolute; top: 149.10405904173965pt; left: 84.50718688964842pt;">hello</span>
+<span style="line-height: 0.8856239318847656; color: black; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 180.64174652099607pt; left: 61.999999999999986pt;">There's</span>
+<span style="line-height: 0.8856239318847656; color: black; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 180.64174652099607pt; left: 97.63000488281247pt;">a</span>
+<span style="line-height: 0.8856239318847656; color: black; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 180.64174652099607pt; left: 105.96000671386716pt;">picture</span>
+<span style="line-height: 0.8856239318847656; color: black; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 180.64174652099607pt; left: 139.88000488281247pt;">of</span>
+<span style="line-height: 0.8856239318847656; color: black; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 180.64174652099607pt; left: 151.2700042724609pt;">a</span>
+<span style="line-height: 0.8856239318847656; color: black; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 180.64174652099607pt; left: 159.6000061035156pt;">galaxy</span>
+<span style="line-height: 0.8856239318847656; color: black; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 180.64174652099607pt; left: 191.2700042724609pt;">below</span>
+<div data-url="universe.jpg" style="top: 193.6896469531249pt; left: 76.99999999999999pt; position: absolute; height:301.78423pt; width:201.18948pt; background-color:grey;"></div><span style="line-height: 0.8856239318847656; color: black; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 498.61763763427723pt; left: 76.99999999999999pt;">There's</span>
+<span style="line-height: 0.8856239318847656; color: black; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 498.61763763427723pt; left: 112.63000488281247pt;">a</span>
+<span style="line-height: 0.8856239318847656; color: black; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 498.61763763427723pt; left: 120.96000671386716pt;">picture</span>
+<span style="line-height: 0.8856239318847656; color: black; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 498.61763763427723pt; left: 154.88000488281247pt;">of</span>
+<span style="line-height: 0.8856239318847656; color: black; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 498.61763763427723pt; left: 166.2700042724609pt;">a</span>
+<span style="line-height: 0.8856239318847656; color: black; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 498.61763763427723pt; left: 174.6000061035156pt;">galaxy</span>
+<span style="line-height: 0.8856239318847656; color: black; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 498.61763763427723pt; left: 206.27000427246088pt;">above</span>
+<span style="line-height: 0.8856239318847656; color: black; white-space:pre; font-family: lmroman10-regular; font-size: 10pt; position: absolute; top: 624.1437606811522pt; left: 231.99999999999994pt;">1</span>
 </div>
 </body>
 </html>

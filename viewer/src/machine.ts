@@ -48,7 +48,7 @@ export class DviFont {
 
 export class Machine {
 
-    output: string;
+    body: string;
     pointsPerDviUnit: number;
 
     svgDepth: number;
@@ -66,7 +66,16 @@ export class Machine {
 
     constructor() {
         this.fonts = [];
-        this.output = "";
+        this.body = "";
+        this.color = "black";
+    }
+
+    getBody():string {
+        return this.body;
+    }
+
+    getHead():string {
+        return "";
     }
 
     pushColor(c: string) {
@@ -81,8 +90,7 @@ export class Machine {
     setPapersize(width: number, height: number) {
         this.paperwidth = width;
         this.paperheight = height;
-        console.log(this.paperwidth);
-        console.log(this.paperheight);
+        
     }
 
     putSVG(svg: string) {
@@ -97,7 +105,7 @@ export class Machine {
         svg = svg.replace(/{\?x}/g, left.toString());
         svg = svg.replace(/{\?y}/g, top.toString());
 
-        this.output += svg;
+        this.body += svg;
     }
 
     push() {
@@ -151,7 +159,7 @@ export class Machine {
         let bottom = this.position.v * this.pointsPerDviUnit;
         let top = bottom - a;
 
-        this.output += `<span style="background: ${this.color}; position: absolute; top: ${top}pt; left: ${left}pt; width:${b}pt; height: ${a}pt;"></span>\n`;
+        this.body += `<span style="background: ${this.color}; position: absolute; top: ${top}pt; left: ${left}pt; width:${b}pt; height: ${a}pt;"></span>\n`;
     }
 
     _to_legal_unicode(c: number): number {
@@ -173,11 +181,11 @@ export class Machine {
         let csstop = this.position.v * this.pointsPerDviUnit;
         let fontsize = this.font.designSize/65536.0;
         if (this.svgDepth == 0) {
-            this.output += `<div style="line-height: 0; color: ${this.color}; font-family: ${this.font.name}; font-size: ${fontsize}pt; position: absolute; top: ${csstop - cssheight}pt; left: ${cssleft}pt;">${htmlText}<span style="display: inline-block; vertical-align: ${cssheight}pt; "></span></div>\n`;
+            this.body += `<div style="line-height: 0; color: ${this.color}; font-family: ${this.font.name}; font-size: ${fontsize}pt; position: absolute; top: ${csstop - cssheight}pt; left: ${cssleft}pt;">${htmlText}<span style="display: inline-block; vertical-align: ${cssheight}pt; "></span></div>\n`;
         } else {
             let bottom = this.position.v * this.pointsPerDviUnit;
             // No 'pt' on fontsize since those units are potentially scaled
-            this.output += `<text alignment-baseline="baseline" y="${bottom}" x="${cssleft}" style="font-family: ${this.font.name};" font-size="${fontsize}">${htmlText}</text>\n`;
+            this.body += `<text alignment-baseline="baseline" y="${bottom}" x="${cssleft}" style="font-family: ${this.font.name};" font-size="${fontsize}">${htmlText}</text>\n`;
         }
 
         return text_width;
@@ -194,7 +202,7 @@ export class Machine {
         let fontsize = this.font.designSize;
         let lineheight = (this.font.height + this.font.depth)/1048576.0;
         let textheight = lineheight * fontsize; /*Todo, not sure whether it is correct*/
-        this.output += `<span style="line-height: ${lineheight}; color: ${this.color}; white-space:pre; font-family: ${this.font.name}; font-size: ${fontsize}pt; position: absolute; top: ${csstop - textheight}pt; left: ${cssleft}pt;">${htmlText}</span>\n`;
+        this.body += `<span style="line-height: ${lineheight}; color: ${this.color}; white-space:pre; font-family: ${this.font.name}; font-size: ${fontsize}pt; position: absolute; top: ${csstop - textheight}pt; left: ${cssleft}pt;">${htmlText}</span>\n`;
         return width;
     }
  
@@ -203,7 +211,7 @@ export class Machine {
         let cssleft = this.position.h * this.pointsPerDviUnit;
         
         let csstop = this.position.v * this.pointsPerDviUnit;
-        this.output += `<div data-url="${url}" style="top: ${csstop - height}pt; left: ${cssleft}pt; position: absolute; height:${height}pt; width:${width}pt; background-color:grey;"></div>`
+        this.body += `<div data-url="${url}" style="top: ${csstop - height}pt; left: ${cssleft}pt; position: absolute; height:${height}pt; width:${width}pt; background-color:grey;"></div>`
     }
 
     loadFont(properties: any): DviFont {
