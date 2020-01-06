@@ -1,10 +1,11 @@
 
-import HTMLMachine from "./html";
+import { Machine } from "./machine";
 
-import { dviParser } from "./parser";
+import { parseDVI } from "./parser";
 
-export function dvi2html( dviContent:Uint8Array ) {
-  	return "";
-
+export function dvi2html(buf: Uint8Array) {
+  	let machine = new Machine();
+  	parseDVI(buf, machine);
+  	return machine.output;
 }
 

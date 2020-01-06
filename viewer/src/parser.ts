@@ -480,6 +480,26 @@ class SetFont extends DviCommand {
 // 241	xxx3	k[3], x[k]
 // 242	xxx4	k[4], x[k]
 
+function _intToHex(n) {
+  return ("00" + Math.round(n).toString(16)).substr(-2);
+}
+
+function _texColor(name) {
+  if (name == 'gray 0')
+    return 'black';
+  if (name == 'gray 1')
+    return 'white';
+  if (name.startsWith('rgb ')) {
+    return '#' + name.split(' ').slice(1).map(function (x) { return _intToHex(parseFloat(x) * 255); }).join('');
+  }
+  if (name.startsWith('gray ')) {
+    var x = name.split(' ')[1];
+    return _texColor('rgb ' + x + ' ' + x + ' ' + x);
+  }
+  return 'black';
+}
+
+
 class Special extends DviCommand {
     opcode: Opcode.xxx;
 
@@ -493,6 +513,32 @@ class Special extends DviCommand {
 
     toString(): string {
         return `Special { x: '${this.x}' }`;
+    }
+
+    execute(machine: Machine) {
+        if (this.x.startsWith('dvisvgm:raw ')) {
+        	let svg = this.x.replace(/^dvisvgm:raw /, '');
+        	machine.putSVG(svg);
+        } else if(this.x.startsWith('pdf:pagesize')) {
+        	let papersize = this.x.replace(/^pdf:pagesize /, '');
+        	const regex = /width ([0-9\.]+)pt height ([0-9\.]+)pt/gm;
+        	let m  = regex.exec(papersize);
+        	let paperWidth = Number(m[1]);
+        	let paperHeight = Number(m[2]);
+        	machine.setPapersize(paperWidth, paperHeight);
+        } else if(this.x.startsWith('color push ')) {
+        	let color = _texColor(this.x.replace(/^color push /, ''));
+        	machine.pushColor(color);
+        } else if(this.x.startsWith('color pop ')) {
+        	machine.popColor();
+        } else if(this.x.startsWith('pdf:image bbox 0 0 ')) {
+        	let image = this.x.replace(/pdf:image bbox 0 0 /, '').split(' ');
+        	let imageWidth = Number(image[0]);
+        	let imageHeight =  Number(image[1]);
+        	let url = image[6].substr(1).slice(0, -1);
+        	machine.putImage(imageWidth, imageHeight, url);
+        }
+        
     }
 }
 
@@ -1088,9 +1134,9 @@ function parseCommand(opcode: Opcode, buffer: Buffer): Command | void {
     throw Error(`routine for ${opcode} is not implemented`);
 }
 
-export function dviParser(dviContent: Uint8Array, machine: Machine) {
-    let buffer = Buffer.alloc(0);
-    
+export function parseDVI(dviContent: Uint8Array, machine: Machine) {
+    let buffer = Buffer.from(dviContent.buffer);
+
     let isAfterPostamble = false;
 
     let offset = 0;
@@ -1108,14 +1154,14 @@ export function dviParser(dviContent: Uint8Array, machine: Machine) {
         }
 
         let command = parseCommand(opcode, buffer.slice(offset + 1));
-        //console.log(command);
+        // console.log(command);
         if (command) {
-            command.execute(machine);
+        	command.execute(machine);
             offset += command.length;
             if (command.opcode == Opcode.post_post)
                 isAfterPostamble = true;
         } else {
-        	console.log("Invaild DVI File detected\n")
+        	console.error("Invaild DVI File detected\n")
             break;
         }
     }

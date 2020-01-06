@@ -1,11 +1,9 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
+    "module": "commonJS",
     "declaration": true,
     "outDir": "./lib",
-    "downlevelIteration": true,
-    "resolveJsonModule": true,
     "lib": [ "es2015" ]
   },
   "include": [
