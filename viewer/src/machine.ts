@@ -200,7 +200,10 @@ export class Machine {
  
 
     putImage(width:number, height:number, url:string) {
-        console.log("putting " + url);
+        let cssleft = this.position.h * this.pointsPerDviUnit;
+        
+        let csstop = this.position.v * this.pointsPerDviUnit;
+        this.output += `<div data-url="${url}" style="top: ${csstop - height}pt; left: ${cssleft}pt; position: absolute; height:${height}pt; width:${width}pt; background-color:grey;"></div>`
     }
 
     loadFont(properties: any): DviFont {
