@@ -390,7 +390,7 @@ int main() {
   ourapi.input_getc = input_getc;
   ourapi.input_ungetc = input_ungetc;
   ourapi.input_close = input_close;
-
+  //compileFormat();
   // for(int i = 0; i < 10; i++)
   compileLaTeX();
 

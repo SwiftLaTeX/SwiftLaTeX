@@ -232,11 +232,14 @@ static int find_pic_file(char **path, real_rect *bounds, int pdfBoxType,
       char * pch;
       pch = strtok (data, "\n");
       if(pch != NULL) {
-        pch = strtok(data, "\n");
+       // printf("line %s\n", pch);
+        pch = strtok(NULL, "\n");
         if(pch != NULL) {
+          //printf("line %s\n", pch);
           bounds->wd = (float)(atoi(pch)) * 72.7 / 72.0;
-          pch = strtok(data, "\n");
+          pch = strtok(NULL, "\n");
           if(pch != NULL) {
+            //printf("line %s\n", pch);
             bounds->ht = (float)(atoi(pch)) * 72.7 / 72.0;
             parser_failed = 0;
           }
@@ -248,6 +251,8 @@ static int find_pic_file(char **path, real_rect *bounds, int pdfBoxType,
     fprintf(stderr, "failed to parse image files\n");
     bounds->wd = 100;
     bounds->ht = 100;
+  } else {
+    //fprintf(stderr, "image size %f %f\n", bounds->wd, bounds->ht);
   }
   
   if (err == 0) {
