@@ -1,5 +1,4 @@
 
-*.ttf
 *.pyc
 venv/
 texlive/venv/
