@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<texmakertags title="Metapost">
+<section title="General (Metapost)">
+<item txt="beginfig(); endfig;"  tag="beginfig();\n\nendfig;" dx="0" dy="1" type="0"/>
+<item txt="extra_beginfig(); extra_endfig;"  tag="extra_beginfig();\n\nextra_endfig;" dx="0" dy="1" type="0"/>
+<item txt="begingraph(); endgraph;"  tag="begingraph();\n\nendgraph;" dx="0" dy="1" type="0"/>
+<item txt="begingroup(); endgroup;"  tag="begingroup();\n\nendgroup;" dx="0" dy="1" type="0"/>
+<item txt=""  tag="for  upto" dx="0" dy="0" type="0"/>
+<item txt=""  tag="forever:" dx="0" dy="0" type="0"/>
+<item txt=""  tag="forsuffixes :" dx="0" dy="0" type="0"/>
+<item txt=""  tag="endfor" dx="0" dy="0" type="0"/>
+<item txt=""  tag="if :" dx="0" dy="0" type="0"/>
+<item txt=""  tag="else :" dx="0" dy="0" type="0"/>
+<item txt=""  tag="fi" dx="0" dy="0" type="0"/>
+</section>
+<section title="Alphabetical Commands (Metapost)">
+<item txt=""  tag="abs" dx="0" dy="0" type="0"/>
+<item txt=""  tag="addto also" dx="0" dy="0" type="0"/>
+<item txt=""  tag="addto contour" dx="0" dy="0" type="0"/>
+<item txt=""  tag="addto doublepath" dx="0" dy="0" type="0"/>
+<item txt=""  tag="ahangle" dx="0" dy="0" type="0"/>
+<item txt=""  tag="ahlength" dx="0" dy="0" type="0"/>
+<item txt=""  tag="and" dx="0" dy="0" type="0"/>
+<item txt=""  tag="angle" dx="0" dy="0" type="0"/>
+<item txt=""  tag="arclength" dx="0" dy="0" type="0"/>
+<item txt=""  tag="arctime of" dx="0" dy="0" type="0"/>
+<item txt=""  tag="augment." dx="0" dy="0" type="0"/>
+<item txt=""  tag="auto." dx="0" dy="0" type="0"/>
+<item txt=""  tag="Autoform" dx="0" dy="0" type="0"/>
+<item txt=""  tag="autogrid()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="background" dx="0" dy="0" type="0"/>
+<item txt=""  tag="bbox" dx="0" dy="0" type="0"/>
+<item txt=""  tag="bboxmargin" dx="0" dy="0" type="0"/>
+<item txt=""  tag="beveled" dx="0" dy="0" type="0"/>
+<item txt=""  tag="black" dx="0" dy="0" type="0"/>
+<item txt=""  tag="blue" dx="0" dy="0" type="0"/>
+<item txt=""  tag="bluepart" dx="0" dy="0" type="0"/>
+<item txt=""  tag="boolean" dx="0" dy="0" type="0"/>
+<item txt=""  tag="bot" dx="0" dy="0" type="0"/>
+<item txt=""  tag="boxit" dx="0" dy="0" type="0"/>
+<item txt=""  tag="boxjoin()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="bp" dx="0" dy="0" type="0"/>
+<item txt=""  tag="bpath" dx="0" dy="0" type="0"/>
+<item txt=""  tag="btex  etex" dx="0" dy="0" type="0"/>
+<item txt=""  tag="buildcycle()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="butt" dx="0" dy="0" type="0"/>
+<item txt=""  tag="ceiling" dx="0" dy="0" type="0"/>
+<item txt=""  tag="char" dx="0" dy="0" type="0"/>
+<item txt=""  tag="charcode" dx="0" dy="0" type="0"/>
+<item txt=""  tag="circleit" dx="0" dy="0" type="0"/>
+<item txt=""  tag="circmargin" dx="0" dy="0" type="0"/>
+<item txt=""  tag="clip" dx="0" dy="0" type="0"/>
+<item txt=""  tag="color" dx="0" dy="0" type="0"/>
+<item txt=""  tag="controls" dx="0" dy="0" type="0"/>
+<item txt=""  tag="cosd" dx="0" dy="0" type="0"/>
+<item txt=""  tag="curl" dx="0" dy="0" type="0"/>
+<item txt=""  tag="currentpen" dx="0" dy="0" type="0"/>
+<item txt=""  tag="currentpicture" dx="0" dy="0" type="0"/>
+<item txt=""  tag="cutafter" dx="0" dy="0" type="0"/>
+<item txt=""  tag="cutbefore" dx="0" dy="0" type="0"/>
+<item txt=""  tag="cutdraw" dx="0" dy="0" type="0"/>
+<item txt=""  tag="cycle" dx="0" dy="0" type="0"/>
+<item txt=""  tag="dashed" dx="0" dy="0" type="0"/>
+<item txt=""  tag="dashpattern" dx="0" dy="0" type="0"/>
+<item txt=""  tag="day" dx="0" dy="0" type="0"/>
+<item txt=""  tag="dd" dx="0" dy="0" type="0"/>
+<item txt=""  tag="decimal" dx="0" dy="0" type="0"/>
+<item txt=""  tag="decr" dx="0" dy="0" type="0"/>
+<item txt=""  tag="defaultdx:=" dx="0" dy="0" type="0"/>
+<item txt=""  tag="defaultdy:=" dx="0" dy="0" type="0"/>
+<item txt=""  tag="defaultfont:=" dx="0" dy="0" type="0"/>
+<item txt=""  tag="defaultpen:=" dx="0" dy="0" type="0"/>
+<item txt=""  tag="defaultscale:=" dx="0" dy="0" type="0"/>
+<item txt=""  tag="def  enddef" dx="0" dy="0" type="0"/>
+<item txt=""  tag="direction   of" dx="0" dy="0" type="0"/>
+<item txt=""  tag="directionpoint  of" dx="0" dy="0" type="0"/>
+<item txt=""  tag="directiontime  of" dx="0" dy="0" type="0"/>
+<item txt=""  tag="ditto" dx="0" dy="0" type="0"/>
+<item txt=""  tag="div" dx="0" dy="0" type="0"/>
+<item txt=""  tag="dotlabel." dx="0" dy="0" type="0"/>
+<item txt=""  tag="dotlabels." dx="0" dy="0" type="0"/>
+<item txt=""  tag="dotprod" dx="0" dy="0" type="0"/>
+<item txt=""  tag="down" dx="0" dy="0" type="0"/>
+<item txt=""  tag="downto" dx="0" dy="0" type="0"/>
+<item txt=""  tag="draw" dx="0" dy="0" type="0"/>
+<item txt=""  tag="draw_mark()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="draw_marked()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="drawarrow" dx="0" dy="0" type="0"/>
+<item txt=""  tag="drawblarrow" dx="0" dy="0" type="0"/>
+<item txt=""  tag="drawboxed()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="drawboxes()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="drawoptions()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="drawshadowed()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="drawunboxed()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="epsilon" dx="0" dy="0" type="0"/>
+<item txt=""  tag="evenly" dx="0" dy="0" type="0"/>
+<item txt=""  tag="exitif" dx="0" dy="0" type="0"/>
+<item txt=""  tag="exitunless" dx="0" dy="0" type="0"/>
+<item txt=""  tag="expr" dx="0" dy="0" type="0"/>
+<item txt=""  tag="Fe_base" dx="0" dy="0" type="0"/>
+<item txt=""  tag="Fe_plus" dx="0" dy="0" type="0"/>
+<item txt=""  tag="fill" dx="0" dy="0" type="0"/>
+<item txt=""  tag="filldraw" dx="0" dy="0" type="0"/>
+<item txt=""  tag="fixpos()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="fixsize()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="floor" dx="0" dy="0" type="0"/>
+<item txt=""  tag="fontsize" dx="0" dy="0" type="0"/>
+<item txt=""  tag="format()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="frame." dx="0" dy="0" type="0"/>
+<item txt=""  tag="fullcircle" dx="0" dy="0" type="0"/>
+<item txt=""  tag="gdata()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="gdotlabel." dx="0" dy="0" type="0"/>
+<item txt=""  tag="gdraw" dx="0" dy="0" type="0"/>
+<item txt=""  tag="gdrawarrow" dx="0" dy="0" type="0"/>
+<item txt=""  tag="gdrawdblarrow" dx="0" dy="0" type="0"/>
+<item txt=""  tag="getmid" dx="0" dy="0" type="0"/>
+<item txt=""  tag="gfill" dx="0" dy="0" type="0"/>
+<item txt=""  tag="glabel." dx="0" dy="0" type="0"/>
+<item txt=""  tag="Gmarks" dx="0" dy="0" type="0"/>
+<item txt=""  tag="Gminlog" dx="0" dy="0" type="0"/>
+<item txt=""  tag="Gpaths" dx="0" dy="0" type="0"/>
+<item txt=""  tag="green" dx="0" dy="0" type="0"/>
+<item txt=""  tag="greenpart" dx="0" dy="0" type="0"/>
+<item txt=""  tag="grid." dx="0" dy="0" type="0"/>
+<item txt=""  tag="halfcircle" dx="0" dy="0" type="0"/>
+<item txt=""  tag="hex" dx="0" dy="0" type="0"/>
+<item txt=""  tag="hide()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="identity" dx="0" dy="0" type="0"/>
+<item txt=""  tag="image()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="in" dx="0" dy="0" type="0"/>
+<item txt=""  tag="incr()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="infinity" dx="0" dy="0" type="0"/>
+<item txt=""  tag="infont" dx="0" dy="0" type="0"/>
+<item txt=""  tag="init_numbers()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="input" dx="0" dy="0" type="0"/>
+<item txt=""  tag="interim" dx="0" dy="0" type="0"/>
+<item txt=""  tag="intersectionpoint" dx="0" dy="0" type="0"/>
+<item txt=""  tag="intersectiontimes" dx="0" dy="0" type="0"/>
+<item txt=""  tag="inverse" dx="0" dy="0" type="0"/>
+<item txt=""  tag="itick." dx="0" dy="0" type="0"/>
+<item txt=""  tag="joinup()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="known" dx="0" dy="0" type="0"/>
+<item txt=""  tag="label." dx="0" dy="0" type="0"/>
+<item txt=""  tag="labeloffset" dx="0" dy="0" type="0"/>
+<item txt=""  tag="labels." dx="0" dy="0" type="0"/>
+<item txt=""  tag="left" dx="0" dy="0" type="0"/>
+<item txt=""  tag="length" dx="0" dy="0" type="0"/>
+<item txt=""  tag="let" dx="0" dy="0" type="0"/>
+<item txt=""  tag="lft" dx="0" dy="0" type="0"/>
+<item txt=""  tag="linear" dx="0" dy="0" type="0"/>
+<item txt=""  tag="linecap:=" dx="0" dy="0" type="0"/>
+<item txt=""  tag="linejoin:=" dx="0" dy="0" type="0"/>
+<item txt=""  tag="llcorner" dx="0" dy="0" type="0"/>
+<item txt=""  tag="llft" dx="0" dy="0" type="0"/>
+<item txt=""  tag="log" dx="0" dy="0" type="0"/>
+<item txt=""  tag="loggingall" dx="0" dy="0" type="0"/>
+<item txt=""  tag="lrcorner" dx="0" dy="0" type="0"/>
+<item txt=""  tag="lrt" dx="0" dy="0" type="0"/>
+<item txt=""  tag="makepath" dx="0" dy="0" type="0"/>
+<item txt=""  tag="makepen" dx="0" dy="0" type="0"/>
+<item txt=""  tag="mark_angle()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="mark_rt_angle()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="max" dx="0" dy="0" type="0"/>
+<item txt=""  tag="mexp" dx="0" dy="0" type="0"/>
+<item txt=""  tag="mfplain" dx="0" dy="0" type="0"/>
+<item txt=""  tag="middlepoint()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="midpoint()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="min" dx="0" dy="0" type="0"/>
+<item txt=""  tag="mitered" dx="0" dy="0" type="0"/>
+<item txt=""  tag="miterlimit:=" dx="0" dy="0" type="0"/>
+<item txt=""  tag="Mlog" dx="0" dy="0" type="0"/>
+<item txt=""  tag="mlog" dx="0" dy="0" type="0"/>
+<item txt=""  tag="mm" dx="0" dy="0" type="0"/>
+<item txt=""  tag="mod" dx="0" dy="0" type="0"/>
+<item txt=""  tag="month" dx="0" dy="0" type="0"/>
+<item txt=""  tag="mp" dx="0" dy="0" type="0"/>
+<item txt=""  tag="mpxbreak" dx="0" dy="0" type="0"/>
+<item txt=""  tag="Mreadpath()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="Mten" dx="0" dy="0" type="0"/>
+<item txt=""  tag="newinternal" dx="0" dy="0" type="0"/>
+<item txt=""  tag="normaldeviate" dx="0" dy="0" type="0"/>
+<item txt=""  tag="not" dx="0" dy="0" type="0"/>
+<item txt=""  tag="nullpicture" dx="0" dy="0" type="0"/>
+<item txt=""  tag="numeric" dx="0" dy="0" type="0"/>
+<item txt=""  tag="oct" dx="0" dy="0" type="0"/>
+<item txt=""  tag="odd" dx="0" dy="0" type="0"/>
+<item txt=""  tag="or" dx="0" dy="0" type="0"/>
+<item txt=""  tag="origin" dx="0" dy="0" type="0"/>
+<item txt=""  tag="otick." dx="0" dy="0" type="0"/>
+<item txt=""  tag="OUT" dx="0" dy="0" type="0"/>
+<item txt=""  tag="pair" dx="0" dy="0" type="0"/>
+<item txt=""  tag="path" dx="0" dy="0" type="0"/>
+<item txt=""  tag="pausing" dx="0" dy="0" type="0"/>
+<item txt=""  tag="pc" dx="0" dy="0" type="0"/>
+<item txt=""  tag="pen" dx="0" dy="0" type="0"/>
+<item txt=""  tag="pencircle" dx="0" dy="0" type="0"/>
+<item txt=""  tag="penoffset" dx="0" dy="0" type="0"/>
+<item txt=""  tag="pensquare" dx="0" dy="0" type="0"/>
+<item txt=""  tag="pic" dx="0" dy="0" type="0"/>
+<item txt=""  tag="pickup" dx="0" dy="0" type="0"/>
+<item txt=""  tag="picture" dx="0" dy="0" type="0"/>
+<item txt=""  tag="plot" dx="0" dy="0" type="0"/>
+<item txt=""  tag="point  of" dx="0" dy="0" type="0"/>
+<item txt=""  tag="postcontrol" dx="0" dy="0" type="0"/>
+<item txt=""  tag="precontrol" dx="0" dy="0" type="0"/>
+<item txt=""  tag="primarydef  enddef" dx="0" dy="0" type="0"/>
+<item txt=""  tag="pt" dx="0" dy="0" type="0"/>
+<item txt=""  tag="quartecircle" dx="0" dy="0" type="0"/>
+<item txt=""  tag="readfrom" dx="0" dy="0" type="0"/>
+<item txt=""  tag="red" dx="0" dy="0" type="0"/>
+<item txt=""  tag="redpart" dx="0" dy="0" type="0"/>
+<item txt=""  tag="reflectedabout()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="reverse" dx="0" dy="0" type="0"/>
+<item txt=""  tag="right" dx="0" dy="0" type="0"/>
+<item txt=""  tag="rotated" dx="0" dy="0" type="0"/>
+<item txt=""  tag="rotatedaround()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="round" dx="0" dy="0" type="0"/>
+<item txt=""  tag="rounded" dx="0" dy="0" type="0"/>
+<item txt=""  tag="rt" dx="0" dy="0" type="0"/>
+<item txt=""  tag="Sabs" dx="0" dy="0" type="0"/>
+<item txt=""  tag="Sadd" dx="0" dy="0" type="0"/>
+<item txt=""  tag="sarith" dx="0" dy="0" type="0"/>
+<item txt=""  tag="save" dx="0" dy="0" type="0"/>
+<item txt=""  tag="scaled" dx="0" dy="0" type="0"/>
+<item txt=""  tag="Scvnum" dx="0" dy="0" type="0"/>
+<item txt=""  tag="Sdiv" dx="0" dy="0" type="0"/>
+<item txt=""  tag="secondarydef  enddef" dx="0" dy="0" type="0"/>
+<item txt=""  tag="self" dx="0" dy="0" type="0"/>
+<item txt=""  tag="setbounds  to" dx="0" dy="0" type="0"/>
+<item txt=""  tag="setcoords()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="setrange()" dx="0" dy="0" type="0"/>
+<item txt=""  tag="shifted" dx="0" dy="0" type="0"/>
+<item txt=""  tag="shipout" dx="0" dy="0" type="0"/>
+<item txt=""  tag="show" dx="0" dy="0" type="0"/>
+<item txt=""  tag="showdependencies" dx="0" dy="0" type="0"/>
+<item txt=""  tag="showstopping" dx="0" dy="0" type="0"/>
+<item txt=""  tag="showtoken" dx="0" dy="0" type="0"/>
+<item txt=""  tag="showvariable" dx="0" dy="0" type="0"/>
+<item txt=""  tag="sind" dx="0" dy="0" type="0"/>
+<item txt=""  tag="slanted" dx="0" dy="0" type="0"/>
+<item txt=""  tag="Sleq" dx="0" dy="0" type="0"/>
+<item txt=""  tag="Smul" dx="0" dy="0" type="0"/>
+<item txt=""  tag="Sneq" dx="0" dy="0" type="0"/>
+<item txt=""  tag="special" dx="0" dy="0" type="0"/>
+<item txt=""  tag="sqrt" dx="0" dy="0" type="0"/>
+<item txt=""  tag="squared" dx="0" dy="0" type="0"/>
+<item txt=""  tag="Ssub" dx="0" dy="0" type="0"/>
+<item txt=""  tag="step" dx="0" dy="0" type="0"/>
+<item txt=""  tag="str" dx="0" dy="0" type="0"/>
+<item txt=""  tag="string" dx="0" dy="0" type="0"/>
+<item txt=""  tag="stroked" dx="0" dy="0" type="0"/>
+<item txt=""  tag="subpath" dx="0" dy="0" type="0"/>
+<item txt=""  tag="substring" dx="0" dy="0" type="0"/>
+<item txt=""  tag="tertiarydef  enddef" dx="0" dy="0" type="0"/>
+<item txt=""  tag="text" dx="0" dy="0" type="0"/>
+<item txt=""  tag="thelabel." dx="0" dy="0" type="0"/>
+<item txt=""  tag="time" dx="0" dy="0" type="0"/>
+<item txt=""  tag="top" dx="0" dy="0" type="0"/>
+<item txt=""  tag="tracingall" dx="0" dy="0" type="0"/>
+<item txt=""  tag="tracingcapsules" dx="0" dy="0" type="0"/>
+<item txt=""  tag="tracingchoices" dx="0" dy="0" type="0"/>
+<item txt=""  tag="tracingcommands" dx="0" dy="0" type="0"/>
+<item txt=""  tag="tracingequations" dx="0" dy="0" type="0"/>
+<item txt=""  tag="tracinglostchars" dx="0" dy="0" type="0"/>
+<item txt=""  tag="tracingmacros" dx="0" dy="0" type="0"/>
+<item txt=""  tag="tracingnone" dx="0" dy="0" type="0"/>
+<item txt=""  tag="tracingonline" dx="0" dy="0" type="0"/>
+<item txt=""  tag="tracingoutput" dx="0" dy="0" type="0"/>
+<item txt=""  tag="tracingrestores" dx="0" dy="0" type="0"/>
+<item txt=""  tag="tracingspecs" dx="0" dy="0" type="0"/>
+<item txt=""  tag="tracingstats" dx="0" dy="0" type="0"/>
+<item txt=""  tag="tracingtitles" dx="0" dy="0" type="0"/>
+<item txt=""  tag="transform" dx="0" dy="0" type="0"/>
+<item txt=""  tag="transformed" dx="0" dy="0" type="0"/>
+<item txt=""  tag="true" dx="0" dy="0" type="0"/>
+<item txt=""  tag="truecorners:=" dx="0" dy="0" type="0"/>
+<item txt=""  tag="ulcorner" dx="0" dy="0" type="0"/>
+<item txt=""  tag="ulft" dx="0" dy="0" type="0"/>
+<item txt=""  tag="undraw" dx="0" dy="0" type="0"/>
+<item txt=""  tag="unfill" dx="0" dy="0" type="0"/>
+<item txt=""  tag="unfilldraw" dx="0" dy="0" type="0"/>
+<item txt=""  tag="uniformdeviate" dx="0" dy="0" type="0"/>
+<item txt=""  tag="unitsquare" dx="0" dy="0" type="0"/>
+<item txt=""  tag="unitvector" dx="0" dy="0" type="0"/>
+<item txt=""  tag="unknown" dx="0" dy="0" type="0"/>
+<item txt=""  tag="until" dx="0" dy="0" type="0"/>
+<item txt=""  tag="up" dx="0" dy="0" type="0"/>
+<item txt=""  tag="urcorner" dx="0" dy="0" type="0"/>
+<item txt=""  tag="urt" dx="0" dy="0" type="0"/>
+<item txt=""  tag="vardef  enddef" dx="0" dy="0" type="0"/>
+<item txt=""  tag="whatever[]" dx="0" dy="0" type="0"/>
+<item txt=""  tag="white" dx="0" dy="0" type="0"/>
+<item txt=""  tag="withcolor" dx="0" dy="0" type="0"/>
+<item txt=""  tag="withdots" dx="0" dy="0" type="0"/>
+<item txt=""  tag="withpen" dx="0" dy="0" type="0"/>
+<item txt=""  tag="write  to" dx="0" dy="0" type="0"/>
+<item txt=""  tag="xpart" dx="0" dy="0" type="0"/>
+<item txt=""  tag="xscaled" dx="0" dy="0" type="0"/>
+<item txt=""  tag="xxpart" dx="0" dy="0" type="0"/>
+<item txt=""  tag="xypart" dx="0" dy="0" type="0"/>
+<item txt=""  tag="year" dx="0" dy="0" type="0"/>
+<item txt=""  tag="yscaled" dx="0" dy="0" type="0"/>
+<item txt=""  tag="yxpart" dx="0" dy="0" type="0"/>
+<item txt=""  tag="yypart" dx="0" dy="0" type="0"/>
+<item txt=""  tag="zscaled" dx="0" dy="0" type="0"/>
+</section>
+</texmakertags>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<texmakertags title="Left/Right">
+<section title="Left">
+<item txt="" tag="\\left( " dx="0" dy="0" type="0"/>
+<item txt="" tag="\\left[ " dx="0" dy="0" type="0"/>
+<item txt="\\left{ " tag="\\left\\lbrace " dx="0" dy="0" type="0"/>
+<item txt="\\left&lt; " tag="\\left\\langle " dx="0" dy="0" type="0"/>
+<item txt="" tag="\\left) " dx="0" dy="0" type="0"/>
+<item txt="" tag="\\left] " dx="0" dy="0" type="0"/>
+<item txt="\\left} " tag="\\left\\rbrace " dx="0" dy="0" type="0"/>
+<item txt="\\left&gt; " tag="\\left\\rangle " dx="0" dy="0" type="0"/>
+<item txt="" tag="\\left. " dx="0" dy="0" type="0"/>
+</section>
+<section title="Right">
+<item txt="" tag="\\right( " dx="0" dy="0" type="0"/>
+<item txt="" tag="\\right[ " dx="0" dy="0" type="0"/>
+<item txt="\\right{ " tag="\\right\\lbrace " dx="0" dy="0" type="0"/>
+<item txt="\\right&lt; " tag="\\right\\langle " dx="0" dy="0" type="0"/>
+<item txt="" tag="\\right) " dx="0" dy="0" type="0"/>
+<item txt="" tag="\\right] " dx="0" dy="0" type="0"/>
+<item txt="\\right} " tag="\\right\\rbrace " dx="0" dy="0" type="0"/>
+<item txt="\\right&gt; " tag="\\right\\rangle " dx="0" dy="0" type="0"/>
+<item txt="" tag="\\right. " dx="0" dy="0" type="0"/>
+</section>
+</texmakertags>

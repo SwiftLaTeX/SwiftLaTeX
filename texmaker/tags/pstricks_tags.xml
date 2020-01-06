@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<texmakertags title="Pstricks">
+<section title="General (Pstricks)">
+<item txt="" tag="\\psset{xunit=1cm,yunit=1cm}" dx="0" dy="0" type="0"/>
+<item txt="\\begin{pspicture}(x0,y0)(x1,y1) \\end{pspicture}" tag="\\begin{pspicture}(x0,y0)(x1,y1)\n\n\\end{pspicture}" dx="0" dy="1" type="0"/>
+<item txt="" tag="\\SpecialCoor" dx="0" dy="0" type="0"/>
+</section>
+<section title="Lines/Polygons  (Pstricks)">
+<item txt="" tag="\\psline[options]{arrows}(x0,y0)(x1,y1)" dx="0" dy="0" type="0"/>
+<item txt="" tag="\\pspolygon[options](x0,y0)(xn,yn)" dx="0" dy="0" type="0"/>
+<item txt="" tag="\\psframe[options](x0,y0)(x1,y1)" dx="0" dy="0" type="0"/>
+<item txt="" tag="linearc=[0pt]" dx="0" dy="0" type="1"/>
+<item txt="" tag="framearc=[0]" dx="0" dy="0" type="1"/>
+</section>
+<section title="Arcs/Circles/Ellipses  (Pstricks)">
+<item txt="" tag="\\pscircle[options](x0,y0){radius}" dx="0" dy="0" type="0"/>
+<item txt="" tag="\\pswedge[options](x0,y0){radius}{angle1}{angle2}" dx="0" dy="0" type="0"/>
+<item txt="" tag="\\psarc[options]{arrows}(x,y){radius}{angleA}{angleB}" dx="0" dy="0" type="0"/>
+<item txt="" tag="\\psellipse[options](x0,y0)(x1,y1)" dx="0" dy="0" type="0"/>
+<item txt="" tag="arcSepA=[0pt]" dx="0" dy="0" type="1"/>
+<item txt="" tag="arcSepB=[0pt]" dx="0" dy="0" type="1"/>
+<item txt="" tag="arcsep=[0]" dx="0" dy="0" type="1"/>
+</section>
+<section title="Curves  (Pstricks)">
+<item txt="" tag="\\psbezier[options]{arrows}(x0,y0)(x1,y1)(x2,y2)(x3,y3)" dx="0" dy="0" type="0"/>
+<item txt="" tag="\\parabola[options]{arrows}(x0,y0)(x1,y1)" dx="0" dy="0" type="0"/>
+<item txt="" tag="\\pscurve[options]{arrows}(x1,y1)(xn,yn)" dx="0" dy="0" type="0"/>
+<item txt="" tag="\\psecurve[options]{arrows}(x1,y1)(xn,yn)" dx="0" dy="0" type="0"/>
+<item txt="" tag="\\psccurve[options]{arrows}(x1,y1)(xn,yn)" dx="0" dy="0" type="0"/>
+</section>
+<section title="Dots  (Pstricks)">
+<item txt="" tag="\\psdot[options](x1,y1)" dx="0" dy="0" type="0"/>
+<item txt="" tag="\\psdots[options](x1,y1)(xn,yn)" dx="0" dy="0" type="0"/>
+<item txt="" tag="dotstyle=[*/o/+/triangle(*)/square(*)/pentagon(*)/|]" dx="0" dy="0" type="1"/>
+<item txt="" tag="dotscale=[1]" dx="0" dy="0" type="1"/>
+<item txt="" tag="dotangle=[0]" dx="0" dy="0" type="1"/>
+</section>
+<section title="Grids  (Pstricks)">
+<item txt="" tag="\\psgrid[options](x0,y0)(x1,y1)(x2,y2)" dx="0" dy="0" type="0"/>
+<item txt="" tag="gridwidth=[0.8pt]" dx="0" dy="0" type="1"/>
+<item txt="" tag="gridcolor=[black]" dx="0" dy="0" type="1"/>
+<item txt="" tag="griddots=[0]" dx="0" dy="0" type="1"/>
+<item txt="" tag="gridlabels=[10pt]" dx="0" dy="0" type="1"/>
+<item txt="" tag="gridlabelcolor=[black]" dx="0" dy="0" type="1"/>
+<item txt="" tag="subgriddiv=[5]" dx="0" dy="0" type="1"/>
+<item txt="" tag="subgridwidth=[0.4pt]" dx="0" dy="0" type="1"/>
+<item txt="" tag="subgridcolor=[gray]" dx="0" dy="0" type="1"/>
+<item txt="" tag="subgriddots=[0]" dx="0" dy="0" type="1"/>
+</section>
+<section title="Placing/Rotating  (Pstricks)">
+<item txt="" tag="\\uput[refangle](x,y){stuff}" dx="0" dy="0" type="0"/>
+<item txt="" tag="\\uput[refangle]{rotation}(x,y){stuff}" dx="0" dy="0" type="0"/>
+<item txt="" tag="\\uput{labelsep}[refangle]{rotation}(x,y){stuff}" dx="0" dy="0" type="0"/>
+<item txt="" tag="\\rput(x,y){stuff}" dx="0" dy="0" type="0"/>
+<item txt="" tag="\\rput[refpoint](x,y){stuff}" dx="0" dy="0" type="0"/>
+<item txt="" tag="\\rput{rotation}(x,y){stuff}" dx="0" dy="0" type="0"/>
+<item txt="" tag="\\rput[refpoint]{rotation}(x,y){stuff}" dx="0" dy="0" type="0"/>
+</section>
+<section title="Arrows  (Pstricks)">
+<item txt="" tag="-" dx="0" dy="0" type="0"/>
+<item txt="" tag="&lt;-&gt;" dx="0" dy="0" type="0"/>
+<item txt="" tag="&gt;-&lt;" dx="0" dy="0" type="0"/>
+<item txt="" tag="&lt;&lt;-&gt;&gt;" dx="0" dy="0" type="0"/>
+<item txt="" tag="&gt;&gt;-&lt;&lt;" dx="0" dy="0" type="0"/>
+<item txt="" tag="|-|" dx="0" dy="0" type="0"/>
+<item txt="" tag="|*-|*" dx="0" dy="0" type="0"/>
+<item txt="" tag="[-]" dx="0" dy="0" type="0"/>
+<item txt="" tag="(-)" dx="0" dy="0" type="0"/>
+<item txt="" tag="o-o" dx="0" dy="0" type="0"/>
+<item txt="" tag="*-*" dx="0" dy="0" type="0"/>
+<item txt="" tag="oo-oo" dx="0" dy="0" type="0"/>
+<item txt="" tag="**-**" dx="0" dy="0" type="0"/>
+<item txt="" tag="c-c" dx="0" dy="0" type="0"/>
+<item txt="" tag="cc-cc" dx="0" dy="0" type="0"/>
+<item txt="" tag="C-C" dx="0" dy="0" type="0"/>
+<item txt="" tag="arrowsize=[2pt 3]" dx="0" dy="0" type="1"/>
+<item txt="" tag="arrowlength=[1.4]" dx="0" dy="0" type="1"/>
+<item txt="" tag="arrowinset=[0.4]" dx="0" dy="0" type="1"/>
+<item txt="" tag="tbarsize=[2pt 5]" dx="0" dy="0" type="1"/>
+<item txt="" tag="bracketlength=[0.15]" dx="0" dy="0" type="1"/>
+<item txt="" tag="rbracketlength=[0.15]" dx="0" dy="0" type="1"/>
+<item txt="" tag="dotsize=[0.5pt 2.5]" dx="0" dy="0" type="1"/>
+<item txt="" tag="arrowscale=[1]" dx="0" dy="0" type="1"/>
+</section>
+<section title="Line styles  (Pstricks)">
+<item txt="" tag="linestyle=[solid/dashed/dotted]" dx="0" dy="0" type="1"/>
+<item txt="" tag="linewidth=[0.8pt]" dx="0" dy="0" type="1"/>
+<item txt="" tag="linecolor=[black]" dx="0" dy="0" type="1"/>
+<item txt="" tag="showpoints=[false]" dx="0" dy="0" type="1"/>
+<item txt="" tag="dash=[5pt 3pt]" dx="0" dy="0" type="1"/>
+<item txt="" tag="dotsep=[3pt]" dx="0" dy="0" type="1"/>
+<item txt="" tag="border=[0pt]" dx="0" dy="0" type="1"/>
+<item txt="" tag="bordercolor=[white]" dx="0" dy="0" type="1"/>
+<item txt="" tag="doubleline=[false]" dx="0" dy="0" type="1"/>
+<item txt="" tag="doublesep=[1.25\\pslinewidth]" dx="0" dy="0" type="1"/>
+<item txt="" tag="doublecolor=[white]" dx="0" dy="0" type="1"/>
+<item txt="" tag="shadow=[false]" dx="0" dy="0" type="1"/>
+<item txt="" tag="shadowsize=[3pt]" dx="0" dy="0" type="1"/>
+<item txt="" tag="shadowangle=[-45]" dx="0" dy="0" type="1"/>
+<item txt="" tag="shadowcolor=[darkgray]" dx="0" dy="0" type="1"/>
+</section>
+<section title="Fill styles  (Pstricks)">
+<item txt="" tag="fillstyle=[none/solid/vlines(*)/hlines(*)/crosshatch(*)]" dx="0" dy="0" type="1"/>
+<item txt="" tag="fillcolor=[white]" dx="0" dy="0" type="1"/>
+<item txt="" tag="hatchwidth=[0.8pt]" dx="0" dy="0" type="1"/>
+<item txt="" tag="hatchsep=[4pt]" dx="0" dy="0" type="1"/>
+<item txt="" tag="hatchcolor=[black]" dx="0" dy="0" type="1"/>
+<item txt="" tag="hatchangle=[45]" dx="0" dy="0" type="1"/>
+</section>
+<section title="Colors  (Pstricks)">
+<item txt="" tag="\\newgray{color}{num}" dx="0" dy="0" type="0"/>
+<item txt="" tag="\\newrgbcolor{color}{num1 num2 num3}" dx="0" dy="0" type="0"/>
+</section>
+<section title="Plots (Pstricks/pst-plot)">
+<item txt="" tag="\\psplot[options]{xmin}{xmax}{function}" dx="0" dy="0" type="0"/>
+<item txt="" tag="\\parametricplot[options]{tmin}{tmax}{function}" dx="0" dy="0" type="0"/>
+<item txt="" tag="\\dataplot[options]{commands}" dx="0" dy="0" type="0"/>
+<item txt="" tag="\\fileplot[options]{file}" dx="0" dy="0" type="0"/>
+<item txt="" tag="\\listplot[options]{list}" dx="0" dy="0" type="0"/>
+<item txt="" tag="plotstyle=[line/dots/polygon/curve/ecurve/ccurve]" dx="0" dy="0" type="1"/>
+<item txt="" tag="plotpoints=[50]" dx="0" dy="0" type="1"/>
+<item txt="" tag="origin=[{0pt,0pt}]" dx="0" dy="0" type="1"/>
+<item txt="" tag="swapaxes=[false]" dx="0" dy="0" type="1"/>
+<item txt="" tag="\\readdata{command}{file}" dx="0" dy="0" type="0"/>
+<item txt="" tag="\\savedata{command}[data]" dx="0" dy="0" type="0"/>
+<item txt="" tag="\\psaxes[options]{arrows}(x0,y0)(x1,y1)(x2,y2)" dx="0" dy="0" type="0"/>
+<item txt="" tag="labels=[all/x/y/none]" dx="0" dy="0" type="1"/>
+<item txt="" tag="Dx=[1]" dx="0" dy="0" type="1"/>
+<item txt="" tag="Dy=[1]" dx="0" dy="0" type="1"/>
+<item txt="" tag="showorigin=[true]" dx="0" dy="0" type="1"/>
+<item txt="" tag="ticks=[all/x/y/none]" dx="0" dy="0" type="1"/>
+<item txt="" tag="tickstyle=[full/top/bottom]" dx="0" dy="0" type="1"/>
+<item txt="" tag="ticksize=[3pt]" dx="0" dy="0" type="1"/>
+<item txt="" tag="axesstyle=[axes/frame/none]" dx="0" dy="0" type="1"/>
+</section>
+</texmakertags>
