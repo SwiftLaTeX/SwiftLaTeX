@@ -142,8 +142,8 @@ private:
   QMenu *bibMenu, *bibtexMenu, *biblatexMenu;
   QMenu *user1Menu, *user11Menu, *user12Menu;
   QMenu *viewMenu;
-  QMenu *optionsMenu, *translationMenu, /**appearanceMenu,*/ *settingsMenu,
-      *scriptMenu;
+  QMenu *optionsMenu, *translationMenu; /**appearanceMenu,*/ /*settingsMenu,*/
+      /*scriptMenu;*/
   QMenu *helpMenu;
   QMenu *sectionMenu, *sizeMenu, *refMenu;
 
@@ -320,9 +320,9 @@ private slots:
 
   void ReadSettings();
   void SaveSettings();
-  void DeleteSettings();
-  void CopySettings();
-  void CopySettingsDone(const QString &);
+  // void DeleteSettings();
+  // void CopySettings();
+  // void CopySettingsDone(const QString &);
   //void ReplaceSettings();
 
   void NewDocumentStatus(bool m);

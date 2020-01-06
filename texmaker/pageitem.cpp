@@ -96,36 +96,34 @@ PageItem::~PageItem() {
 void PageItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
   if (m_doc == 0)
     return;
-  QMenu menu;
-#if defined(Q_OS_MAC)
+  QMenu *menu = new QMenu();
+
   QAction *act =
-      menu.addAction(tr("Click to jump to the line") + " (cmd+click)");
-#else
-  QAction *act =
-      menu.addAction(tr("Click to jump to the line") + " (ctrl+click)");
-#endif
+      menu->addAction(tr("Click to jump to the line") + " (ctrl+click)");
+
 
   // act->setShortcut(Qt::CTRL+Qt::Key_Space);
   act->setData(QVariant(event->pos()));
   connect(act, SIGNAL(triggered()), this, SLOT(jumpToSourceFromPdf()));
 
-  act = menu.addAction(tr("Number of words in the document"));
+  act = menu->addAction(tr("Number of words in the document"));
   act->setData(QVariant(event->pos()));
   connect(act, SIGNAL(triggered()), this, SLOT(requestNumWords()));
 
-  act = menu.addAction(tr("Number of words in the page"));
+  act = menu->addAction(tr("Number of words in the page"));
   act->setData(QVariant(event->pos()));
   connect(act, SIGNAL(triggered()), this, SLOT(requestPageWords()));
 
-  act = menu.addAction(tr("Convert page to png image"));
+  act = menu->addAction(tr("Convert page to png image"));
   act->setData(QVariant(event->pos()));
   connect(act, SIGNAL(triggered()), this, SLOT(requestPngExport()));
 
-  act = menu.addAction(tr("Open the file browser"));
+  act = menu->addAction(tr("Open the file browser"));
   act->setData(QVariant(event->pos()));
   connect(act, SIGNAL(triggered()), this, SLOT(requestOpenLocation()));
 
-  menu.exec(event->screenPos());
+  menu->setAttribute(Qt::WA_DeleteOnClose);
+  menu->popup(event->screenPos());
 }
 
 QRectF PageItem::boundingRect() const { return m_boundingRect; }
@@ -426,8 +424,8 @@ void PageItem::copyToClipboard(const QPoint &screenPos) {
 
   QAction *copyTextAction = menu->addAction(tr("Copy text"));
   QAction *copyImageAction = menu->addAction(tr("Copy image"));
-
-  QAction *action = menu->exec(screenPos);
+  menu->setAttribute(Qt::WA_DeleteOnClose);
+  QAction *action = menu->popup(screenPos);
 
   if (action == copyTextAction) {
     QString text;
@@ -483,7 +481,7 @@ void PageItem::copyToClipboard(const QPoint &screenPos) {
     }
   }
 
-  delete menu;
+  //delete menu;
 }
 
 QImage PageItem::exportImagePage() {

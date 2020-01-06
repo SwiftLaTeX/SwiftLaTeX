@@ -67,7 +67,7 @@ void UserTagsListWidget::customContentsMenu(const QPoint &pos) {
     changeAct->setEnabled(false);
   }
   QPoint globalPos = this->mapToGlobal(pos);
-  menu->exec(globalPos);
+  menu->popup(globalPos);
 }
 
 void UserTagsListWidget::dropEvent(QDropEvent *event) {

@@ -37,8 +37,9 @@ bool KeySequenceDialog::eventFilter(QObject *o, QEvent *e) {
     menu->addAction(clearAction);
     clearAction->setEnabled(!m_keySequence.isEmpty());
     connect(clearAction, SIGNAL(triggered()), this, SLOT(slotClearShortcut()));
-    menu->exec(c->globalPos());
-    delete menu;
+    menu->popup(c->globalPos());
+    menu->setAttribute(Qt::WA_DeleteOnClose);
+    //delete menu;
     e->accept();
     return true;
   }

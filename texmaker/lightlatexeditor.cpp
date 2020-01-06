@@ -840,8 +840,8 @@ void LightLatexEditor::contextMenuEvent(QContextMenuEvent *e) {
   Act = new QAction(tr("Goto Line"), this);
   connect(Act, SIGNAL(triggered()), this, SLOT(editGotoLine()));
   menu->addAction(Act);
-  menu->exec(e->globalPos());
-  delete menu;
+  menu->popup(e->globalPos());
+  menu->setAttribute(Qt::WA_DeleteOnClose); 
 }
 
 void LightLatexEditor::gotoBookmark1() {

@@ -2308,13 +2308,13 @@ void Texmaker::setupMenus() {
   optionsMenu->addSeparator();
 #endif
 
-  settingsMenu = optionsMenu->addMenu(tr("Settings File"));
-  Act = new QAction(tr("Reset Settings"), this);
-  connect(Act, SIGNAL(triggered()), this, SLOT(DeleteSettings()));
-  settingsMenu->addAction(Act);
-  Act = new QAction(tr("Save a copy of the settings file"), this);
-  connect(Act, SIGNAL(triggered()), this, SLOT(CopySettings()));
-  settingsMenu->addAction(Act);
+  // settingsMenu = optionsMenu->addMenu(tr("Settings File"));
+  // Act = new QAction(tr("Reset Settings"), this);
+  // connect(Act, SIGNAL(triggered()), this, SLOT(DeleteSettings()));
+  // settingsMenu->addAction(Act);
+  // Act = new QAction(tr("Save a copy of the settings file"), this);
+  // connect(Act, SIGNAL(triggered()), this, SLOT(CopySettings()));
+  // settingsMenu->addAction(Act);
   // Act = new QAction(tr("Replace the settings file by a new one"), this);
   // connect(Act, SIGNAL(triggered()), this, SLOT(ReplaceSettings()));
   // settingsMenu->addAction(Act);
@@ -4883,47 +4883,47 @@ void Texmaker::SaveSettings() {
   config.endGroup();
 }
 
-void Texmaker::DeleteSettings() {
-  switch (QMessageBoxWeb::warningWith3Buttons(this, "Texmaker",
-                               tr("Delete settings file?\n(Texmaker will be "
-                                  "closed and you will have to restart it)"),
-                               tr("Ok"), tr("Cancel"), QString::null, 0, 1)) {
-  case 0:
-    eraseSettings = true;
-    fileExit();
-    break;
-  case 1:
-  default:
-    return;
-    break;
-  }
-}
+// void Texmaker::DeleteSettings() {
+//   switch (QMessageBoxWeb::warningWith3Buttons(this, "Texmaker",
+//                                tr("Delete settings file?\n(Texmaker will be "
+//                                   "closed and you will have to restart it)"),
+//                                tr("Ok"), tr("Cancel"), QString::null, 0, 1)) {
+//   case 0:
+//     eraseSettings = true;
+//     fileExit();
+//     break;
+//   case 1:
+//   default:
+//     return;
+//     break;
+//   }
+// }
 
-void Texmaker::CopySettings() {
-  QFileInfo fi_or(settingsFileName);
-  if (fi_or.exists()) {
-    QFileDialog *sfDlg = new QFileDialog(this, tr("Save As"), QDir::homePath(),
-                                     "Setting files (*.ini);;All files (*.*)");
-    sfDlg->setAcceptMode(QFileDialog::AcceptSave);
-    sfDlg->setAttribute(Qt::WA_DeleteOnClose);
-    sfDlg->show();
-    connect(sfDlg, SIGNAL(fileSelected(const QString&)), this, SLOT(CopySettingsDone(const QString&)));
-  }
-}
+// void Texmaker::CopySettings() {
+//   QFileInfo fi_or(settingsFileName);
+//   if (fi_or.exists()) {
+//     QFileDialog *sfDlg = new QFileDialog(this, tr("Save As"), QDir::homePath(),
+//                                      "Setting files (*.ini);;All files (*.*)");
+//     sfDlg->setAcceptMode(QFileDialog::AcceptSave);
+//     sfDlg->setAttribute(Qt::WA_DeleteOnClose);
+//     sfDlg->show();
+//     connect(sfDlg, SIGNAL(fileSelected(const QString&)), this, SLOT(CopySettingsDone(const QString&)));
+//   }
+// }
 
-void Texmaker::CopySettingsDone(const QString &to_file) {
-  if (!to_file.isEmpty()) {
-      QFile fichier_or(settingsFileName);
-      QFileInfo fi_dest(to_file);
-      if (fi_dest.exists()) {
-        QFile fichier_dest(to_file);
-        fichier_dest.remove();
-        fichier_or.copy(to_file);
-      } else {
-        fichier_or.copy(to_file);
-      }
-  }
-}
+// void Texmaker::CopySettingsDone(const QString &to_file) {
+//   if (!to_file.isEmpty()) {
+//       QFile fichier_or(settingsFileName);
+//       QFileInfo fi_dest(to_file);
+//       if (fi_dest.exists()) {
+//         QFile fichier_dest(to_file);
+//         fichier_dest.remove();
+//         fichier_or.copy(to_file);
+//       } else {
+//         fichier_or.copy(to_file);
+//       }
+//   }
+// }
 
 // void Texmaker::ReplaceSettings() {
 //   switch (QMessageBox::warning(
@@ -7909,17 +7909,17 @@ void Texmaker::SizeCommand() {
 }
 void Texmaker::ShowSectionMenu() {
   QAction *action = qobject_cast<QAction *>(sender());
-  sectionMenu->exec(centralToolBar->widgetForAction(action)->mapToGlobal(
+  sectionMenu->popup(centralToolBar->widgetForAction(action)->mapToGlobal(
       QPoint(centralToolBar->width(), 0)));
 }
 void Texmaker::ShowRefMenu() {
   QAction *action = qobject_cast<QAction *>(sender());
-  refMenu->exec(centralToolBar->widgetForAction(action)->mapToGlobal(
+  refMenu->popup(centralToolBar->widgetForAction(action)->mapToGlobal(
       QPoint(centralToolBar->width(), 0)));
 }
 void Texmaker::ShowSizeMenu() {
   QAction *action = qobject_cast<QAction *>(sender());
-  sizeMenu->exec(centralToolBar->widgetForAction(action)->mapToGlobal(
+  sizeMenu->popup(centralToolBar->widgetForAction(action)->mapToGlobal(
       QPoint(centralToolBar->width(), 0)));
 }
 
@@ -11143,7 +11143,8 @@ void Texmaker::customContentsMenuMain(const QPoint &pos) {
   menu->addAction(showracineAct);
 
   QPoint globalPos = centralToolBar->mapToGlobal(pos);
-  menu->exec(globalPos);
+  menu->popup(globalPos);
+  menu->setAttribute(Qt::WA_DeleteOnClose);
 }
 
 void Texmaker::ToggleEmphasis() {

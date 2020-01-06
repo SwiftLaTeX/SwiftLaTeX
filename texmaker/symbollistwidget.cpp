@@ -235,5 +235,5 @@ void SymbolListWidget::customContentsMenu(const QPoint &pos) {
     remAct->setData(item->text());
   }
   QPoint globalPos = this->mapToGlobal(pos);
-  menu->exec(globalPos);
+  menu->popup(globalPos);
 }
