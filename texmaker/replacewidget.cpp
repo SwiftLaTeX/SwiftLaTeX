@@ -101,7 +101,7 @@ void ReplaceWidget::doReplace() {
         break;
       }
     }
-    ui.checkBegin->setChecked(true);
+    //ui.checkBegin->setChecked(true);
   }
 }
 

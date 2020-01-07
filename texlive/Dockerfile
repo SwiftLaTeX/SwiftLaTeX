@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:19.10
 RUN   apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -q -y wget \
     texlive-full \
     python3 \
