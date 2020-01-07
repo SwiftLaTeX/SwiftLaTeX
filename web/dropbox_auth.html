@@ -1,0 +1,111 @@
+
+<html>
+<head>
+	<script src="https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+</head>
+
+<body>
+    <button id="sign-in-or-out-button">Sign In/Authorize</button>
+    <div id="auth-status" style="display: inline; padding-left: 25px"></div>
+    <script>
+    const TOKEN_KEY = "swiftlatex_storage_token";
+    const BACKEND_KEY = "swiftlatex_storage_backend";
+	const CLIENT_ID = 'g3iksohibu4jdaw';
+
+	function is_token_in_storage() {
+		let dropbox_token = localStorage.getItem(TOKEN_KEY);
+		if(dropbox_token) {
+			return true;
+		} else{
+			return false;
+		}
+	}
+
+	function parseQueryString(str) {
+      var ret = Object.create(null);
+
+      if (typeof str !== 'string') {
+        return ret;
+      }
+
+      str = str.trim().replace(/^(\?|#|&)/, '');
+
+      if (!str) {
+        return ret;
+      }
+
+      str.split('&').forEach(function (param) {
+        var parts = param.replace(/\+/g, ' ').split('=');
+        // Firefox (pre 40) decodes `%3D` to `=`
+        // https://github.com/sindresorhus/query-string/pull/37
+        var key = parts.shift();
+        var val = parts.length > 0 ? parts.join('=') : undefined;
+
+        key = decodeURIComponent(key);
+
+        // missing `=` should be `null`:
+        // http://w3.org/TR/2012/WD-url-20120524/#collect-url-parameters
+        val = val === undefined ? null : decodeURIComponent(val);
+
+        if (ret[key] === undefined) {
+          ret[key] = val;
+        } else if (Array.isArray(ret[key])) {
+          ret[key].push(val);
+        } else {
+          ret[key] = [ret[key], val];
+        }
+      });
+
+      return ret;
+    }
+
+	function get_token_in_url() {
+	    return parseQueryString(window.location.hash).access_token;
+	}
+
+	function login_dropbox(){
+		let dbx = new Dropbox.Dropbox({ clientId: CLIENT_ID });
+	    let authUrl = dbx.getAuthenticationUrl('https://www.swiftlatex.com/dropbox_auth.html');
+	    window.location.href = authUrl;
+	}
+
+	function logout_dropbox() {
+		localStorage.removeItem(TOKEN_KEY);
+		window.location.href = "/";
+	}
+
+	function update_login_status() {
+
+		let isAuthorized = is_token_in_storage();
+
+		if(!isAuthorized) {
+			let token = get_token_in_url();
+			if(token) {
+				isAuthorized = true;
+				localStorage.setItem(TOKEN_KEY, token);
+			}
+		}
+		console.log("here2");
+		if (isAuthorized) {
+            $('#sign-in-or-out-button').html('Revoke!');
+            $('#sign-in-or-out-button').click(logout_dropbox);
+            $('#auth-status').html('Access granted, redirecting to SwiftLaTeX in a few seconds...');
+            localStorage.setItem(BACKEND_KEY, 'dropbox');
+            setTimeout(function(){
+                  window.location.href = "/";
+            }, 3000);
+        } else {
+            $('#sign-in-or-out-button').html('Sign In/Authorize');
+            $('#sign-in-or-out-button').click(login_dropbox);
+            $('#auth-status').html('Please click to sign in your Dropbox.');
+        }
+	}
+
+	
+
+	update_login_status()
+	</script>
+</body>
+
+</html>
