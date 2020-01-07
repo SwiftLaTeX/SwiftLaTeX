@@ -1,0 +1,34 @@
+<script src="js/thirdpartys/Dropbox-sdk.min.js"></script>
+
+<script>
+const CLIENT_ID = '42zjexze6mfpf7x';
+
+function dropbox_login_status() {
+	let dropbox_token = localStorage.getItem('dropbox_token');
+	if(dropbox_token) {
+		return true;
+	} else{
+		return false;
+	}
+}
+
+function getAccessTokenFromUrl() {
+    return utils.parseQueryString(window.location.hash).access_token;
+}
+
+function login_dropbox(){
+	let dbx = new Dropbox.Dropbox({ clientId: CLIENT_ID });
+    let authUrl = dbx.getAuthenticationUrl('http://localhost:8080/auth');
+    window.location.href = authUrl;
+}
+
+if(!dropbox_login_status()) {
+	let token_in_url = getAccessTokenFromUrl();
+	if(token_in_url) {
+		localStorage.setItem('dropbox_token', token_in_url);
+	} else {
+		//No Login
+	}
+}
+	
+</script>
