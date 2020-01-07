@@ -1,4 +1,0 @@
-requests>0.1
-flask>0.1
-Jinja2 > 2.8
-
