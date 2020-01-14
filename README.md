@@ -1,94 +1,68 @@
-# SwiftLaTeX
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-A Browser-based Fast LaTeX Visual Editor. 
+## Available Scripts
 
-# Key features:
-1. WYSIWYG
-2. Fast compilation thanks to LaTeX checkpointing
-3. Cloud file storage
+In the project directory, you can run:
 
-Try it here: https://www.swiftlatex.com/oauth/login_oauth?type=sandbox
+### `yarn start`
 
-## Short Introduction
+Runs the app in the development mode.<br />
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-SwiftLaTeX is a Web-browser based editor to create PDF documents such as reports, term projects, slide decks, in the typesetting system LaTeX. In contrast to other web-based editors SwiftLaTeX is true WYSIWYG, What-you-see-is-what-you-get: You edit directly in a representation of the print output. You can import a LaTeX document at any stage of completeness into SwiftLaTeX. You can start a new document with SwiftLaTeX, or you can use SwiftLaTeX for final copy-editing. For advanced operation you can edit the so-called LaTeX source code, which gives you more fine-grained control. SwiftLaTeX is collaborative; you can share your project with others and work on it at the same time. SwiftLaTeX stores your data in the cloud under your account; currently it supports Google Drive and DropBox.
+The page will reload if you make edits.<br />
+You will also see any lint errors in the console.
 
-## Software Architecture
-This software consists of three main components.
-1. HTML and Javascript files under ide directory. (The python files are used as a simple webserver and OAuth for Google and Dropbox integration.)
-2. TeX engine under engine directory.
-3. Texlive File Server used to dynamically serve LaTeX packages under texlive directory.
-4. Optionally, a collaborative editing server (https://github.com/SwiftLaTeX/collaborative-editing) built on top of sharedb. Note that collaborative editing only works with Google integration now, which is still at alpha stage.
+### `yarn test`
 
+Launches the test runner in the interactive watch mode.<br />
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-## Installation
-You are welcome to host SwiftLaTeX by yourself according to AGPL licence. And you can also use our web server https://www.swiftlatex.com. Usually you just need this repo to run SwiftLaTeX.
+### `yarn build`
 
-### Run SwiftLaTeX using Docker in 3 Steps. (We will release the docker image in docker hub soon)
-1. Install Docker
-2. Run "docker build . -t swiftlatex/swiftlatex"
-3. Run "docker-compose up"
+Builds the app for production to the `build` folder.<br />
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-### Run SwiftLaTeX using Python3 in 3 Steps
+The build is minified and the filenames include the hashes.<br />
+Your app is ready to be deployed!
 
-1. Install Python3 && Pip3
-2. Run "pip3 install -r requirements.txt"
-3. Run "python3 wsgi.py"
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-Open url "https://localhost:3000", and enjoy writing.
+### `yarn eject`
 
-### Adding Google Drive and Dropbox Support
-1. You first need to be a Google API Developer to retrieve a Google API Client ID and Secret. See here (https://developers.google.com/identity/protocols/OAuth2)
-2. Edit config.py and put your Client ID and Secret Inside. (You can use environment variables instead.)
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-## FAQ
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-### About LaTeX packages
-All packages are dynamically loaded from our file server and cached locally. Our file server has almost all the packages. 
-If you want to host the file server by yourself, you can checkout another repo: https://github.com/elliott-wen/texlive-server
+Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-### About Engines
-Currently, this engine is built atop pdftex. So no unicode supported. 
-We are working to port xetex in future release.
-The engine source code is hosted in https://github.com/SwiftLaTeX/PdfTeXLite.
-It is unusable so far as we need more time to upload and tidy up the source codes. Stay tuned.
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
+## Learn More
 
-## Roadmap
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-### Bug Fixes
-1. WYSIWYG
-Formulas are absolute positioned, therefore, the correct display only comes after a compilation. Reductant spaces occurs between words.
-2. Slow Upload to Google
-Our system abstracts your cloud storage as a POSIX-like file system to simplify user interface implementation at the cost of a little bit performance. We are working hard to improve our implementation to reduce the network turn around time.
-3. Sharing Files only works on Google
-4. Checkpointing breaks certain projects.
+To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Pending Features
-1. Vertical Spilt View
-2. Adding XeTeX support. Clean up and Release Engine Source Codes. 
-3. Tidy-up all the JS files.
-4. Add Github and S3 storage support.
+### Code Splitting
 
-## Participate
-As an open source project SwiftLaTeX strongly benefits from an active community. It is a good idea to announce your plans on the issue list. So everybody knows what's going on and there is no duplicate work.
+This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
 
-### Spread the word
-The easiest way to help on the development with SwiftLaTeX is to use it! Furthermore, if you like SwiftLaTeX, tell all your friends and colleagues about it.
+### Analyzing the Bundle Size
 
-### Bug Reports
-User feedback is highly welcome. If you wanna report bugs regarding some TeX documentations not compiling. Please attach the snippets so that we can look into it.
+This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
 
+### Making a Progressive Web App
 
-### Contributon and Copyright
-If you are sending PR requests, you own the copyright of your contribution, and that you must agree to give us a license to use it in both the open source version, and the version of SwiftLaTeX running at www.swiftlatex.com, which may include additional changes. For more details, you can see https://www.swiftlatex.com/contribute.html. 
+This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
 
-### Happy New Year~
-Thank you very much for your interest and support:) We are very happy to receive such a warm response.
-We are currently overwhelmed by our full-time jobs at uni. But we will try our best to monitor this repo and keep improving the code daily. Really appreciate your patience and wish you all a wonderful holiday season:)
+### Advanced Configuration
 
+This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
 
+### Deployment
 
-## Research Paper
-If you are interested in reading tech jargons, you could have a look at https://dl.acm.org/citation.cfm?id=3209522&dl=ACM&coll=DL
-(Though some stuff in the paper is outdated.)
+This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+
+### `yarn build` fails to minify
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
