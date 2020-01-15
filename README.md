@@ -2,6 +2,8 @@
 
 A Browser-based Fast LaTeX Visual Editor. 
 
+We are currently working on V2 version, which features Visual studio IDE, Github, S3 storage, LaTeX langauge Server. Please stay tuned. Big update coming soon.
+
 # Key features:
 1. WYSIWYG
 2. Fast compilation thanks to LaTeX checkpointing
