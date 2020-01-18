@@ -45,6 +45,9 @@ typedef struct {
 
 BEGIN_EXTERN_C
 
+unsigned short read_charglyph_map(unsigned short f, unsigned short glyph);
+void store_charglyph_map(unsigned short f, unsigned short glyph, unsigned short character);
+void clean_charglyph_map();
 int get_native_mathsy_param(int f, int n);
 int get_native_mathex_param(int f, int n);
 int get_ot_math_constant(int f, int n);

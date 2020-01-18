@@ -714,7 +714,10 @@ static void hlist_out(void) {
             dvi_two(1);  /* glyph count */
             dvi_four(0); /* x offset, as fixed-point */
             dvi_four(0); /* y offset, as fixed-point */
-            dvi_two(NATIVE_NODE_glyph(p));
+            unsigned short glyph_id = NATIVE_NODE_glyph(p);
+            unsigned short origin_char = read_charglyph_map(f, glyph_id);
+            dvi_two(glyph_id);
+            dvi_two(origin_char);
             cur_h += BOX_width(p);
           } else {
             if (NODE_subtype(p) == NATIVE_WORD_NODE_AT) {

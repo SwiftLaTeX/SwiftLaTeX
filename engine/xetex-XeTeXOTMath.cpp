@@ -34,11 +34,34 @@ authorization from the copyright holders.
 #include "xetex-core.h"
 
 #include <algorithm>
-
+#include <map>
 #include "xetex-XeTeXFontInst.h"
 #include "xetex-XeTeXLayoutInterface.h"
 #include "xetex-XeTeXOTMath.h"
 #include "xetex-web.h"
+
+static std::map<unsigned short, std::map<unsigned short, unsigned short>> charglyph_map;
+unsigned short read_charglyph_map(unsigned short f, unsigned short glyph) {
+    if ( charglyph_map.count(f) == 0 ) {
+      return 0;
+    } 
+
+    if(charglyph_map[f].count(glyph) == 0) {
+      return 0;
+    }
+
+    return charglyph_map[f][glyph];
+}
+
+void store_charglyph_map(unsigned short f, unsigned short glyph, unsigned short character){
+    charglyph_map[f][glyph] = character;
+}
+
+void clean_charglyph_map() {
+    charglyph_map.clear();
+}
+
+
 
 int get_ot_math_constant(int f, int n) {
   hb_ot_math_constant_t constant = (hb_ot_math_constant_t)n;
@@ -158,6 +181,7 @@ const hb_ot_math_constant_t TeX_ext_to_OT_map[] = {
     HB_OT_MATH_CONSTANT_LOWER_LIMIT_BASELINE_DROP_MIN, // big_op_spacing4
     HB_OT_MATH_CONSTANT_STACK_GAP_MIN                  // big_op_spacing5
 };
+
 
 int get_native_mathex_param(int f, int n) {
   int rval = 0;

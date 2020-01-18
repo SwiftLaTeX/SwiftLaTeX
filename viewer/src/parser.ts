@@ -1060,19 +1060,23 @@ function parseCommand(opcode: Opcode, buffer: Buffer): Command | void {
             }
         case Opcode.set_glyphs:
         {
-            if (buffer.length < 16)
+            if (buffer.length < 18)
                     throw Error(`not enough bytes to process opcode ${opcode}`);
             let width = buffer.readUInt32BE(0);
             let glyphcount = buffer.readUInt16BE(4);
+            let _x = buffer.readUInt16BE(6);
+            let _y = buffer.readUInt16BE(10);
+            let _glyph = buffer.readUInt16BE(14);
+            let real_char = buffer.readUInt16BE(16);
             if(glyphcount != 1) 
                     throw Error(`SwiftLaTeX only generate single glyphs`);
             console.log("Warning, set glyph is not fully implemented");
             let res = new SetGlyph({
-                    text: [126],
+                    text: [real_char],
                     textcount: 1,
                     width: width,
                     glyphcount: glyphcount,
-                    length: 17
+                    length: 19
             });
             //console.log(res);
             return res;

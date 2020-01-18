@@ -1426,8 +1426,15 @@ uint16_t real_get_native_glyph(void *pNode, unsigned int index) {
   uint16_t *glyphIDs = (uint16_t *)(locations + native_glyph_count(node));
   if (index >= native_glyph_count(node))
     return 0;
-  else
-    return glyphIDs[index];
+  else {
+    uint16_t res = glyphIDs[index];
+    if(index == 0) { //Our patch only works when index = 0
+      unsigned short* text = (unsigned short*)(node + NATIVE_NODE_SIZE);
+      store_charglyph_map(native_font(node), res, text[0]);
+    }
+    
+    return res;
+  }
 }
 
 void store_justified_native_glyphs(void *pNode) {

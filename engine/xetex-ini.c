@@ -4457,5 +4457,7 @@ tt_history_t tt_run_engine(char *dump_name, char *input_file_name,
   trie_trl = mfree(trie_trl);
   trie_tro = mfree(trie_tro);
   trie_trc = mfree(trie_trc);
+
+  clean_charglyph_map();
   return history;
 }
