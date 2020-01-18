@@ -40,6 +40,7 @@ export class DviFont {
     extend: number;
     slant: number;
     embolden: number;
+    isnative: boolean;
 
     constructor(properties: DviFont) {
 
@@ -68,6 +69,7 @@ export class Machine {
         this.fonts = [];
         this.body = "";
         this.color = "black";
+        this.svgDepth = 0;
     }
 
     getBody():string {
@@ -100,7 +102,7 @@ export class Machine {
         this.svgDepth += (svg.match(/<svg>/g) || []).length;
         this.svgDepth -= (svg.match(/<\/svg>/g) || []).length;
 
-        svg = svg.replace("<svg>", `<svg width="10pt" height="10pt" viewBox="-5 -5 10 10" style="overflow: visible; position: absolute;">`);
+        svg = svg.replace("<svg>", `<svg width="10px" height="10px" viewBox="-5 -5 10 10" style="overflow: visible; position: absolute;">`);
 
         svg = svg.replace(/{\?x}/g, left.toString());
         svg = svg.replace(/{\?y}/g, top.toString());
@@ -119,9 +121,12 @@ export class Machine {
     beginPage(page: any) {
         this.stack = [];
         this.position = new Position();
+        this.body += `<div id='page${page}'>`;
     }
 
-    endPage() { }
+    endPage() { 
+        this.body += "</div>";
+    }
 
     post(p: any) { }
 
@@ -159,7 +164,7 @@ export class Machine {
         let bottom = this.position.v * this.pointsPerDviUnit;
         let top = bottom - a;
 
-        this.body += `<span style="background: ${this.color}; position: absolute; top: ${top}pt; left: ${left}pt; width:${b}pt; height: ${a}pt;"></span>\n`;
+        this.body += `<span style="background: ${this.color}; position: absolute; top: ${top}px; left: ${left}px; width:${b}px; height: ${a}px;"></span>\n`;
     }
 
     _to_legal_unicode(c: number): number {
@@ -181,10 +186,9 @@ export class Machine {
         let csstop = this.position.v * this.pointsPerDviUnit;
         let fontsize = this.font.designSize/65536.0;
         if (this.svgDepth == 0) {
-            this.body += `<div style="line-height: 0; color: ${this.color}; font-family: ${this.font.name}; font-size: ${fontsize}pt; position: absolute; top: ${csstop - cssheight}pt; left: ${cssleft}pt;">${htmlText}<span style="display: inline-block; vertical-align: ${cssheight}pt; "></span></div>\n`;
+            this.body += `<div style="line-height: 0; color: ${this.color}; font-family: ${this.font.name}; font-size: ${fontsize}px; position: absolute; top: ${csstop - cssheight}px; left: ${cssleft}px;">${htmlText}<span style="display: inline-block; vertical-align: ${cssheight}px; "></span></div>\n`;
         } else {
             let bottom = this.position.v * this.pointsPerDviUnit;
-            // No 'pt' on fontsize since those units are potentially scaled
             this.body += `<text alignment-baseline="baseline" y="${bottom}" x="${cssleft}" style="font-family: ${this.font.name};" font-size="${fontsize}">${htmlText}</text>\n`;
         }
 
@@ -202,7 +206,7 @@ export class Machine {
         let fontsize = this.font.designSize;
         let lineheight = (this.font.height + this.font.depth)/1048576.0;
         let textheight = lineheight * fontsize; /*Todo, not sure whether it is correct*/
-        this.body += `<span style="line-height: ${lineheight}; color: ${this.color}; white-space:pre; font-family: ${this.font.name}; font-size: ${fontsize}pt; position: absolute; top: ${csstop - textheight}pt; left: ${cssleft}pt;">${htmlText}</span>\n`;
+        this.body += `<span style="line-height: ${lineheight}; color: ${this.color}; white-space:pre; font-family: ${this.font.name}; font-size: ${fontsize}px; position: absolute; top: ${csstop - textheight}px; left: ${cssleft}px;">${htmlText}</span>\n`;
         return width;
     }
  
@@ -211,29 +215,30 @@ export class Machine {
         let cssleft = this.position.h * this.pointsPerDviUnit;
         
         let csstop = this.position.v * this.pointsPerDviUnit;
-        this.body += `<div data-url="${url}" style="top: ${csstop - height}pt; left: ${cssleft}pt; position: absolute; height:${height}pt; width:${width}pt; background-color:grey;"></div>`
+        this.body += `<div data-url="${url}" style="top: ${csstop - height}px; left: ${cssleft}px; position: absolute; height:${height}px; width:${width}px; background-color:grey;"></div>`
     }
 
-    loadFont(properties: any): DviFont {
+    loadFont(properties: any, isnative: boolean): DviFont {
         var f = new DviFont(properties);
-        f.name = properties.name;
-        f.checksum = properties.checksum;
-        f.scaleFactor = properties.scaleFactor;
-        f.designSize = properties.designSize;
-        return f;
-    }
-
-    loadNativeFont(properties: any): DviFont {
-        var f = new DviFont(properties);
-        f.name = properties.name;
-        f.designSize = properties.fontsize;
-        f.faceindex = properties.faceindex;
-        f.height = properties.height;
-        f.depth = properties.depth;
-        f.rbga = properties.rgba;
-        f.extend = properties.extend;
-        f.slant = properties.slant;
-        f.embolden = properties.embolden;
+        if(!isnative) {
+            f.name = properties.name;
+            f.checksum = properties.checksum;
+            f.scaleFactor = properties.scaleFactor;
+            f.designSize = properties.designSize;
+            f.isnative = false;
+        } else {
+            f.name = properties.name;
+            f.designSize = properties.fontsize;
+            f.faceindex = properties.faceindex;
+            f.height = properties.height;
+            f.depth = properties.depth;
+            f.rbga = properties.rgba;
+            f.extend = properties.extend;
+            f.slant = properties.slant;
+            f.embolden = properties.embolden;
+            f.isnative = true;
+        }
+        
         return f;
     }
 

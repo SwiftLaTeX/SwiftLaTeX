@@ -90,7 +90,7 @@ static int existsInCacheDir(char *name)
 }
 #else
 
-#define KPSE_BASE_URL "http://127.0.0.1:5000/tex"
+#define KPSE_BASE_URL "https://texlive.swiftlatex.com/"
 // #include <emscripten/fetch.h>
 static size_t curl_write_data(void *ptr, size_t size, size_t nmemb,
                               void *stream) {

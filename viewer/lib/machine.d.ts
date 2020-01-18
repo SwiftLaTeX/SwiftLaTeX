@@ -26,7 +26,7 @@ export declare class DviFont {
     constructor(properties: DviFont);
 }
 export declare class Machine {
-    output: string;
+    body: string;
     pointsPerDviUnit: number;
     svgDepth: number;
     color: string;
@@ -38,6 +38,8 @@ export declare class Machine {
     stack: Position[];
     position: Position;
     constructor();
+    getBody(): string;
+    getHead(): string;
     pushColor(c: string): void;
     popColor(): void;
     setPapersize(width: number, height: number): void;

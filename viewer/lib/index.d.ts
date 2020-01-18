@@ -1,1 +1,1 @@
-export declare function dvi2html(buf: Uint8Array): string;
+export declare function dvi2html(buf: Uint8Array): any;

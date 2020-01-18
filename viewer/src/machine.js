@@ -26,9 +26,16 @@ exports.DviFont = DviFont;
 var Machine = /** @class */ (function () {
     function Machine() {
         this.fonts = [];
-        this.output = "";
+        this.body = "";
         this.color = "black";
+        this.svgDepth = 0;
     }
+    Machine.prototype.getBody = function () {
+        return this.body;
+    };
+    Machine.prototype.getHead = function () {
+        return "";
+    };
     Machine.prototype.pushColor = function (c) {
         this.colorStack.push(this.color);
         this.color = c;
@@ -45,10 +52,10 @@ var Machine = /** @class */ (function () {
         var top = this.position.v * this.pointsPerDviUnit;
         this.svgDepth += (svg.match(/<svg>/g) || []).length;
         this.svgDepth -= (svg.match(/<\/svg>/g) || []).length;
-        svg = svg.replace("<svg>", "<svg width=\"10pt\" height=\"10pt\" viewBox=\"-5 -5 10 10\" style=\"overflow: visible; position: absolute;\">");
+        svg = svg.replace("<svg>", "<svg width=\"10px\" height=\"10px\" viewBox=\"-5 -5 10 10\" style=\"overflow: visible; position: absolute;\">");
         svg = svg.replace(/{\?x}/g, left.toString());
         svg = svg.replace(/{\?y}/g, top.toString());
-        this.output += svg;
+        this.body += svg;
     };
     Machine.prototype.push = function () {
         this.stack.push(new Position(this.position));
@@ -59,8 +66,11 @@ var Machine = /** @class */ (function () {
     Machine.prototype.beginPage = function (page) {
         this.stack = [];
         this.position = new Position();
+        this.body += "<div id='page" + page + "'>";
     };
-    Machine.prototype.endPage = function () { };
+    Machine.prototype.endPage = function () {
+        this.body += "</div>";
+    };
     Machine.prototype.post = function (p) { };
     Machine.prototype.postPost = function (p) { };
     Machine.prototype.moveRight = function (distance) {
@@ -87,7 +97,7 @@ var Machine = /** @class */ (function () {
         var left = this.position.h * this.pointsPerDviUnit;
         var bottom = this.position.v * this.pointsPerDviUnit;
         var top = bottom - a;
-        this.output += "<span style=\"background: " + this.color + "; position: absolute; top: " + top + "pt; left: " + left + "pt; width:" + b + "pt; height: " + a + "pt;\"></span>\n";
+        this.body += "<span style=\"background: " + this.color + "; position: absolute; top: " + top + "px; left: " + left + "px; width:" + b + "px; height: " + a + "px;\"></span>\n";
     };
     Machine.prototype._to_legal_unicode = function (c) {
         if ((c <= 0x20) || (c >= 0x7F && c <= 0xA0) || (c == 0xAD)) {
@@ -107,12 +117,11 @@ var Machine = /** @class */ (function () {
         var csstop = this.position.v * this.pointsPerDviUnit;
         var fontsize = this.font.designSize / 65536.0;
         if (this.svgDepth == 0) {
-            this.output += "<div style=\"line-height: 0; color: " + this.color + "; font-family: " + this.font.name + "; font-size: " + fontsize + "pt; position: absolute; top: " + (csstop - cssheight) + "pt; left: " + cssleft + "pt;\">" + htmlText + "<span style=\"display: inline-block; vertical-align: " + cssheight + "pt; \"></span></div>\n";
+            this.body += "<div style=\"line-height: 0; color: " + this.color + "; font-family: " + this.font.name + "; font-size: " + fontsize + "px; position: absolute; top: " + (csstop - cssheight) + "px; left: " + cssleft + "px;\">" + htmlText + "<span style=\"display: inline-block; vertical-align: " + cssheight + "px; \"></span></div>\n";
         }
         else {
             var bottom = this.position.v * this.pointsPerDviUnit;
-            // No 'pt' on fontsize since those units are potentially scaled
-            this.output += "<text alignment-baseline=\"baseline\" y=\"" + bottom + "\" x=\"" + cssleft + "\" style=\"font-family: " + this.font.name + ";\" font-size=\"" + fontsize + "\">" + htmlText + "</text>\n";
+            this.body += "<text alignment-baseline=\"baseline\" y=\"" + bottom + "\" x=\"" + cssleft + "\" style=\"font-family: " + this.font.name + ";\" font-size=\"" + fontsize + "\">" + htmlText + "</text>\n";
         }
         return text_width;
     };
@@ -126,33 +135,35 @@ var Machine = /** @class */ (function () {
         var fontsize = this.font.designSize;
         var lineheight = (this.font.height + this.font.depth) / 1048576.0;
         var textheight = lineheight * fontsize; /*Todo, not sure whether it is correct*/
-        this.output += "<span style=\"line-height: " + lineheight + "; color: " + this.color + "; white-space:pre; font-family: " + this.font.name + "; font-size: " + fontsize + "pt; position: absolute; top: " + (csstop - textheight) + "pt; left: " + cssleft + "pt;\">" + htmlText + "</span>\n";
+        this.body += "<span style=\"line-height: " + lineheight + "; color: " + this.color + "; white-space:pre; font-family: " + this.font.name + "; font-size: " + fontsize + "px; position: absolute; top: " + (csstop - textheight) + "px; left: " + cssleft + "px;\">" + htmlText + "</span>\n";
         return width;
     };
     Machine.prototype.putImage = function (width, height, url) {
         var cssleft = this.position.h * this.pointsPerDviUnit;
         var csstop = this.position.v * this.pointsPerDviUnit;
-        this.output += "<div data-url=\"" + url + "\" style=\"top: " + (csstop - height) + "pt; left: " + cssleft + "pt; position: absolute; height:" + height + "pt; width:" + width + "pt; background-color:grey;\"></div>";
+        this.body += "<div data-url=\"" + url + "\" style=\"top: " + (csstop - height) + "px; left: " + cssleft + "px; position: absolute; height:" + height + "px; width:" + width + "px; background-color:grey;\"></div>";
     };
-    Machine.prototype.loadFont = function (properties) {
+    Machine.prototype.loadFont = function (properties, isnative) {
         var f = new DviFont(properties);
-        f.name = properties.name;
-        f.checksum = properties.checksum;
-        f.scaleFactor = properties.scaleFactor;
-        f.designSize = properties.designSize;
-        return f;
-    };
-    Machine.prototype.loadNativeFont = function (properties) {
-        var f = new DviFont(properties);
-        f.name = properties.name;
-        f.designSize = properties.fontsize;
-        f.faceindex = properties.faceindex;
-        f.height = properties.height;
-        f.depth = properties.depth;
-        f.rbga = properties.rgba;
-        f.extend = properties.extend;
-        f.slant = properties.slant;
-        f.embolden = properties.embolden;
+        if (!isnative) {
+            f.name = properties.name;
+            f.checksum = properties.checksum;
+            f.scaleFactor = properties.scaleFactor;
+            f.designSize = properties.designSize;
+            f.isnative = false;
+        }
+        else {
+            f.name = properties.name;
+            f.designSize = properties.fontsize;
+            f.faceindex = properties.faceindex;
+            f.height = properties.height;
+            f.depth = properties.depth;
+            f.rbga = properties.rgba;
+            f.extend = properties.extend;
+            f.slant = properties.slant;
+            f.embolden = properties.embolden;
+            f.isnative = true;
+        }
         return f;
     };
     return Machine;

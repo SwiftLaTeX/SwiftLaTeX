@@ -1,8 +1,11 @@
 import * as fs from "fs";
-import { dvi2html } from "./src";
+import { Machine } from "./src/machine";
+import { parseDVI } from "./src/parser";
 
 
 let bufContent = fs.readFileSync("test.xdv");
+let machine = new Machine();
+parseDVI(bufContent, machine);
 
 let html = "";
 html = html + "<!doctype html>\n";
@@ -10,9 +13,7 @@ html = html + "<html lang=en>\n";
 html = html + "<head>\n";
 html = html + "</head>\n";
 html = html + '<body>\n';
-html = html + '<div style="position: absolute;">\n';
-html = html + dvi2html(bufContent);
-html = html + '</div>\n';
+html = html + machine.getBody();
 html = html + '</body>\n';
 html = html + "</html>\n";
 fs.writeFileSync("index.html", html);

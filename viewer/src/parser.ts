@@ -574,7 +574,7 @@ class FontDefinition extends DviCommand {
             checksum: this.c,
             scaleFactor: this.s,
             designSize: this.d
-        });
+        }, false);
     }
 
     toString(): string {
@@ -689,7 +689,7 @@ class NativeFontDefinition extends DviCommand {
     }
     execute(machine: Machine) {
         //console.log("Defining Native Font name: " + this.filename + " index: " + this.fontnumber);
-        machine.fonts[this.fontnumber] = machine.loadNativeFont({
+        machine.fonts[this.fontnumber] = machine.loadFont({
             name: this.filename,
             fontsize: this.fontsize,
             faceindex: this.faceindex,
@@ -699,7 +699,7 @@ class NativeFontDefinition extends DviCommand {
             extend: this.extend,
             slant: this.slant,
             embolden: this.embolden
-        });
+        }, true);
     }
     toString(): string {
         return `NativeFontDefinition { filename: ${this.filename}, fontnumber: ${this.fontnumber}, length: ${this.length}, rbga: ${this.rbga}}`;
@@ -1070,7 +1070,7 @@ function parseCommand(opcode: Opcode, buffer: Buffer): Command | void {
             let real_char = buffer.readUInt16BE(16);
             if(glyphcount != 1) 
                     throw Error(`SwiftLaTeX only generate single glyphs`);
-            console.log("Warning, set glyph is not fully implemented");
+            // console.log("Warning, set glyph is not fully implemented " + String.fromCharCode(real_char));
             let res = new SetGlyph({
                     text: [real_char],
                     textcount: 1,

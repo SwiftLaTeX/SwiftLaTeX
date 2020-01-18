@@ -503,7 +503,7 @@ var FontDefinition = /** @class */ (function (_super) {
             checksum: this.c,
             scaleFactor: this.s,
             designSize: this.d
-        });
+        }, false);
     };
     FontDefinition.prototype.toString = function () {
         return "FontDefinition { k: " + this.k + ", n: '" + this.n + "', ... }";
@@ -576,7 +576,7 @@ var NativeFontDefinition = /** @class */ (function (_super) {
     }
     NativeFontDefinition.prototype.execute = function (machine) {
         //console.log("Defining Native Font name: " + this.filename + " index: " + this.fontnumber);
-        machine.fonts[this.fontnumber] = machine.loadNativeFont({
+        machine.fonts[this.fontnumber] = machine.loadFont({
             name: this.filename,
             fontsize: this.fontsize,
             faceindex: this.faceindex,
@@ -586,7 +586,7 @@ var NativeFontDefinition = /** @class */ (function (_super) {
             extend: this.extend,
             slant: this.slant,
             embolden: this.embolden
-        });
+        }, true);
     };
     NativeFontDefinition.prototype.toString = function () {
         return "NativeFontDefinition { filename: " + this.filename + ", fontnumber: " + this.fontnumber + ", length: " + this.length + ", rbga: " + this.rbga + "}";
@@ -909,19 +909,23 @@ function parseCommand(opcode, buffer) {
             }
         case Opcode.set_glyphs:
             {
-                if (buffer.length < 16)
+                if (buffer.length < 18)
                     throw Error("not enough bytes to process opcode " + opcode);
                 var width = buffer.readUInt32BE(0);
                 var glyphcount = buffer.readUInt16BE(4);
+                var _x = buffer.readUInt16BE(6);
+                var _y = buffer.readUInt16BE(10);
+                var _glyph = buffer.readUInt16BE(14);
+                var real_char = buffer.readUInt16BE(16);
                 if (glyphcount != 1)
                     throw Error("SwiftLaTeX only generate single glyphs");
-                console.log("Warning, set glyph is not fully implemented");
+                console.log("Warning, set glyph is not fully implemented " + String.fromCharCode(real_char));
                 var res = new SetGlyph({
-                    text: [126],
+                    text: [real_char],
                     textcount: 1,
                     width: width,
                     glyphcount: glyphcount,
-                    length: 17
+                    length: 19
                 });
                 //console.log(res);
                 return res;
