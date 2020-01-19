@@ -213,15 +213,6 @@ class Nop extends DviCommand {
 class Bop extends DviCommand {
     opcode: Opcode.bop;
     c_0: number;
-    c_1: number;
-    c_2: number;
-    c_3: number;
-    c_4: number;
-    c_5: number;
-    c_6: number;
-    c_7: number;
-    c_8: number;
-    c_9: number;
     p: number;
     constructor(properties) {
         super(properties);
@@ -229,7 +220,7 @@ class Bop extends DviCommand {
     }
 
     execute(machine: Machine) {
-        machine.beginPage(this);
+        machine.beginPage(this.c_0);
     }
 
     toString(): string {
@@ -464,10 +455,9 @@ class SetFont extends DviCommand {
 
     execute(machine: Machine) {
         //console.log("Setting mainfont to " + this.k);
-        if (machine.fonts[this.k]) {
-            machine.setFont(machine.fonts[this.k]);
-        } else
-            throw Error(`Could not find font ${this.k}.`);
+        
+            machine.setFont(this.k);
+        
     }
 
     toString(): string {
@@ -569,12 +559,12 @@ class FontDefinition extends DviCommand {
 
     execute(machine: Machine) {
         //console.log("Defining Local Font name: " + this.n + " index: " + this.k);
-        machine.fonts[this.k] = machine.loadFont({
+        machine.loadFont({
             name: this.n,
             checksum: this.c,
             scaleFactor: this.s,
             designSize: this.d
-        }, false);
+        }, this.k, false);
     }
 
     toString(): string {
@@ -603,8 +593,8 @@ class Preamble extends DviCommand {
         if (this.den <= 0)
             throw Error('Invalid denominator (must be > 0)');
 
-        if (this.i != 7) {
-            throw Error(`DVI format must be 2. (${this.i}) `);
+        if (this.i != 71) {
+            throw Error(`DVI format must be 71, which is SwiftLaTeX format `);
         }
 
         machine.preamble(this.num, this.den, this.mag, this.x);
@@ -689,7 +679,7 @@ class NativeFontDefinition extends DviCommand {
     }
     execute(machine: Machine) {
         //console.log("Defining Native Font name: " + this.filename + " index: " + this.fontnumber);
-        machine.fonts[this.fontnumber] = machine.loadFont({
+        machine.loadFont({
             name: this.filename,
             fontsize: this.fontsize,
             faceindex: this.faceindex,
@@ -699,7 +689,7 @@ class NativeFontDefinition extends DviCommand {
             extend: this.extend,
             slant: this.slant,
             embolden: this.embolden
-        }, true);
+        }, this.fontnumber, true);
     }
     toString(): string {
         return `NativeFontDefinition { filename: ${this.filename}, fontnumber: ${this.fontnumber}, length: ${this.length}, rbga: ${this.rbga}}`;
@@ -813,20 +803,11 @@ function parseCommand(opcode: Opcode, buffer: Buffer): Command | void {
             return new Nop({ length: 1 });
 
         case Opcode.bop:
-            if (buffer.length < 44) throw Error(`not enough bytes to process opcode ${opcode}`);
+            if (buffer.length < 9) throw Error(`not enough bytes to process opcode ${opcode}`);
             return new Bop({
                 c_0: buffer.readUInt32BE(0),
-                c_1: buffer.readUInt32BE(4),
-                c_2: buffer.readUInt32BE(8),
-                c_3: buffer.readUInt32BE(12),
-                c_4: buffer.readUInt32BE(16),
-                c_5: buffer.readUInt32BE(20),
-                c_6: buffer.readUInt32BE(24),
-                c_7: buffer.readUInt32BE(28),
-                c_8: buffer.readUInt32BE(32),
-                c_9: buffer.readUInt32BE(36),
                 p: buffer.readUInt32BE(40),
-                length: 45
+                length: 9
             });
 
         case Opcode.eop:

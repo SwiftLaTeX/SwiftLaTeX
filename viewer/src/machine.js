@@ -25,16 +25,18 @@ var DviFont = /** @class */ (function () {
 exports.DviFont = DviFont;
 var Machine = /** @class */ (function () {
     function Machine() {
-        this.fonts = [];
+        this.fonts = new Map();
         this.body = "";
+        this.style = "";
+        this.usedfonts = [];
         this.color = "black";
         this.svgDepth = 0;
     }
     Machine.prototype.getBody = function () {
         return this.body;
     };
-    Machine.prototype.getHead = function () {
-        return "";
+    Machine.prototype.getStyle = function () {
+        return this.style;
     };
     Machine.prototype.pushColor = function (c) {
         this.colorStack.push(this.color);
@@ -46,6 +48,7 @@ var Machine = /** @class */ (function () {
     Machine.prototype.setPapersize = function (width, height) {
         this.paperwidth = width;
         this.paperheight = height;
+        this.style += "#page" + this.currentpage + " { position:relative; width:" + this.paperwidth + "px; height:" + this.paperheight + "px; border-width: thin; }\n";
     };
     Machine.prototype.putSVG = function (svg) {
         var left = this.position.h * this.pointsPerDviUnit;
@@ -66,7 +69,8 @@ var Machine = /** @class */ (function () {
     Machine.prototype.beginPage = function (page) {
         this.stack = [];
         this.position = new Position();
-        this.body += "<div id='page" + page + "'>";
+        this.currentpage = page + 1;
+        this.body += "<div id='page" + this.currentpage + "'>";
     };
     Machine.prototype.endPage = function () {
         this.body += "</div>";
@@ -79,9 +83,28 @@ var Machine = /** @class */ (function () {
     Machine.prototype.moveDown = function (distance) {
         this.position.v += distance;
     };
-    Machine.prototype.setFont = function (font) {
-        this.font = font;
-        //console.log(font);
+    Machine.prototype.setFont = function (fontnum) {
+        if (this.fonts.has(fontnum)) {
+            this.font = this.fonts.get(fontnum);
+            if (!this.usedfonts.includes(this.font.name)) {
+                this.usedfonts.push(this.font.name);
+                if (this.font.isnative) {
+                    if (this.font.name.endsWith(".ttf") || this.font.name.endsWith(".otf")) {
+                        //Local font
+                    }
+                    else {
+                        //Remote font
+                        this.style += "@font-face { font-family:" + this.font.name + "; src:url(https://texlive.swiftlatex.com/" + this.font.name + ".otf); } \n";
+                    }
+                }
+                else {
+                    this.style += "@font-face { font-family:" + this.font.name + "; src:url(fonts/output/" + this.font.name + ".woff); } \n";
+                }
+            }
+        }
+        else {
+            throw Error("Could not find font " + fontnum + ".");
+        }
     };
     Machine.prototype.preamble = function (numerator, denominator, magnification, comment) {
         var dviUnit = magnification * numerator / 1000.0 / denominator;
@@ -117,7 +140,7 @@ var Machine = /** @class */ (function () {
         var csstop = this.position.v * this.pointsPerDviUnit;
         var fontsize = this.font.designSize / 65536.0;
         if (this.svgDepth == 0) {
-            this.body += "<div style=\"line-height: 0; color: " + this.color + "; font-family: " + this.font.name + "; font-size: " + fontsize + "px; position: absolute; top: " + (csstop - cssheight) + "px; left: " + cssleft + "px;\">" + htmlText + "<span style=\"display: inline-block; vertical-align: " + cssheight + "px; \"></span></div>\n";
+            this.body += "<div style=\"line-height: 0; color: " + this.color + "; font-family: " + this.font.name + "; font-size: " + fontsize + "px; position: absolute; top: " + Number(csstop - cssheight).toFixed(2) + "px; left: " + Number(cssleft).toFixed(2) + "px;\">" + htmlText + "<span style=\"display: inline-block; vertical-align: " + Number(cssheight).toFixed(2) + "px; \"></span></div>\n";
         }
         else {
             var bottom = this.position.v * this.pointsPerDviUnit;
@@ -135,15 +158,15 @@ var Machine = /** @class */ (function () {
         var fontsize = this.font.designSize;
         var lineheight = (this.font.height + this.font.depth) / 1048576.0;
         var textheight = lineheight * fontsize; /*Todo, not sure whether it is correct*/
-        this.body += "<span style=\"line-height: " + lineheight + "; color: " + this.color + "; white-space:pre; font-family: " + this.font.name + "; font-size: " + fontsize + "px; position: absolute; top: " + (csstop - textheight) + "px; left: " + cssleft + "px;\">" + htmlText + "</span>\n";
+        this.body += "<span style=\"line-height: " + Number(lineheight).toFixed(2) + "; color: " + this.color + "; white-space:pre; font-family: " + this.font.name + "; font-size: " + fontsize + "px; position: absolute; top: " + Number(csstop - textheight).toFixed(2) + "px; left: " + Number(cssleft).toFixed(2) + "px;\">" + htmlText + "</span>\n";
         return width;
     };
     Machine.prototype.putImage = function (width, height, url) {
         var cssleft = this.position.h * this.pointsPerDviUnit;
         var csstop = this.position.v * this.pointsPerDviUnit;
-        this.body += "<div data-url=\"" + url + "\" style=\"top: " + (csstop - height) + "px; left: " + cssleft + "px; position: absolute; height:" + height + "px; width:" + width + "px; background-color:grey;\"></div>";
+        this.body += "<div data-url=\"" + url + "\" style=\"top: " + Number(csstop - height).toFixed(2) + "px; left: " + Number(cssleft).toFixed(2) + "px; position: absolute; height:" + Number(height).toFixed(2) + "px; width:" + Number(width).toFixed(2) + "px; background-color:grey;\"></div>";
     };
-    Machine.prototype.loadFont = function (properties, isnative) {
+    Machine.prototype.loadFont = function (properties, fontnumber, isnative) {
         var f = new DviFont(properties);
         if (!isnative) {
             f.name = properties.name;
@@ -164,7 +187,7 @@ var Machine = /** @class */ (function () {
             f.embolden = properties.embolden;
             f.isnative = true;
         }
-        return f;
+        this.fonts.set(fontnumber, f);
     };
     return Machine;
 }());

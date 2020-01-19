@@ -50,6 +50,7 @@ export class DviFont {
 export class Machine {
 
     body: string;
+    style: string;
     pointsPerDviUnit: number;
 
     svgDepth: number;
@@ -58,16 +59,19 @@ export class Machine {
 
     paperwidth: number;
     paperheight: number;
+    currentpage: number;
 
-
-    fonts: DviFont[];
+    fonts: Map<number, DviFont>;
     font: DviFont;
+    usedfonts: string[];
     stack: Position[];
     position: Position;
 
     constructor() {
-        this.fonts = [];
+        this.fonts = new Map();
         this.body = "";
+        this.style = "";
+        this.usedfonts = [];
         this.color = "black";
         this.svgDepth = 0;
     }
@@ -76,8 +80,8 @@ export class Machine {
         return this.body;
     }
 
-    getHead():string {
-        return "";
+    getStyle():string {
+        return this.style;
     }
 
     pushColor(c: string) {
@@ -92,7 +96,7 @@ export class Machine {
     setPapersize(width: number, height: number) {
         this.paperwidth = width;
         this.paperheight = height;
-        
+        this.style += `#page${this.currentpage} { position:relative; width:${this.paperwidth}px; height:${this.paperheight}px; border-width: thin; }\n`;
     }
 
     putSVG(svg: string) {
@@ -118,10 +122,11 @@ export class Machine {
         this.position = this.stack.pop();
     }
 
-    beginPage(page: any) {
+    beginPage(page: number) {
         this.stack = [];
         this.position = new Position();
-        this.body += `<div id='page${page}'>`;
+        this.currentpage = page + 1;
+        this.body += `<div id='page${this.currentpage}'>`;
     }
 
     endPage() { 
@@ -141,9 +146,26 @@ export class Machine {
         this.position.v += distance;
     }
 
-    setFont(font: DviFont) {
-        this.font = font;
-        //console.log(font);
+    setFont(fontnum: number) {
+        if (this.fonts.has(fontnum)) {
+            this.font = this.fonts.get(fontnum);
+            if(!this.usedfonts.includes(this.font.name)) {
+                this.usedfonts.push(this.font.name);
+                if(this.font.isnative) {
+                   if(this.font.name.endsWith(".ttf") || this.font.name.endsWith(".otf")) {
+                       //Local font
+                   } else {
+                       //Remote font
+                       this.style += `@font-face { font-family:${this.font.name}; src:url(https://texlive.swiftlatex.com/${this.font.name}.otf); } \n`;
+                   }
+
+                } else {
+                    this.style += `@font-face { font-family:${this.font.name}; src:url(fonts/output/${this.font.name}.woff); } \n`;
+                }
+            }
+        } else {
+            throw Error(`Could not find font ${fontnum}.`);
+        }
     }
 
     preamble(numerator: number, denominator: number, magnification: number, comment: string) {
@@ -186,7 +208,7 @@ export class Machine {
         let csstop = this.position.v * this.pointsPerDviUnit;
         let fontsize = this.font.designSize/65536.0;
         if (this.svgDepth == 0) {
-            this.body += `<div style="line-height: 0; color: ${this.color}; font-family: ${this.font.name}; font-size: ${fontsize}px; position: absolute; top: ${csstop - cssheight}px; left: ${cssleft}px;">${htmlText}<span style="display: inline-block; vertical-align: ${cssheight}px; "></span></div>\n`;
+            this.body += `<div style="line-height: 0; color: ${this.color}; font-family: ${this.font.name}; font-size: ${fontsize}px; position: absolute; top: ${Number(csstop - cssheight).toFixed(2)}px; left: ${Number(cssleft).toFixed(2)}px;">${htmlText}<span style="display: inline-block; vertical-align: ${Number(cssheight).toFixed(2)}px; "></span></div>\n`;
         } else {
             let bottom = this.position.v * this.pointsPerDviUnit;
             this.body += `<text alignment-baseline="baseline" y="${bottom}" x="${cssleft}" style="font-family: ${this.font.name};" font-size="${fontsize}">${htmlText}</text>\n`;
@@ -206,7 +228,7 @@ export class Machine {
         let fontsize = this.font.designSize;
         let lineheight = (this.font.height + this.font.depth)/1048576.0;
         let textheight = lineheight * fontsize; /*Todo, not sure whether it is correct*/
-        this.body += `<span style="line-height: ${lineheight}; color: ${this.color}; white-space:pre; font-family: ${this.font.name}; font-size: ${fontsize}px; position: absolute; top: ${csstop - textheight}px; left: ${cssleft}px;">${htmlText}</span>\n`;
+        this.body += `<span style="line-height: ${Number(lineheight).toFixed(2)}; color: ${this.color}; white-space:pre; font-family: ${this.font.name}; font-size: ${fontsize}px; position: absolute; top: ${Number(csstop - textheight).toFixed(2)}px; left: ${Number(cssleft).toFixed(2)}px;">${htmlText}</span>\n`;
         return width;
     }
  
@@ -215,11 +237,11 @@ export class Machine {
         let cssleft = this.position.h * this.pointsPerDviUnit;
         
         let csstop = this.position.v * this.pointsPerDviUnit;
-        this.body += `<div data-url="${url}" style="top: ${csstop - height}px; left: ${cssleft}px; position: absolute; height:${height}px; width:${width}px; background-color:grey;"></div>`
+        this.body += `<div data-url="${url}" style="top: ${Number(csstop - height).toFixed(2)}px; left: ${Number(cssleft).toFixed(2)}px; position: absolute; height:${Number(height).toFixed(2)}px; width:${Number(width).toFixed(2)}px; background-color:grey;"></div>`
     }
 
-    loadFont(properties: any, isnative: boolean): DviFont {
-        var f = new DviFont(properties);
+    loadFont(properties: any, fontnumber: number, isnative: boolean) {
+        let f = new DviFont(properties);
         if(!isnative) {
             f.name = properties.name;
             f.checksum = properties.checksum;
@@ -238,8 +260,7 @@ export class Machine {
             f.embolden = properties.embolden;
             f.isnative = true;
         }
-        
-        return f;
+        this.fonts.set(fontnumber,f);
     }
 
 }

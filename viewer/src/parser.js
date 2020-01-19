@@ -199,7 +199,7 @@ var Bop = /** @class */ (function (_super) {
         return _this;
     }
     Bop.prototype.execute = function (machine) {
-        machine.beginPage(this);
+        machine.beginPage(this.c_0);
     };
     Bop.prototype.toString = function () {
         return "Bop { ... }";
@@ -408,11 +408,7 @@ var SetFont = /** @class */ (function (_super) {
     }
     SetFont.prototype.execute = function (machine) {
         //console.log("Setting mainfont to " + this.k);
-        if (machine.fonts[this.k]) {
-            machine.setFont(machine.fonts[this.k]);
-        }
-        else
-            throw Error("Could not find font " + this.k + ".");
+        machine.setFont(this.k);
     };
     SetFont.prototype.toString = function () {
         return "SetFont { k: " + this.k + " }";
@@ -498,12 +494,12 @@ var FontDefinition = /** @class */ (function (_super) {
     }
     FontDefinition.prototype.execute = function (machine) {
         //console.log("Defining Local Font name: " + this.n + " index: " + this.k);
-        machine.fonts[this.k] = machine.loadFont({
+        machine.loadFont({
             name: this.n,
             checksum: this.c,
             scaleFactor: this.s,
             designSize: this.d
-        }, false);
+        }, this.k, false);
     };
     FontDefinition.prototype.toString = function () {
         return "FontDefinition { k: " + this.k + ", n: '" + this.n + "', ... }";
@@ -523,8 +519,8 @@ var Preamble = /** @class */ (function (_super) {
             throw Error('Invalid numerator (must be > 0)');
         if (this.den <= 0)
             throw Error('Invalid denominator (must be > 0)');
-        if (this.i != 7) {
-            throw Error("DVI format must be 2. (" + this.i + ") ");
+        if (this.i != 71) {
+            throw Error("DVI format must be 71, which is SwiftLaTeX format ");
         }
         machine.preamble(this.num, this.den, this.mag, this.x);
     };
@@ -576,7 +572,7 @@ var NativeFontDefinition = /** @class */ (function (_super) {
     }
     NativeFontDefinition.prototype.execute = function (machine) {
         //console.log("Defining Native Font name: " + this.filename + " index: " + this.fontnumber);
-        machine.fonts[this.fontnumber] = machine.loadFont({
+        machine.loadFont({
             name: this.filename,
             fontsize: this.fontsize,
             faceindex: this.faceindex,
@@ -586,7 +582,7 @@ var NativeFontDefinition = /** @class */ (function (_super) {
             extend: this.extend,
             slant: this.slant,
             embolden: this.embolden
-        }, true);
+        }, this.fontnumber, true);
     };
     NativeFontDefinition.prototype.toString = function () {
         return "NativeFontDefinition { filename: " + this.filename + ", fontnumber: " + this.fontnumber + ", length: " + this.length + ", rbga: " + this.rbga + "}";
@@ -675,21 +671,12 @@ function parseCommand(opcode, buffer) {
         case Opcode.nop:
             return new Nop({ length: 1 });
         case Opcode.bop:
-            if (buffer.length < 44)
+            if (buffer.length < 9)
                 throw Error("not enough bytes to process opcode " + opcode);
             return new Bop({
                 c_0: buffer.readUInt32BE(0),
-                c_1: buffer.readUInt32BE(4),
-                c_2: buffer.readUInt32BE(8),
-                c_3: buffer.readUInt32BE(12),
-                c_4: buffer.readUInt32BE(16),
-                c_5: buffer.readUInt32BE(20),
-                c_6: buffer.readUInt32BE(24),
-                c_7: buffer.readUInt32BE(28),
-                c_8: buffer.readUInt32BE(32),
-                c_9: buffer.readUInt32BE(36),
                 p: buffer.readUInt32BE(40),
-                length: 45
+                length: 9
             });
         case Opcode.eop:
             return new Eop({ length: 1 });
@@ -919,7 +906,7 @@ function parseCommand(opcode, buffer) {
                 var real_char = buffer.readUInt16BE(16);
                 if (glyphcount != 1)
                     throw Error("SwiftLaTeX only generate single glyphs");
-                console.log("Warning, set glyph is not fully implemented " + String.fromCharCode(real_char));
+                // console.log("Warning, set glyph is not fully implemented " + String.fromCharCode(real_char));
                 var res = new SetGlyph({
                     text: [real_char],
                     textcount: 1,
