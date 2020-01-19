@@ -181,10 +181,10 @@ void ship_out(int32_t p) {
   if (total_pages == 0) {
     dvi_out(PRE);
 
-    if (semantic_pagination_enabled)
-      dvi_out(SPX_ID_BYTE);
-    else
-      dvi_out(XDV_ID_BYTE);
+    // if (semantic_pagination_enabled)
+    dvi_out(SPX_ID_BYTE);
+    // else
+    // dvi_out(XDV_ID_BYTE);
 
     dvi_four(25400000L);  /* magic values: conversion ratio for sp */
     dvi_four(473628672L); /* magic values: conversion ratio for sp */
@@ -204,9 +204,9 @@ void ship_out(int32_t p) {
 
   dvi_out(BOP);
 
-  for (k = 0; k < 10; k++)
-    dvi_four(COUNT_REG(k));
-
+  // for (k = 0; k < 10; k++)
+  //   dvi_four(COUNT_REG(k));
+  dvi_four(total_pages);
   dvi_four(last_bop);
   last_bop = page_loc;
 
