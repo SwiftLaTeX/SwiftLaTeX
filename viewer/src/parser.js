@@ -13,6 +13,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+var FILE_VERSION = 71;
 var Opcode;
 (function (Opcode) {
     Opcode[Opcode["set_char"] = 0] = "set_char";
@@ -216,7 +217,7 @@ var Eop = /** @class */ (function (_super) {
     }
     Eop.prototype.execute = function (machine) {
         if (machine.stack.length)
-            throw Error('Stack should be empty at the end of a page.');
+            throw new Error('Stack should be empty at the end of a page.');
         machine.endPage();
     };
     Eop.prototype.toString = function () {
@@ -516,11 +517,11 @@ var Preamble = /** @class */ (function (_super) {
     }
     Preamble.prototype.execute = function (machine) {
         if (this.num <= 0)
-            throw Error('Invalid numerator (must be > 0)');
+            throw new Error('Invalid numerator (must be > 0)');
         if (this.den <= 0)
-            throw Error('Invalid denominator (must be > 0)');
-        if (this.i != 71) {
-            throw Error("DVI format must be 71, which is SwiftLaTeX format ");
+            throw new Error('Invalid denominator (must be > 0)');
+        if (this.i != FILE_VERSION) {
+            throw new Error("DVI format must be 71, which is SwiftLaTeX format ");
         }
         machine.preamble(this.num, this.den, this.mag, this.x);
     };
@@ -618,20 +619,20 @@ var SetGlyph = /** @class */ (function (_super) {
 }(DviCommand));
 function parseCommand(opcode, buffer) {
     if ((opcode >= Opcode.set_char) && (opcode < Opcode.set1)) {
-        throw Error("SwiftLaTeX does not generate simple setchar");
+        throw new Error("SwiftLaTeX does not generate simple setchar");
         //return new SetChar({ c: opcode, length: 1 });
     }
     if ((opcode >= Opcode.fnt) && (opcode < Opcode.fnt1))
         return new SetFont({ k: opcode - 171, length: 1 });
     // Technically these are undefined opcodes, but we'll pretend they are NOPs
     if ((opcode == 250) || (opcode == 251) || (opcode == 255)) {
-        throw Error("Undefined opcode " + opcode);
+        throw new Error("Undefined opcode " + opcode);
         //return new Nop({ length: 1 });
     }
     switch (opcode) {
         case Opcode.set1:
             if (buffer.length < 9)
-                throw Error("not enough bytes to process opcode " + opcode);
+                throw new Error("not enough bytes to process opcode " + opcode);
             return new SetChar({
                 c: buffer.readUInt8(0),
                 text_height: buffer.readUInt32BE(1),
@@ -641,10 +642,10 @@ function parseCommand(opcode, buffer) {
         case Opcode.set2:
         case Opcode.set3:
         case Opcode.set4:
-            throw Error("SwiftLaTeX does not generate set_char234");
+            throw new Error("SwiftLaTeX does not generate set_char234");
         case Opcode.set_rule:
             if (buffer.length < 8)
-                throw Error("not enough bytes to process opcode " + opcode);
+                throw new Error("not enough bytes to process opcode " + opcode);
             return new SetRule({
                 a: buffer.readInt32BE(0),
                 b: buffer.readInt32BE(4),
@@ -654,15 +655,15 @@ function parseCommand(opcode, buffer) {
         case Opcode.put2:
         case Opcode.put3:
         case Opcode.put4:
-            throw Error("SwiftLaTeX engine does not generate put_char");
-        // if (buffer.length < opcode - Opcode.put_char + 1) throw Error(`not enough bytes to process opcode ${opcode}`);
+            throw new Error("SwiftLaTeX engine does not generate put_char");
+        // if (buffer.length < opcode - Opcode.put_char + 1) throw new Error(`not enough bytes to process opcode ${opcode}`);
         // return new PutChar({
         //     c: buffer.readIntBE(0, opcode - Opcode.put_char + 1),
         //     length: opcode - Opcode.put_char + 1 + 1
         // });
         case Opcode.put_rule:
             if (buffer.length < 8)
-                throw Error("not enough bytes to process opcode " + opcode);
+                throw new Error("not enough bytes to process opcode " + opcode);
             return new PutRule({
                 a: buffer.readInt32BE(0),
                 b: buffer.readInt32BE(4),
@@ -672,7 +673,7 @@ function parseCommand(opcode, buffer) {
             return new Nop({ length: 1 });
         case Opcode.bop:
             if (buffer.length < 9)
-                throw Error("not enough bytes to process opcode " + opcode);
+                throw new Error("not enough bytes to process opcode " + opcode);
             return new Bop({
                 c_0: buffer.readUInt32BE(0),
                 p: buffer.readUInt32BE(40),
@@ -689,7 +690,7 @@ function parseCommand(opcode, buffer) {
         case Opcode.right3:
         case Opcode.right4:
             if (buffer.length < opcode - Opcode.right + 1)
-                throw Error("not enough bytes to process opcode " + opcode);
+                throw new Error("not enough bytes to process opcode " + opcode);
             return new MoveRight({
                 b: buffer.readIntBE(0, opcode - Opcode.right + 1),
                 length: opcode - Opcode.right + 1 + 1
@@ -701,7 +702,7 @@ function parseCommand(opcode, buffer) {
         case Opcode.w3:
         case Opcode.w4:
             if (buffer.length < opcode - Opcode.w)
-                throw Error("not enough bytes to process opcode " + opcode);
+                throw new Error("not enough bytes to process opcode " + opcode);
             return new MoveW({
                 b: buffer.readIntBE(0, opcode - Opcode.w),
                 length: opcode - Opcode.w + 1
@@ -713,7 +714,7 @@ function parseCommand(opcode, buffer) {
         case Opcode.x3:
         case Opcode.x4:
             if (buffer.length < opcode - Opcode.x)
-                throw Error("not enough bytes to process opcode " + opcode);
+                throw new Error("not enough bytes to process opcode " + opcode);
             return new MoveX({
                 b: buffer.readIntBE(0, opcode - Opcode.x),
                 length: opcode - Opcode.x + 1
@@ -723,7 +724,7 @@ function parseCommand(opcode, buffer) {
         case Opcode.down3:
         case Opcode.down4:
             if (buffer.length < opcode - Opcode.down + 1)
-                throw Error("not enough bytes to process opcode " + opcode);
+                throw new Error("not enough bytes to process opcode " + opcode);
             return new MoveDown({
                 a: buffer.readIntBE(0, opcode - Opcode.down + 1),
                 length: opcode - Opcode.down + 1 + 1
@@ -735,7 +736,7 @@ function parseCommand(opcode, buffer) {
         case Opcode.y3:
         case Opcode.y4:
             if (buffer.length < opcode - Opcode.y)
-                throw Error("not enough bytes to process opcode " + opcode);
+                throw new Error("not enough bytes to process opcode " + opcode);
             return new MoveY({
                 a: buffer.readIntBE(0, opcode - Opcode.y),
                 length: opcode - Opcode.y + 1
@@ -747,7 +748,7 @@ function parseCommand(opcode, buffer) {
         case Opcode.z3:
         case Opcode.z4:
             if (buffer.length < opcode - Opcode.z)
-                throw Error("not enough bytes to process opcode " + opcode);
+                throw new Error("not enough bytes to process opcode " + opcode);
             return new MoveZ({
                 a: buffer.readIntBE(0, opcode - Opcode.z),
                 length: opcode - Opcode.z + 1
@@ -757,7 +758,7 @@ function parseCommand(opcode, buffer) {
         case Opcode.fnt3:
         case Opcode.fnt4:
             if (buffer.length < opcode - Opcode.fnt1 + 1)
-                throw Error("not enough bytes to process opcode " + opcode);
+                throw new Error("not enough bytes to process opcode " + opcode);
             return new SetFont({
                 k: buffer.readIntBE(0, opcode - Opcode.fnt1 + 1),
                 length: opcode - Opcode.fnt1 + 1 + 1
@@ -768,10 +769,10 @@ function parseCommand(opcode, buffer) {
         case Opcode.xxx4: {
             var i = opcode - Opcode.xxx + 1;
             if (buffer.length < i)
-                throw Error("not enough bytes to process opcode " + opcode);
+                throw new Error("not enough bytes to process opcode " + opcode);
             var k = buffer.readUIntBE(0, i);
             if (buffer.length < i + k)
-                throw Error("not enough bytes to process opcode " + opcode);
+                throw new Error("not enough bytes to process opcode " + opcode);
             return new Special({
                 x: buffer.slice(i, i + k).toString(),
                 length: i + k + 1
@@ -783,17 +784,17 @@ function parseCommand(opcode, buffer) {
         case Opcode.fnt_def4: {
             var i = opcode - Opcode.fnt_def + 1;
             if (buffer.length < i)
-                throw Error("not enough bytes to process opcode " + opcode);
+                throw new Error("not enough bytes to process opcode " + opcode);
             var k = buffer.readIntBE(0, i);
             if (buffer.length < i + 14)
-                throw Error("not enough bytes to process opcode " + opcode);
+                throw new Error("not enough bytes to process opcode " + opcode);
             var c = buffer.readUInt32BE(i + 0);
             var s = buffer.readUInt32BE(i + 4);
             var d = buffer.readUInt32BE(i + 8);
             var a = buffer.readUInt8(i + 12);
             var l = buffer.readUInt8(i + 13);
             if (buffer.length < i + 14 + a + l)
-                throw Error("not enough bytes to process opcode " + opcode);
+                throw new Error("not enough bytes to process opcode " + opcode);
             var n = buffer.slice(i + 14, i + 14 + a + l).toString();
             return new FontDefinition({
                 k: k,
@@ -808,14 +809,14 @@ function parseCommand(opcode, buffer) {
         }
         case Opcode.pre: {
             if (buffer.length < 14)
-                throw Error("not enough bytes to process opcode " + opcode);
+                throw new Error("not enough bytes to process opcode " + opcode);
             var i = buffer.readUInt8(0);
             var num = buffer.readUInt32BE(1);
             var den = buffer.readUInt32BE(5);
             var mag = buffer.readUInt32BE(9);
             var k = buffer.readUInt8(13);
             if (buffer.length < 14 + k + 8)
-                throw Error("not enough bytes to process opcode " + opcode);
+                throw new Error("not enough bytes to process opcode " + opcode);
             var comment = buffer.slice(14, 14 + k).toString();
             return new Preamble({
                 i: i,
@@ -828,7 +829,7 @@ function parseCommand(opcode, buffer) {
         }
         case Opcode.post:
             if (buffer.length < 4 + 4 + 4 + 4 + 4 + 4 + 2 + 2)
-                throw Error("not enough bytes to process opcode " + opcode);
+                throw new Error("not enough bytes to process opcode " + opcode);
             return new Post({
                 p: buffer.readUInt32BE(0),
                 num: buffer.readUInt32BE(4),
@@ -842,7 +843,7 @@ function parseCommand(opcode, buffer) {
             });
         case Opcode.post_post:
             if (buffer.length < 5)
-                throw Error("not enough bytes to process opcode " + opcode);
+                throw new Error("not enough bytes to process opcode " + opcode);
             return new PostPost({
                 q: buffer.readUInt32BE(0),
                 i: buffer.readUInt8(4),
@@ -851,7 +852,7 @@ function parseCommand(opcode, buffer) {
         case Opcode.define_native_font:
             {
                 if (buffer.length < 19)
-                    throw Error("not enough bytes to process opcode " + opcode);
+                    throw new Error("not enough bytes to process opcode " + opcode);
                 var fontnum = buffer.readUInt32BE(0);
                 var fontsize = buffer.readUInt32BE(4) / 65536;
                 var flag = buffer.readUInt16BE(8);
@@ -897,7 +898,7 @@ function parseCommand(opcode, buffer) {
         case Opcode.set_glyphs:
             {
                 if (buffer.length < 18)
-                    throw Error("not enough bytes to process opcode " + opcode);
+                    throw new Error("not enough bytes to process opcode " + opcode);
                 var width = buffer.readUInt32BE(0);
                 var glyphcount = buffer.readUInt16BE(4);
                 var _x = buffer.readUInt16BE(6);
@@ -905,7 +906,7 @@ function parseCommand(opcode, buffer) {
                 var _glyph = buffer.readUInt16BE(14);
                 var real_char = buffer.readUInt16BE(16);
                 if (glyphcount != 1)
-                    throw Error("SwiftLaTeX only generate single glyphs");
+                    throw new Error("SwiftLaTeX only generate single glyphs");
                 // console.log("Warning, set glyph is not fully implemented " + String.fromCharCode(real_char));
                 var res = new SetGlyph({
                     text: [real_char],
@@ -920,10 +921,10 @@ function parseCommand(opcode, buffer) {
         case Opcode.set_text_and_glyphs:
             {
                 if (buffer.length < 16)
-                    throw Error("not enough bytes to process opcode " + opcode);
+                    throw new Error("not enough bytes to process opcode " + opcode);
                 var textcount = buffer.readUInt16BE(0);
                 if (buffer.length < 2 + textcount * 2)
-                    throw Error("not enough bytes to process opcode " + opcode + " for textcount");
+                    throw new Error("not enough bytes to process opcode " + opcode + " for textcount");
                 var text = [];
                 for (var j = 0; j < textcount; j++) {
                     var n = buffer.readUInt16BE(2 + j * 2);
@@ -933,7 +934,7 @@ function parseCommand(opcode, buffer) {
                 var glyphcount = buffer.readUInt16BE(2 + textcount * 2 + 4);
                 //console.log(`How many count? ${glyphcount}`);
                 if (buffer.length < 2 + textcount * 2 + 6 + glyphcount * 10)
-                    throw Error("not enough bytes to process opcode " + opcode + " " + buffer.length + " " + glyphcount);
+                    throw new Error("not enough bytes to process opcode " + opcode + " " + buffer.length + " " + glyphcount);
                 var res = new SetGlyph({
                     text: text,
                     textcount: textcount,
@@ -967,34 +968,125 @@ function parseCommand(opcode, buffer) {
                 return res;
             }
     }
-    throw Error("routine for " + opcode + " is not implemented");
+    throw new Error("routine for " + opcode + " is not implemented");
 }
-function parseDVI(dviContent, machine) {
-    var buffer = Buffer.from(dviContent.buffer);
-    var isAfterPostamble = false;
+function locatePagePtr(buffer, lastBop, page) {
+    var offset = lastBop;
+    while (offset > 0) {
+        var bop_opcode = buffer.readUInt8(offset);
+        if (bop_opcode != 139) {
+            throw new Error("Parse failed in reading bop preamble");
+        }
+        var boppage = buffer.readUInt32BE(offset + 1) + 1;
+        if (boppage < page) {
+            throw new Error("No such a page");
+        }
+        if (boppage == page) {
+            console.log("Find page " + page);
+            break;
+        }
+        var _prevPtr = buffer.readUInt32BE(offset + 5);
+        if (_prevPtr > offset) {
+            throw new Error("Parse failed in reading bop jump");
+        }
+        offset = _prevPtr;
+    }
+    return offset;
+}
+function parseHeader(buffer, machine) {
     var offset = 0;
+    // Parse Header
+    var preamble_code = buffer.readUInt8(offset);
+    if (preamble_code != Opcode.pre) {
+        throw new Error('Invalid Header');
+    }
+    var command = parseCommand(preamble_code, buffer.slice(offset + 1));
+    if (command) {
+        command.execute(machine);
+        offset += command.length;
+    }
+    else {
+        throw new Error('Invalid DVI Header');
+    }
+    //Parse Footer
+    return offset;
+}
+function parseFooter(buffer, machine) {
+    var offset = buffer.length - 1;
+    //Locate Post
+    while (offset > 0) {
+        var opcode = buffer.readUInt8(offset);
+        if (opcode == 223) {
+            offset -= 1;
+        }
+        else if (opcode == FILE_VERSION) {
+            break;
+        }
+        else {
+            throw new Error('Parse failed, signature check');
+        }
+    }
+    offset -= 4;
+    var prevPtr = buffer.readUInt32BE(offset);
+    if (prevPtr > offset) {
+        throw new Error("Parse failed in reading post ending");
+    }
+    offset = prevPtr;
+    //Post Sanity Check
+    var post_opcode = buffer.readUInt8(offset);
+    if (post_opcode != 248) {
+        throw new Error("Parse failed in reading post preamble");
+    }
+    prevPtr = buffer.readUInt32BE(offset + 1);
+    if (prevPtr > offset) {
+        throw new Error("Parse failed in reading post preamble");
+    }
+    //Parse fonts definition
     while (offset < buffer.length) {
         var opcode = buffer.readUInt8(offset);
-        if (isAfterPostamble) {
-            if (opcode == 223) {
-                offset++;
-                continue;
-            }
-            else {
-                throw Error('Only 223 bytes are permitted after the post-postamble.');
-            }
-        }
         var command = parseCommand(opcode, buffer.slice(offset + 1));
-        // console.log(command);
         if (command) {
             command.execute(machine);
             offset += command.length;
-            if (command.opcode == Opcode.post_post)
-                isAfterPostamble = true;
+            if (command.opcode == Opcode.post_post) {
+                break;
+            }
         }
         else {
-            console.error("Invaild DVI File detected\n");
-            break;
+            throw new Error("Corrupted Footer");
+        }
+    }
+    return prevPtr; //Last Bop
+}
+function parseDVI(dviContent, machine, page) {
+    var buffer = Buffer.from(dviContent.buffer);
+    var offset = 0;
+    var firstBop = parseHeader(buffer, machine);
+    var lastBop = parseFooter(buffer, machine);
+    // Jump to Page 
+    if (page != 0) {
+        offset = locatePagePtr(buffer, lastBop, page);
+    }
+    else {
+        offset = firstBop;
+    }
+    //Handle the remaining bits
+    while (offset < buffer.length) {
+        var opcode = buffer.readUInt8(offset);
+        var command = parseCommand(opcode, buffer.slice(offset + 1));
+        //console.log(command);
+        if (command) {
+            command.execute(machine);
+            offset += command.length;
+            if (page != 0 && command.opcode == Opcode.eop) {
+                break;
+            }
+            if (command.opcode == Opcode.post || command.opcode == Opcode.post_post) {
+                break;
+            }
+        }
+        else {
+            throw new Error("Corrupted File detected\n");
         }
     }
 }

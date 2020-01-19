@@ -1,5 +1,4 @@
 "use strict";
-//  var path = execSync('kpsewhich ' + name + '.tfm').toString().split("\n")[0];
 exports.__esModule = true;
 var Position = /** @class */ (function () {
     function Position(properties) {
@@ -31,6 +30,7 @@ var Machine = /** @class */ (function () {
         this.usedfonts = [];
         this.color = "black";
         this.svgDepth = 0;
+        this.pointsPerDviUnit = 0;
     }
     Machine.prototype.getBody = function () {
         return this.body;
@@ -108,10 +108,6 @@ var Machine = /** @class */ (function () {
     };
     Machine.prototype.preamble = function (numerator, denominator, magnification, comment) {
         var dviUnit = magnification * numerator / 1000.0 / denominator;
-        var resolution = 300.0; // ppi
-        var tfm_conv = (25400000.0 / numerator) * (denominator / 473628672) / 16.0;
-        var conv = (numerator / 254000.0) * (resolution / denominator);
-        conv = conv * (magnification / 1000.0);
         this.pointsPerDviUnit = dviUnit * 72.27 / 100000.0 / 2.54;
     };
     Machine.prototype.putRule = function (rule) {

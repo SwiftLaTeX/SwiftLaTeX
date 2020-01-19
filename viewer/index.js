@@ -5,7 +5,7 @@ var machine_1 = require("./src/machine");
 var parser_1 = require("./src/parser");
 var bufContent = fs.readFileSync("test.xdv");
 var machine = new machine_1.Machine();
-parser_1.parseDVI(bufContent, machine);
+parser_1.parseDVI(bufContent, machine, 0);
 var html = "";
 html = html + "<!doctype html>\n";
 html = html + "<html lang=en>\n";

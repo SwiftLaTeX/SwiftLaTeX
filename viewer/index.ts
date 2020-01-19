@@ -5,7 +5,7 @@ import { parseDVI } from "./src/parser";
 
 let bufContent = fs.readFileSync("test.xdv");
 let machine = new Machine();
-parseDVI(bufContent, machine);
+parseDVI(bufContent, machine, 0);
 
 let html = "";
 html = html + "<!doctype html>\n";

@@ -1,5 +1,3 @@
-//  var path = execSync('kpsewhich ' + name + '.tfm').toString().split("\n")[0];
-
 
 export interface Rule {
     a: number;
@@ -43,7 +41,7 @@ export class DviFont {
     isnative: boolean;
 
     constructor(properties: DviFont) {
-
+        
     }
 }
 
@@ -74,13 +72,14 @@ export class Machine {
         this.usedfonts = [];
         this.color = "black";
         this.svgDepth = 0;
+        this.pointsPerDviUnit = 0;
     }
 
-    getBody():string {
+    getBody(): string {
         return this.body;
     }
 
-    getStyle():string {
+    getStyle(): string {
         return this.style;
     }
 
@@ -129,7 +128,7 @@ export class Machine {
         this.body += `<div id='page${this.currentpage}'>`;
     }
 
-    endPage() { 
+    endPage() {
         this.body += "</div>";
     }
 
@@ -137,7 +136,7 @@ export class Machine {
 
     postPost(p: any) { }
 
-    
+
     moveRight(distance: number) {
         this.position.h += distance;
     }
@@ -149,15 +148,15 @@ export class Machine {
     setFont(fontnum: number) {
         if (this.fonts.has(fontnum)) {
             this.font = this.fonts.get(fontnum);
-            if(!this.usedfonts.includes(this.font.name)) {
+            if (!this.usedfonts.includes(this.font.name)) {
                 this.usedfonts.push(this.font.name);
-                if(this.font.isnative) {
-                   if(this.font.name.endsWith(".ttf") || this.font.name.endsWith(".otf")) {
-                       //Local font
-                   } else {
-                       //Remote font
-                       this.style += `@font-face { font-family:${this.font.name}; src:url(https://texlive.swiftlatex.com/${this.font.name}.otf); } \n`;
-                   }
+                if (this.font.isnative) {
+                    if (this.font.name.endsWith(".ttf") || this.font.name.endsWith(".otf")) {
+                        //Local font
+                    } else {
+                        //Remote font
+                        this.style += `@font-face { font-family:${this.font.name}; src:url(https://texlive.swiftlatex.com/${this.font.name}.otf); } \n`;
+                    }
 
                 } else {
                     this.style += `@font-face { font-family:${this.font.name}; src:url(fonts/output/${this.font.name}.woff); } \n`;
@@ -169,12 +168,8 @@ export class Machine {
     }
 
     preamble(numerator: number, denominator: number, magnification: number, comment: string) {
-        let dviUnit = magnification * numerator / 1000.0 / denominator;
 
-        let resolution = 300.0; // ppi
-        let tfm_conv = (25400000.0 / numerator) * (denominator / 473628672) / 16.0;
-        let conv = (numerator / 254000.0) * (resolution / denominator);
-        conv = conv * (magnification / 1000.0);
+        let dviUnit = magnification * numerator / 1000.0 / denominator;
 
         this.pointsPerDviUnit = dviUnit * 72.27 / 100000.0 / 2.54;
     }
@@ -197,7 +192,7 @@ export class Machine {
         }
     }
 
-    setChar(c: number, text_height:number, text_width:number): number {
+    setChar(c: number, text_height: number, text_width: number): number {
 
         let textWidth = 0;
         let textHeight = 0;
@@ -206,7 +201,7 @@ export class Machine {
         let cssleft = this.position.h * this.pointsPerDviUnit;
         let cssheight = text_height * this.pointsPerDviUnit;
         let csstop = this.position.v * this.pointsPerDviUnit;
-        let fontsize = this.font.designSize/65536.0;
+        let fontsize = this.font.designSize / 65536.0;
         if (this.svgDepth == 0) {
             this.body += `<div style="line-height: 0; color: ${this.color}; font-family: ${this.font.name}; font-size: ${fontsize}px; position: absolute; top: ${Number(csstop - cssheight).toFixed(2)}px; left: ${Number(cssleft).toFixed(2)}px;">${htmlText}<span style="display: inline-block; vertical-align: ${Number(cssheight).toFixed(2)}px; "></span></div>\n`;
         } else {
@@ -220,29 +215,29 @@ export class Machine {
 
     setNativeText(text: number[], width: number): number {
         let htmlText = "";
-        for(let j = 0; j < text.length; j ++) {
+        for (let j = 0; j < text.length; j++) {
             htmlText += String.fromCharCode(text[j]);
         }
         let cssleft = this.position.h * this.pointsPerDviUnit;
         let csstop = this.position.v * this.pointsPerDviUnit;
         let fontsize = this.font.designSize;
-        let lineheight = (this.font.height + this.font.depth)/1048576.0;
+        let lineheight = (this.font.height + this.font.depth) / 1048576.0;
         let textheight = lineheight * fontsize; /*Todo, not sure whether it is correct*/
         this.body += `<span style="line-height: ${Number(lineheight).toFixed(2)}; color: ${this.color}; white-space:pre; font-family: ${this.font.name}; font-size: ${fontsize}px; position: absolute; top: ${Number(csstop - textheight).toFixed(2)}px; left: ${Number(cssleft).toFixed(2)}px;">${htmlText}</span>\n`;
         return width;
     }
- 
 
-    putImage(width:number, height:number, url:string) {
+
+    putImage(width: number, height: number, url: string) {
         let cssleft = this.position.h * this.pointsPerDviUnit;
-        
+
         let csstop = this.position.v * this.pointsPerDviUnit;
         this.body += `<div data-url="${url}" style="top: ${Number(csstop - height).toFixed(2)}px; left: ${Number(cssleft).toFixed(2)}px; position: absolute; height:${Number(height).toFixed(2)}px; width:${Number(width).toFixed(2)}px; background-color:grey;"></div>`
     }
 
     loadFont(properties: any, fontnumber: number, isnative: boolean) {
         let f = new DviFont(properties);
-        if(!isnative) {
+        if (!isnative) {
             f.name = properties.name;
             f.checksum = properties.checksum;
             f.scaleFactor = properties.scaleFactor;
@@ -260,7 +255,7 @@ export class Machine {
             f.embolden = properties.embolden;
             f.isnative = true;
         }
-        this.fonts.set(fontnumber,f);
+        this.fonts.set(fontnumber, f);
     }
 
 }
