@@ -823,8 +823,8 @@
 #define NEW_LINE 33
 
 /* DVI format codes */
-#define XDV_ID_BYTE 7
-#define SPX_ID_BYTE 100
+#define SWIFTLATEX_ID_BYTE 71
+// #define SPX_ID_BYTE 100
 
 /* page_contents possibilities (EMPTY is overloaded) */
 #define EMPTY 0

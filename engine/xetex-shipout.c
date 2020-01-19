@@ -182,9 +182,9 @@ void ship_out(int32_t p) {
     dvi_out(PRE);
 
     // if (semantic_pagination_enabled)
-    dvi_out(SPX_ID_BYTE);
+    // dvi_out(SPX_ID_BYTE);
     // else
-    // dvi_out(XDV_ID_BYTE);
+    dvi_out(SWIFTLATEX_ID_BYTE);
 
     dvi_four(25400000L);  /* magic values: conversion ratio for sp */
     dvi_four(473628672L); /* magic values: conversion ratio for sp */
@@ -2268,10 +2268,10 @@ void finalize_dvi_file(void) {
   dvi_out(POST_POST);
   dvi_four(last_bop);
 
-  if (semantic_pagination_enabled)
-    dvi_out(SPX_ID_BYTE);
-  else
-    dvi_out(XDV_ID_BYTE);
+  // if (semantic_pagination_enabled)
+  //   dvi_out(SPX_ID_BYTE);
+  // else
+  dvi_out(SWIFTLATEX_ID_BYTE);
 
   k = 4 + (DVI_BUF_SIZE - dvi_ptr) % 4;
 
