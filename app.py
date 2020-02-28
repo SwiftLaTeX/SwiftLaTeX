@@ -5,7 +5,7 @@ import time
 import boto3
 import pymongo
 from botocore.client import Config
-from flask import Flask, session, request, redirect, abort, render_template, flash, Response
+from flask import Flask, session, request, redirect, abort, render_template, flash, Response, send_from_directory
 from flask_limiter import Limiter
 from flask_paginate import Pagination, get_page_parameter
 from flask_pymongo import PyMongo
@@ -22,7 +22,6 @@ app = Flask(__name__)
 
 # Mongo
 app.config["MONGO_URI"] = config.DB_URL
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 mongo = PyMongo(app)
 
 # Aws
@@ -388,5 +387,30 @@ def db_create_or_update_user(username, display_name, oauth_type, refresh_token, 
         mongo.db.users.insert_one(record)
 
 
+# Consider serving them using nginx for better performance
+@app.route('/u/<string:pid>/')
+def proxy_ide_index(pid):
+    return send_from_directory('IDE', 'index.html')
+
+
+@app.route('/u/<string:pid>/<path:url>')
+def proxy_ide(pid, url):
+    return send_from_directory('IDE', url)
+
+
+@app.route('/bin/<string:file>')
+def proxy_engine(file):
+    return send_from_directory('bin', file)
+
+
+# For Debug Purpose
+@app.after_request
+def after_request(response):
+    if request.url.endswith(".wasm"):
+        response.headers['Content-Type'] = 'application/wasm'
+    response.headers["Cache-Control"] = "max-age=86400"
+    return response
+
+
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="localhost", port=5000, debug=True)
