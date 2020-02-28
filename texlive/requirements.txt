@@ -1,3 +1,0 @@
-flask > 0.1
-gevent > 0.1
-flask-cors>0.1

@@ -1,16 +1,18 @@
-import config
-import dropbox
-import string_utils
-import requests
 import logging
 
-class DropboxOAuth():
+import dropbox
+import requests
+
+import abstract_auth
+import config
+import utils
+
+
+class DropboxOAuth(abstract_auth.Auth):
 
     @staticmethod
-    def get_authorization_url(level):
-
-        random_token = string_utils.random_string(16)
-
+    def get_authorization_url():
+        random_token = utils.random_string(16)
         authorization_base_url = 'https://www.dropbox.com/oauth2/authorize?client_id=%s&redirect_uri=%s&response_type=code&state=%s' % (
             config.DROPBOX_CLIENT_ID, config.OAUTH_REDIRECT_URI, random_token)
         return authorization_base_url, random_token
@@ -37,7 +39,6 @@ class DropboxOAuth():
         try:
             r = requests.post(token_url, data, auth=auth, timeout=20)
             idata = r.json()
-            print(idata)
             return [idata['access_token'], idata['access_token'], idata['access_token']]
         except:
             logging.warning("Unable to fetch access token!")

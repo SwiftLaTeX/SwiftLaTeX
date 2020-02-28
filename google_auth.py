@@ -1,19 +1,17 @@
 import config
-import string_utils
 import requests
 import logging
 import traceback
+import abstract_auth
+import utils
 
 
-
-class GoogleOAuth():
+class GoogleOAuth(abstract_auth.Auth):
 
     @staticmethod
-    def get_authorization_url(level):
-        random_token = string_utils.random_string(16)
+    def get_authorization_url():
+        random_token = utils.random_string(16)
         scope = "https://www.googleapis.com/auth/drive.file"
-        if level != "limited":
-            scope = "https://www.googleapis.com/auth/drive"
         authorization_base_url = 'https://accounts.google.com/o/oauth2/v2/auth?client_id=%s&response_type=code&access_type=offline&state=%s&scope=%s email profile' \
                                  '&redirect_uri=%s&prompt=consent' % (
                                      config.GOOGLE_CLIENT_ID, random_token, scope, config.OAUTH_REDIRECT_URI)
@@ -38,12 +36,12 @@ class GoogleOAuth():
     @staticmethod
     def get_access_token(code):
         token_url = "https://www.googleapis.com/oauth2/v4/token"
-        data = {'code':code, 'grant_type':'authorization_code', 'client_id':config.GOOGLE_CLIENT_ID, 'client_secret': config.GOOGLE_CLIENT_SECRET, 'redirect_uri': config.OAUTH_REDIRECT_URI}
+        data = {'code': code, 'grant_type': 'authorization_code', 'client_id': config.GOOGLE_CLIENT_ID,
+                'client_secret': config.GOOGLE_CLIENT_SECRET, 'redirect_uri': config.OAUTH_REDIRECT_URI}
         try:
             r = requests.post(token_url, data, timeout=20)
             idata = r.json()
-            print(idata)
-            return [idata['access_token'],idata['refresh_token'], idata['id_token']]
+            return [idata['access_token'], idata['refresh_token'], idata['id_token']]
         except:
             logging.warning("Unable to fetch access token for google!")
             return None
@@ -56,9 +54,7 @@ class GoogleOAuth():
         try:
             r = requests.post(token_url, data, timeout=20)
             idata = r.json()
-            print(idata)
             return idata['access_token']
         except:
             logging.warning("Unable to refresh access token for google!")
             return None
-
