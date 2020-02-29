@@ -30,7 +30,7 @@ docker-compose up
 ## SwiftLaTeX Architecture
 This section is devoted for interesting developers only. If you want more help, you could considering opening an issue.
 
-SwiftLaTeX consists of five major components.
+SwiftLaTeX consists of three major components.
 
 ### Engine 
 SwiftLaTeX engine (a C++ reimplementation of XeTeX) supports UTF-8 and Opentype fonts out of box. 
