@@ -3,6 +3,8 @@
 ## One-liner introduction for SwiftLaTeX
 SwiftLaTeX, a WYSIWYG WebAssembly-powered LaTeX Editor.
 
+![Screenshot](https://github.com/SwiftLaTeX/SwiftLaTeX/raw/master/screenshot.png)
+
 ## What are the differences to Overleaf or ShareLaTeX?
 1. The most important difference is 
 ```
