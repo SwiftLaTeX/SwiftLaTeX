@@ -14,5 +14,4 @@ engine/test/
 *.xdv
 *.log
 *.aux
-*.wasm
 .DS_Store
