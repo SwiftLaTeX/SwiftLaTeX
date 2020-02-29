@@ -39,7 +39,7 @@ sts = boto3.client('sts',
                    region_name='us-east-1')
 
 # Session
-app.config["SESSION_TYPE"] = "mongodb"
+app.config["SESSION_TYPE"] = "filesystem"
 sess = Session(app)
 
 

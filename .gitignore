@@ -14,4 +14,5 @@ engine/test/
 *.xdv
 *.log
 *.aux
+*.js.map
 .DS_Store

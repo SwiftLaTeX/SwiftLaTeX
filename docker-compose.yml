@@ -1,0 +1,20 @@
+version: '3'
+services:
+  database:
+    image: 'mongo'
+    container_name: 'mongodb'
+    ports:
+      - '27017-27019:27017-27019'
+  minio:
+    image: 'swiftlatex/storage:v2'
+    container_name: 'storage'
+    ports:
+      - '9000:9000'
+  portal:
+    image: 'swiftlatex/portal:v2'
+    container_name: 'portal'
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/swiftlatex
+      - S3_ENDPOINT=http://storage:9000
+    ports:
+      - '80:3000'
