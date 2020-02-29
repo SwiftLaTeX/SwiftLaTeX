@@ -39,7 +39,8 @@ sts = boto3.client('sts',
                    region_name='us-east-1')
 
 # Session
-app.config["SESSION_TYPE"] = "filesystem"
+app.config["SESSION_TYPE"] = "mongodb"
+app.config["SESSION_MONGODB"] = pymongo.MongoClient(config.DB_URL)
 sess = Session(app)
 
 

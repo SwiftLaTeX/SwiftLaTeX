@@ -5,16 +5,37 @@ services:
     container_name: 'mongodb'
     ports:
       - '27017-27019:27017-27019'
+    networks:
+      app_net:
+        ipv4_address: 172.18.18.4
   minio:
     image: 'swiftlatex/storage:v2'
     container_name: 'storage'
     ports:
       - '9000:9000'
+    networks:
+      app_net:
+        ipv4_address: 172.18.18.3
   portal:
-    image: 'swiftlatex/portal:v2'
+    image: 'swiftlatex/portal:latest'
     container_name: 'portal'
     environment:
-      - MONGO_URL=mongodb://mongodb:27017/swiftlatex
-      - S3_ENDPOINT=http://storage:9000
+      - MONGO_URL=mongodb://172.18.18.4:27017/swiftlatex
+      - S3_ENDPOINT=http://172.18.18.3:9000
+      - S3_KEY=limiteduser
+      - S3_SECRET=limiteduser
     ports:
       - '80:3000'
+    networks:
+      app_net:
+        ipv4_address: 172.18.18.2
+
+networks:
+  app_net:
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: "false"
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.18.18.0/24
