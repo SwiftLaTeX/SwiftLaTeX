@@ -1,4 +1,4 @@
-# SwiftLaTeX
+# SwiftLaTeX (Actively developing)
 
 ## One-liner introduction for SwiftLaTeX
 
