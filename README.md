@@ -27,16 +27,6 @@ Or host it by yourself using docker-compose
 docker-compose up
 ```
 
-## Known Bugs in SwiftLaTeX?
-
-SwiftLaTeX is a quick evolving project and may consist of a small number of bugs. We are currently working hard on the following issues. We expect to fix them in the next few weeks.
-
-1. Previewer may fail to display certain documents. (e.g., \usepackage{2up} will screw the viewer)
-
-2. Previewer may fail to display images. 
-
-3. WYSIWYG functionality is not available for formulas yet.
-
 ## SwiftLaTeX Architecture
 This section is devoted for interesting developers only. If you want more help, you could considering opening an issue.
 
@@ -48,23 +38,47 @@ The engine binary exposes two major APIs **_compileLaTeX** and **_compileBibtex*
 You may find the following source file useful as it showcases how to use these APIs.
 (https://github.com/SwiftLaTeX/IDE/blob/master/packages/latex/src/browser/latex-engine.ts). 
 
-The engine is not a faithful reimplementation. First, it does not support Chinese/Japanese/Korea/Arabic languages. Supporting these languages require a fully working ICU library, whose size may be unbearable. Secondly, the engine uses browsers' APIs to handle image files. 
-Due to API limitation (or my laziness), our engine does not support multi-page PDF images yet.
+The engine is not a faithful reimplementation of XeTeX. First, it does not support Chinese/Japanese/Korea/Arabic languages. Supporting these languages require a fully working ICU library, whose size may be unbearable. Secondly, the engine uses browsers' APIs to handle image files. 
+Due to API limitation (or my laziness), our engine does not support multi-page PDF images yet. 
+If you want to include a multi-page PDF images in your document, consider extracting the page you want to include and save it as an independent file first. (Todo, more details) 
 
-Currently, the engine is under a proprietary license, while our team is happy to grant permission for you or your organization to use the binary for non-commercial purposes (e.g., individual or tertiary education). 
-If you need more tech support on the engine, you can contact g.weber(at)auckland.ac.nz for further details.
+Currently, we have no plan to release the source code. Nevertheless, our team is happy to grant permission for you or your organization to use the binary for non-commercial purposes (e.g., individual or tertiary education). 
+If you need more tech support on the engine or want to submit a feature request, you can contact g.weber(at)auckland.ac.nz.
 
-### Theia Extension
-Theia is a fork of VS code and designed to have high extensibility. SwiftLaTeX implements an extension for Theia, which mainly provides live previewer and WYSIWYG editing functionalities. The live previewer takes the engine output and converts it into HTML for display. 
+### Live Viewer
+The live viewer converts the output of the Engine (DVI format) to HTML, so it can be displayed in a browser more efficiently (rather than relying on PDF.js). 
+You may find the following two files useful.
+1. DVI parser (https://github.com/SwiftLaTeX/IDE/blob/master/packages/latex/src/browser/xdv-parser.ts).
+2. HTML generator (https://github.com/SwiftLaTeX/IDE/blob/master/packages/latex/src/browser/xdv-machine.ts)
 
-### S3 Storage.
-SwiftLaTeX stores users files in self-hosting Minio server or public Amazon S3 cloud. To do that, we rewrite the filesystem subsystem of Theia. https://github.com/SwiftLaTeX/IDE/blob/master/packages/filesystem/src/browser/s3storagesystem.ts. Optionally, we also provide a backend service to sync the files to different cloud storage like Google, Dropbox, and Github. 
+The generated HTMLs contains synchronization information (similar to SyncTeX), which is the mapping from the HTML element to the source code position. The information has a character-grained accuracy, which then allows us to implement WYSIWYG editing on the viewer.
 
-### Realtime Collaboration
-Todo
+However, SwiftLaTeX is a quick evolving project and the viewer may consist of a small number of bugs. We are currently working hard on the following issues. We expect to fix them in the next few weeks.
 
-### Language Server
-Todo
+1. Previewer may fail to display certain documents. (e.g., \usepackage{2up} will screw the viewer)
+
+2. Previewer may fail to display images. 
+
+3. WYSIWYG functionality is not available for formulas yet.
+
+
+### VS Code (Theia)
+Theia is a fork of VS code and designed to have high extensibility. SwiftLaTeX extends Theia in following aspects. 
+
+1. S3 Storage.
+SwiftLaTeX stores users files in self-hosting Minio server or public Amazon S3 cloud. To do that, we rewrote the filesystem subsystem of Theia. (https://github.com/SwiftLaTeX/IDE/blob/master/packages/filesystem/src/browser/s3storagesystem.ts.)
+Optionally, we also provide a backend service to sync the files to different cloud storage like Google, Dropbox, and Github. 
+
+2. Realtime Collaboration
+We extends the Monaco Editor of Theia to support realtime collaboration among different users. 
+(https://github.com/SwiftLaTeX/IDE/blob/master/packages/latex/src/browser/monaco-yjs.ts).
+The collaboration uses CRDT implementation, more details can be found at https://github.com/yjs/yjs.
+
+3. Language Server
+We incorporate a TeXLab language server (https://github.com/SwiftLaTeX/texlab-swiftlatex), which provides auto-completion, syntax highlighting, and API documents supports. 
+The language server has been modified to support multiple users. [Todo: more details]
+
+Note that, we only include the generated binary in this repo. To hack the IDE, please checkout (https://github.com/SwiftLaTeX/IDE)
  
 ## License
 
