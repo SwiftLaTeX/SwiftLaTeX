@@ -28,7 +28,7 @@ docker-compose up
 
 ## Known Bugs in SwiftLaTeX?
 
-SwiftLaTeX is a quick evolving project and may consist of a small number of bugs. We are currently working hard on the following issues.
+SwiftLaTeX is a quick evolving project and may consist of a small number of bugs. We are currently working hard on the following issues. We expect to fix them in the next few weeks.
 
 1. Previewer may fail to display certain documents. (e.g., \usepackage{2up} will screw the viewer)
 
@@ -40,7 +40,27 @@ SwiftLaTeX is a quick evolving project and may consist of a small number of bugs
 This section is devoted for interesting developers only. If you want more help, you could considering opening an issue.
 
 SwiftLaTeX consists of five major components.
+
 ### Engine 
-SwiftLaTeX engin (fork from XeTeX) supports UTF-8 and opentype fonts out of box. The engine binary is available under the bin folder. It exposes two major APIs **_compileLaTeX** and **_compileBibtex** for the use of developers. For more implementation details, you can check this source file (https://github.com/SwiftLaTeX/IDE/blob/master/packages/latex/src/browser/latex-engine.ts).
+SwiftLaTeX engine (fork from XeTeX) supports UTF-8 and opentype fonts out of box. The engine binary is available under the bin folder. It exposes two major APIs **_compileLaTeX** and **_compileBibtex** for the use of developers.
+You may find the following source file useful as it showcases how to interact with the binary.
+(https://github.com/SwiftLaTeX/IDE/blob/master/packages/latex/src/browser/latex-engine.ts). 
 
+Currently, the engine is under a proprietary license, while our team is happy to grant permission for you or your organization to use the binary for non-commerical purposes (e.g., individual or tertiary education). 
+If you need more tech support on the engine, you can contact g.weber(at)auckland.ac.nz for further details.
 
+### Theia Extension
+Theia is a fork of VS code and designed to have high extensiableity. SwiftLaTeX implements an entension for Theia, which mainly provides live previewer and WYSIWYG editing functionalities. The live previewer takes the engine output and converts it into HTML for display. 
+
+### S3 Storage.
+SwiftLaTeX stores users files in self-hosting Minio server or public Amazon S3 cloud. To do that, we rewrite the filesystem subsystem of Theia. https://github.com/SwiftLaTeX/IDE/blob/master/packages/filesystem/src/browser/s3storagesystem.ts. Optionally, we also provide a backend service to sync the files to different cloud storage like Google, Dropbox, and Github. 
+
+### Realtime Collaboration
+Todo
+
+### Language Server
+Todo
+ 
+## License
+
+SwiftLaTeX is released under AGPL3 licence. 
