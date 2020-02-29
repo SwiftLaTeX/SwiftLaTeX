@@ -24,6 +24,8 @@ Try it in https://v2.swiftlatex.com
 Or host it by yourself using docker-compose
 
 ```
+git clone https://github.com/SwiftLaTeX/SwiftLaTeX
+cd SwiftLaTeX
 docker-compose up
 ```
 
