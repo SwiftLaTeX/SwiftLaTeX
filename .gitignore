@@ -16,3 +16,9 @@ engine/test/
 *.aux
 *.js.map
 .DS_Store
+/dist/
+/build/
+# No longer generated
+/web-snack-libraries.tar.gz
+node_modules/
+.env

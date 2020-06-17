@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: snack
+spec:
+  tls:
+  - hosts:
+    - snack.expo.io
+    secretName: snack-tls
+  rules:
+  - host: snack.expo.io
+    http:
+      paths:
+      - backend:
+          serviceName: snack
+          servicePort: 80
+        path: /

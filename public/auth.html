@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>SwiftLaTeX: WYSIWYG LaTeX Editor for Browsers</title>
+</head>
+<body>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->\
+<script>
+  let hashString = window.location.hash;
+  if (hashString.startsWith('#')) {
+    hashString = hashString.slice(1);
+  }
+  const urlParams = new URLSearchParams(hashString);
+  const accessToken = urlParams.get('access_token');
+  const state = urlParams.get('state');
+  if ((state === 'dropbox' || state === 'google') && accessToken) {
+    localStorage.setItem('access_token', accessToken);
+    localStorage.setItem('provider', state);
+    window.opener && window.opener.postMessage({ 'authResult': 'ok' }, '*');
+    window.top && window.top.postMessage({ 'authResult': 'ok' }, '*');
+  } else {
+    window.opener && window.opener.postMessage({ 'authResult': 'failed' }, '*');
+    window.top && window.top.postMessage({ 'authResult': 'failed' }, '*');
+  }
+  window.close();
+</script>
+<script src="js/s.js"></script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+base/secrets/* filter=git-crypt diff=git-crypt
+staging/secrets/* filter=git-crypt diff=git-crypt
+production/secrets/* filter=git-crypt diff=git-crypt

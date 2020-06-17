@@ -1,0 +1,52 @@
+{
+  "extends": ["tslint:recommended", "tslint-config-prettier", "tslint-react-hooks"],
+  "rulesDirectory": ["tslint-plugin-prettier", "tslint-microsoft-contrib"],
+  "rules": {
+    "prettier": true,
+
+    "deprecation": false,
+    "interface-over-type-literal": false,
+    "max-classes-per-file": false,
+    "member-access": [true, "no-public"],
+    "member-ordering": false,
+    "no-console": [true, "log", "info"],
+    "no-default-export": false,
+    "no-floating-promises": false,
+    "no-for-in-array": true,
+    "no-inferred-empty-object-type": false,
+    "no-parameter-reassignment": false,
+    "no-redundant-jsdoc": false,
+    "no-shadowed-variable": false,
+    "no-unbound-method": false,
+    "no-unnecessary-type-assertion": true,
+    "no-unsafe-any": false,
+    "no-unused-expression": [true, "allow-fast-null-checks"],
+    "no-var-requires": false,
+    "no-void-expression": false,
+    "promise-function-async": false,
+    "object-literal-sort-keys": false,
+    "only-arrow-functions": false,
+    "ordered-imports": false,
+    "strict-type-predicates": false,
+    "use-default-type-parameter": true,
+    "variable-name": false,
+
+    "no-constant-condition": true,
+    "no-control-regex": true,
+    "no-delete-expression": true,
+    "no-string-based-set-immediate": true,
+    "no-string-based-set-interval": true,
+    "no-string-based-set-timeout": true,
+    "no-unnecessary-bind": true,
+    "no-unnecessary-field-initialization": true,
+    "no-unnecessary-override": true,
+    "no-with-statement": true,
+    "non-literal-require": true,
+    "promise-must-complete": true,
+
+    "react-hooks-nesting": "error"
+  },
+  "linterOptions": {
+    "exclude": ["*.json", "**/*.json"]
+  }
+}
