@@ -1,4 +1,4 @@
-# SwiftLaTeX, Ready for production use.
+# SwiftLaTeX
 
 ## One-liner introduction for SwiftLaTeX
 
@@ -57,8 +57,14 @@ SwiftLaTeX supports opentype fonts (ttf, otf), but you need to upload the fonts 
 ```
 To use your fonts.
 
-### Editor.
-More document is coming
+### Change Logs:
+2020-6-23 18:00 NZT. We update the logic to fetch CTAN files, now the viewer can now properly display legacy tex fonts. 
+
+### Production use
+SwiftLaTeX is almost for production use, with the following exceptions. These exceptions will be gradually removed.
+1. Viewer cannot display pdf images yet, but shows a placeholder for now.
+2. No graphite fonts and international line-breaking support. We so fardeem this functionalties not very useful for English-speaking people. 
+3. Sharing is not fully implemented yet, but it is on the way. 
  
 ## License
 
