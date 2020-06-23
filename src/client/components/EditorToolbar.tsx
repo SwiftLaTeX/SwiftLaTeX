@@ -16,6 +16,7 @@ type Props = {
     onExportPDF: () => Promise<void>;
     onDownloadCode: () => Promise<void>;
     onSubmitTitle: (title: string) => Promise<void>;
+    onShowShareCode: () => Promise<void>;
 };
 
 export default function EditorToolbar(props: Props) {
@@ -28,6 +29,7 @@ export default function EditorToolbar(props: Props) {
         onDownloadCode,
         isSystemBusy,
         onSubmitTitle,
+        onShowShareCode
     } = props;
     const { theme } = preferences;
 
@@ -57,10 +59,10 @@ export default function EditorToolbar(props: Props) {
             <div className={css(styles.buttons)}>
                 <IconButton
                     responsive
-                    title="Download Source Codes"
+                    title="Share Source Codes"
                     label="Share"
                     disabled={isSystemBusy}
-                    onClick={onDownloadCode}
+                    onClick={onShowShareCode}
                 >
                     <svg width="24px" height="16px" viewBox="0 0 20 18">
                         <path fillRule="evenodd"

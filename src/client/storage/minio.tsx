@@ -20,9 +20,9 @@ export class MinioStorage extends BackendStorage {
         return response.arrayBuffer();
     }
 
-    async getPublicLink(scope: string, key: string): Promise<string> {
-        return BASE_URL + '/' + this.token + '/' + scope + '/' + key;
-    }
+    // async getPublicLink(scope: string, key: string): Promise<string> {
+    //     return BASE_URL + '/' + this.token + '/' + scope + '/' + key;
+    // }
 
     async list(scope: string): Promise<ItemEntry[]> {
         const url = this.token + '/' + scope;
@@ -39,7 +39,7 @@ export class MinioStorage extends BackendStorage {
         for (let i = 0; i < data.length; i++) {
             const entry = data[i];
             const r = {
-                name: entry.Key.slice(url.length + 1),
+                itemKey: entry.Key.slice(url.length + 1),
                 scope: scope,
                 _id: entry.Key,
                 modifiedTime: entry.LastModified,

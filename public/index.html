@@ -41,19 +41,20 @@
     <section class="header">
         <h2 class="title">The Browser-based Fast LaTeX Visual Editor.</h2>
         <div id="signin_buttons">
-            <span>Sign in With: </span>
-            <a class="button button-primary" onclick="localLogin();" title="Just to have a play without login."
+            <span>Store your files in: </span>
+            <a class="button button-primary" onclick="localLogin();"
+               title="A playgroud for you to have a look at SwiftLaTeX without login."
                href="#">Playground</a>
             <a class="button button-primary" onclick="googleLogin();"
                href="#">Google</a>
             <a class="button button-primary" onclick="dropboxLogin();"
                href="#">Dropbox</a>
-
         </div>
+
         <div class="value-props row">
             <div class="four columns value-prop">
                 <img class="value-img" src="images/feather.svg">
-                Compile and render each LaTeX document in realtime. Our server load does not affect your experience.
+                Compile and render each LaTeX document in realtime. All computation is done locally.
             </div>
             <div class="four columns value-prop">
                 <img class="value-img" src="images/pens.svg">
@@ -61,7 +62,7 @@
             </div>
             <div class="four columns value-prop">
                 <img class="value-img" src="images/watch.svg">
-                Quick to start with zero compiling or installing necessary.
+                Quick to start with zero compiling or installing necessary. An Internet connection is what you need.
             </div>
         </div>
     </section>
@@ -98,78 +99,34 @@
     <div class="docs-section" id="screenshot">
         <h6 class="docs-header">SwiftLaTeX Screenshot</h6>
         <img src="images/screenshot-light.png" class="screenshot-img"/>
-        <p>Love SwiftLaTeX and want to share it, star it, or donate a cup of coffee? </p>
+
+
+    </div>
+
+    <div class="docs-section" id="info">
+        <h6>Love SwiftLaTeX and want to have a look at how it works, or donate a cup of coffee? </h6>
 
         <iframe src="https://ghbtns.com/github-btn.html?user=swiftlatex&repo=swiftlatex&type=watch&count=true"
                 allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
         <iframe src="https://ghbtns.com/github-btn.html?user=swiftlatex&repo=swiftlatex&type=fork&count=true"
                 allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
-        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" class="paypal">
             <input type="hidden" name="cmd" value="_s-xclick"/>
             <input type="hidden" name="hosted_button_id" value="MBLKQURY3C38S"/>
             <input type="image" src="images/donate.png" border="0"
                    name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button"
                    width="96px"/>
         </form>
+        <h6 class="agreement"><span class="buildNumber">BuildNo:</span> <a href="contact.html">About Us</a> <a
+                href="eula.html">EULA</a> <a href="privacy.html">Privacy Policy</a></h6>
     </div>
-
 </div>
 
 
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 <script src="/dist/storage.bundle.js"></script>
-<script>
-
-  const redirect_uri = 'http://localhost:3011/auth.html';
-
-  function wait4Token() {
-    NProgress.start();
-    window.addEventListener('message', (event) => {
-      NProgress.done();
-      if (event.data.authResult === 'ok') {
-        window.location.href = '/project.html';
-      } else {
-        alert('Login failure');
-      }
-    });
-  }
-
-  function googleLogin() {
-    const google_url = GoogleStorage.getAuthUrl(redirect_uri);
-    window.open(google_url);
-    wait4Token();
-  }
-
-  function dropboxLogin() {
-    const dropbox_url = DropboxStorage.getAuthUrl(redirect_uri);
-    window.open(dropbox_url);
-    wait4Token();
-  }
-
-  function makePlayID(length) {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-  }
-
-  function localLogin() {
-    let play_token = localStorage.getItem('playground_token');
-    if (!play_token) {
-      play_token = makePlayID(32);
-      localStorage.setItem('playground_token', play_token);
-    }
-    localStorage.setItem('provider', 'minio');
-    localStorage.setItem('access_token', play_token);
-    window.location.href = '/project.html';
-  }
-
-</script>
-<script src="js/s.js"></script>
-
+<script src="index.js"></script>
+<script src="common.js"></script>
 </body>
 </html>

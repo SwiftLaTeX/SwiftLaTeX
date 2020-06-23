@@ -7,8 +7,8 @@ import * as path from 'path';
 
 const AWS_ID = process.env.S3ID;
 const AWS_KEY = process.env.S3KEY;
-const AWS_ENDPOINT = process.env.S3ENDPOINT;
-const AWS_BUCKET = process.env.S3BUCKET || "";
+const AWS_ENDPOINT = process.env.S3ENDPOINT || 'https://s3.swiftlatex.com';
+const AWS_BUCKET = process.env.S3BUCKET || 'swiftlatex2';
 
 const upload = async (ctx: Context) => {
   ctx.type = 'json';
@@ -89,6 +89,7 @@ const list = async (ctx: Context) => {
     };
   }
 }
+
 
 export default function playground() {
   const router = new Router();

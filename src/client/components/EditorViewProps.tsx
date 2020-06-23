@@ -28,4 +28,5 @@ export type EditorViewProps = {
   entryPoint: string;
   onSetEntryPoint: (path: string) => void;
   onTypeContent: (delta: string, isInsert: boolean) => void;
+  onShareProject: () => Promise<void>;
 };

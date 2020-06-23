@@ -1,0 +1,576 @@
+comments = [[
+Source: amsrefs documentatin
+URL: https://ctan.org/pkg/hyperref
+Original license: LPPL 1.3
+]]
+package = {
+  documentation = "texinfo:latex/amsrefs/amsrdoc.pdf",
+  name = "amsrefs",
+  options = {
+    alphabetic = {
+      details = [[
+This generates alphabetic labels similar to the `alpha` BibTeX
+style, consisting of the first letter(s) of each author name plus the
+year of publication.
+]]
+    },
+    shortalphabetic = {
+      details = [[
+This generates a shorter alphabetic label using only the first letter
+of each author name.
+]]
+    },
+    ["author-year"] = {
+      details = [[
+This switches to the popular author-year citation format, similar to
+that described in The Chicago Manual of Style.
+]]
+    },
+    y2k = {
+      details = [[
+When using the `alphabetic` option, normally only the last two digits
+of the year are used in the label.  The `y2k` option instructs amsrefs
+to use the full year.
+]]
+    },
+    ["non-compressed-cites"] = {
+      details = [[
+Turn off range compression; citations will still be sorted.  Range
+compression is also automatically turned off if amsrefs detects that
+the hyperref package has been loaded.  (In order for this to work
+correctly, the hyperref package must be loaded after the amsrefs
+package.)
+]]
+    },
+    ["non-sorted-cites"] = {
+      details = [[
+Turn off range sorting.  This also turns off range compression as a
+side-effect.
+]]
+    },
+    abbrev = {
+      details = [[
+This is equivalent to requesting all four of the options `initials`,
+`short-journals`,`short-months` and `short-publishers`.
+]]
+    },
+    initials = {
+      details = [[
+Replace the given names of all authors, editors, and translators with
+their initials.
+]]
+    },
+    ["short-journals"] = {
+      details = [[
+Print short form instead of full form for journal names.  This works
+only with abbreviations defined with the `\DefineJournal` command.
+]]
+    },
+    ["short-months"] = {
+      details = [[
+Print short version of month names (e.g., Jan. instead of January).
+This works only when you write all dates in ISO 8601 format.
+]]
+    },
+    ["short-publishers"] = {
+      details = [[
+Print short form instead of full form for publisher names.  This works
+only with abbreviations defined with the `\DefinePublisher` command.
+]]
+    },
+    backrefs = {
+      details = [[
+This option causes “back-references” to be printed at the end of each
+bibliography entry to show what page it was cited on.  This option
+will work only if the hyperref package is installed.
+]]
+    },
+    ["bibtex-style"] = {
+      details = [[
+By default, amsrefs formats references using the AMS house style.  The
+`bibtex-style` option instructs it to use a format that is very
+similar to the one implemented by the standard BibTeX styles (plain,
+alpha, abbrv, and unsrt).
+]]
+    },
+    ["citation-order"] = {
+      details = [[
+This option applies only when using amsrefs in conjunction with
+BibTeX.  Consequently, changing this option will have no effect until
+after the next bibtex run.
+
+The `citation-order` option corresponds to the standard BibTeX style
+unsrt, where items are printed in the reference list in the order in
+which they are cited in the document.
+]]
+    },
+    lite = {
+      details = [[
+Suppress the loading of the following packages, which amsrefs
+will normally automatically load:
+
+  - mathscinet: Define a number of special characters and accents that
+    are sometimes encountered when downloading data from MathSciNet.
+
+  - txtcmds: Provide shorthand commands for a number of characters
+    that are usually specified via ligatures (e.g., -- for an en-dash
+    or ?` for ?.  Using these ligatures can cause problems if you're
+    using fonts other than the Computer Modern Roman family or if you
+    want to make it easy to convert your document to, say, HTML.
+    LaTeX does provide macros for these characters, but their names
+    tend to be rather unwieldy (e.g., `\textendash` and
+    `\textquestiondown`, so txtcmds provides shorter names (`\ndash`
+    and `\qd` in this case).
+]]
+    },
+    ["msc-links"] = {
+      details = [[
+Redefine the `\MR` command to create hypertext links to the
+MathSciNet database.  This option will work only if the hyperref
+package is installed.
+]]
+    },
+    nobysame = {
+      details = [[
+If two or more consecutive bibliography items have the same authors,
+amsrefs will normally replace the author names in the second and
+succeeding entries by a horizontal rule.  This option disables this
+feature, causing the full author names to always be printed.
+]]
+    }
+  }
+}
+commands= {
+  bibselect = {
+    summary = "Read \\bib entries from an ltb file.",
+    action = "input",
+    filename = "?.ltb",
+    arguments = {
+      {
+        meta = "*",
+        summary = "If present, print all bibliography items, including not cited.",
+        optional = true,
+        type = "literal"
+      },
+      {
+        meta = "files",
+        summary = "A list of files with ltb extension."
+      }
+    }
+  },
+  bib = {
+    action = "amsrefs_bib",
+    summary = "Create a bibliogprahy item.",
+    arguments = {
+      {
+        meta = "label"
+      },
+      {
+        meta = "type",
+        values = {
+          "article",
+          "book",
+          "misc",
+          "report",
+          "thesis",
+          "webpage"
+        }
+      },
+      {
+        meta = "fields",
+        keys = {
+          accessdate = {
+            details = [[
+Used to specify the date on which a webpage was viewed, as opposed to
+the date on which the resource was last modified, which would be put
+in the date field.
+]]
+          },
+          address = {
+            details = [[
+Usually the address of the publisher or other issuing organization,
+but inside the conference compound field it refers to the address of
+the conference.
+]]
+          },
+          booktitle = {
+            details = [[
+Used in the article type to specify the title of the book in which the
+article appeared.  If anything other than a simple book title is
+required, the book compound field should be used instead.
+]]
+          },
+          date = {
+            details = [[
+Usually the date of publication, except inside the conference field,
+where it is the date of the conference.
+
+This replaces BibTeX's year and month fields.  Its value should be
+written in ISO 8601 format, e.g., 1967-02-24.  The day and/or month
+can be omitted, so all of the following are valid representations of
+February 24, 1967:
+```
+date={1967-02-24}
+date={1967-02}
+date={1967}
+```
+Using this format allows amsrefs maximum flexibility in formatting
+dates, for example, by allowing month names to be printed in full or
+abbreviated as necessary.
+
+For Winter, Spring, Summer, Fall, either use month numbers of 13, 14,
+15, 16 (respectively) or just put in the text before the year:
+```
+date={Summer 1987},
+```
+For compatibility, year is provided as an alias for date, but its use
+is discouraged.
+]]
+          },
+          edition = {
+            details = [[
+For books or reports.  If the value of this field is a simple number,
+bib will convert it to cardinal form and add “ed.” (or alternative
+text if specified by the bibliography style).  Otherwise it will be
+printed as is.
+]]
+          },
+          eprint = {
+            details = [[
+Electronic preprint information such as for <www.arXiv.org>. See
+<http://xxx.lanl.gov/help/faq/references> for recommended form.
+]]
+          },
+          hyphenation = {
+            details = [[
+This corresponds to the Babel package notion of language.  The
+hyphenation language used for a given bib entry is determined from
+various clues, which are checked in the following order:
+
+- The Babel language specified by the hyphenation field.
+
+- The Babel language specified by the \emph{first word} of the
+  language field (after lowercasing).
+
+- The current Babel language that was in effect before the \cn{bib}
+  command started.
+
+- The current hyphenation patterns of the document, if there are no
+  Babel language modules loaded.
+
+The hyphenation field applies to an entire entry.  To change the Babel
+language for a single field, see the discussion of the language
+attribute.
+]]
+          },
+          journal = {},
+          label = {
+            details = [[
+When the alphabetic or shortalphabetic options are used, amsrefs will
+usually try to generate the label on its own.  If necessary, you can
+override the automatically generated label by specifying a label
+field.
+]]
+          },
+          language = {
+            details = [[
+Language of the work.  The language name should be the printed form,
+not a Babel-style language name, since in principle this field could
+contain more complicated remarks such as “Russian, with French
+abstract”.
+]]
+          },
+          note = {
+            details = [[
+Any additional information that does not fit into one of the other
+fields.
+]]
+          },
+          number = {
+            details = [[
+The issue number of the journal for an article or the technical report
+number for a report.
+]]
+          },
+          organization = {
+            details = [[
+The school, university, corporation, or other nonpublisher
+organization that issued the document.
+]]
+          },
+          pages = {},
+          part = {},
+          publisher = {},
+          series = {},
+          setup = {
+            details = [[
+This is a special field that can be used to give arbitrary commands to
+be executed at the beginning of the current bib entry, after all the
+fields have been read. The idea is that one can alter the formatting
+of an individual entry through this field to handle special cases.
+]]
+          },
+          status = {
+            details = [[
+Typically used for notes such as “to appear” or “in preparation”
+or “unpublished” with journal articles.
+]]
+          },
+          subtitle = {
+            details = [[
+Typically used with a multipart journal article to give a subtitle for
+each part, but it can also be used for books.
+]]
+          },
+          type = {
+            details = [[
+The type of a thesis, e.g., “Master's Thesis” or “Ph.D. Thesis”.
+]]
+          },
+          xref = {
+          },
+          author = {
+            details = [[
+The authors of the item.  If there are other contributors that should
+be acknowledged, they should be listed in contribution fields.
+]]
+          },
+          editor = {
+            details = [[
+The editors of the item.  If there are other contributors that should
+be acknowledged, they should be listed in contribution fields.
+]]
+          },
+          translator = {
+            details = [[
+The translators of the item.  If there are other contributors that
+should be acknowledged, they should be listed in contribution fields.
+]]
+          },
+          isbn, issn = {
+            details = [[
+An International Standard Book or Serial Number.  (These are not
+printed by the standard styles, but are reserved for future use.)
+]]
+          },
+          review = {
+            details = [[
+A review number or similar pointer to, for example, Mathematical
+Reviews or Zentralblatt.  You must supply any special markup for the
+number; i.e., you should write
+
+    review={\MR{2015463}}
+
+instead of
+
+    review={2015463}
+]]
+          },
+          book = {
+            details = [[
+This is used for conference articles to make it easier to
+differentiate between an article and the book or proceedings that it
+appeared in.  The book field can contain any of the following
+subfields: title, part, subtitle, edition, editor, translator,
+contribution, series, volume, publisher, organization, address, date,
+note.
+
+It is often used in conjunction with the conference field.
+]]
+          },
+          conference = {
+            details = [[
+The conference field can contain a title, address, and date.
+
+    \bib{Burkholder1986a}{article}{
+        author={Burkholder, Donald L.},
+        title={Martingales and Fourier analysis in Banach spaces},
+        conference={
+            title={C.I.M.E. Lectures},
+            address={Varenna, Italy},
+            date={1985}
+        },
+        book={
+            series={Lecture Notes in Math.},
+            volume={1206},
+            publisher={Springer-Verlag},
+            address={Berlin and New York},
+            date={1986},
+        },
+        pages={61--108},
+        review={\MR{0864712}}
+    }
+]]
+          },
+          contribution = {
+            details = [[
+This field can be repeated as many times as necessary to list any
+contributors other than authors, editors, or translators.
+
+    contribution={
+        type={illustrations},
+        author={Gorey, Edward}
+    }
+
+which in the default style produces
+
+    with illustrations by Edward Gorey
+
+Since contributions are potentially complicated, so is the
+contribution field:
+
+- Sometimes it is necessary to add additional material to the type in
+  order to produce intelligible text:
+
+      contribution={
+          type={an appendix},
+          author={Doe, John}
+      }
+
+- amsrefs tries very hard to format multiple contributions, each of
+  which may have multiple authors, in an appropriate way.  However,
+  there might be cases where the default rules aren't flexible enough,
+  in which case you can instead use the contribution field as a simple
+  field and format it exactly the way you want:
+
+      contribution={some arbitrary text about contributions}
+
+This feature should only be used as a last resort, though.
+]]
+          },
+          partial = {
+            details = [[
+This is used with the article type for multipart articles.  Like the
+contribution field, it is repeatable.  It can contain any of the
+following fields: part, subtitle, contribution, journal, volume, date,
+number, pages.
+
+    \bib{Zho-fan1972}{article}{
+        author={Zho-fan, Z.},
+        title={Monomials},
+        partial={
+            part={I},
+            journal={Tot. Math.},
+            volume={19},
+            date={1972},
+            pages={335--350}
+        },
+        partial={
+            part={II},
+            journal={Tot. Math.},
+            volume={20},
+            date={1973},
+            pages={19--37}
+        }
+    }
+]]
+          },
+          reprint = {
+            details = [[
+This can be used inside an article to indicate another place (usually
+a book) where the article can also be found.  It can contain any field
+that the book type can.
+
+    \bib{Sokal96}{article}{
+        title={Trangressing the boundaries},
+        subtitle={Toward a transformative hermeneutics of quantum
+        gravity},
+        author={Sokal, Alan},
+        journal={Social Text},
+        volume={46/47},
+        date={1996},
+        pages={217--252},
+        reprint={
+            title={Fashionable Nonsense},
+            subtitle={Postmodern Intellectuals' Abuse of Science},
+            author={Sokal, Alan},
+            author={Bricmont, Jean},
+            publisher={Picador USA},
+            address={New York},
+            date={1998}
+        }
+    }
+]]
+          },
+          translation = {
+            details = [[
+This is the only compound field that can be used with any bibliography
+type.  It can contain any field that its parent type can contain.
+]]
+          }
+        }
+      }
+    }
+  },
+  citelist = {
+    details = [[
+This is used to group a number of individual `\cite` commands into a
+single citation.  Among other things, this makes it possible to add an
+optional argument to any of the `\cite` commands unambiguously:
+
+    \citelist{\cite{xx} \cite{yy}*{Theorem 4.9} \cite{zz}}
+
+Note that there is no punctuation or other text between the `\cite
+commands.  Any necessary commas or other punctuation will be supplied
+automatically.  Any attempts to supply it by hand will backfire.
+]]
+  },
+  cites = {
+    action = "cite",
+    arguments = {{meta = "labels"}},
+    details = [[
+This is a variant of citelist, provided for convenience:
+
+    \cites{aa,bb,cc}
+
+is equivalent to
+
+    \citelist{\cite{aa}\cite{bb}\cite{cc}}
+
+Note that cites does not take an optional arguments.
+]]
+  },
+  nocite = {
+    action = "cite",
+    arguments = {{meta = "labels"}},
+    details = [[
+This continues to work the same way that it does in standard LaTeX
+when used with BibTeX, but see the manual for limitations when it is
+used with bibselect and ltb files.
+]]
+  },
+  ocite = {
+    action = "cite",
+    arguments = {{meta = "label"}},
+    summary = "Cite as an object.",
+    action = "cite"
+  },
+  ycite = {
+    action = "cite",
+    arguments = {{meta = "label"}},
+    summary = "Cite year.",
+    action = "cite",
+  },
+  DefineName = {
+    arguments = {
+      {meta = "label"},
+      {meta = "text"}
+    }
+  },
+  DefinePublisher = {
+    arguments = {
+      {meta = "label"},
+      {meta = "text"}
+    }
+  },
+  DefineJournal = {
+    arguments = {
+      {meta = "label"},
+      {meta = "text"}
+    }
+  }
+}
+environments = {
+  bibdiv = {},
+  biblist = {}
+}

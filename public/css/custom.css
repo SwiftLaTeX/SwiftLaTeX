@@ -2,6 +2,14 @@
     max-width: 960px;
 }
 
+.agreement {
+    float: right;
+}
+
+.buildNumber {
+    font-size: 9px;
+}
+
 .header {
     margin-top: 6rem;
     text-align: center;

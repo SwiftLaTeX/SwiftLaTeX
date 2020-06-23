@@ -1,6 +1,18 @@
 import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
 
-export async function measureImageDimension(content: Blob, name: string): Promise<string> {
+export async function measureImageDimension(content: Blob, name: string, id: string): Promise<string> {
+  const cachedMeasurement = localStorage.getItem('image' + id);
+  if (cachedMeasurement) {
+    // console.log('Using cached measure ' + id);
+    return cachedMeasurement;
+  }
+  const answer = await _measure(content, name);
+  localStorage.setItem('image' + id, answer);
+  return answer;
+}
+
+async function _measure(content: Blob, name: string): Promise<string> {
+
   if (name.endsWith('pdf')) {
     GlobalWorkerOptions.workerSrc =
       '//cdn.jsdelivr.net/npm/pdfjs-dist@2.4.456/build/pdf.worker.min.js';
@@ -27,7 +39,7 @@ export async function measureImageDimension(content: Blob, name: string): Promis
         URL.revokeObjectURL(tempImageURL);
         resolve(`swiftlatex\n${tmpImgElement.width}\n${tmpImgElement.height}\n`);
       };
-      tmpImgElement.onerror = _ => {
+      tmpImgElement.onerror = (_: any) => {
         console.error(`Unable to measure the image document ${name}, return a dummy dimension `);
         URL.revokeObjectURL(tempImageURL);
         resolve('swiftlatex\n300\n400\n');

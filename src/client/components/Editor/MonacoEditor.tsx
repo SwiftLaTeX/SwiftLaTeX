@@ -4,45 +4,14 @@ import classnames from 'classnames';
 import debounce from 'lodash/debounce';
 // import mapValues from 'lodash/mapValues';
 import 'monaco-editor/esm/vs/editor/browser/controller/coreCommands.js';
-// import 'monaco-editor/esm/vs/editor/browser/widget/codeEditorWidget.js';
 import 'monaco-editor/esm/vs/editor/contrib/bracketMatching/bracketMatching.js';
 import 'monaco-editor/esm/vs/editor/contrib/caretOperations/caretOperations.js';
-// import 'monaco-editor/esm/vs/editor/contrib/caretOperations/transpose.js';
 import 'monaco-editor/esm/vs/editor/contrib/clipboard/clipboard.js';
-// import 'monaco-editor/esm/vs/editor/contrib/codelens/codelensController.js';
-// import 'monaco-editor/esm/vs/editor/contrib/colorPicker/colorDetector.js';
-import 'monaco-editor/esm/vs/editor/contrib/comment/comment.js';
 import 'monaco-editor/esm/vs/editor/contrib/contextmenu/contextmenu.js';
-import 'monaco-editor/esm/vs/editor/contrib/cursorUndo/cursorUndo.js';
-// import 'monaco-editor/esm/vs/editor/contrib/dnd/dnd.js';
 import 'monaco-editor/esm/vs/editor/contrib/find/findController.js';
-// import 'monaco-editor/esm/vs/editor/contrib/folding/folding.js';
-// import 'monaco-editor/esm/vs/editor/contrib/format/formatActions.js';
-// import 'monaco-editor/esm/vs/editor/contrib/goToDeclaration/goToDeclarationCommands.js';
-// import 'monaco-editor/esm/vs/editor/contrib/goToDeclaration/goToDeclarationMouse.js';
-// import 'monaco-editor/esm/vs/editor/contrib/gotoError/gotoError.js';
-// import 'monaco-editor/esm/vs/editor/contrib/hover/hover.js';
-import 'monaco-editor/esm/vs/editor/contrib/inPlaceReplace/inPlaceReplace.js';
-import 'monaco-editor/esm/vs/editor/contrib/linesOperations/linesOperations.js';
-// import 'monaco-editor/esm/vs/editor/contrib/links/links.js';
-// import 'monaco-editor/esm/vs/editor/contrib/multicursor/multicursor.js';
-// import 'monaco-editor/esm/vs/editor/contrib/parameterHints/parameterHints.js';
-// import 'monaco-editor/esm/vs/editor/contrib/quickFix/quickFixCommands.js';
-// import 'monaco-editor/esm/vs/editor/contrib/referenceSearch/referenceSearch.js';
-// import 'monaco-editor/esm/vs/editor/contrib/rename/rename.js';
-// import 'monaco-editor/esm/vs/editor/contrib/smartSelect/smartSelect.js';
-// import 'monaco-editor/esm/vs/editor/contrib/snippet/snippetController2.js';
-// import 'monaco-editor/esm/vs/editor/contrib/suggest/suggestController.js';
-// import 'monaco-editor/esm/vs/editor/contrib/toggleTabFocusMode/toggleTabFocusMode.js';
+import 'monaco-editor/esm/vs/editor/contrib/hover/hover.js';
+import 'monaco-editor/esm/vs/editor/contrib/suggest/suggestController.js';
 import 'monaco-editor/esm/vs/editor/contrib/wordHighlighter/wordHighlighter.js';
-import 'monaco-editor/esm/vs/editor/contrib/wordOperations/wordOperations.js';
-// import 'monaco-editor/esm/vs/editor/standalone/browser/accessibilityHelp/accessibilityHelp.js';
-// import 'monaco-editor/esm/vs/editor/standalone/browser/inspectTokens/inspectTokens.js';
-// import 'monaco-editor/esm/vs/editor/standalone/browser/iPadShowKeyboard/iPadShowKeyboard.js';
-// import 'monaco-editor/esm/vs/editor/standalone/browser/quickOpen/quickOutline.js';
-// import 'monaco-editor/esm/vs/editor/standalone/browser/quickOpen/gotoLine.js';
-// import 'monaco-editor/esm/vs/editor/standalone/browser/quickOpen/quickCommand.js';
-// import 'monaco-editor/esm/vs/editor/standalone/browser/toggleHighContrast/toggleHighContrast.js';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 // import { SimpleEditorModelResolverService } from 'monaco-editor/esm/vs/editor/standalone/browser/simpleServices';
 import { StaticServices } from 'monaco-editor/esm/vs/editor/standalone/browser/standaloneServices';
@@ -50,15 +19,21 @@ import { light, dark } from './themes/monaco';
 import overrides from './themes/monaco-overrides';
 import { ThemeName } from '../Preferences/withThemeName';
 import ResizeDetector from '../shared/ResizeDetector';
-// import prettierCode from '../../utils/prettierCode';
-// import getRelativePath from '../../utils/getRelativePath';
-// import getFileLanguage from '../../utils/getFileLanguage';
-// import { SDKVersion } from '../../configs/sdk';
+
+import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
 import { Annotation } from '../../types';
 import { EditorProps } from './EditorProps';
 import { Registry } from 'monaco-textmate'; // peer dependency
 import { wireTmGrammars } from 'monaco-editor-textmate';
 import { MonacoYJSBinding } from './MonacoYjs';
+import {
+    MonacoLanguageClient, CloseAction, ErrorAction,
+    MonacoServices, createConnection
+} from 'monaco-languageclient';
+import { MimicWebsocket } from './MimicWebsocket';
+
+
+
 
 /**
  * Monkeypatch to make 'Find All References' work across multiple files
@@ -67,6 +42,8 @@ import { MonacoYJSBinding } from './MonacoYjs';
 // SimpleEditorModelResolverService.prototype.findModel = function(_: any, resource: any) {
 //   return monaco.editor.getModels().find(model => model.uri.toString() === resource.toString());
 // };
+
+
 
 // @ts-ignore
 global.MonacoEnvironment = {
@@ -93,8 +70,13 @@ const findModel = (path: string) => {
     return monaco.editor.getModels().find(model => model.uri.path === `/${path}`);
 }
 
+
+
 class MonacoEditor extends React.Component<Props> {
 
+    static hasHighlightingSetup = false;
+    _languageServerDisposable: any = undefined;
+    _websocketConnection: any = undefined;
     static defaultProps: Partial<Props> = {
         lineNumbers: 'on',
         wordWrap: 'on',
@@ -136,6 +118,81 @@ class MonacoEditor extends React.Component<Props> {
         }
     }
 
+    _createLanguageClient(connection: MessageConnection): MonacoLanguageClient {
+        return new MonacoLanguageClient({
+            name: "Sample Language Client",
+            clientOptions: {
+                // use a language id as a document selector
+                documentSelector: ['latex', 'bibtex'],
+                // disable the default error handler
+                errorHandler: {
+                    error: () => ErrorAction.Continue,
+                    closed: () => CloseAction.DoNotRestart
+                }
+            },
+            // create a language client connection from the JSON RPC connection on demand
+            connectionProvider: {
+                get: (errorHandler, closeHandler) => {
+                    return Promise.resolve(createConnection(connection, errorHandler, closeHandler))
+                }
+            }
+        });
+    }
+
+    _setupLanguageServer(editor: any) {
+        MonacoServices.install(editor);
+        const webSocket: any = new MimicWebsocket();
+        this._websocketConnection = webSocket;
+        listen ({
+            webSocket,
+            onConnection: connection => {
+                // create and start the language client
+                const languageClient = this._createLanguageClient(connection);
+                this._languageServerDisposable = languageClient.start();
+            }
+        });
+        webSocket.connect();
+    }
+
+    static _setupHighlighting() {
+        if (MonacoEditor.hasHighlightingSetup) return;
+        MonacoEditor.hasHighlightingSetup = true;
+        const registry = new Registry({
+            getGrammarDefinition: async (scopeName: string) => {
+                // console.log(scopeName);
+                if (scopeName === 'text.tex.latex') {
+                    return {
+                        format: 'json',
+                        content: await (await fetch('bin/LaTeX.tmLanguage.json')).text(),
+                    };
+                } else if (scopeName === 'text.bibtex') {
+                    return {
+                        format: 'json',
+                        content: await (await fetch('bin/Bibtex.tmLanguage.json')).text(),
+                    };
+                } else if (scopeName === 'text.tex') {
+                    return {
+                        format: 'json',
+                        content: await (await fetch('bin/TeX.tmLanguage.json')).text(),
+                    };
+                } else {
+                    throw new Error('Unexpected grammar ' + scopeName);
+                }
+            },
+        });
+        const grammars = new Map();
+        grammars.set('bibtex', 'text.bibtex');
+        grammars.set('latex', 'text.tex.latex');
+        wireTmGrammars(monaco, registry, grammars).then(
+            function() {
+                console.log('Grammer loaded');
+            },
+            function(err) {
+                console.log('Unabled to load grammer ' + err);
+            },
+        );
+    }
+
     componentDidMount() {
 
         const { path, value, annotations, autoFocus, ...rest } = this.props;
@@ -163,42 +220,9 @@ class MonacoEditor extends React.Component<Props> {
             codeEditorService,
         );
 
-        // @ts-ignore
+        MonacoEditor._setupHighlighting();
 
-        const registry = new Registry({
-            getGrammarDefinition: async (scopeName: string) => {
-                // console.log(scopeName);
-                if (scopeName === 'text.tex.latex') {
-                    return {
-                        format: 'json',
-                        content: await (await fetch('bin/LaTeX.tmLanguage.json')).text(),
-                    };
-                } else if (scopeName === 'text.bibtex') {
-                    return {
-                        format: 'json',
-                        content: await (await fetch('bin/Bibtex.tmLanguage.json')).text(),
-                    };
-                } else if (scopeName === 'text.tex') {
-                    return {
-                        format: 'json',
-                        content: await (await fetch('bin/TeX.tmLanguage.json')).text(),
-                    };
-                } else {
-                    throw new Error('Unexpected grammar ' + scopeName);
-                }
-            },
-        });
-        const grammars = new Map();
-        grammars.set('bibtex', 'text.bibtex');
-        grammars.set('latex', 'text.tex.latex');
-        wireTmGrammars(monaco, registry, grammars, editor).then(
-            function() {
-                console.log('Grammer loaded');
-            },
-            function(err) {
-                console.log('Unabled to load grammer ' + err);
-            },
-        );
+        this._setupLanguageServer(editor);
 
         this._contentSubscription = editor.onDidChangeModelContent((_) => {
             const model = editor.getModel();
@@ -223,6 +247,8 @@ class MonacoEditor extends React.Component<Props> {
                 // console.log('Path ' + path + ' ' + column + ' ' + line);
             }
         });
+
+
 
         this._editor = editor;
 
@@ -268,7 +294,13 @@ class MonacoEditor extends React.Component<Props> {
     componentWillUnmount() {
         this._cursorSubscription && this._cursorSubscription.dispose();
         this._contentSubscription && this._contentSubscription.dispose();
+
+        // this._languageServerPlugin && this._languageServerPlugin.dispose();
+        this._websocketConnection && this._websocketConnection.close();
+        this._languageServerDisposable && this._languageServerDisposable.dispose();
+
         this._editor && this._editor.dispose();
+
     }
 
     _initializeFile = (path: string, value: string) => {

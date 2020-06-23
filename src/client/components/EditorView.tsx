@@ -12,6 +12,8 @@ import NoFileSelected from './NoFileSelected';
 import FileList from './FileList/FileList';
 import MonacoEditor from './Editor/MonacoEditor';
 import openEntry from '../actions/openEntry';
+import Banner from './shared/Banner';
+import ModalDialog from './shared/ModalDialog';
 import {
     isInsideFolder,
     changeParentPath,
@@ -20,17 +22,18 @@ import withPreferences, { PreferencesContextType } from './Preferences/withPrefe
 import { c } from './ColorsProvider';
 import { FileSystemEntry, Annotation } from '../types';
 import { EditorViewProps } from './EditorViewProps';
+import ShareCode from './ShareCode';
 
 
 
 export type Props = PreferencesContextType &
     EditorViewProps;
 
-// type ModalName =  'shortcuts' ;
-type BannerName = 'slow-connection';
+type ModalName =  'shortcuts' | 'share' ;
+type BannerName = 'no-entry' | 'entry-changed';
 
 type State = {
-    // currentModal: ModalName | null;
+    currentModal: ModalName | null;
     currentBanner: BannerName | null;
     isDownloading: boolean;
     deviceLogsShown: boolean;
@@ -38,12 +41,12 @@ type State = {
     previousEntry: FileSystemEntry | undefined;
 };
 
-// const BANNER_TIMEOUT_SHORT = 1500;
-// const BANNER_TIMEOUT_LONG = 5000;
+const BANNER_TIMEOUT_SHORT = 3000;
+// const BANNER_TIMEOUT_LONG = 15000;
 
 class EditorView extends React.Component<Props, State> {
     state = {
-        // currentModal: null,
+        currentModal: null,
         currentBanner: null,
         isDownloading: false,
         deviceLogsShown: false,
@@ -54,9 +57,13 @@ class EditorView extends React.Component<Props, State> {
     componentDidMount() {
         this._EditorComponentRef = React.createRef();
         window.addEventListener('beforeunload', this._handleUnload);
+
     }
 
-    componentDidUpdate(_: Props) {
+    componentDidUpdate(prevProps: Props) {
+        if (this.props.entryPoint !== prevProps.entryPoint) {
+            this._showBanner('entry-changed', BANNER_TIMEOUT_SHORT);
+        }
     }
 
     componentWillUnmount() {
@@ -167,9 +174,16 @@ class EditorView extends React.Component<Props, State> {
             shouldPreventRedirectWarning: false,
         });
 
+    _handleShowShareCode = async () => {
+        this.setState({ currentModal: 'share' });
+    };
+
+    _handleHideModal = () => {
+        this.setState({ currentModal: null });
+    };
 
     render() {
-        // const { currentModal } = this.state;
+        const { currentBanner, currentModal } = this.state;
 
         const {
             entry,
@@ -230,6 +244,7 @@ class EditorView extends React.Component<Props, State> {
                     onExportPDF={this.props.onExportPDF}
                     isSystemBusy={this.props.isSystemBusy}
                     onDownloadCode={this.props.onDownloadAsync}
+                    onShowShareCode={this._handleShowShareCode}
                 />
                 <div className={css(styles.editorAreaOuterWrapper)}>
                     <div className={css(styles.editorAreaOuter)}>
@@ -279,17 +294,22 @@ class EditorView extends React.Component<Props, State> {
                     // onShowShortcuts={this._handleShowShortcuts}
                     theme={this.props.preferences.theme}
                 />
-                {/*<ModalDialog*/}
-                {/*    className={css(styles.embedModal)}*/}
-                {/*    autoSize={false}*/}
-                {/*    visible={currentModal === 'embed'}*/}
-                {/*    onDismiss={this._handleHideModal}>*/}
-                {/*    <EmbedCode params={undefined} sdkVersion={'34.0.0'}/>*/}
-                {/*</ModalDialog>*/}
+                <ModalDialog
+                    className={css(styles.embedModal)}
+                    autoSize={false}
+                    visible={currentModal === 'share'}
+                    onDismiss={this._handleHideModal}>
+                    <ShareCode
+                    theme={this.props.preferences.theme}
+                    />
+                </ModalDialog>
 
-                {/*<Banner type="success" visible={currentBanner === 'connected'}>*/}
-                {/*    Device connected!*/}
-                {/*</Banner>*/}
+                <Banner type="success" visible={currentBanner === 'entry-changed'}>
+                    Entry point is set to {this.props.entryPoint}
+                </Banner>
+                <Banner type="error" visible={!this.props.entryPoint}>
+                    No entry point detected, please choose a tex file as the entry point.
+                </Banner>
             </ContentShell>
         );
     }

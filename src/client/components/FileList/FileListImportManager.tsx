@@ -9,17 +9,17 @@ import { c } from '../ColorsProvider';
 import { ThemeName } from '../Preferences/withThemeName';
 import {
     getUniquePath,
-    getExtension,
     isImageFile,
     isTextFile,
     isOpenTypeFontFile,
     supportedFileTypes,
+    genRandomFileID,
 } from '../../utils/fileUtilities';
 import { WebkitFileEntry, WebkitDirectoryEntry } from '../../utils/convertDataTransferItemsToFiles';
 import dragEventIncludes from '../../utils/dragEventIncludes';
 import { FileSystemEntry } from '../../types';
-import { measureImageDimension } from '../../utils/measureImageDimension';
-import { genRandomString } from '../../utils/strings';
+
+
 
 type Props = {
     entries: FileSystemEntry[];
@@ -147,8 +147,7 @@ class FileListImportManager extends React.PureComponent<Props, State> {
             files.map(async ({ file, path }) => {
                 try {
                     let metaContent: string | ArrayBuffer = '';
-                    const ext = getExtension(path);
-                    const fid = genRandomString() + '.' + ext;
+                    const fid = genRandomFileID(path);
                     const isTextEntry = isTextFile(path);
                     if (isTextEntry) {
                         // console.log('A text file');
@@ -160,10 +159,7 @@ class FileListImportManager extends React.PureComponent<Props, State> {
                             reader.onerror = error => reject(error);
                             reader.readAsText(file);
                         });
-                    } else if (isImageFile(path)) {
-                        // console.log('A image file');
-                        metaContent = await measureImageDimension(file, path);
-                    } else if (isOpenTypeFontFile(path)) {
+                    } else if (isImageFile(path) || isOpenTypeFontFile(path)) {
                         // console.log('A open font file');
                         metaContent = await new Promise<ArrayBuffer>((resolve, reject) => {
                             const reader = new FileReader();
@@ -176,6 +172,7 @@ class FileListImportManager extends React.PureComponent<Props, State> {
                     }
 
                     const uri = await this.props.uploadFileAsync(file, fid);
+                    path = path.replace(/ /g, '_'); /* Space may everything crack */
                     const uploadEntry = {
                         item: {
                             path: path,
@@ -290,7 +287,7 @@ class FileListImportManager extends React.PureComponent<Props, State> {
                     onDismiss={this._hideImportModal}
                     title="Import files">
                     <p className={css(styles.paragraph)}>
-                        Import JavaScript files from your computer or a GitHub repository to use in your expo
+                        Import files from your computer or a GitHub repository to use in your
                         project.
                     </p>
                     <div

@@ -2,7 +2,7 @@ import updateEntry from './updateEntry';
 import createEntryAtPath from './createEntryAtPath';
 import { isInsideFolder } from '../utils/fileUtilities';
 import { FileSystemEntry } from '../types';
-import { genRandomString } from '../utils/strings';
+import { genRandomFileID } from '../utils/fileUtilities';
 
 export default function createNewEntry(
     entries: FileSystemEntry[],
@@ -18,7 +18,7 @@ export default function createNewEntry(
                     content: '',
                     uri: '',
                     asset: false,
-                    id: genRandomString() + '.tex',
+                    id: genRandomFileID('Untitled.tex')
                 },
                 state: {
                     isCreating: true,
@@ -31,7 +31,7 @@ export default function createNewEntry(
                     content: '',
                     uri: '',
                     asset: false,
-                    id: genRandomString()
+                    id: genRandomFileID('UntitledFolder')
                 },
                 state: {
                     isCreating: true,

@@ -19,7 +19,7 @@ import {
     FileSystemEntry,
     SaveStatus,
 } from '../types';
-
+import { measureImageDimension } from '../utils/measureImageDimension';
 
 
 const BROADCAST_CHANNEL_NAME = 'SWIFTLATEX_BROADCAST_CHANNEL';
@@ -136,6 +136,40 @@ export default class App extends React.Component<any, State> {
         }
     }
 
+    async __loadSingleFile(tmp: any): Promise<FileSystemEntry | undefined> {
+        let importedEntry: FileSystemEntry = {
+            item: {
+                type: tmp.type,
+                asset: tmp.asset,
+                uri: tmp.uri,
+                content: '',
+                id: tmp.id,
+                path: tmp.path,
+            },
+            state: {},
+        };
+
+        if (tmp.type === 'file') {
+            try {
+                if (!tmp.asset) { /* Is a text file */
+                    const tmp_content_buf = await this._backendStorage!.get('asset', tmp.id);
+                    importedEntry.item.content = arrayBufferToString(tmp_content_buf);
+                    return importedEntry;
+                } else if (isImageFile(tmp.path) || isOpenTypeFontFile(tmp.path)) {
+                    const tmp_content_buf = await this._backendStorage!.get('asset', tmp.id);
+                    importedEntry.item.content = tmp_content_buf;
+                    return importedEntry;
+                }
+            } catch (e) {
+                console.error('Failed to load ' + tmp.path);
+
+            }
+        } else {
+            return importedEntry;
+        }
+        return undefined;
+    }
+
     async _loadProjectFiles() {
         try {
             const manifest_buffer = await this._backendStorage!.get('manifest', this.state.id);
@@ -144,7 +178,7 @@ export default class App extends React.Component<any, State> {
             const name = manifest['name'];
             let entryPoint = manifest['entryPoint'];
             const fileEntries = manifest['fileEntries'];
-            if (!username || !name || !entryPoint || !fileEntries) {
+            if (!isString(username) || !isString(name) || !isString(entryPoint) || !fileEntries) {
                 return false;
             }
 
@@ -154,50 +188,29 @@ export default class App extends React.Component<any, State> {
 
             const importedEntries: FileSystemEntry[] = [];
             let entryPointFound = false;
+            let fileLoadingPromises = [];
             for (let j = 0; j < fileEntries.length; j++) {
                 const tmp = fileEntries[j];
-                if (!isString(tmp.type) || !isString(tmp.id) || !isString(tmp.path) || !isString(tmp.uri) || !isString(tmp.content) || !isBoolean(tmp.asset)) {
+                if (!isString(tmp.type) || !isString(tmp.id) || !isString(tmp.path) || !isString(tmp.uri) || !isBoolean(tmp.asset)) {
                     return false;
                 }
+                fileLoadingPromises.push(this.__loadSingleFile(tmp));
+            }
 
-                let importedEntry: FileSystemEntry = {
-                    item: {
-                        type: tmp.type,
-                        asset: tmp.asset,
-                        uri: tmp.uri,
-                        content: '',
-                        id: tmp.id,
-                        path: tmp.path,
-                    },
-                    state: {},
-                };
-
-
-                if (tmp.type === 'file') {
-                    try {
-                        if (!tmp.asset) { /* Is a text file */
-                            const tmp_content_buf = await this._backendStorage!.get('asset', tmp.id);
-                            importedEntry.item.content = arrayBufferToString(tmp_content_buf);
-                            if(tmp.path === entryPoint) {
-                                importedEntry.state = {
-                                    isOpen: true,
-                                    isFocused: true,
-                                }
-                                entryPointFound = true;
-                            }
-                        } else if (isImageFile(tmp.path)) {
-                            importedEntry.item.content = tmp.content;
-                            /* Do nothing, as content contains the measurement already */
-                        } else if (isOpenTypeFontFile(tmp.path)) {
-                            const tmp_content_buf = await this._backendStorage!.get('asset', tmp.id);
-                            importedEntry.item.content = tmp_content_buf;
+            /* Multithreading */
+            while (fileLoadingPromises.length) {
+                // 10 at at time
+                const batch = await Promise.all(fileLoadingPromises.splice(0, 10));
+                for (let tmp of batch) {
+                    if (tmp) {
+                        if (tmp.item.path === entryPoint && tmp.item.type === 'file') {
+                            entryPointFound = true;
+                            tmp.state.isOpen = true;
+                            tmp.state.isFocused = true;
                         }
-                    } catch (e) {
-                        console.error('Failed to load ' + tmp.path);
-                        continue;
+                        importedEntries.push(tmp);
                     }
                 }
-                importedEntries.push(importedEntry);
             }
 
             if (!entryPointFound) {
@@ -273,7 +286,6 @@ export default class App extends React.Component<any, State> {
     _copyEntryBeforeUpload = (tmp: FileSystemEntry) => {
         const entry = {
             uri: tmp.item.uri,
-            content: isImageFile(tmp.item.path) ? tmp.item.content : '', /* We do not need to upload content except for measured images */
             asset: tmp.item.asset,
             type: tmp.item.type,
             path: tmp.item.path,
@@ -294,7 +306,7 @@ export default class App extends React.Component<any, State> {
             if (tmp.item.type === 'file') {
                 if (!tmp.item.asset) {
                     let needUpload = false;
-                    if (tmp.item.uri === '') { /* Without a url, always need to upload */
+                    if (tmp.item.uri === '') { /* Without a url, indicate it is a newly create file, always need to upload */
                         needUpload = true;
                     } else { /* Not empty uri, we need to compare and see whether it changes or not */
                         if (this._requiredUploadFiles.includes(tmp.item.id)) {
@@ -320,6 +332,7 @@ export default class App extends React.Component<any, State> {
                         } catch (e) {
                             console.log('An upload error is detected, silently ignored?' + tmp.item.path);
                         }
+                        console.log('Uploading finish' + tmp.item.path);
                     }
                 }
             }
@@ -344,11 +357,10 @@ export default class App extends React.Component<any, State> {
         }
 
         if (this.state.sendCodeOnChangeEnabled) {
-            if (this.state.fileEntries.length === 0 || !this.state.entryPoint) {
-                return;
-            }
-            if (this._requiredFlushInEngine || this._requiredUpdateFilesInEngine.length > 0) {
-                this._fireEngine();
+            if (this.state.fileEntries.length > 0  && this.state.entryPoint) {
+                if (this._requiredFlushInEngine || this._requiredUpdateFilesInEngine.length > 0) {
+                    this._fireEngine();
+                }
             }
         }
 
@@ -372,8 +384,11 @@ export default class App extends React.Component<any, State> {
         this.setState(state => ({ sendCodeOnChangeEnabled: !state.sendCodeOnChangeEnabled }));
 
     _handleSubmitTitle = async (name: string) => {
-        this.setState({name: name, saveStatus: 'changed'});
-    }
+        if (!name) {
+            name = 'Fancy Project';
+        }
+        this.setState({ name: name, saveStatus: 'changed' });
+    };
 
 
     _syncManifestNoDebounce = async () => {
@@ -391,18 +406,15 @@ export default class App extends React.Component<any, State> {
         try {
             await this._backendStorage!.put('manifest', this.state.id, manifestBlob);
         } catch (e) {
-            console.log('Unable to upload manifest!');
+            console.error('Unable to upload manifest!');
         }
 
         this.setState({ saveStatus: 'published' });
     };
 
-    _syncManifest = debounce(this._syncManifestNoDebounce, 1000);
+    _syncManifest = debounce(this._syncManifestNoDebounce, 5000);
 
-
-    _reloadSnack = () => {
-        // this._snack.session.reloadSnack();
-    };
+    
 
     _handleChangeCursor = (path: string, line: number, column: number) => {
         const preview = this._previewRef.current;
@@ -439,8 +451,14 @@ export default class App extends React.Component<any, State> {
             for (let j = 0; j < currentFileEntries.length; j++) {
                 const tmp = currentFileEntries[j];
                 if (tmp.item.type === 'file') {
-                    console.log('Write fresh file ' + tmp.item.path);
-                    this._latexEngine.writeMemFSFile(tmp.item.path, tmp.item.content);
+                    if (isImageFile(tmp.item.path)) {
+                        const content = await measureImageDimension(new Blob([tmp.item.content]), tmp.item.path, tmp.item.id);
+                        console.log('Write fresh image ' + tmp.item.path);
+                        this._latexEngine.writeMemFSFile(tmp.item.path, content);
+                    } else {
+                        console.log('Write fresh file ' + tmp.item.path);
+                        this._latexEngine.writeMemFSFile(tmp.item.path, tmp.item.content);
+                    }
                 }
             }
         } else {
@@ -487,9 +505,9 @@ export default class App extends React.Component<any, State> {
     _handleOnSendCode = () => {
         if (this.state.entryPoint) {
             this._requiredUpdateFilesInEngine.push(this.state.entryPoint);
-            this.setState({saveStatus: 'changed'});
+            this.setState({ saveStatus: 'changed' });
         }
-    }
+    };
 
     _handleTypeContent = (delta: string, isInsert: boolean) => {
         const preview = this._previewRef.current;
@@ -546,21 +564,12 @@ export default class App extends React.Component<any, State> {
         for (let j = 0; j < this.state.fileEntries.length; j++) {
             const tmp = this.state.fileEntries[j];
             if (tmp.item.type === 'file') {
-                if (tmp.item.asset && tmp.item.uri) {
-                    try {
-                        const remoteFile = await this._backendStorage!.get('asset', tmp.item.id);
-                        zipobj.file(tmp.item.path, remoteFile);
-                    } catch (e) {
-                        console.error('Unable to get ' + tmp.item.path);
-                    }
-                } else {
-                    zipobj.file(tmp.item.path, tmp.item.content);
-                }
+                zipobj.file(tmp.item.path, tmp.item.content);
             } else if (tmp.item.type === 'folder') {
             }
         }
         const blobFile = await zipobj.generateAsync({ type: 'blob' });
-        this._triggerDownloadAction(blobFile, 'export.zip');
+        this._triggerDownloadBlobAction(blobFile, 'export.zip');
 
         this.setState({ isSystemBusy: false });
     };
@@ -578,7 +587,7 @@ export default class App extends React.Component<any, State> {
         this.setState({ entryPoint: path, saveStatus: 'changed' });
     };
 
-    _triggerDownloadAction = (blob: Blob, name: string) => {
+    _triggerDownloadBlobAction = (blob: Blob, name: string) => {
         const tempPDFURL = URL.createObjectURL(blob);
         setTimeout(_ => {
             URL.revokeObjectURL(tempPDFURL);
@@ -596,7 +605,7 @@ export default class App extends React.Component<any, State> {
     };
 
     _handleExportPDF = async () => {
-        if (!this.state.entryPoint || this.state.fileEntries.length === 0 ) {
+        if (!this.state.entryPoint || this.state.fileEntries.length === 0) {
             return;
         }
         this.setState({ isSystemBusy: true });
@@ -614,17 +623,7 @@ export default class App extends React.Component<any, State> {
         for (let j = 0; j < currentFileEntries.length; j++) {
             const tmp = currentFileEntries[j];
             if (tmp.item.type === 'file') {
-                if (!tmp.item.asset) {
-                    console.log('Export: Write fresh file ' + tmp.item.path);
-                    export_engine.writeMemFSFile(tmp.item.path, tmp.item.content);
-                } else {
-                    try {
-                        const remoteFile = await this._backendStorage!.get('asset', tmp.item.id);
-                        export_engine.writeMemFSFile(tmp.item.path, remoteFile);
-                    } catch (e) {
-                        console.error('Unable to get ' + tmp.item.path);
-                    }
-                }
+                export_engine.writeMemFSFile(tmp.item.path, tmp.item.content);
             }
         }
 
@@ -636,6 +635,7 @@ export default class App extends React.Component<any, State> {
             if (!r.pdf) {
                 compileOk = false;
                 this.setState({ engineLogs: r.log, engineErrors: r.errors });
+                console.log(r.errors);
                 break;
             }
         }
@@ -645,7 +645,7 @@ export default class App extends React.Component<any, State> {
         } else {
             const r: CompileResult = await export_engine.compilePDF();
             if (r.pdf) {
-                this._triggerDownloadAction(new Blob([r.pdf]), 'export.pdf');
+                this._triggerDownloadBlobAction(new Blob([r.pdf]), 'export.pdf');
             } else {
                 this.setState({ engineLogs: r.log, engineErrors: r.errors });
             }
@@ -654,6 +654,10 @@ export default class App extends React.Component<any, State> {
         this.setState({ isSystemBusy: false });
         export_engine.closeWorker();
     };
+
+    _handleShareProject = async() => {
+
+    }
 
     render() {
         if (this.state.sessionStatus === SessionStatus.Ready) {
@@ -681,6 +685,7 @@ export default class App extends React.Component<any, State> {
                     sendCodeOnChangeEnabled={this.state.sendCodeOnChangeEnabled}
                     entryPoint={this.state.entryPoint}
                     onSetEntryPoint={this._handleSetEntryPoint}
+                    onShareProject={this._handleShareProject}
                 />
             );
         } else if (this.state.sessionStatus === SessionStatus.LoadComponents || this.state.sessionStatus === SessionStatus.LoadFiles) {

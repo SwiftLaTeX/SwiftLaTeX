@@ -1,5 +1,5 @@
 export type ItemEntry = {
-    name: string;
+    itemKey: string;
     scope: string;
     modifiedTime: string;
     _id: string;
@@ -18,14 +18,16 @@ export abstract class BackendStorage {
 
     }
 
-    abstract get(scope: string, itemKey: string): Promise<ArrayBuffer>; /* Text */
-    abstract getPublicLink(scope: string, itemKey: string): Promise<string>;
+    abstract get(scope: string, itemKey: string): Promise<ArrayBuffer>;
+
     abstract put(scope: string, itemKey: string, bloblike: Blob): Promise<string>;
 
     abstract list(scope: string): Promise<ItemEntry[]>; /* itemKey */
+
     static getAuthUrl(): string {
         return '';
     };
+
     abstract getUserInfo():Promise<UserInfo>;
 }
 

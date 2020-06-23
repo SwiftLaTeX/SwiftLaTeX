@@ -1,0 +1,6 @@
+package = {
+  name = "t-pgf.tex",
+  dependencies = {
+    "pgf"
+  }
+}

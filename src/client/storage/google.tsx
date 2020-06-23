@@ -3,12 +3,12 @@ import { ItemEntry, BackendStorage, UserInfo } from './backendStorage';
 const GOOGLE_CLIENT_ID = '691913119884-481fqunn0n41a86p7rv1g4aqrr3t1dmr.apps.googleusercontent.com';
 const GOOGLE_REDIRECT_URL = process.env.NODE_ENV === 'production' ? 'https://www.swiftlatex.com/auth.html': 'http://localhost:3011/auth.html';
 const BASE_URL = 'https://www.googleapis.com';
-
+const ROOT_FOLDER_NAME = 'swiftlatex';
 
 export class GoogleStorage extends BackendStorage {
 
     refreshErrorDetected: boolean;
-
+    __rootID: string = '';
     constructor(token: string) {
         super(token);
         this.refreshErrorDetected = false;
@@ -65,18 +65,18 @@ export class GoogleStorage extends BackendStorage {
         return response.arrayBuffer();
     }
 
-    async getPublicLink(scope: string, key: string): Promise<string> {
-        if (this.refreshErrorDetected) {
-            throw new Error('Token failure');
-        }
-
-        const itemKey = scope + '_' + key;
-        const fid = await this._itemKeyToFileInfo(itemKey);
-        if (!fid) {
-            throw new Error('Cannot get public link because the file does not exist');
-        }
-        return `https://drive.google.com/uc?id=${fid}&export=download`
-    }
+    // async getPublicLink(scope: string, key: string): Promise<string> {
+    //     if (this.refreshErrorDetected) {
+    //         throw new Error('Token failure');
+    //     }
+    //
+    //     const itemKey = scope + '_' + key;
+    //     const fid = await this._itemKeyToFileInfo(itemKey);
+    //     if (!fid) {
+    //         throw new Error('Cannot get public link because the file does not exist');
+    //     }
+    //     return `https://drive.google.com/uc?id=${fid}`
+    // }
 
 
     static getAuthUrl(): string {
@@ -88,7 +88,8 @@ export class GoogleStorage extends BackendStorage {
         if (this.refreshErrorDetected) {
             throw new Error('Token failure');
         }
-        const query = '\'' + 'root' + '\' in parents and title contains \'' + scope + '\'';
+        const root_id = await this._resolveRootFolderID();
+        const query = '\'' + root_id + '\' in parents and title contains \'' + scope + '\'';
         const fields = 'items(webContentLink, id, title, modifiedDate)';
         const url = BASE_URL + '/drive/v2/files?'
             + 'q=' + encodeURIComponent(query)
@@ -106,7 +107,7 @@ export class GoogleStorage extends BackendStorage {
         for (let j = 0; j < jsonR.items.length; j++) {
             const item = jsonR.items[j];
             const entry = {
-                name: item.title.slice(scope.length + 1),
+                itemKey: item.title.slice(scope.length + 1),
                 scope: scope,
                 modifiedTime: item.modifiedDate,
                 _id: item.id,
@@ -128,12 +129,13 @@ export class GoogleStorage extends BackendStorage {
 
 
     async _uploadFile(itemKey: string, blobLike: Blob, fid: string | undefined): Promise<string> {
+        const root_id = await this._resolveRootFolderID();
         const metadata = {
             title: itemKey,
             mimeType: 'application/octet-stream',
             parents: [{
                 kind: 'drive#fileLink',
-                id: 'root',
+                id: root_id,
             }],
         };
         const headers = {
@@ -165,7 +167,10 @@ export class GoogleStorage extends BackendStorage {
             throw new Error('Unable to create file');
         }
         const uploadResponseJson = await uploadResponse.json();
-        const link = uploadResponseJson.webContentLink;
+        let link = uploadResponseJson.webContentLink;
+        if (link.includes('&export=download')) {
+            link = link.replace('&export=download', '');
+        }
         if (!fid) {
             await this._setPermission(uploadResponseJson.id);
         }
@@ -192,7 +197,8 @@ export class GoogleStorage extends BackendStorage {
     async _itemKeyToFileInfo(itemKey: string): Promise<undefined | string> {
         let fid = this._getCache(itemKey);
         if (fid) return fid;
-        const query = '\'' + 'root' + '\' in parents and title=\'' + itemKey + '\'';
+        const root_id = await this._resolveRootFolderID();
+        const query = '\'' + root_id + '\' in parents and title contains \'' + itemKey + '\'';
         const fields = 'items(id)';
         const url = BASE_URL + '/drive/v2/files?'
             + 'q=' + encodeURIComponent(query)
@@ -212,6 +218,51 @@ export class GoogleStorage extends BackendStorage {
         fid = jsonR.items[0].id;
         this._putCache(itemKey, fid)
         return fid;
+    }
+
+    async _resolveRootFolderID(): Promise<string> {
+        if (this.__rootID) {
+            return this.__rootID;
+        }
+        const query = '\'' + 'root' + '\' in parents and title=\'' + ROOT_FOLDER_NAME + '\'';
+        const fields = 'items(id)';
+        const url = BASE_URL + '/drive/v2/files?'
+            + 'q=' + encodeURIComponent(query)
+            + '&fields=' + encodeURIComponent(fields)
+            + '&maxResults=1000';
+        const headers = {
+            'Authorization': 'Bearer ' + this.token,
+        };
+        const response = await fetch(url, { method: 'GET', headers: headers });
+        if (response.status !== 200) {
+            throw new Error('Failed to resolve Root ID');
+        }
+        const jsonR = await response.json();
+        if (jsonR.items.length === 0) {
+            /* Create the root folder */
+            const metadata = {
+                title: ROOT_FOLDER_NAME,
+                mimeType: 'application/vnd.google-apps.folder',
+                parents: [{
+                    kind: 'drive#fileLink',
+                    id: 'root',
+                }],
+            };
+            let createFolderUrl = BASE_URL + '/drive/v2/files';
+            const createFolderHeaders = {
+                'Authorization': 'Bearer ' + this.token,
+                'Content-Type': 'application/json; charset=UTF-8'
+            };
+            const createFolderResponse = await fetch(createFolderUrl, { method: "POST", body: JSON.stringify(metadata), headers: createFolderHeaders });
+            if (createFolderResponse.status !== 200) {
+                throw new Error('Unable to create root folder');
+            }
+            const createFolderResponseJson = await createFolderResponse.json();
+            this.__rootID = createFolderResponseJson.id;
+            return this.__rootID;
+        }
+        this.__rootID = jsonR.items[0].id;
+        return this.__rootID;
     }
 
     async getUserInfo(): Promise<UserInfo> {

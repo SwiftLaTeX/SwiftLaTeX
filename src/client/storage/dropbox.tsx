@@ -32,10 +32,10 @@ export class DropboxStorage extends BackendStorage {
         return arrayB;
     }
 
-    async getPublicLink(scope: string, key: string): Promise<string> {
-        const itemKey = '/' + scope + '/' + key;
-        return this._getShareLink(itemKey);
-    }
+    // async getPublicLink(scope: string, key: string): Promise<string> {
+    //     const itemKey = '/' + scope + '/' + key;
+    //     return this._getShareLink(itemKey);
+    // }
 
     async _getShareLink(itemKey: string): Promise<string> {
         const cacheAns = this._getCache(itemKey);
@@ -91,7 +91,7 @@ export class DropboxStorage extends BackendStorage {
         for (let i = 0; i < entries.length; i++) {
             const entry = entries[i];
             const r = {
-                name: entry.name,
+                itemKey: entry.name,
                 scope: scope,
                 _id: entry.id,
                 modifiedTime: entry.client_modified,

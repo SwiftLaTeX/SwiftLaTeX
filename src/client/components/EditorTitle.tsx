@@ -4,6 +4,7 @@ import withThemeName, { ThemeName } from './Preferences/withThemeName';
 import colors from '../configs/colors';
 import { SaveStatus } from '../types';
 import EditableField from './shared/EditableField';
+import Helmet from 'react-helmet-async';
 
 type Props = {
   name: string;
@@ -59,13 +60,16 @@ class EditorTitle extends React.Component<Props, State> {
 
 
     return (
+
       <div className={css(styles.container)}>
         <div className={css(styles.header)}>
           <div className={css(styles.titleContainer)}>
             <h1 className={css(styles.title)}>
               <EditableField value={name} onSubmitText={this.props.onSubmitTitle} />
             </h1>
-
+            <Helmet
+                title={name}
+            />
           </div>
           <div className={css(styles.metadata)}>
             <p className={css(styles.status)}>{statusText}</p>

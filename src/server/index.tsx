@@ -8,9 +8,8 @@ import compress from 'koa-compress';
 import bodyParser from 'koa-body';
 import stoppable from 'stoppable';
 import playground from './playground';
+import gaproxy from './analytics';
 import { AddressInfo } from 'net';
-
-
 type ShutdownSignal = 'SIGHUP' | 'SIGINT' | 'SIGTERM' | 'SIGUSR2';
 
 const port = parseInt(process.env.SNACK_PORT || '', 10) || 3011;
@@ -67,7 +66,7 @@ if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
 app.use(serve(path.join(__dirname, '..', '..', 'public')));
 app.use(bodyParser({ multipart: true }));
 app.use(playground());
-
+app.use(gaproxy())
 
 const httpServer = app.listen(port, host, backlog, () => {
   const { address, port } = server.address() as AddressInfo;

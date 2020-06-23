@@ -12,6 +12,20 @@ export function changeParentPath(path: string, oldParentPath: string, newParentP
   return path.replace(new RegExp('^' + escapeRegExp(oldParentPath + '/')), newParentPath + '/');
 }
 
+const _genRandomString = (length: number = 32) => {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
+export function genRandomFileID(path: string) {
+  return _genRandomString(10) + encodeURIComponent(path).replace(/%/g, '_').replace(/\//g, '_');
+}
+
 export function getBaseName(path: string) {
   return path.split('/').reverse()[0];
 }
