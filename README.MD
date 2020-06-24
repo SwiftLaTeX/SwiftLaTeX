@@ -50,12 +50,18 @@ Our engine now directly outputs SVG files, which can be directly rendered in bro
 The generated SVGs contains SyncTeX information, which is the mapping from the HTML element to the source code position. The information allows us to implement WYSIWYG editing on the viewer.
 
 ### Font support
+SwiftLaTeX supports most legacy TeX fonts behind the scene. 
 SwiftLaTeX supports opentype fonts (ttf, otf), but you need to upload the fonts by yourself due to license issue. Once you upload your fonts, you can use
 ```
 \usepackage{fontspec}
 \setmainfont{foobar.ttf} 
 ```
 To use your fonts.
+
+### Open source components
+SwiftLaTeX would not be here without the following amazing open source projects.
+1) Tectonic and XeTeX https://github.com/tectonic-typesetting/tectonic
+2) Digestif, a Lua-based LaTeX language server. https://github.com/astoff/digestif
 
 ### Change Logs:
 2020-6-23 18:00 NZT. We update the logic to fetch CTAN files, now the viewer can now properly display legacy tex fonts. 
