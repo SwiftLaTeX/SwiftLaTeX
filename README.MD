@@ -34,7 +34,7 @@ This section is devoted for interesting developers only. If you want more help, 
 ### Live Viewer
 Our engine now directly outputs SVG files, which can be directly rendered in browsers.
 The generated SVGs contains SyncTeX information, which is the mapping from the HTML element to the source code position. The information allows us to implement WYSIWYG editing on the viewer.
-However, our viewer does not support Tikz and PGF yet.  
+However, our viewer does not support Tikz and PGF yet. (We are not very sure how many people are using these technologies nowadays, personally, I would suggest use more modern technologies to generate figures.)
 
 ### Font support
 SwiftLaTeX supports most legacy TeX fonts behind the scene. 
@@ -48,7 +48,7 @@ SwiftLaTeX supports opentype fonts (ttf, otf), but you need to upload the fonts 
 SwiftLaTeX engine is based on Tectonic (a C++ reimplementation of XeTeX), which supports UTF-8 and Opentype fonts out of box. 
 The engine binary exposes two major APIs **_compileLaTeX** and **_compileBibtex**.
 You may find the following source file useful as it showcases how to use these APIs.
-(https://github.com/SwiftLaTeX/IDE/blob/master/src/client/swiftlatex/latexEngine.ts). 
+(https://github.com/SwiftLaTeX/SwiftLaTeX/blob/master/src/client/swiftlatex/latexEngine.tsx). 
 
 The engine is not 100% faithful to XeTeX. 
 First, it does not support Chinese/Japanese/Korea/Arabic languages.
