@@ -26,41 +26,52 @@ git clone https://github.com/SwiftLaTeX/SwiftLaTeX
 yarn
 yarn start
 ```
+It should work out of the box for Google and Dropbox storage. For playgroud to work, you should consider setting up a Minio server locally. More details to come.
 
 ## SwiftLaTeX Architecture
-This section is devoted for interesting developers only. If you want more help, you could considering opening an issue.
-
-SwiftLaTeX consists of three major components.
-
-### Engine 
-SwiftLaTeX engine (a C++ reimplementation of XeTeX) supports UTF-8 and Opentype fonts out of box. 
-The engine binary exposes two major APIs **_compileLaTeX** and **_compileBibtex**.
-You may find the following source file useful as it showcases how to use these APIs.
-(https://github.com/SwiftLaTeX/IDE/blob/master/src/client/swiftlatex/latexEngine.ts). 
-
-The engine is not a faithful reimplementation of XeTeX. First, it does not support Chinese/Japanese/Korea/Arabic languages. Supporting these languages require a fully working ICU library, whose size may be unbearable. Secondly, the engine uses browsers' APIs to handle image files. 
-Due to API limitation (or my laziness), our engine does not support multi-page PDF images yet. 
-If you want to include a multi-page PDF images in your document, consider extracting the page you want to include and save it as an independent file first. 
-
-You can find the engine source code in https://github.com/SwiftLaTeX/SwiftLaTeX-Engine. Compiling it requires an Emscripten toolchain. 
-If you need more tech support on the engine or want to submit a feature request, you can contact g.weber(at)auckland.ac.nz.
+This section is devoted for interesting developers only. If you want more help, you could consider opening an issue.
 
 ### Live Viewer
 Our engine now directly outputs SVG files, which can be directly rendered in browsers.
 The generated SVGs contains SyncTeX information, which is the mapping from the HTML element to the source code position. The information allows us to implement WYSIWYG editing on the viewer.
+However, our viewer does not faithfully support Tikz and PGF yet. (We are not very sure how many people are using these technologies nowadays). But if you insist, you should select a correct pgf driver before including the tikz package. You may encounter some bugs, but please report them to me.
+```
+% SwiftLaTeX provides a beta support for Tikz and PGF, provided that you use a correct driver
+\def\pgfsysdriver{pgfsys-swiftlatex.def}
+\documentclass{article}
+\usepackage{tikz}
+\usepackage{verbatim}
+```
+![Screenshot](https://s3.swiftlatex.com/swiftlatex2/9FSa0rkYnHCWlA9ThUbeUYWKyE2A4yrK/asset/cn9tf1YLHmlocalhost_3011_editor.html_p_3D0KaL0q7np8(iPad_20Pro)_20(2).png)
+
 
 ### Font support
-SwiftLaTeX supports opentype fonts (ttf, otf), but you need to upload the fonts by yourself due to license issue. Once you upload your fonts, you can use
+SwiftLaTeX supports most legacy TeX fonts behind the scene. 
+SwiftLaTeX supports opentype fonts (ttf, otf), but you need to upload the fonts by yourself due to license issue. Once you upload your fonts, you can use fonts with the following snippets.
 ```
 \usepackage{fontspec}
 \setmainfont{foobar.ttf} 
 ```
-To use your fonts.
+
+### Engine 
+SwiftLaTeX engine is based on Tectonic (a C++ reimplementation of XeTeX), which supports UTF-8 and Opentype fonts out of box. 
+The engine binary exposes two major APIs **_compileLaTeX** and **_compileBibtex**.
+You may find the following source file useful as it showcases how to use these APIs.
+(https://github.com/SwiftLaTeX/SwiftLaTeX/blob/master/src/client/swiftlatex/latexEngine.tsx). 
+
+The engine is not 100% faithful to XeTeX. 
+First, it does not support Chinese/Japanese/Korea/Arabic languages.
+Supporting these languages require a fully working ICU library, whose size may be unbearable.
+Secondly, it does not support graphite fonts, which are rarely used.
+You can find the engine source code in https://github.com/SwiftLaTeX/SwiftLaTeX-Engine. Nevertheless, compiling it requires an Emscripten toolchain and some basic knowledge about WebAssembly. We would strongly recommend you to use the prebuilt binaries in this repo. 
+
+### Language Server
+SwiftLaTeX is using Digestif as a LaTeX language server. It is amazingly small and powerful. You could check out the project at https://github.com/astoff/digestif.
 
 ### Change Logs:
-2020-6-23 18:00 NZT. We update the logic to fetch CTAN files, now the viewer can now properly display legacy tex fonts. 
+You can check the detailed change logs in http://www.swiftlatex.com/changelogs.html
 
-### Production use
+### Production Use.
 SwiftLaTeX is almost for production use, with the following exceptions. These exceptions will be gradually removed.
 1. Viewer cannot display pdf images yet, but shows a placeholder for now.
 2. No graphite fonts and international line-breaking support. We so fardeem this functionalties not very useful for English-speaking people. 
