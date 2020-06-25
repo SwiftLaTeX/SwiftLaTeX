@@ -24,14 +24,9 @@
     <link rel="stylesheet" href="css/custom.css">
     <link rel="stylesheet" href="css/nprogress.css">
 
-    <!-- Scripts
-    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
-
     <!-- Favicon
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-    <link rel="icon" type="image/png" href="dist/images/favicon.png">
+    <link rel="icon" type="image/png" href="favicon.png">
 </head>
 <body class="code-snippets-visible">
 
@@ -42,12 +37,12 @@
         <h2 class="title">The Browser-based Fast LaTeX Visual Editor.</h2>
         <div id="signin_buttons">
             <span>Store your files in: </span>
-            <a class="button button-primary" onclick="localLogin();"
+            <a class="button button-primary" id="localLogin"
                title="A playgroud for you to have a look at SwiftLaTeX without login."
                href="#">Playground</a>
-            <a class="button button-primary" onclick="googleLogin();"
+            <a class="button button-primary" id="googleLogin"
                href="#">Google</a>
-            <a class="button button-primary" onclick="dropboxLogin();"
+            <a class="button button-primary" id="dropboxLogin"
                href="#">Dropbox</a>
         </div>
 
@@ -117,16 +112,19 @@
                    name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button"
                    width="96px"/>
         </form>
-        <h6 class="agreement"><span class="buildNumber">BuildNo:</span> <a href="contact.html">About Us</a> <a
-                href="eula.html">EULA</a> <a href="privacy.html">Privacy Policy</a></h6>
+        <h6 class="agreement"><span id="buildNumber">BuildNo:</span>
+            <a href="changelogs.html">Upgrade Logs</a>
+            <a href="contact.html">About Us</a>
+            <a href="eula.html">EULA</a>
+            <a href="privacy.html">Privacy Policy</a>
+        </h6>
     </div>
 </div>
 
 
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-<script src="/dist/storage.bundle.js"></script>
-<script src="index.js"></script>
+<script src="/dist/index.bundle.js"></script>
 <script src="common.js"></script>
 </body>
 </html>

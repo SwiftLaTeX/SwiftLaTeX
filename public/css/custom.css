@@ -4,11 +4,9 @@
 
 .agreement {
     float: right;
+    font-size: 12px;
 }
 
-.buildNumber {
-    font-size: 9px;
-}
 
 .header {
     margin-top: 6rem;

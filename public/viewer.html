@@ -1,8 +1,7 @@
 <html>
 
 <head>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+    <title>SwiftLaTeX Viewer</title>
 </head>
 <style>
 
@@ -28,7 +27,7 @@
 
     #toolbar {
         position: relative;
-        z-index: 10;
+        z-index: 2;
         margin: auto;
         justify-content: center;
         text-align: center;
@@ -36,7 +35,7 @@
 
     #viewer {
         position: relative;
-        z-index: 5;
+        z-index: 1;
         text-align: center;
     }
 
@@ -77,6 +76,7 @@
     </div>
 </div>
 </body>
-<script src="viewer.js"></script>
+<script src="dist/viewer.bundle.js"></script>
+
 <script src="common.js"></script>
 </html>
