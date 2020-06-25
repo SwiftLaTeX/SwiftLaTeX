@@ -29,7 +29,7 @@ yarn start
 It should work out of the box for Google and Dropbox storage. For playgroud to work, you should consider setting up a Minio server locally. More details to come.
 
 ## SwiftLaTeX Architecture
-This section is devoted for interesting developers only. If you want more help, you could considering opening an issue.
+This section is devoted for interesting developers only. If you want more help, you could consider opening an issue.
 
 ### Live Viewer
 Our engine now directly outputs SVG files, which can be directly rendered in browsers.
