@@ -34,9 +34,9 @@ This section is devoted for interesting developers only. If you want more help, 
 ### Live Viewer
 Our engine now directly outputs SVG files, which can be directly rendered in browsers.
 The generated SVGs contains SyncTeX information, which is the mapping from the HTML element to the source code position. The information allows us to implement WYSIWYG editing on the viewer.
-However, our viewer does not faithfully support Tikz and PGF yet. (We are not very sure how many people are using these technologies nowadays, personally, I would suggest use more modern technologies to generate figures.). But if you insist, you could select a correct pgf driver before including the tikz package.
+However, our viewer does not faithfully support Tikz and PGF yet. (We are not very sure how many people are using these technologies nowadays). But if you insist, you should select a correct pgf driver before including the tikz package. You may encounter some bugs, but please report them to me.
 ```
-% SwiftLaTeX provides a beta support for Tikz and PGF, provided that you use correct driver
+% SwiftLaTeX provides a beta support for Tikz and PGF, provided that you use a correct driver
 \def\pgfsysdriver{pgfsys-swiftlatex.def}
 \documentclass{article}
 \usepackage{tikz}
