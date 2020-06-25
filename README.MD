@@ -42,6 +42,8 @@ However, our viewer does not faithfully support Tikz and PGF yet. (We are not ve
 \usepackage{tikz}
 \usepackage{verbatim}
 ```
+![Screenshot](https://s3.swiftlatex.com/swiftlatex2/9FSa0rkYnHCWlA9ThUbeUYWKyE2A4yrK/asset/cn9tf1YLHmlocalhost_3011_editor.html_p_3D0KaL0q7np8(iPad_20Pro)_20(2).png)
+
 
 ### Font support
 SwiftLaTeX supports most legacy TeX fonts behind the scene. 
