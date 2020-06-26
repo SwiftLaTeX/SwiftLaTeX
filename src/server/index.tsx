@@ -12,7 +12,7 @@ import gaproxy from './analytics';
 import { AddressInfo } from 'net';
 type ShutdownSignal = 'SIGHUP' | 'SIGINT' | 'SIGTERM' | 'SIGUSR2';
 
-const port = parseInt(process.env.SNACK_PORT || '', 10) || 3011;
+const port = parseInt(process.env.SNACK_PORT || '', 10) || 3000;
 const host = '::';
 const backlog = 511;
 const timeout = 30000;
