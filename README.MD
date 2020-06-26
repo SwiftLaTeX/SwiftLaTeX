@@ -19,22 +19,24 @@ SwiftLaTeX, a WYSIWYG WebAssembly-powered LaTeX Editor.
 ## Great, I wanna have a try!
 Try it in https://www.swiftlatex.com
 
-Or host it by yourself.
+If you want to host SwiftLaTeX by yourself, you could compile it by yourself with a Node 12 toolchain
 
 ```
 git clone https://github.com/SwiftLaTeX/SwiftLaTeX
 yarn
 yarn start
 ```
-It should work out of the box for Google and Dropbox storage. For playgroud to work, you should consider setting up a Minio server locally. More details to come.
+The server will be up and running in http://localhost:3011
 
-## SwiftLaTeX Architecture
-This section is devoted for interesting developers only. If you want more help, you could consider opening an issue.
+The Google and Dropbox storage options should work out of the box. For playgroud to work, you should set up a Minio server locally. More details to come.
+
+## SwiftLaTeX Technical Details
+This section is devoted for developers only. If you want more help, you could consider opening an issue.
 
 ### Live Viewer
 Our engine now directly outputs SVG files, which can be directly rendered in browsers.
-The generated SVGs contains SyncTeX information, which is the mapping from the HTML element to the source code position. The information allows us to implement WYSIWYG editing on the viewer.
-However, our viewer does not faithfully support Tikz and PGF yet. (We are not very sure how many people are using these technologies nowadays). But if you insist, you should select a correct pgf driver before including the tikz package. You may encounter some bugs, but please report them to me.
+The generated SVGs contain SyncTeX information, which allows us to implement WYSIWYG editing on the viewer.
+Our viewer currently does not faithfully display Tikz and PGF. (We are not very sure how many people are using these technologies nowadays). But if you insist, you should select a correct pgf driver as follows before including the tikz package. 
 ```
 % SwiftLaTeX provides a beta support for Tikz and PGF, provided that you use a correct driver
 \def\pgfsysdriver{pgfsys-swiftlatex.def}
@@ -46,8 +48,8 @@ However, our viewer does not faithfully support Tikz and PGF yet. (We are not ve
 
 
 ### Font support
-SwiftLaTeX supports most legacy TeX fonts behind the scene. 
-SwiftLaTeX supports opentype fonts (ttf, otf), but you need to upload the fonts by yourself due to license issue. Once you upload your fonts, you can use fonts with the following snippets.
+SwiftLaTeX supports most legacy TeX fonts automatically. 
+SwiftLaTeX also supports opentype fonts (ttf, otf), but you need to upload the fonts by yourself due to licensing issues. Once you upload your fonts, you can use fonts as follows.
 ```
 \usepackage{fontspec}
 \setmainfont{foobar.ttf} 
