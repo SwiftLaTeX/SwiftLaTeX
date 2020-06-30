@@ -26,6 +26,7 @@ export default function recursivelyCreateParents(
           asset: false,
           uri: '',
           content: '',
+          id: '',
         },
         state: {
           isExpanded: !!expand,
