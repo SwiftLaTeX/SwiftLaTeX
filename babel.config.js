@@ -9,12 +9,13 @@ module.exports = api => {
           ? {
             targets: {
               "chrome": "70",
-              "firefox": "70"
+              "firefox": "60",
+              "safari": "11.1"
             },
           }
           : {
             targets: {
-              node: '8.14',
+              node: '10.18',
             },
           },
       ],

@@ -12,8 +12,17 @@ module.exports = {
         // Editor bundle
         editor: './src/client/editor.tsx',
 
-        // Storage Library
-        storage: './src/client/storage/index.tsx',
+        // DVIViewer bundle
+        dviviewer: './src/client/dviviewer.tsx',
+
+        // PDFViewer bundle
+        pdfviewer: './src/client/pdfviewer.tsx',
+
+        // Welcome Page
+        index: './src/client/index.tsx',
+
+        // Project Page
+        project: './src/client/project.tsx',
 
         // Editor Worker
         'editor.worker': 'monaco-editor/esm/vs/editor/editor.worker.js',
@@ -44,22 +53,13 @@ module.exports = {
     plugins: [
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+            'process.env.BUILD_NUMBER': JSON.stringify(generate('2.0.1')),
         }),
         new webpack.IgnorePlugin(
           /^((fs)|(path)|(os)|(crypto)|(source-map-support))$/,
           /vs(\/|\\)language(\/|\\)typescript(\/|\\)lib/,
         ),
         new MiniCssExtractPlugin(),
-        new StatsWriterPlugin({
-            filename: 'build-stats.js',
-            fields: ['hash'],
-            transform: ({ hash }) => `
-	        ${JSON.stringify({
-                buildDate: generate('2.0.1'),
-                hash,
-            })}
-`,
-        }),
     ],
     module: {
         rules: [

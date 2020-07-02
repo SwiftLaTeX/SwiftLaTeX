@@ -1,0 +1,87 @@
+<html>
+
+<head>
+    <title>SwiftLaTeX Viewer</title>
+</head>
+<style>
+
+    #toolbar-input {
+        width: 10%;
+        line-height: 1.00;
+        margin-left: 4px;
+        margin-right: 4px;
+        text-align: center;
+    }
+
+
+    button {
+        background-color: #555555; /* Green */
+        border: none;
+        color: white;
+        padding: 7px 7px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 10px;
+    }
+
+    #toolbar {
+        position: relative;
+        z-index: 2;
+        margin: auto;
+        justify-content: center;
+        text-align: center;
+    }
+
+    #viewer {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+    }
+
+    .exampleContainer {
+        flex: 1;
+        flex-direction: column;
+        justify-content: center;
+        padding-bottom: 35%;
+        background-color: #ecf0f1;
+        padding-top: 35%;
+    }
+
+    .exampleParagraph {
+        margin: 24px;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    #toolbar-displayimage-tip {
+        font-size:12px;
+    }
+
+</style>
+
+<body>
+<div id='toolbar'>
+    <button id='toolbar-previous'>Prev</button>
+    <input type='text' id='toolbar-input' placeholder="1/1">
+    <button id='toolbar-next'>Next</button>
+    <button id='toolbar-zoomin'>Zoomin</button>
+    <button id='toolbar-zoomout'>Zoomout</button>
+    <input type="checkbox" id="toolbar-displayimage"><label id="toolbar-displayimage-tip" for="toolbar-displayimage"> Display Images</label>
+</div>
+<div id="fontLoader">
+</div>
+<div id="viewer">
+    <div class="exampleContainer">
+        <p class="exampleParagraph">
+            Change code in the editor and watch it change on this window!
+        </p>
+    </div>
+</div>
+</body>
+
+<script src="meow.js"></script>
+<script src="dist/dviviewer.bundle.js"></script>
+
+</html>

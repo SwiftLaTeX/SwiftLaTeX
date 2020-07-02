@@ -110,7 +110,6 @@ class Project extends React.PureComponent<Props, State> {
         }).finally(() => {
             this.setState({ isBusy: false });
         });
-
     }
 
     componentDidUpdate(_: Props, __: State) {

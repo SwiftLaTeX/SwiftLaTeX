@@ -45,7 +45,7 @@
     <div class="docs-section" id="intro">
 
 
-        <p> Last changed 2020-06-15.
+        <p> Last changed 2020-06-29.
         </p>
 
 
@@ -67,17 +67,18 @@
 
 
         <p> SwiftLaTeX.com does not keep data about you. <br/>
-            The SwiftLaTeX server never learns anything about the personal data you are editing with the SwiftLaTeX editor.
+            The SwiftLaTeX server never learns anything about the personal data you are editing with the SwiftLaTeX
+            editor.
             Our application code of Swiftlatex.com does not store any information about you between your visits to
             Swiftlatex.com. The standard open source software running on our servers, including the Nginx
             webserver, in their current configuration, do not store any personal or personalizable information about
             you to the best of our knowledge.
-            We only reserve the right to do basic web page access analytics that comes inbuilt with the webserver.
+            We only reserve the right to do basic web page access analytics. We may also report uncaught exceptions
+            in our Javascript codes to allow us to mitigate bugs.
         </p>
 
 
         <p>
-
             <b>Access to Google User data: </b> SwiftLaTeX has only SwiftLaTeX client-side code running in your
             browser. <br/>
             Our SwiftLaTeX client-side code running in your browser accesses only your Google drive, and therein it
@@ -90,13 +91,24 @@
 
         <b>Access to Dropbox User data: </b> SwiftLaTeX has only SwiftLaTeX client-side code running in your
         browser. <br/>
-
         <p>
-        Our SwiftLaTeX client-side code running in your browser accesses only top-level directories in your Dropbox
-        or shared with you with a name with prefix "swiftlatex_". SwiftLaTeX client-side code is not transmitting
-        any information from your Dropbox to our servers, also not the content of the "swiftlatex_" folders.
-        SwiftLaTeX client-side code is using access to your data only to allow you editing and compiling of your
-        LaTeX projects.
+            Our SwiftLaTeX client-side code running in your browser accesses only top-level directories in your Dropbox
+            or shared with you with a name with prefix "swiftlatex_". SwiftLaTeX client-side code is not transmitting
+            any information from your Dropbox to our servers, also not the content of the "swiftlatex_" folders.
+            SwiftLaTeX client-side code is using access to your data only to allow you editing and compiling of your
+            LaTeX projects.
+        </p>
+
+        <b>Access to GitHub User data: </b> SwiftLaTeX has SwiftLaTeX client-side code running in your
+        browser. SwiftLaTeX also has a server side code in order to obtain access tokens from Github servers, as required by Github. <br/>
+        <p>
+            Our SwiftLaTeX client-side code running in your browser accesses only the `SwiftLaTeX` private repo in your
+            GitHub account.
+            SwiftLaTeX client-side code is not transmitting
+            any information from your Dropbox to our servers, also not the content of the SwiftLaTeX repos.
+            SwiftLaTeX client-side code is using access to your data only to allow you editing and compiling of your
+            LaTeX projects.
+            SwiftLaTeX server-side code does nothing more than obtaining access codes.
         </p>
 
 
@@ -130,6 +142,6 @@
 
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-<script src="common.js"></script>
+<script src="meow.js"></script>
 </body>
 </html>
