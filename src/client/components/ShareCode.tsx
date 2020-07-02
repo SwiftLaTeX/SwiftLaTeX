@@ -56,7 +56,7 @@ class ShareCode extends React.PureComponent<Props, State> {
             <div className={css(styles.container)}>
                 <Banner visible={copied}>Copied to clipboard!</Banner>
                 <div className={css(styles.section)}>
-                    <h3 className={css(styles.header)}>Share1 Code</h3>
+                    <h3 className={css(styles.header)}>Share Code</h3>
                     <div className={css(styles.inputContainer)}>
                         <input
                             readOnly

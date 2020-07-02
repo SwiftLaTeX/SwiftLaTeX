@@ -14,7 +14,7 @@
  * SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
  ********************************************************************************/
 import { LatexParser } from './latexLogParser';
-import { Annotation } from '../types';
+import { Annotation, EngineVersion } from '../types';
 export enum EngineStatus {
   Init = 1,
   Ready,
@@ -22,8 +22,8 @@ export enum EngineStatus {
   Error,
 }
 
-const PREVIEW_ENGINE_PATH = 'bin/swiftlatex.js';
-const EXPORT_ENGINE_PATH = 'bin/swiftlatex_export.js'
+const XELATEX_ENGINE_PATH = 'bin/swiftlatex.js';
+const PDFLATEX_ENGINE_PATH = 'bin/swiftlatexpdftex.js'
 
 export class CompileResult {
   pdf: Uint8Array | undefined = undefined;
@@ -33,14 +33,14 @@ export class CompileResult {
 }
 
 export class LaTeXEngine {
-  private enginePath = PREVIEW_ENGINE_PATH;
-  private engineType = 'preview';
+  private enginePath = XELATEX_ENGINE_PATH;
+  private engineType: EngineVersion = 'XeLaTeX';
   private latexWorker: Worker | undefined = undefined;
   latexWorkerStatus: EngineStatus = EngineStatus.Init;
-  constructor(engineType: 'preview' | 'export' = 'preview') {
+  constructor(engineType: EngineVersion = 'XeLaTeX') {
     this.engineType = engineType;
-    if (engineType !== 'preview') {
-      this.enginePath = EXPORT_ENGINE_PATH;
+    if (engineType !== 'XeLaTeX') {
+      this.enginePath = PDFLATEX_ENGINE_PATH;
     }
   }
 
@@ -99,10 +99,10 @@ export class LaTeXEngine {
     return converterError;
   }
 
-  async compileLaTeX(): Promise<CompileResult> {
+  async compileLaTeX(desiredDVI: boolean = false): Promise<CompileResult> {
     this.checkEngineStatus();
     this.latexWorkerStatus = EngineStatus.Busy;
-    const start_compile_time = performance.now();
+
     // await new Promise(resolve => setTimeout(resolve, 5000));
     const res: CompileResult = await new Promise((resolve, _) => {
       this.latexWorker!.onmessage = (ev: any) => {
@@ -115,7 +115,7 @@ export class LaTeXEngine {
         const log: string = data.log as string;
         const status: number = data.status as number;
         this.latexWorkerStatus = EngineStatus.Ready;
-        console.log('Engine compilation finish ' + (performance.now() - start_compile_time));
+
         const nice_report = new CompileResult();
         nice_report.status = status;
         nice_report.log = log;
@@ -123,11 +123,23 @@ export class LaTeXEngine {
         if (result === 'ok') {
           const pdf: Uint8Array = new Uint8Array(data.pdf);
           nice_report.pdf = pdf;
+        } else {
+          if (nice_report.errors.length === 0) {
+            let dummyAnnotation: Annotation = {
+              startLineNumber: 1,
+              endLineNumber: 1,
+              startColumn: 0,
+              endColumn: 1024,
+              message: `Unexpected error happened, please check the detailed log. Status ${status}, Engine: ${this.engineType}`,
+              severity: 4,
+              source: 'SwiftLaTeX'
+            }
+            nice_report.errors = [dummyAnnotation];
+          }
         }
         resolve(nice_report);
       };
-      this.latexWorker!.postMessage({ cmd: 'compilelatex' });
-      console.log('Engine compilation start');
+      this.latexWorker!.postMessage({ cmd: 'compilelatex', dvi: desiredDVI });
     });
     this.latexWorker!.onmessage = (_: any) => {};
 
@@ -167,52 +179,6 @@ export class LaTeXEngine {
     this.latexWorker!.onmessage = (_: any) => {};
   }
 
-  async compilePDF(): Promise<CompileResult> {
-    if (this.engineType === 'preview') {
-      throw new Error('Current engine does not support PDF generation');
-    }
-    this.checkEngineStatus();
-    this.latexWorkerStatus = EngineStatus.Busy;
-    const start_compile_time = performance.now();
-    const res: CompileResult = await new Promise((resolve, _) => {
-      this.latexWorker!.onmessage = (ev: any) => {
-        const data: any = ev['data'];
-        const cmd: string = data['cmd'] as string;
-        if (cmd !== "compile") return;
-        const result: string = data['result'] as string;
-        const log: string = data['log'] as string;
-        const status: number = data['status'] as number;
-        this.latexWorkerStatus = EngineStatus.Ready;
-        console.log('Engine compilation finish ' + (performance.now() - start_compile_time));
-        const nice_report = new CompileResult();
-        nice_report.status = status;
-        nice_report.log = log;
-        if (result === 'ok') {
-          const pdf: Uint8Array = new Uint8Array(data['pdf']);
-          nice_report.pdf = pdf;
-        } else {
-          let dummyAnnotation: Annotation = {
-            startLineNumber: 1,
-            endLineNumber: 1,
-            startColumn: 0,
-            endColumn: 1024,
-            message: 'Unable error happened when generating PDF. Status ' + status,
-            severity: 4,
-            source: 'Dvipdfmx'
-          }
-          nice_report.errors = [dummyAnnotation];
-        }
-        resolve(nice_report);
-      };
-      this.latexWorker!.postMessage({ 'cmd': 'compilepdf' });
-      console.log('Engine compilation start');
-    });
-    this.latexWorker!.onmessage = (_: any) => {
-    };
-
-    return res;
-  }
-
   setEngineMainFile(filename: string): void {
     this.checkEngineStatus();
     if (this.latexWorker !== undefined) {
@@ -222,7 +188,7 @@ export class LaTeXEngine {
 
   writeMemFSFile(filename: string, srccode: string | ArrayBuffer): void {
     this.checkEngineStatus();
-    if (!srccode) {
+    if (srccode === undefined) {
       return;
     }
     if (srccode instanceof ArrayBuffer) {

@@ -1,3 +1,11 @@
+export const EngineVersions = {
+  'XeLaTeX': true,
+  'PDFLaTeX': true
+};
+
+export type EngineVersion = keyof typeof EngineVersions;
+
+export const DEFAULT_ENGINE_VERSION: EngineVersion = 'XeLaTeX';
 
 export type Annotation = {
   startLineNumber: number;

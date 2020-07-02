@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    minWidth: 240,
+    minWidth: 210,
     borderRight: `1px solid ${colors.border}`,
   },
 

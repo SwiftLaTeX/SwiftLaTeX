@@ -10,26 +10,34 @@ import AnimatedLogo from './shared/AnimatedLogo';
 import { LaTeXEngine, CompileResult } from '../swiftlatex/latexEngine';
 import { loadWASM } from 'onigasm'; // peer dependency of 'monaco-textmate'
 import JSZip from 'jszip';
-import { arrayBufferToJson, arrayBufferToString, isImageFile, isOpenTypeFontFile } from '../utils/fileUtilities';
+import {
+    arrayBufferToJson,
+    arrayBufferToString,
+    isImageFile,
+    isOpenTypeFontFile,
+    triggerDownloadBlob,
+} from '../utils/fileUtilities';
 import { initializeStorage, BackendStorage } from '../storage/index';
-
+import { EventReporter } from '../utils/eventReport';
 
 import {
+    EngineVersion,
     Annotation,
     FileSystemEntry,
-    SaveStatus,
+    SaveStatus, DEFAULT_ENGINE_VERSION,
 } from '../types';
-import { measureImageDimension } from '../utils/measureImageDimension';
+import { DvipdfmxEngine } from '../swiftlatex/dvipdfmxEngine';
 
 
 const BROADCAST_CHANNEL_NAME = 'SWIFTLATEX_BROADCAST_CHANNEL';
 
 enum SessionStatus {
+    Init,
     LoadComponents,
     LoadFiles,
     Ready,
     LoadComponentsFailed,
-    LoadFilesFailed
+    LoadFilesFailed,
 }
 
 type State = {
@@ -40,46 +48,45 @@ type State = {
     isSystemBusy: boolean;
     sessionStatus: SessionStatus;
     sendCodeOnChangeEnabled: boolean;
-    autosaveEnabled: boolean;
     saveStatus: SaveStatus;
     fileEntries: FileSystemEntry[];
     engineErrors: Annotation[] | undefined;
     engineLogs: string;
     entryPoint: string;
+    engine: EngineVersion;
 };
 
 
 export default class App extends React.Component<any, State> {
     constructor(props: any) {
         super(props);
+        const urlParams = new URLSearchParams(window.location.search);
+        const project_id = urlParams.get('p') || '';
         this.state = {
-            id: '',
+            id: project_id,
             username: '',
             name: '',
             isSaved: false,
             isSystemBusy: false,
-            sessionStatus: SessionStatus.LoadComponents,
+            sessionStatus: SessionStatus.Init,
             sendCodeOnChangeEnabled: true,
-            autosaveEnabled: true,
             saveStatus: 'changed',
             fileEntries: [],
             engineLogs: '',
             engineErrors: undefined,
             entryPoint: 'main.tex',
+            engine: DEFAULT_ENGINE_VERSION
         };
+        EventReporter.reportPageView();
     }
 
     componentDidMount() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const project_id = urlParams.get('p');
 
-        if (!project_id) {
+        const project_id = this.state.id;
+        if (project_id === '') {
             this.setState({ sessionStatus: SessionStatus.LoadFilesFailed });
-        } else {
-            this.setState({ 'id': project_id });
+            return;
         }
-
-        this._initSession().then();
 
         this._broadcastChannel = new BroadcastChannel(BROADCAST_CHANNEL_NAME, {
             webWorkerSupport: false,
@@ -107,17 +114,17 @@ export default class App extends React.Component<any, State> {
                     break;
                 case 'DUPLICATE_TAB':
                     alert('Warning: another tab with the same project is opened!');
-                    window.close();
                     break;
             }
         });
+
+        this._initSession().then();
     }
 
     _latexEngine: LaTeXEngine = undefined as any;
     _backendStorage: BackendStorage | undefined = undefined;
 
     async _loadEditorComponents() {
-        try {
             await new Promise((resolve, reject) => {
                 loadWASM('bin/onigasm.wasm').then(
                     function() {
@@ -130,10 +137,6 @@ export default class App extends React.Component<any, State> {
             });
             this._latexEngine = new LaTeXEngine();
             await this._latexEngine.loadEngine();
-            return true;
-        } catch (e) {
-            return false;
-        }
     }
 
     async __loadSingleFile(tmp: any): Promise<FileSystemEntry | undefined> {
@@ -171,7 +174,7 @@ export default class App extends React.Component<any, State> {
     }
 
     async _loadProjectFiles() {
-        try {
+
             const manifest_buffer = await this._backendStorage!.get('manifest', this.state.id);
             const manifest = arrayBufferToJson(manifest_buffer);
             const username = manifest['username'];
@@ -179,11 +182,11 @@ export default class App extends React.Component<any, State> {
             let entryPoint = manifest['entryPoint'];
             const fileEntries = manifest['fileEntries'];
             if (!isString(username) || !isString(name) || !isString(entryPoint) || !fileEntries) {
-                return false;
+                throw new Error('Malformed Manifest');
             }
 
             if (!Array.isArray(fileEntries)) {
-                return false;
+                throw new Error('Malformed Manifest');
             }
 
             const importedEntries: FileSystemEntry[] = [];
@@ -192,7 +195,7 @@ export default class App extends React.Component<any, State> {
             for (let j = 0; j < fileEntries.length; j++) {
                 const tmp = fileEntries[j];
                 if (!isString(tmp.type) || !isString(tmp.id) || !isString(tmp.path) || !isString(tmp.uri) || !isBoolean(tmp.asset)) {
-                    return false;
+                    throw new Error('Malformed Manifest');
                 }
                 fileLoadingPromises.push(this.__loadSingleFile(tmp));
             }
@@ -223,44 +226,57 @@ export default class App extends React.Component<any, State> {
                 fileEntries: importedEntries,
                 entryPoint: entryPoint,
             });
-
-            return true;
-        } catch (e) {
-            return false;
-        }
     }
 
     async _initSession() {
         /* Load Components */
-        this._backendStorage = initializeStorage();
-
-        if (!this._backendStorage) {
+        try {
+            this._backendStorage = initializeStorage();
+        } catch {
             this.setState({
                 sessionStatus: SessionStatus.LoadComponentsFailed,
             });
             return;
         }
 
-        if (await this._loadEditorComponents()) {
+        this.setState({sessionStatus: SessionStatus.LoadFiles});
+        try {
+            await this._loadProjectFiles()
+        } catch (e) {
             this.setState({
-                sessionStatus: SessionStatus.LoadFiles,
+                sessionStatus: SessionStatus.LoadFilesFailed,
             });
-            if (await this._loadProjectFiles()) {
-                this.setState({
-                    sessionStatus: SessionStatus.Ready,
-                });
-            } else {
-                this.setState({
-                    sessionStatus: SessionStatus.LoadFilesFailed,
-                });
-            }
-        } else {
+            return;
+        }
+
+        this.setState({sessionStatus: SessionStatus.LoadComponents});
+        try {
+            await this._loadEditorComponents()
+        } catch {
             this.setState({
                 sessionStatus: SessionStatus.LoadComponentsFailed,
             });
+            return;
         }
+        this.setState({sessionStatus: SessionStatus.Ready});
     }
 
+    _handleChangeEngineVersion = async (engine: EngineVersion) => {
+        if (this.state.isSystemBusy || this.state.engine === engine) {
+            return;
+        }
+        this.setState({isSystemBusy: true});
+        EventReporter.reportEvent('editor', 'switchEngine', engine);
+        this._latexEngine && this._latexEngine.closeWorker();
+        try {
+            this._latexEngine = new LaTeXEngine(engine);
+            await this._latexEngine.loadEngine();
+            this._requiredFlushInEngine = true;
+            this.setState({engine: engine, isSystemBusy: false});
+        } catch {
+            this.setState({sessionStatus: SessionStatus.LoadComponentsFailed});
+        }
+    }
 
     _compareFileTreeStructure(
         nextFileEntries: FileSystemEntry[],
@@ -332,7 +348,7 @@ export default class App extends React.Component<any, State> {
                         } catch (e) {
                             console.log('An upload error is detected, silently ignored?' + tmp.item.path);
                         }
-                        console.log('Uploading finish' + tmp.item.path);
+                        // console.log('Uploading finish' + tmp.item.path);
                     }
                 }
             }
@@ -357,7 +373,7 @@ export default class App extends React.Component<any, State> {
         }
 
         if (this.state.sendCodeOnChangeEnabled) {
-            if (this.state.fileEntries.length > 0  && this.state.entryPoint) {
+            if (this.state.fileEntries.length > 0 && this.state.entryPoint) {
                 if (this._requiredFlushInEngine || this._requiredUpdateFilesInEngine.length > 0) {
                     this._fireEngine();
                 }
@@ -392,6 +408,7 @@ export default class App extends React.Component<any, State> {
 
 
     _syncManifestNoDebounce = async () => {
+        EventReporter.reportEvent('editor', 'syncCode');
         const fileEntriesCopy = await this._uploadFileTree();
         const manifest = {
             name: this.state.name,
@@ -399,6 +416,7 @@ export default class App extends React.Component<any, State> {
             username: this.state.username,
             modifiedTime: new Date().toString(),
             fileEntries: fileEntriesCopy,
+            engine: this.state.engine
         };
         const jsonStr = JSON.stringify(manifest);
         // console.log(jsonStr);
@@ -414,7 +432,6 @@ export default class App extends React.Component<any, State> {
 
     _syncManifest = debounce(this._syncManifestNoDebounce, 5000);
 
-    
 
     _handleChangeCursor = (path: string, line: number, column: number) => {
         const preview = this._previewRef.current;
@@ -434,8 +451,8 @@ export default class App extends React.Component<any, State> {
         return resourceMap;
     };
 
-    _fireEngineDebounce = async () => {
-        if (!this._latexEngine.isReady()) return;
+    _fireEngineNoDebounce = async () => {
+        if (!this._latexEngine.isReady()) return false;
         const currentFileEntries = this.state.fileEntries;
 
         if (this._requiredFlushInEngine) {
@@ -451,14 +468,9 @@ export default class App extends React.Component<any, State> {
             for (let j = 0; j < currentFileEntries.length; j++) {
                 const tmp = currentFileEntries[j];
                 if (tmp.item.type === 'file') {
-                    if (isImageFile(tmp.item.path)) {
-                        const content = await measureImageDimension(new Blob([tmp.item.content]), tmp.item.path, tmp.item.id);
-                        console.log('Write fresh image ' + tmp.item.path);
-                        this._latexEngine.writeMemFSFile(tmp.item.path, content);
-                    } else {
-                        console.log('Write fresh file ' + tmp.item.path);
-                        this._latexEngine.writeMemFSFile(tmp.item.path, tmp.item.content);
-                    }
+                    console.log('Write fresh file ' + tmp.item.path);
+                    this._latexEngine.writeMemFSFile(tmp.item.path, tmp.item.content);
+
                 }
             }
         } else {
@@ -479,28 +491,41 @@ export default class App extends React.Component<any, State> {
         if (preview) {
             preview.postMessage({ cmd: 'compileStart' }, '*');
         }
+        console.log('Engine compilation start');
+        const start_compile_time = performance.now();
         const r: CompileResult = await this._latexEngine.compileLaTeX();
+        const past_time = performance.now() - start_compile_time;
+        console.log('Engine compilation finish ' + past_time);
+        EventReporter.reportTiming('editor', 'compile_timing', past_time);
         if (preview) {
             preview.postMessage({ cmd: 'compileEnd' }, '*');
         }
         this.setState({ isSystemBusy: false, engineLogs: r.log, engineErrors: r.errors });
         if (r.pdf) {
+            EventReporter.reportEvent('editor', 'compile_ok');
             if (preview) {
-                const content = new TextDecoder('utf-8').decode(r.pdf);
+                let content: string | Uint8Array = r.pdf;
+                if (this.state.engine === 'XeLaTeX') {
+                    content = new TextDecoder('utf-8').decode(content);
+                }
                 preview.postMessage({
                     cmd: 'setContent',
                     source: content,
                     resources: this._generateResourceUrlMap(),
                 }, '*');
             }
+            return true;
         } else {
+            EventReporter.reportEvent('editor', 'compile_failed', r.errors);
             if (preview) {
                 preview.postMessage({ cmd: 'compileError' }, '*');
             }
+            this._requiredFlushInEngine = true;
+            return false;
         }
     };
 
-    _fireEngine = debounce(this._fireEngineDebounce, 1000);
+    _fireEngine = debounce(this._fireEngineNoDebounce, 1000);
 
     _handleOnSendCode = () => {
         if (this.state.entryPoint) {
@@ -558,6 +583,7 @@ export default class App extends React.Component<any, State> {
 
     _handleDownloadAsync = async () => {
         // Already check if Snack is saved in EditorView.js
+        EventReporter.reportEvent('editor', 'download');
         this.setState({ isSystemBusy: true });
 
         const zipobj = new JSZip();
@@ -569,9 +595,10 @@ export default class App extends React.Component<any, State> {
             }
         }
         const blobFile = await zipobj.generateAsync({ type: 'blob' });
-        this._triggerDownloadBlobAction(blobFile, 'export.zip');
+        triggerDownloadBlob(blobFile, 'export.zip');
 
         this.setState({ isSystemBusy: false });
+
     };
 
     _findFocusedEntry = (entries: FileSystemEntry[]): FileSystemEntry | undefined =>
@@ -587,77 +614,110 @@ export default class App extends React.Component<any, State> {
         this.setState({ entryPoint: path, saveStatus: 'changed' });
     };
 
-    _triggerDownloadBlobAction = (blob: Blob, name: string) => {
-        const tempPDFURL = URL.createObjectURL(blob);
-        setTimeout(_ => {
-            URL.revokeObjectURL(tempPDFURL);
-        }, 30000);
-        // Simulate link click to download file
-        const element = document.createElement('a');
-        if (element && document.body) {
-            document.body.appendChild(element);
-            element.setAttribute('href', tempPDFURL);
-            element.setAttribute('download', name);
-            element.style.display = '';
-            element.click();
-            document.body.removeChild(element);
-        }
-    };
-
-    _handleExportPDF = async () => {
-        if (!this.state.entryPoint || this.state.fileEntries.length === 0) {
-            return;
-        }
+    _handlePDFTeXExport = async () => {
+        let pdfCompileOk = true;
         this.setState({ isSystemBusy: true });
-        const export_engine = new LaTeXEngine('export');
-
-        await export_engine.loadEngine();
-        let currentFileEntries = this.state.fileEntries;
-        for (let j = 0; j < currentFileEntries.length; j++) {
-            const tmp = currentFileEntries[j];
-            if (tmp.item.type === 'folder') {
-                console.log('Export: Make fresh dir ' + tmp.item.path);
-                export_engine.makeMemFSFolder(tmp.item.path);
-            }
-        }
-        for (let j = 0; j < currentFileEntries.length; j++) {
-            const tmp = currentFileEntries[j];
-            if (tmp.item.type === 'file') {
-                export_engine.writeMemFSFile(tmp.item.path, tmp.item.content);
-            }
-        }
-
-        export_engine.setEngineMainFile(this.state.entryPoint);
-        let compileOk = true;
-
+        let pdfResult: CompileResult = undefined as any;
         for (let j = 0; j < 3; j++) {
-            const r: CompileResult = await export_engine.compileLaTeX();
-            if (!r.pdf) {
-                compileOk = false;
-                this.setState({ engineLogs: r.log, engineErrors: r.errors });
-                console.log(r.errors);
+            pdfResult = await this._latexEngine.compileLaTeX(true);
+            this.setState({ engineLogs: pdfResult.log, engineErrors: pdfResult.errors });
+            if (!pdfResult.pdf) {
+                pdfCompileOk = false;
+                break;
+            }
+        }
+        this.setState({ isSystemBusy: false });
+        if (pdfCompileOk) {
+            triggerDownloadBlob(new Blob([pdfResult.pdf!]), 'export.pdf');
+        } else {
+            this._requiredFlushInEngine = true; /* Error, we require flush */
+        }
+    }
+
+    _handleXeTeXExport = async () => {
+        /* Only XeLaTeX requires DVIPDFMX */
+        const export_engine = new DvipdfmxEngine();
+        await export_engine.loadEngine();
+        let dviCompileOk = true;
+        /* Compile DVI First */
+
+        this.setState({ isSystemBusy: true });
+        let xdvResult: CompileResult = undefined as any;
+        for (let j = 0; j < 3; j++) {
+            xdvResult = await this._latexEngine.compileLaTeX(true);
+            this.setState({ engineLogs: xdvResult.log, engineErrors: xdvResult.errors });
+            if (!xdvResult.pdf) {
+                dviCompileOk = false;
                 break;
             }
         }
 
-        if (!compileOk) {
-            /* Nothing we can do */
-        } else {
+        /* Feed XDV and Resources to DVIPDFMX */
+        if (dviCompileOk) {
+            let currentFileEntries = this.state.fileEntries;
+            for (let j = 0; j < currentFileEntries.length; j++) {
+                const tmp = currentFileEntries[j];
+                if (tmp.item.type === 'folder') {
+                    // console.error('Export: Make fresh dir ' + tmp.item.path);
+                    export_engine.makeMemFSFolder(tmp.item.path);
+                }
+            }
+            for (let j = 0; j < currentFileEntries.length; j++) {
+                const tmp = currentFileEntries[j];
+                if (tmp.item.type === 'file') {
+                    // console.error('Export: write fresh file ' + tmp.item.path);
+                    export_engine.writeMemFSFile(tmp.item.path, tmp.item.content);
+                }
+            }
+            const xdvPath = this.state.entryPoint.substr(0, this.state.entryPoint.length - 4) + '.xdv';
+            // console.error('Export: write xdv file ' + xdvPath);
+            export_engine.writeMemFSFile(xdvPath, xdvResult.pdf!);
+            export_engine.setEngineMainFile(this.state.entryPoint);
             const r: CompileResult = await export_engine.compilePDF();
             if (r.pdf) {
-                this._triggerDownloadBlobAction(new Blob([r.pdf]), 'export.pdf');
+                triggerDownloadBlob(new Blob([r.pdf]), 'export.pdf');
             } else {
                 this.setState({ engineLogs: r.log, engineErrors: r.errors });
             }
         }
-
         this.setState({ isSystemBusy: false });
         export_engine.closeWorker();
+
+        /* Weird */
+        if (!dviCompileOk) {
+            this._requiredFlushInEngine = true;
+        }
+    }
+
+    _handleExportPDF = async () => {
+        if (!this._latexEngine || !this._latexEngine.isReady()) {
+            return;
+        }
+
+        if (!this.state.entryPoint || this.state.fileEntries.length === 0) {
+            return;
+        }
+
+        if (this._requiredFlushInEngine || this._requiredUpdateFilesInEngine.length > 0) {
+            return;
+        }
+
+        if (this.state.engineErrors && this.state.engineErrors.length > 0) {
+            return;
+        }
+
+        EventReporter.reportEvent('editor', 'export');
+
+        if (this.state.engine === 'PDFLaTeX') {
+            await this._handlePDFTeXExport();
+        } else {
+            await this._handleXeTeXExport();
+        }
     };
 
-    _handleShareProject = async() => {
+    _handleShareProject = async () => {
 
-    }
+    };
 
     render() {
         if (this.state.sessionStatus === SessionStatus.Ready) {
@@ -686,9 +746,11 @@ export default class App extends React.Component<any, State> {
                     entryPoint={this.state.entryPoint}
                     onSetEntryPoint={this._handleSetEntryPoint}
                     onShareProject={this._handleShareProject}
+                    engine={this.state.engine}
+                    onChangeEngineVersion={this._handleChangeEngineVersion}
                 />
             );
-        } else if (this.state.sessionStatus === SessionStatus.LoadComponents || this.state.sessionStatus === SessionStatus.LoadFiles) {
+        } else if (this.state.sessionStatus === SessionStatus.Init || this.state.sessionStatus === SessionStatus.LoadComponents || this.state.sessionStatus === SessionStatus.LoadFiles) {
 
             return (<div className={css(styles.container)}>
                 <div className={css(styles.logo)}>

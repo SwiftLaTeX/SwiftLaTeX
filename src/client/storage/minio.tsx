@@ -26,7 +26,7 @@ export class MinioStorage extends BackendStorage {
 
     async list(scope: string): Promise<ItemEntry[]> {
         const url = this.token + '/' + scope;
-        const response = await fetch(`/list?uri=${url}`, { method: 'GET' });
+        const response = await fetch(`/list?uri=${url}`, { cache: "no-cache"});
         if (!response.ok) {
             throw new Error('Cannot list scope');
         }
@@ -52,7 +52,7 @@ export class MinioStorage extends BackendStorage {
 
     async put(scope: string, key: string, blobLike: Blob): Promise<string> {
         const url = this.token + '/' + scope + '/' + key;
-        const presigned_req = await fetch(`/upload?uri=${url}`, { method: 'GET' });
+        const presigned_req = await fetch(`/upload?uri=${url}`, { cache: "no-cache" });
         if (!presigned_req.ok) {
             throw new Error('Cannot get presigned url');
         }

@@ -2,11 +2,11 @@ import { Context } from 'koa';
 import compose from 'koa-compose';
 import Router from 'koa-router';
 import axios from 'axios';
-
+const HIT_URL = '04cd307674c4166727511267b681f84e';
 const analytics = async (ctx: Context) => {
 
     const clientIp = ctx.request.headers['x-real-ip'] || ctx.request.headers['x-forwarded-for'] || '127.0.0.1';
-    let url = 'https://www.google-analytics.com' + ctx.url.slice(10).replace('c0ll2ct', 'collect');
+    let url = 'https://www.google-analytics.com' + ctx.url.slice(10).replace(HIT_URL, 'collect');
     url = url + (url.indexOf('?') === -1 ? '?' : '&') + 'uip=' + encodeURIComponent(clientIp);
     let headerConfigs = {
         headers: {
@@ -28,8 +28,12 @@ const analytics = async (ctx: Context) => {
 
 export default function gaproxy() {
     const router = new Router();
-    router.get('/analytics/c0ll2ct', analytics);
-    router.get('/analytics/r/c0ll2ct', analytics);
-    router.get('/analytics/j/c0ll2ct', analytics);
+
+    router.get(`/analytics/${HIT_URL}`, analytics);
+    router.get(`/analytics/r/${HIT_URL}`, analytics);
+    router.get(`/analytics/j/${HIT_URL}`, analytics);
+    router.post(`/analytics/${HIT_URL}`, analytics);
+    router.post(`/analytics/r/${HIT_URL}`, analytics);
+    router.post(`/analytics/j/${HIT_URL}`, analytics);
     return compose([router.routes(), router.allowedMethods()]);
 }

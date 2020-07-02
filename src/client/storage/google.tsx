@@ -1,4 +1,5 @@
 import { ItemEntry, BackendStorage, UserInfo } from './backendStorage';
+import { genRandomString } from '../utils/fileUtilities';
 
 const GOOGLE_CLIENT_ID = '691913119884-481fqunn0n41a86p7rv1g4aqrr3t1dmr.apps.googleusercontent.com';
 const GOOGLE_REDIRECT_URL = process.env.NODE_ENV === 'production' ? 'https://www.swiftlatex.com/auth.html': 'http://localhost:3011/auth.html';
@@ -80,7 +81,9 @@ export class GoogleStorage extends BackendStorage {
 
 
     static getAuthUrl(): string {
-        return `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&response_type=token&state=google&scope=https://www.googleapis.com/auth/drive.file email profile &redirect_uri=${GOOGLE_REDIRECT_URL}`;
+        const secureState = "google" + genRandomString();
+        window.localStorage.setItem("oauthState", secureState);
+        return `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&response_type=token&state=${secureState}&scope=https://www.googleapis.com/auth/drive.file email profile &redirect_uri=${GOOGLE_REDIRECT_URL}`;
     }
 
 

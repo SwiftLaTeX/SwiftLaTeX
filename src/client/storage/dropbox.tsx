@@ -1,4 +1,5 @@
 import { BackendStorage, ItemEntry, UserInfo } from './backendStorage';
+import { genRandomString } from '../utils/fileUtilities';
 
 const DROPBOX_ID = 'gu8xjkr74jsx4rn';
 const DROPBOX_REDIRECT_URL = process.env.NODE_ENV === 'production' ? 'https://www.swiftlatex.com/auth.html': 'http://localhost:3011/auth.html';
@@ -65,7 +66,9 @@ export class DropboxStorage extends BackendStorage {
     }
 
     static getAuthUrl(): string {
-        return `https://www.dropbox.com/oauth2/authorize?response_type=token&client_id=${DROPBOX_ID}&redirect_uri=${DROPBOX_REDIRECT_URL}&state=dropbox`;
+        const secureState = "dropbox" + genRandomString();
+        window.localStorage.setItem("oauthState", secureState);
+        return `https://www.dropbox.com/oauth2/authorize?response_type=token&client_id=${DROPBOX_ID}&redirect_uri=${DROPBOX_REDIRECT_URL}&state=${secureState}`;
     }
 
 

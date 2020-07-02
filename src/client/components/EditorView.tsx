@@ -3,7 +3,6 @@ import { StyleSheet, css } from 'aphrodite';
 import ProgressIndicator from './shared/ProgressIndicator';
 import ContentShell from './Shell/ContentShell';
 import LayoutShell from './Shell/LayoutShell';
-import DevicePreview from './Preview/DevicePreview';
 import EditorToolbar from './EditorToolbar';
 import EditorPanels from './EditorPanels';
 import EditorFooter from './EditorFooter';
@@ -19,18 +18,19 @@ import {
     changeParentPath,
 } from '../utils/fileUtilities';
 import withPreferences, { PreferencesContextType } from './Preferences/withPreferences';
-import { c } from './ColorsProvider';
 import { FileSystemEntry, Annotation } from '../types';
 import { EditorViewProps } from './EditorViewProps';
 import ShareCode from './ShareCode';
-
+import SplitterLayout from 'react-splitter-layout';
+import './shared/Splitter.css';
+import WebFrame from './WebFrame';
 
 
 export type Props = PreferencesContextType &
     EditorViewProps;
 
-type ModalName =  'shortcuts' | 'share' ;
-type BannerName = 'no-entry' | 'entry-changed';
+type ModalName = 'shortcuts' | 'share' ;
+type BannerName = 'no-entry' | 'entry-changed' | 'engine-changed';
 
 type State = {
     currentModal: ModalName | null;
@@ -39,9 +39,11 @@ type State = {
     deviceLogsShown: boolean;
     shouldPreventRedirectWarning: boolean;
     previousEntry: FileSystemEntry | undefined;
+    dragging: boolean;
 };
 
 const BANNER_TIMEOUT_SHORT = 3000;
+
 // const BANNER_TIMEOUT_LONG = 15000;
 
 class EditorView extends React.Component<Props, State> {
@@ -52,17 +54,21 @@ class EditorView extends React.Component<Props, State> {
         deviceLogsShown: false,
         shouldPreventRedirectWarning: false,
         previousEntry: undefined,
+        dragging: false,
     };
 
     componentDidMount() {
         this._EditorComponentRef = React.createRef();
         window.addEventListener('beforeunload', this._handleUnload);
-
     }
 
-    componentDidUpdate(prevProps: Props) {
+    componentDidUpdate(prevProps: Props, _: State) {
         if (this.props.entryPoint !== prevProps.entryPoint) {
             this._showBanner('entry-changed', BANNER_TIMEOUT_SHORT);
+        }
+
+        if (this.props.engine !== prevProps.engine) {
+            this._showBanner('engine-changed', BANNER_TIMEOUT_SHORT);
         }
     }
 
@@ -113,7 +119,7 @@ class EditorView extends React.Component<Props, State> {
                 }
             });
         } else {
-                MonacoEditor.removePath(path);
+            MonacoEditor.removePath(path);
         }
     };
 
@@ -182,6 +188,15 @@ class EditorView extends React.Component<Props, State> {
         this.setState({ currentModal: null });
     };
 
+    onDragStart = () => {
+        this.setState({ dragging: true });
+    };
+
+    onDragEnd = () => {
+        this.setState({ dragging: false });
+    };
+
+
     render() {
         const { currentBanner, currentModal } = this.state;
 
@@ -201,6 +216,8 @@ class EditorView extends React.Component<Props, State> {
             previewRef,
             entryPoint,
             onSetEntryPoint,
+            engine,
+            onChangeEngineVersion,
         } = this.props;
 
         let annotations: Annotation[] = [];
@@ -261,9 +278,16 @@ class EditorView extends React.Component<Props, State> {
                                 entryPoint={entryPoint}
                                 onSetEntryPoint={onSetEntryPoint}
                             />
-                            {editorComponent}
-                            {preferences.devicePreviewShown ? <DevicePreview previewRef={previewRef}
-                                                                             onPreviewClick={this._handlePreviewClick}/> : null}
+                            <SplitterLayout onDragStart={this.onDragStart} onDragEnd={this.onDragEnd} percentage={true}
+                                            secondaryInitialSize={45}>
+                                <div className={css(styles.editorArea)}>{editorComponent}</div>
+                                {preferences.devicePreviewShown && <div className={css(styles.previewerArea)}>
+                                    {this.state.dragging && <div className="my-iframe-overlay"/>}
+                                    <WebFrame engine={engine} previewRef={previewRef}
+                                              onPreviewClick={this._handlePreviewClick}/></div>}
+                            </SplitterLayout>
+
+
                         </LayoutShell>
                         {preferences.panelsShown ? (
                             <EditorPanels
@@ -286,6 +310,8 @@ class EditorView extends React.Component<Props, State> {
                     sendCodeOnChangeEnabled={sendCodeOnChangeEnabled}
                     onSendCode={onSendCode}
                     // onReloadSnack={onReloadSnack}
+                    engine={engine}
+                    onChangeEngineVersion={onChangeEngineVersion}
                     onToggleTheme={this._toggleTheme}
                     onTogglePanels={this._togglePanels}
                     onToggleFileTree={this._toggleFileTree}
@@ -300,12 +326,16 @@ class EditorView extends React.Component<Props, State> {
                     visible={currentModal === 'share'}
                     onDismiss={this._handleHideModal}>
                     <ShareCode
-                    theme={this.props.preferences.theme}
+                        theme={this.props.preferences.theme}
                     />
                 </ModalDialog>
 
                 <Banner type="success" visible={currentBanner === 'entry-changed'}>
                     Entry point is set to {this.props.entryPoint}
+                </Banner>
+                <Banner type="success" visible={currentBanner === 'engine-changed'}>
+                    Switch to the {this.props.engine} typesetting
+                    engine. {this.props.engine === 'PDFLaTeX' ? 'Note that PDFLaTeX engine has limited WYSIWYG functionalities' : ''}
                 </Banner>
                 <Banner type="error" visible={!this.props.entryPoint}>
                     No entry point detected, please choose a tex file as the entry point.
@@ -341,34 +371,18 @@ const styles = StyleSheet.create({
         maxHeight: 'calc(100% - 48px)',
     },
 
-    splitPane: {
+    previewerArea: {
         display: 'flex',
-        flexDirection: 'row',
         flex: 1,
+        flexDirection: 'column',
     },
 
-    previewToggle: {
-        appearance: 'none',
-        position: 'absolute',
-        right: 0,
-        bottom: 0,
-        margin: 32,
-        padding: 12,
-        height: 48,
-        width: 48,
-        border: 0,
-        borderRadius: '50%',
-        backgroundColor: c('accent'),
-        color: c('accent-text'),
-        outline: 0,
-
-        ':focus-visible': {
-            outline: 'auto',
-        },
+    editorArea: {
+        display: 'flex',
+        flex: 1,
+        flexDirection: 'column',
+        height: '100%',
+        overflow: 'hidden',
     },
 
-    previewToggleIcon: {
-        fill: 'currentColor',
-        verticalAlign: -1,
-    },
 });

@@ -4,15 +4,16 @@ import path from 'path';
 import Koa from 'koa';
 import serve from 'koa-static';
 import mount from 'koa-mount';
-import compress from 'koa-compress';
+// import compress from 'koa-compress';
 import bodyParser from 'koa-body';
 import stoppable from 'stoppable';
 import playground from './playground';
 import gaproxy from './analytics';
 import { AddressInfo } from 'net';
+import githubOauth from './github';
 type ShutdownSignal = 'SIGHUP' | 'SIGINT' | 'SIGTERM' | 'SIGUSR2';
 
-const port = parseInt(process.env.SNACK_PORT || '', 10) || 3011;
+const port = parseInt(process.env.SWIFT_PORT || '', 10) || 3011;
 const host = '::';
 const backlog = 511;
 const timeout = 30000;
@@ -25,15 +26,9 @@ if (require.main === module) {
 
 const app = new Koa();
 
-if (process.env.COMPRESS_ASSETS === 'true') {
-  // Enable gzip compression conditionally, for development
-  // This makes it easier to test how big bundles will be in production
-  app.use(compress());
-}
-
-
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
   console.log('Production mode');
+  // app.use(compress());
   app.use(mount('/dist', serve(path.join(__dirname, '..', '..', 'dist'))));
 } else {
   // Use webpack dev middleware in development
@@ -66,7 +61,8 @@ if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
 app.use(serve(path.join(__dirname, '..', '..', 'public')));
 app.use(bodyParser({ multipart: true }));
 app.use(playground());
-app.use(gaproxy())
+app.use(gaproxy());
+app.use(githubOauth());
 
 const httpServer = app.listen(port, host, backlog, () => {
   const { address, port } = server.address() as AddressInfo;

@@ -4,10 +4,8 @@ import ToolbarShell from './Shell/ToolbarShell';
 import ToolbarTitleShell from './Shell/ToolbarTitleShell';
 import IconButton from './shared/IconButton';
 import EditorTitle from './EditorTitle';
-
-
 import { SaveStatus } from '../types';
-import usePreferences from './Preferences/usePreferences';
+
 
 type Props = {
     name: string;
@@ -20,7 +18,6 @@ type Props = {
 };
 
 export default function EditorToolbar(props: Props) {
-    const [preferences] = usePreferences();
 
     const {
         name,
@@ -31,7 +28,6 @@ export default function EditorToolbar(props: Props) {
         onSubmitTitle,
         onShowShareCode
     } = props;
-    const { theme } = preferences;
 
     const onExit = () => {
         window.location.href = '/project.html';
@@ -42,11 +38,8 @@ export default function EditorToolbar(props: Props) {
             <ToolbarTitleShell>
                 <img
                     src={
-                        theme === 'dark'
-                            ? require('../assets/snack-icon-dark.svg')
-                            : require('../assets/snack-icon.svg')
+                            require('../assets/feather.svg')
                     }
-                    alt="Snack"
                     className={css(styles.logo)}
                 />
 

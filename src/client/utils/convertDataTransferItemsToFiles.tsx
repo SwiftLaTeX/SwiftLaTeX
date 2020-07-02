@@ -1,3 +1,5 @@
+import { isImageFile, isOpenTypeFontFile, isTextFile } from './fileUtilities';
+
 export type WebkitDirectoryReaderResult = Array<WebkitFileEntry | WebkitDirectoryEntry>;
 
 export type WebkitDirectoryReader = {
@@ -23,36 +25,20 @@ export type WebkitDirectoryEntry = {
   createReader: () => WebkitDirectoryReader;
 };
 
-const blacklist = [
-  /^\./, // hidden files
-  /\.(jks|keystore)$/, // android keystore
-  /^(android|ios)$/, // native code
-  /^coverage$/, // code ceoverage
-  /^(js|ts)config\.json$/, // vscode config
-  /^flow-typed$/, // flow type definitions
-  /^node_modules$/, // third party modules
-  /^npm-debug\.log$/, // npm debug log
-  /^npm-error\.log$/, // npm error log
-  /^package-lock\.json$/, // npm package metadata
-  /^yarn-debug\.log$/, // yarn debug log
-  /^yarn-error\.log$/, // yarn error log
-  /^yarn\.lock$/, // yarn package metadata
-  /^__tests__$/, // jest tests
-  /~$/, // hidden and backup files
-];
 
-const whitelist = [/^\.eslintrc(\.json)?$/];
 
 const processEntry = async (
   entry: WebkitFileEntry | WebkitDirectoryEntry,
   files: Array<{ file: File; path: string }>,
   path: string
 ) => {
-  if (blacklist.some(r => r.test(entry.name)) && !whitelist.some(r => r.test(entry.name))) {
-    return;
-  }
+
+
 
   if (entry.isFile) {
+    if (!isTextFile(entry.name) && !isImageFile(entry.name) && !isOpenTypeFontFile(entry.name)) {
+        return;
+    }
     const file = await new Promise<File>((resolve, reject) => entry.file(resolve, reject));
     files.push({
       path,

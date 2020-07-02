@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
     minWidth: 0,
     minHeight: 0,
     position: 'relative',
+    height: '100%'
   },
   phantom: {
     display: 'block',

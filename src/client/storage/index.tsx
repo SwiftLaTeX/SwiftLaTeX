@@ -17,10 +17,10 @@ export function initializeStorage() {
         storage = new DropboxStorage(stored_token);
     } else if (provider === 'minio') {
         storage = new MinioStorage(stored_token);
+    } else {
+        throw new Error('Not supported backend');
     }
     return storage;
 }
 
-(global as any).DropboxStorage = DropboxStorage;
-(global as any).GoogleStorage = GoogleStorage;
-(global as any).MinioStorage = MinioStorage;
+

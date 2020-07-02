@@ -2,6 +2,7 @@ import {
   Annotation,
   FileSystemEntry,
   SaveStatus,
+    EngineVersion
 } from '../types';
 
 
@@ -29,4 +30,6 @@ export type EditorViewProps = {
   onSetEntryPoint: (path: string) => void;
   onTypeContent: (delta: string, isInsert: boolean) => void;
   onShareProject: () => Promise<void>;
+  engine: EngineVersion;
+  onChangeEngineVersion: (engine: EngineVersion) => Promise<void>;
 };

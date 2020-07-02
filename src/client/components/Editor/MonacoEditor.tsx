@@ -11,14 +11,12 @@ import 'monaco-editor/esm/vs/editor/contrib/contextmenu/contextmenu.js';
 import 'monaco-editor/esm/vs/editor/contrib/find/findController.js';
 import 'monaco-editor/esm/vs/editor/contrib/hover/hover.js';
 import 'monaco-editor/esm/vs/editor/contrib/suggest/suggestController.js';
-import 'monaco-editor/esm/vs/editor/contrib/wordHighlighter/wordHighlighter.js';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 // import { SimpleEditorModelResolverService } from 'monaco-editor/esm/vs/editor/standalone/browser/simpleServices';
 import { StaticServices } from 'monaco-editor/esm/vs/editor/standalone/browser/standaloneServices';
 import { light, dark } from './themes/monaco';
 import overrides from './themes/monaco-overrides';
 import { ThemeName } from '../Preferences/withThemeName';
-import ResizeDetector from '../shared/ResizeDetector';
 
 import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
 import { Annotation } from '../../types';
@@ -31,6 +29,7 @@ import {
     MonacoServices, createConnection
 } from 'monaco-languageclient';
 import { MimicWebsocket } from './MimicWebsocket';
+import ResizeDetector from '../shared/ResizeDetector';
 
 
 
@@ -251,7 +250,7 @@ class MonacoEditor extends React.Component<Props> {
 
 
         this._editor = editor;
-
+        this._editor.layout();
         this._openFile(path, value, autoFocus);
         this._updateMarkers(annotations);
     }
@@ -362,10 +361,7 @@ class MonacoEditor extends React.Component<Props> {
         // @ts-ignore
         monaco.editor.setModelMarkers(this._editor.getModel(), null, annotations);
 
-    _handleResize = debounce(() => this._editor && this._editor.layout(), 50, {
-        leading: true,
-        trailing: true,
-    });
+    _handleResize = debounce(() => {this._editor && this._editor.layout();}, 1000);
 
     _contentSubscription: monaco.IDisposable | undefined;
     _cursorSubscription: monaco.IDisposable | undefined;
@@ -397,10 +393,7 @@ export default MonacoEditor;
 
 const styles = StyleSheet.create({
     container: {
-        display: 'flex',
-        flexDirection: 'row',
-        flex: '1',
-        minWidth: 0,
+        height: '100%',
     },
     editor: {
         height: '100%',

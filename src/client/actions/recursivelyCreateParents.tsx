@@ -1,4 +1,4 @@
-import { getParentPath } from '../utils/fileUtilities';
+import { genRandomFileID, getParentPath } from '../utils/fileUtilities';
 import { FileSystemEntry } from '../types';
 
 export default function recursivelyCreateParents(
@@ -26,6 +26,7 @@ export default function recursivelyCreateParents(
           asset: false,
           uri: '',
           content: '',
+          id: genRandomFileID(parent)
         },
         state: {
           isExpanded: !!expand,
