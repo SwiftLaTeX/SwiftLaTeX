@@ -22,3 +22,4 @@ engine/test/
 /web-snack-libraries.tar.gz
 node_modules/
 .env
+release/

@@ -70,6 +70,7 @@
     "onigasm": "^2.2.4",
     "pdfjs-dist": "^2.4.456",
     "prettier": "^2.0.5",
+    "prop-types": "^15.7.2",
     "query-string": "^5.1.1",
     "react": "^16.8.1",
     "react-copy-to-clipboard": "^5.0.1",

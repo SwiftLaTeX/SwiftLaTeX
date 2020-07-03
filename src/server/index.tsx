@@ -4,13 +4,11 @@ import path from 'path';
 import Koa from 'koa';
 import serve from 'koa-static';
 import mount from 'koa-mount';
-// import compress from 'koa-compress';
-import bodyParser from 'koa-body';
 import stoppable from 'stoppable';
-import playground from './playground';
 import gaproxy from './analytics';
+import MinioBackend from './minio';
 import { AddressInfo } from 'net';
-import githubOauth from './github';
+
 type ShutdownSignal = 'SIGHUP' | 'SIGINT' | 'SIGTERM' | 'SIGUSR2';
 
 const port = parseInt(process.env.SWIFT_PORT || '', 10) || 3011;
@@ -19,55 +17,53 @@ const backlog = 511;
 const timeout = 30000;
 
 if (require.main === module) {
-  if (process.env.NODE_ENV === 'development') {
-    require('source-map-support').install();
-  }
+    if (process.env.NODE_ENV === 'development') {
+        require('source-map-support').install();
+    }
 }
 
 const app = new Koa();
 
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
-  console.log('Production mode');
-  // app.use(compress());
-  app.use(mount('/dist', serve(path.join(__dirname, '..', '..', 'dist'))));
+    console.log('Production mode');
+    // app.use(compress());
+    app.use(mount('/dist', serve(path.join(__dirname, '..', '..', 'dist'))));
 } else {
-  // Use webpack dev middleware in development
-  console.log('Development mode');
-  const webpack = require('webpack');
-  const dev = require('webpack-dev-middleware');
-  const config = require('../../webpack.config');
+    // Use webpack dev middleware in development
+    console.log('Development mode');
+    const webpack = require('webpack');
+    const dev = require('webpack-dev-middleware');
+    const config = require('../../webpack.config');
 
-  const compiler = webpack(config);
-  const middleware = dev(compiler, {
-    publicPath: '/dist/',
-    stats: 'minimal',
-  });
+    const compiler = webpack(config);
+    const middleware = dev(compiler, {
+        publicPath: '/dist/',
+        stats: 'minimal',
+    });
 
-  app.use(async (ctx, next) => {
-    await middleware(
-      ctx.req,
-      {
-        end: (content: string) => {
-          ctx.body = content;
-        },
-        setHeader: (name: string, value: string) => {
-          ctx.set(name, value);
-        },
-      },
-      next
-    );
-  });
+    app.use(async (ctx, next) => {
+        await middleware(
+            ctx.req,
+            {
+                end: (content: string) => {
+                    ctx.body = content;
+                },
+                setHeader: (name: string, value: string) => {
+                    ctx.set(name, value);
+                },
+            },
+            next
+        );
+    });
 }
 app.use(serve(path.join(__dirname, '..', '..', 'public')));
-app.use(bodyParser({ multipart: true }));
-app.use(playground());
 app.use(gaproxy());
-app.use(githubOauth());
+app.use(MinioBackend());
 
 const httpServer = app.listen(port, host, backlog, () => {
-  const { address, port } = server.address() as AddressInfo;
+    const { address, port } = server.address() as AddressInfo;
 
-  console.log(`The web server is listening on http://${address}:${port}`);
+    console.log(`The web server is listening on http://${address}:${port}`);
 });
 
 httpServer.timeout = timeout;
@@ -82,32 +78,32 @@ const server = stoppable(httpServer, gracePeriod);
 let exitSignal: ShutdownSignal | null = null;
 let httpServerError: Error | null = null;
 
-server.on('error', error => {
-  httpServerError = error;
-  console.error(`There was an error with the HTTP server:`, error);
-  console.error(`The HTTP server is shutting down and draining existing connections`);
-  server.stop();
+server.on('error', (error) => {
+    httpServerError = error;
+    console.error(`There was an error with the HTTP server:`, error);
+    console.error(`The HTTP server is shutting down and draining existing connections`);
+    server.stop();
 });
 
 server.on('close', () => {
-  console.log(`The HTTP server has drained all connections and is scheduling its exit`);
-  console.log(`The HTTP server process is exiting...`);
-  // Let other "close" event handlers run before exiting
-  process.nextTick(() => {
-    if (exitSignal) {
-      process.kill(process.pid, exitSignal);
-    } else {
-      process.exit(httpServerError ? 1 : 0);
-    }
-  });
+    console.log(`The HTTP server has drained all connections and is scheduling its exit`);
+    console.log(`The HTTP server process is exiting...`);
+    // Let other "close" event handlers run before exiting
+    process.nextTick(() => {
+        if (exitSignal) {
+            process.kill(process.pid, exitSignal);
+        } else {
+            process.exit(httpServerError ? 1 : 0);
+        }
+    });
 });
 
 const shutdown = (signal: ShutdownSignal) => {
-  console.log(
-    `Received ${signal}; the HTTP server is shutting down and draining existing connections`
-  );
-  exitSignal = signal;
-  server.stop();
+    console.log(
+        `Received ${signal}; the HTTP server is shutting down and draining existing connections`
+    );
+    exitSignal = signal;
+    server.stop();
 };
 
 // TODO: In Node 9, the signal is passed as the first argument to the listener

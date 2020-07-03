@@ -4,16 +4,16 @@ import Router from 'koa-router';
 import axios from 'axios';
 const HIT_URL = '04cd307674c4166727511267b681f84e';
 const analytics = async (ctx: Context) => {
-
-    const clientIp = ctx.request.headers['x-real-ip'] || ctx.request.headers['x-forwarded-for'] || '127.0.0.1';
+    const clientIp =
+        ctx.request.headers['x-real-ip'] || ctx.request.headers['x-forwarded-for'] || '127.0.0.1';
     let url = 'https://www.google-analytics.com' + ctx.url.slice(10).replace(HIT_URL, 'collect');
     url = url + (url.indexOf('?') === -1 ? '?' : '&') + 'uip=' + encodeURIComponent(clientIp);
-    let headerConfigs = {
+    const headerConfigs = {
         headers: {
             'user-agent': ctx.request.headers['user-agent'],
-            'cookie': ctx.request.headers['cookie'],
+            cookie: ctx.request.headers.cookie,
             'accept-language': ctx.request.headers['accept-language'],
-        }
+        },
     };
     try {
         const response = await axios.get(url, headerConfigs);
@@ -21,7 +21,7 @@ const analytics = async (ctx: Context) => {
     } catch (e) {
         ctx.type = 'json';
         ctx.body = {
-            'result': 'failed',
+            result: 'failed',
         };
     }
 };

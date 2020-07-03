@@ -1,32 +1,25 @@
 import { BackendStorage, ItemEntry, UserInfo } from './backendStorage';
 import { getRandomName } from '../utils/randomNames';
 
-const BASE_URL = 'https://s3.swiftlatex.com/swiftlatex2';
-
-
-
 export class MinioStorage extends BackendStorage {
-
     constructor(token: string) {
         super(token);
     }
 
     async get(scope: string, key: string): Promise<ArrayBuffer> {
-        const url = BASE_URL + '/' + this.token + '/' + scope + '/' + key;
-        const response = await fetch(url, {cache: "no-cache"});
+        const compound = this.token + '/' + scope + '/' + key;
+        const url = '/minio/get?uri=' + encodeURIComponent(compound);
+        const response = await fetch(url, { cache: 'no-cache' });
         if (!response.ok) {
             throw new Error('Cannot fetch file');
         }
         return response.arrayBuffer();
     }
 
-    // async getPublicLink(scope: string, key: string): Promise<string> {
-    //     return BASE_URL + '/' + this.token + '/' + scope + '/' + key;
-    // }
-
     async list(scope: string): Promise<ItemEntry[]> {
-        const url = this.token + '/' + scope;
-        const response = await fetch(`/list?uri=${url}`, { cache: "no-cache"});
+        const compound = this.token + '/' + scope;
+        const url = '/minio/list?uri=' + encodeURIComponent(compound);
+        const response = await fetch(url, { cache: 'no-cache' });
         if (!response.ok) {
             throw new Error('Cannot list scope');
         }
@@ -39,20 +32,20 @@ export class MinioStorage extends BackendStorage {
         for (let i = 0; i < data.length; i++) {
             const entry = data[i];
             const r = {
-                itemKey: entry.Key.slice(url.length + 1),
-                scope: scope,
+                itemKey: entry.Key.slice(compound.length + 1),
+                scope,
                 _id: entry.Key,
                 modifiedTime: entry.LastModified,
             };
             result.push(r);
         }
-
         return result;
     }
 
     async put(scope: string, key: string, blobLike: Blob): Promise<string> {
-        const url = this.token + '/' + scope + '/' + key;
-        const presigned_req = await fetch(`/upload?uri=${url}`, { cache: "no-cache" });
+        const compound = this.token + '/' + scope + '/' + key;
+        const url = '/minio/upload?uri=' + encodeURIComponent(compound);
+        const presigned_req = await fetch(url, { cache: 'no-cache' });
         if (!presigned_req.ok) {
             throw new Error('Cannot get presigned url');
         }
@@ -73,7 +66,7 @@ export class MinioStorage extends BackendStorage {
         if (!result.ok) {
             throw new Error('Upload failure');
         }
-        return BASE_URL + '/' + url;
+        return uploadUrl + '/' + compound;
     }
 
     async getUserInfo(): Promise<UserInfo> {
@@ -87,5 +80,4 @@ export class MinioStorage extends BackendStorage {
             email: 'adventurer@swiftlatex.com',
         };
     }
-
 }
