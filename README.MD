@@ -28,8 +28,7 @@ yarn
 yarn start
 ```
 The server will be up and running in http://localhost:3011
-
-The Google and Dropbox storage options should work out of the box. For playgroud to work, you should set up a Minio server locally. More details to come.
+All storage options should work of the box. You could host your own Minio server and provide the credential info to src/server/minio.tsx, such that you can store playgroud files in your server.
 
 ## SwiftLaTeX Technical Details
 This section is devoted for developers only. If you want more help, you could consider opening an issue.
@@ -38,9 +37,8 @@ This section is devoted for developers only. If you want more help, you could co
 SwiftLaTeX engine is based on Tectonic (a C++ reimplementation of XeTeX), which supports UTF-8 and Opentype fonts out of box.
 The engine is not 100% faithful to XeTeX. 
 First, though XeTeX does support Chinese/Japanese/Korea/Arabic languages, the locale line breaking function is not available yet. This function is rarely used but supporting it requires a fully working ICU library, whose size may be unbearable in browser environments.
-Secondly, XeTeX does not support graphite fonts, which are rarely used.
+Secondly, This engine not support graphite fonts, which are rarely used.
 You can find the engine source code in https://github.com/SwiftLaTeX/SwiftLaTeX-Engine. Nevertheless, compiling it requires an Emscripten toolchain and some basic knowledge about WebAssembly. We would strongly recommend you to use the prebuilt binaries in this repo. 
-XeTeX engine now directly outputs SVG files, which can be directly rendered in browsers.
 
 ![Screenshot](https://s3.swiftlatex.com/swiftlatex2/9FSa0rkYnHCWlA9ThUbeUYWKyE2A4yrK/asset/cn9tf1YLHmlocalhost_3011_editor.html_p_3D0KaL0q7np8(iPad_20Pro)_20(2).png)
 
