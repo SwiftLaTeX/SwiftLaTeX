@@ -52,6 +52,9 @@ SwiftLaTeX also supports opentype fonts (ttf, otf), SwiftLaTeX provides a set of
 \setmonofont{Inconsolata}[Scale=MatchLowercase]
 ```
 
+![Screenshot]
+(https://s3.swiftlatex.com/swiftlatex2/AWdSGuPe60mHwNXnzqDeuOLzWUgkaeaE/asset/localhost_3011_editor,html_p%3DMy_fancy_project,cCBkO57V(iPad_Pro).iBO26.png)
+
 ### PDFTeX Engine
 Despite XeTeX engine is considered to be much modern, many users may still prefer the good-old PdfTeX engine.
 In fact, the first SwiftLaTeX prototype was based on PdfTeX. 
@@ -61,16 +64,16 @@ PDFTeX engine does not fully support WYSIWYG editing.
 Also Unicode and Freetype are not supported. You could switch the engine as shown below.
 ![Screenshot](https://s3.swiftlatex.com/swiftlatex2/7PWFAFkNUJsIqFbEj1rPdGWgqELHX1AH/asset/www,swiftlatex,com_editor,html_p%3D8hYjNAR9XQ.hhE3R.png)
 
-### CTAN files.
+### CTAN files
 LaTeX is not a stand-alone typesetting program in itself, but document preparation software that runs on top of Donald E. Knuth's TeX typesetting system. TeX distributions usually bundle together all the parts needed for a working TeX system and they generally add to this both configuration and maintenance utilities. Nowadays LaTeX, and many of the packages built on it, form an important component of any major TeX distribution. 
 In SwiftLaTeX, all required files are fetched from CTAN (Comprehensive TeX Archive Network), https://www.ctan.org, or our mirror server. 
 ### Language Server
 SwiftLaTeX is using Digestif as a LaTeX language server. It is amazingly small and powerful. You could check out the project at https://github.com/astoff/digestif.
 
-### Change Logs:
+### Change Logs
 You can check the detailed change logs in http://www.swiftlatex.com/changelogs.html
 
-### Production Use.
+### Production Use
 SwiftLaTeX is almost for production use, with the following exceptions. These exceptions will be gradually removed.
 1. No graphite fonts and international line-breaking support. We so far deem this functionalty not very useful for English-speaking people. 
 2. Sharing is not fully implemented yet, but it is on the way. 
