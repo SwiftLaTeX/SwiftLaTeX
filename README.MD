@@ -52,8 +52,7 @@ SwiftLaTeX also supports opentype fonts (ttf, otf), SwiftLaTeX provides a set of
 \setmonofont{Inconsolata}[Scale=MatchLowercase]
 ```
 
-![Screenshot]
-(https://s3.swiftlatex.com/swiftlatex2/AWdSGuPe60mHwNXnzqDeuOLzWUgkaeaE/asset/localhost_3011_editor,html_p%3DMy_fancy_project,cCBkO57V(iPad_Pro).iBO26.png)
+![Screenshot](https://s3.swiftlatex.com/swiftlatex2/AWdSGuPe60mHwNXnzqDeuOLzWUgkaeaE/asset/localhost_3011_editor,html_p%3DMy_fancy_project,cCBkO57V(iPad_Pro).iBO26.png)
 
 ### PDFTeX Engine
 Despite XeTeX engine is considered to be much modern, many users may still prefer the good-old PdfTeX engine.
