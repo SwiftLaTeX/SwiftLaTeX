@@ -43,10 +43,13 @@ You can find the engine source code in https://github.com/SwiftLaTeX/SwiftLaTeX-
 ![Screenshot](https://s3.swiftlatex.com/swiftlatex2/9FSa0rkYnHCWlA9ThUbeUYWKyE2A4yrK/asset/cn9tf1YLHmlocalhost_3011_editor.html_p_3D0KaL0q7np8(iPad_20Pro)_20(2).png)
 
 SwiftLaTeX supports most legacy TeX fonts automatically. 
-SwiftLaTeX also supports opentype fonts (ttf, otf), but you need to upload the fonts by yourself due to licensing issues. Once you upload your fonts, you can use fonts as follows.
+SwiftLaTeX also supports opentype fonts (ttf, otf), SwiftLaTeX provides a set of basic fonts (same as what you get from apt install texlive-full in Ubuntu), you could of cource upload your own opentype fonts.
 ```
 \usepackage{fontspec}
-\setmainfont{foobar.ttf} 
+
+\setmainfont{TeX Gyre Pagella}
+\setsansfont{TeX Gyre Heros}[Scale=MatchLowercase]
+\setmonofont{Inconsolata}[Scale=MatchLowercase]
 ```
 
 ### PDFTeX Engine
