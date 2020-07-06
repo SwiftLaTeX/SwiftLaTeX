@@ -19,16 +19,31 @@ SwiftLaTeX, a WYSIWYG WebAssembly client-side LaTeX Editor. All computation is d
 ## Great, I wanna have a try!
 Try it in https://www.swiftlatex.com
 
-If you want to host SwiftLaTeX by yourself, you could compile it by yourself with a Node 12 toolchain
-
+If you want to host SwiftLaTeX by yourself, you could compile the source code by yourself.
+If you already have Node 12 and yarn, just run
 ```
 git clone https://github.com/SwiftLaTeX/SwiftLaTeX
 cd SwiftLaTeX
 yarn
 yarn start
 ```
-The server will be up and running in http://localhost:3011
-All storage options should work of the box. You could host your own Minio server and provide the credential info to src/server/minio.tsx, such that you can store playgroud files in your server.
+If you do not have node and yarn yet, try the following commands first.
+```
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+nvm install 12
+npm install yarn -g 
+```
+
+If you prefer using Docker, you could try the following commands.
+```
+git clone https://github.com/SwiftLaTeX/SwiftLaTeX
+cd SwiftLaTeX
+docker build . -t swiftlatex/swiftlatexv2
+docker run -p 3011:3011 swiftlatex/swiftlatexv2
+```
+
+The server will be up and running in http://localhost:3011.
+All storage options should work of the box. You could host your own Minio server and provide the credential info to src/server/minio.tsx, such that you can store playgroud files in your server. 
 
 ## SwiftLaTeX Technical Details
 This section is devoted for developers only. If you want more help, you could consider opening an issue.
