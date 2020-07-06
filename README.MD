@@ -16,8 +16,8 @@ SwiftLaTeX, a WYSIWYG WebAssembly client-side LaTeX Editor. All computation is d
 
 4. __Realtime collaboration__. Send a secret link to your friend to start real-time collaboration. 
 
-## Great, I wanna have a try!
-Try it in https://www.swiftlatex.com
+## Installation Guide!
+No installation needed, just try it in https://www.swiftlatex.com
 
 If you want to host SwiftLaTeX by yourself, you could compile the source code by yourself.
 If you already have Node 12 and yarn, just run
