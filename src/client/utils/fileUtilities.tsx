@@ -42,7 +42,7 @@ export const triggerDownloadBlob = (blob: Blob, name: string) => {
 
 export function genRandomFileID(path: string) {
     // return encodeURIComponent(path).replace(/%/g, '_') + genRandomString(5);
-    const preCoded = encodeURIComponent(path).replace(/%20/g, '_');
+    const preCoded = encodeURIComponent(path).replace(/%/g, '_');
     const splits = preCoded.split('.');
     const extension = splits.pop();
     if (extension === preCoded) {
