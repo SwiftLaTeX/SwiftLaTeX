@@ -46,7 +46,6 @@ The server will be up and running in http://localhost:3011.
 All storage options should work of the box. You could host your own Minio server and provide the credential info to src/server/minio.tsx, such that you can store playgroud files in your server. 
 
 ## SwiftLaTeX Technical Details
-This section is devoted for developers only. If you want more help, you could consider opening an issue.
 
 ### XeTeX Engine
 SwiftLaTeX engine is based on Tectonic (a C++ reimplementation of XeTeX), which supports UTF-8 and Opentype fonts out of box.
@@ -78,9 +77,32 @@ PDFTeX engine does not fully support WYSIWYG editing.
 Also Unicode and Freetype are not supported. You could switch the engine as shown below.
 ![Screenshot](https://s3.swiftlatex.com/swiftlatex2/7PWFAFkNUJsIqFbEj1rPdGWgqELHX1AH/asset/www,swiftlatex,com_editor,html_p%3D8hYjNAR9XQ.hhE3R.png)
 
+### Storage Backends
+SwiftLaTeX has few requirements on storage backends. A developer who wishes to add new storage backends just needs to implement the following three simple methods. 
+
+```
+abstract put(scope: string, itemKey: string, file: Blob): Promise<string>;
+put a file to the (scope, itemKey) and return an accessible http url to the file. SwiftLaTeX stores files in a two-level key-val structure. 
+
+abstract get(scope: string, itemKey: string): Promise<ArrayBuffer>;
+get the file located in (scope, itemKey)
+
+abstract list(scope: string): Promise<ItemEntry[]>;
+list all files located in (scope)
+```
+For more concrete examples, please have a look at src/client/storage/minio.tsx.
+
+### Project Sharing and Real-time collaboration 
+SwiftLaTeX adopts a simple sharing mechanism, which is agnostic to storage backends, provided that the storage backends provide a public url to each file. (For example, a user can store his project in Google Drive and share the project to users who use Dropbox).
+Exposing public urls is not a security risk, as they are usually very long and impractical to guess. 
+
+(More technical details to come. Sharing is always a headache considering the differences among storage backends)
+
+
 ### CTAN files
 LaTeX is not a stand-alone typesetting program in itself, but document preparation software that runs on top of Donald E. Knuth's TeX typesetting system. TeX distributions usually bundle together all the parts needed for a working TeX system and they generally add to this both configuration and maintenance utilities. Nowadays LaTeX, and many of the packages built on it, form an important component of any major TeX distribution. 
 In SwiftLaTeX, all required files are fetched from CTAN (Comprehensive TeX Archive Network), https://www.ctan.org, or our mirror server. 
+
 ### Language Server
 SwiftLaTeX is using Digestif as a LaTeX language server. It is amazingly small and powerful. You could check out the project at https://github.com/astoff/digestif.
 
@@ -95,4 +117,5 @@ SwiftLaTeX is almost for production use, with the following exceptions. These ex
  
 ## License
 
-SwiftLaTeX is released under AGPL3 license. 
+The code in this repository is released under the GNU AFFERO GENERAL PUBLIC LICENSE, version 3. A copy can be found in the LICENSE file.
+Copyright (c) SwiftLab, 2014-2020.
