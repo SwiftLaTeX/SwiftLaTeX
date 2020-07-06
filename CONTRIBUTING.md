@@ -19,8 +19,7 @@ to get your changes merged into SwiftLaTeX.
 
 Contributor License Agreement
 -----------------------------
-By submitting pull requests, we deem that you understand the copyright implications.
-To put it in a simple word,
+By submitting pull requests, 
 1) you own the copyright of your contribution.
 2) you agree to give us a license to use it in both the open source version, and the version
 of SwiftLaTeX running at www.swiftlatex.com.
