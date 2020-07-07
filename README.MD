@@ -6,7 +6,7 @@ SwiftLaTeX, a WYSIWYG WebAssembly client-side LaTeX Editor. All computation is d
 
 ![Screenshot](https://www.swiftlatex.com/images/screenshot-light.png)
 
-## What are the differences to Overleaf or ShareLaTeX?
+## Main Features
 
 1. __Speed__. SwiftLaTeX engines run in browsers, all computation is done strictly locally. It makes SwiftLaTeX more responsive (i.e., faster compilation) and scalable.
 
@@ -14,7 +14,7 @@ SwiftLaTeX, a WYSIWYG WebAssembly client-side LaTeX Editor. All computation is d
 
 3. __Flexible Storage Backend__. SwiftLaTeX stores files in user-provided cloud storage or potentially self-hosting S3/Minio. 
 
-4. __Realtime collaboration__. Send a secret link to your friend to start real-time collaboration. 
+4. __Realtime collaboration__. Send a secret link to your friend to start real-time collaboration. (Work in progress) 
 
 ## Installation Guide
 
