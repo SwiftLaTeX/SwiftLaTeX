@@ -21,21 +21,24 @@ SwiftLaTeX, a WYSIWYG WebAssembly client-side LaTeX Editor. All computation is d
 No installation needed, just try it in https://www.swiftlatex.com
 
 ### Host in Windows
-Download the latest release from https://github.com/SwiftLaTeX/SwiftLaTeX/releases
-Unzip the file, and click the webserver.exe
-Open your browser, and go to http://localhost:3011
+Download the latest release from https://github.com/SwiftLaTeX/SwiftLaTeX/releases.
+
+Unzip the file, and click the webserver.exe.
+
+Open your browser, and go to http://localhost:3011.
+
 This option allows you to store files in your local hard drive, Google, or Dropbox.
 
 ### Host in Ubuntu
 If you want to host SwiftLaTeX by yourself, you could 1) use precompiled version, 2) compile source code by yourself, or 3) use Docker.
 
 #### Use precompiled version 
-Download the latest release from https://github.com/SwiftLaTeX/SwiftLaTeX/releases
+Download the latest release from https://github.com/SwiftLaTeX/SwiftLaTeX/releases.
 Unzip the file, and and enter the directory.
 ```
 python3 webserver_src.py
 ```
-Open your browser, and go to http://localhost:3011
+Open your browser, and go to http://localhost:3011.
 
 #### Compile by yourself
 If you do not have node and yarn yet, try the following commands first.
