@@ -19,8 +19,6 @@ import { WebkitFileEntry, WebkitDirectoryEntry } from '../../utils/convertDataTr
 import dragEventIncludes from '../../utils/dragEventIncludes';
 import { FileSystemEntry } from '../../types';
 
-
-
 type Props = {
     entries: FileSystemEntry[];
     onImportFile: (e: FileSystemEntry) => void;
@@ -37,10 +35,10 @@ type State = {
     isDragging: boolean;
     isImporting: boolean;
     itemsToImport: FileItem[];
-    itemsErrored: Array<{
+    itemsErrored: {
         item: FileItem;
         error: Error;
-    }>;
+    }[];
     importTotal: number;
     importProgress: number;
 };
@@ -94,7 +92,7 @@ class FileListImportManager extends React.PureComponent<Props, State> {
             const dataTransfer = e.dataTransfer;
             e.preventDefault();
             const entries: FileItem[] = dataTransfer.items
-                ? Array.from(dataTransfer.items).map(it => it.webkitGetAsEntry())
+                ? Array.from(dataTransfer.items).map((it) => it.webkitGetAsEntry())
                 : Array.from(dataTransfer.files);
             this._handleSelectFilesForImport(entries);
         }
@@ -114,7 +112,7 @@ class FileListImportManager extends React.PureComponent<Props, State> {
         });
 
     _handleSelectFilesForImport = (items: FileItem[]) =>
-        this.setState(state => ({
+        this.setState((state) => ({
             isImportModalShown: true,
             itemsToImport: [...state.itemsToImport, ...items],
             itemsErrored: [],
@@ -127,17 +125,20 @@ class FileListImportManager extends React.PureComponent<Props, State> {
             importProgress: 0,
         });
 
-        const allPaths = this.props.entries.map(e => e.item.path);
+        const allPaths = this.props.entries.map((e) => e.item.path);
         const folderMappings: { [key: string]: string } = {};
 
-        this.state.itemsToImport.forEach(item => {
+        this.state.itemsToImport.forEach((item) => {
             // @ts-ignore
             if (item.isDirectory) {
                 folderMappings[item.name] = getUniquePath(allPaths, item.name);
             }
         });
 
-        const files = await convertDataTransferItemsToFiles(this.state.itemsToImport, folderMappings);
+        const files = await convertDataTransferItemsToFiles(
+            this.state.itemsToImport,
+            folderMappings
+        );
 
         this.setState({
             importTotal: files.length,
@@ -153,20 +154,20 @@ class FileListImportManager extends React.PureComponent<Props, State> {
                         // console.log('A text file');
                         metaContent = await new Promise<string>((resolve, reject) => {
                             const reader = new FileReader();
-                            reader.onloadend = _ => {
+                            reader.onloadend = (_) => {
                                 resolve(reader.result as string);
                             };
-                            reader.onerror = error => reject(error);
+                            reader.onerror = (error) => reject(error);
                             reader.readAsText(file);
                         });
                     } else if (isImageFile(path) || isOpenTypeFontFile(path)) {
                         // console.log('A open font file');
                         metaContent = await new Promise<ArrayBuffer>((resolve, reject) => {
                             const reader = new FileReader();
-                            reader.onloadend = _ => {
+                            reader.onloadend = (_) => {
                                 resolve(reader.result as ArrayBuffer);
                             };
-                            reader.onerror = error => reject(error);
+                            reader.onerror = (error) => reject(error);
                             reader.readAsArrayBuffer(file);
                         });
                     }
@@ -175,10 +176,10 @@ class FileListImportManager extends React.PureComponent<Props, State> {
                     path = path.replace(/ /g, '_'); /* Space may everything crack */
                     const uploadEntry = {
                         item: {
-                            path: path,
+                            path,
                             type: 'file',
                             content: metaContent,
-                            uri: uri,
+                            uri,
                             asset: !isTextEntry,
                             id: fid,
                         },
@@ -194,15 +195,15 @@ class FileListImportManager extends React.PureComponent<Props, State> {
                     this.props.onImportFile(uploadEntry);
                 } catch (error) {
                     console.error(error);
-                    this.setState(state => ({
+                    this.setState((state) => ({
                         itemsErrored: [...state.itemsErrored, { item: file, error }],
                     }));
                 } finally {
-                    this.setState(state => ({
+                    this.setState((state) => ({
                         importProgress: state.importProgress + 1,
                     }));
                 }
-            }),
+            })
         );
 
         this.setState({
@@ -215,8 +216,8 @@ class FileListImportManager extends React.PureComponent<Props, State> {
         this._handleSelectFilesForImport(e.target.files);
 
     _handleRemoveFileImport = (file: FileItem) =>
-        this.setState(state => ({
-            itemsToImport: state.itemsToImport.filter(f => f !== file),
+        this.setState((state) => ({
+            itemsToImport: state.itemsToImport.filter((f) => f !== file),
         }));
 
     _handleProgressDismiss = () => {
@@ -252,12 +253,14 @@ class FileListImportManager extends React.PureComponent<Props, State> {
                                 {importTotal === 0
                                     ? 'Reading files…'
                                     : importProgress === importTotal
-                                        ? `${importedFiles} file${importedFiles === 1 ? '' : 's'} imported${
-                                            itemsErrored.length
-                                                ? `, ${itemsErrored.length} failed to import`
-                                                : ` successfully`
-                                        }`
-                                        : `Importing files (${importProgress + 1}/${importTotal})`}
+                                    ? `${importedFiles} file${
+                                          importedFiles === 1 ? '' : 's'
+                                      } imported${
+                                          itemsErrored.length
+                                              ? `, ${itemsErrored.length} failed to import`
+                                              : ` successfully`
+                                      }`
+                                    : `Importing files (${importProgress + 1}/${importTotal})`}
                             </h4>
                             <button
                                 onClick={this._handleProgressDismiss}
@@ -278,7 +281,8 @@ class FileListImportManager extends React.PureComponent<Props, State> {
                     <div className={css(styles.dropzoneLarge)}>
                         <h2>Drop anywhere to import</h2>
                         <p>
-                            You&#39;ll be able to adjust your selection before importing them into your project
+                            You&#39;ll be able to adjust your selection before importing them into
+                            your project
                         </p>
                     </div>
                 </Modal>
@@ -293,20 +297,20 @@ class FileListImportManager extends React.PureComponent<Props, State> {
                     <div
                         className={css(
                             styles.dropzoneSmall,
-                            theme === 'dark' ? styles.dropzoneSmallDark : styles.dropzoneSmallLight,
+                            theme === 'dark' ? styles.dropzoneSmallDark : styles.dropzoneSmallLight
                         )}>
                         {itemsToImport.length ? (
                             <ul className={css(styles.fileList)}>
                                 {itemsToImport.map((f, i) => (
                                     <li className={css(styles.fileEntry)} key={i}>
-                    <span className={css(styles.fileEntryName)}>
-                      {(f as any).isDirectory ? `${f.name}/` : f.name}
-                    </span>
+                                        <span className={css(styles.fileEntryName)}>
+                                            {(f as any).isDirectory ? `${f.name}/` : f.name}
+                                        </span>
                                         <span className={css(styles.fileEntrySize)}>
-                      {typeof (f as any).size === 'number'
-                          ? `${((f as any).size / 1024).toFixed(2)}kb`
-                          : ''}
-                    </span>
+                                            {typeof (f as any).size === 'number'
+                                                ? `${((f as any).size / 1024).toFixed(2)}kb`
+                                                : ''}
+                                        </span>
                                         <button
                                             onClick={() => this._handleRemoveFileImport(f)}
                                             className={css(styles.fileEntryClose)}>

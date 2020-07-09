@@ -4,21 +4,21 @@ import { EventReporter } from './utils/eventReport';
 
 type CachedFileEntry = {
     fid: number;
-    path: string
-}
+    path: string;
+};
 
 type BatchEntry = {
     type: string;
     data: any;
-}
+};
 
 type CursorPosition = {
     path: string;
     line: number;
     column: number;
-}
+};
 
-const PUBLIC_PDFVIEWER_ENDPOINT = 'https://vast-depths-38277.herokuapp.com/?uri=';
+const PUBLIC_PDFVIEWER_ENDPOINT = '/pdfviewer?uri=';
 
 export class DviViewer {
     totalPage = 1;
@@ -39,25 +39,25 @@ export class DviViewer {
         d3Selection.select('#toolbar-zoomout').on('click', this.handleZoomOut.bind(this));
         d3Selection.select('#toolbar-input').on('change', this.handleInputChanged.bind(this));
         document.addEventListener('click', this._clickEventHandler.bind(this));
-        document.addEventListener('mouseover', this._hoverEventHandler.bind(this));
         window.addEventListener('message', this.receiveMessage.bind(this), false);
     }
 
     receiveMessage(event: any) {
-        const data = event['data'];
-        const cmd = data['cmd'];
+        const data = event.data;
+        const cmd = data.cmd;
         if (cmd === 'setContent') {
-            const rawMeat = data['source'];
-            this.resourcesMap = data['resources'];
+            const rawMeat = data.source;
+            const rawMeatString = new TextDecoder('utf-8').decode(rawMeat);
+            this.resourcesMap = data.resources;
             const domParser = new DOMParser();
-            this.bufferedDocument = domParser.parseFromString(rawMeat, 'text/xml');
+            this.bufferedDocument = domParser.parseFromString(rawMeatString, 'text/xml');
             this.showPage();
         } else if (cmd === 'setCursor') {
             this.lastKnownCursorPosition = data;
-            let res = this.showCursor(data['path'], data['line'], data['column']);
+            const res = this.showCursor(data.path, data.line, data.column);
             if (this.isBatching) {
                 if (res) {
-                    this.batchingQueue.push({ 'type': 'setCursor', 'data': data });
+                    this.batchingQueue.push({ type: 'setCursor', data: data });
                 } else {
                     this.isBatching = false; /* Give Up */
                     this.batchingQueue = [];
@@ -66,14 +66,14 @@ export class DviViewer {
             }
         } else if (cmd === 'typeContent') {
             let res = false;
-            if (data['isInsert']) {
-                res = this.appendCharacter(data['delta']);
+            if (data.isInsert) {
+                res = this.appendCharacter(data.delta);
             } else {
-                res = this.deleteCharacter(data['delta']);
+                res = this.deleteCharacter(data.delta);
             }
             if (this.isBatching) {
                 if (res) {
-                    this.batchingQueue.push({ 'type': 'typeContent', 'data': data });
+                    this.batchingQueue.push({ type: 'typeContent', data: data });
                 } else {
                     this.isBatching = false; /* Give Up */
                     this.batchingQueue = [];
@@ -81,8 +81,9 @@ export class DviViewer {
                 }
             }
         } else if (cmd === 'compileStart') {
-            if (this.cursorAttachElement) { /* Not necessary to batch */
-                this.batchingQueue.push({ 'type': 'setCursor', 'data': this.lastKnownCursorPosition });
+            if (this.cursorAttachElement) {
+                /* Not necessary to batch */
+                this.batchingQueue.push({ type: 'setCursor', data: this.lastKnownCursorPosition });
                 this.isBatching = true;
             }
         } else if (cmd === 'compileEnd') {
@@ -111,11 +112,12 @@ export class DviViewer {
             const fonttype = child.getAttribute('fonttype');
             const fonturl = child.getAttribute('fonturl')!;
             const fontsize = child.getAttribute('fontsize');
-            const fontbase = removeExtension(getBaseName(fonturl));
             const fontid = child.getAttribute('fontid');
+            const fontbaseWithExt = getBaseName(fonturl);
+            const fontbase = removeExtension(fontbaseWithExt);
             if (fonttype === 'native') {
                 if (fonturl.startsWith('/tex/')) {
-                    const astyle = `<style>@font-face {font-family:${fontbase}; src:url(https://texlive.swiftlatex.com/${fontbase}.otf);} .ff${fontid} {font-family: ${fontbase}; font-size:${fontsize}px}</style>\n`;
+                    const astyle = `<style>@font-face {font-family:${fontbase}; src:url(https://texlive.swiftlatex.com/${fontbaseWithExt});} .ff${fontid} {font-family: ${fontbase}; font-size:${fontsize}px}</style>\n`;
                     newFontData += astyle;
                 } else {
                     const remoteUrl = this._lookupResources(fonturl);
@@ -154,16 +156,16 @@ export class DviViewer {
 
     replayBatchingQueue() {
         for (let j = 0; j < this.batchingQueue.length; j++) {
-            let tmp = this.batchingQueue[j];
-            let data = tmp.data;
-            let cmdType = tmp.type;
+            const tmp = this.batchingQueue[j];
+            const data = tmp.data;
+            const cmdType = tmp.type;
             if (cmdType === 'setCursor') {
-                this.showCursor(data['path'], data['line'], data['column']);
+                this.showCursor(data.path, data.line, data.column);
             } else if (cmdType === 'typeContent') {
-                if (data['isInsert']) {
-                    this.appendCharacter(data['delta']);
+                if (data.isInsert) {
+                    this.appendCharacter(data.delta);
                 } else {
-                    this.deleteCharacter(data['delta']);
+                    this.deleteCharacter(data.delta);
                 }
             }
         }
@@ -180,7 +182,9 @@ export class DviViewer {
         if (this.currentPage > this.totalPage) {
             this.currentPage = this.totalPage;
         }
-        (document.getElementById('toolbar-input')! as HTMLInputElement).value = `${this.currentPage}/${this.totalPage}`;
+        (document.getElementById(
+            'toolbar-input'
+        )! as HTMLInputElement).value = `${this.currentPage}/${this.totalPage}`;
 
         /* File List */
         this.loadFileLists();
@@ -188,10 +192,8 @@ export class DviViewer {
         /* Font */
         this.loadFonts();
 
-        /* HTML and click, pic hover event */
         const htmlData = pages[this.currentPage - 1].childNodes[0].nodeValue!;
         document.getElementById('viewer')!.innerHTML = htmlData;
-
 
         /* Replay Event */
         if (this.batchingQueue.length > 0) {
@@ -199,22 +201,24 @@ export class DviViewer {
             this.replayBatchingQueue();
         } else {
             if (this.lastKnownCursorPosition) {
-                this.showCursor(this.lastKnownCursorPosition.path, this.lastKnownCursorPosition.line, this.lastKnownCursorPosition.column);
+                this.showCursor(
+                    this.lastKnownCursorPosition.path,
+                    this.lastKnownCursorPosition.line,
+                    this.lastKnownCursorPosition.column
+                );
             }
         }
 
-        const shouldLoadImage = (document.getElementById('toolbar-displayimage')! as HTMLInputElement).checked;
-        if (shouldLoadImage) {
-            const elements = document.getElementsByClassName('userPic');
-            for (let i = 0; i < elements.length; i++) {
-                this._loadImage(elements[i]);
-            }
+        /* Display Image */
+        const elements = document.getElementsByClassName('userPic');
+        for (let i = 0; i < elements.length; i++) {
+            this._loadImage(elements[i]);
         }
     }
 
     pathToFid(path: string) {
         for (let j = 0; j < this.cachedFileList.length; j++) {
-            let tmp = this.cachedFileList[j];
+            const tmp = this.cachedFileList[j];
             if (tmp.path === path) {
                 return tmp.fid;
             }
@@ -224,20 +228,12 @@ export class DviViewer {
 
     fidToPath(fid: number) {
         for (let j = 0; j < this.cachedFileList.length; j++) {
-            let tmp = this.cachedFileList[j];
+            const tmp = this.cachedFileList[j];
             if (tmp.fid === fid) {
                 return tmp.path;
             }
         }
         return '';
-    }
-
-    _hoverEventHandler(event: MouseEvent) {
-        const target = event.target as Element;
-        if (!target.classList.contains('userPic')) {
-            return;
-        }
-        this._loadImage(target);
     }
 
     _loadImage(target: Element) {
@@ -269,22 +265,16 @@ export class DviViewer {
                 EventReporter.reportEvent('viewer', 'clickText');
                 const msg = {
                     cmd: 'setCursor',
-                    line: line,
-                    column: column,
-                    path: path,
-                    command: command,
+                    line,
+                    column,
+                    path,
+                    command,
                 };
                 if (window.top) {
-                    window.top.postMessage(
-                        msg,
-                        '*',
-                    );
+                    window.top.postMessage(msg, '*');
                 }
                 if (window.opener) {
-                    window.opener.postMessage(
-                        msg,
-                        '*',
-                    );
+                    window.opener.postMessage(msg, '*');
                     window.open('', 'parent-window')!.focus();
                 }
             }
@@ -333,7 +323,7 @@ export class DviViewer {
         }
         const vv = parseInt(input_val);
         if (!isNaN(vv)) {
-            if ((vv >= 1 && vv <= this.totalPage) && vv !== this.currentPage) {
+            if (vv >= 1 && vv <= this.totalPage && vv !== this.currentPage) {
                 this.currentPage = vv;
                 this.showPage();
                 return;
@@ -341,7 +331,6 @@ export class DviViewer {
         }
         inputElement.value = `${this.currentPage}/${this.totalPage}`;
     }
-
 
     showCursor(path: string, line: number, column: number) {
         if (!this.bufferedDocument) {
@@ -357,20 +346,21 @@ export class DviViewer {
         /* Start looking up */
         let fuzzyCursorEnabled = false;
         let fuzzySpace = false;
-        let fid = this.pathToFid(path);
+        const fid = this.pathToFid(path);
         if (fid === 0) {
             return false;
         }
 
-        let lineFilter = d3Selection.selectAll(`tspan[l="${line}"][f="${fid}"]`);
+        const lineFilter = d3Selection.selectAll(`tspan[l="${line}"][f="${fid}"]`);
         let r = lineFilter.filter(`tspan[c="${column}"]`);
         if (r.empty()) {
-            if (column <= 1) { /* No hope */
+            if (column <= 1) {
+                /* No hope */
                 return;
             }
 
             /* Fuzzy logic, try to locate prev text span */
-            let tryAttempt = 5;
+            const tryAttempt = 5;
             let i = 1;
             for (; i < tryAttempt; i++) {
                 const potentialColumn = column - i;
@@ -390,8 +380,9 @@ export class DviViewer {
         this.cursorAttachElement = r.node() as SVGTSpanElement;
         const bbox = this.cursorAttachElement.getBBox();
         let bbox_x = bbox.x;
-        const parentTag = this.cursorAttachElement.parentNode! as Element; /* for locating baseline */
-        let bbox_y = parseInt(parentTag.getAttribute('y')!) - 10;
+        const parentTag = this.cursorAttachElement
+            .parentNode! as Element; /* for locating baseline */
+        const bbox_y = parseInt(parentTag.getAttribute('y')!) - 10;
         if (fuzzyCursorEnabled) {
             bbox_x = bbox.x + bbox.width;
             if (fuzzySpace) bbox_x += bbox.width; /* add one more */
@@ -407,7 +398,16 @@ export class DviViewer {
             parentTag.insertBefore(newTspanTag, this.cursorAttachElement.nextSibling);
             this.cursorAttachElement = newTspanTag;
         }
-        d3Selection.select('svg').append('rect').attr('x', bbox_x).attr('y', bbox_y).attr('width', 1).attr('height', 10).attr('class', 'cursor').attr('fill', 'red').attr('fill', 'red');
+        d3Selection
+            .select('svg')
+            .append('rect')
+            .attr('x', bbox_x)
+            .attr('y', bbox_y)
+            .attr('width', 1)
+            .attr('height', 10)
+            .attr('class', 'cursor')
+            .attr('fill', 'red')
+            .attr('fill', 'red');
         return true;
     }
 
@@ -418,10 +418,10 @@ export class DviViewer {
         if (!this.cursorAttachElement) {
             return false;
         }
-        let column = parseInt(this.cursorAttachElement.getAttribute('c')!);
-        let line = parseInt(this.cursorAttachElement.getAttribute('l')!);
-        let fid = parseInt(this.cursorAttachElement.getAttribute('f')!);
-        let textTag = this.cursorAttachElement.parentNode! as Element;
+        const column = parseInt(this.cursorAttachElement.getAttribute('c')!);
+        const line = parseInt(this.cursorAttachElement.getAttribute('l')!);
+        const fid = parseInt(this.cursorAttachElement.getAttribute('f')!);
+        const textTag = this.cursorAttachElement.parentNode! as Element;
         const newTspanTag = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
         newTspanTag.setAttribute('c', column.toString());
         newTspanTag.setAttribute('l', line.toString());
@@ -430,8 +430,10 @@ export class DviViewer {
         newTspanTag.textContent = character;
         textTag.insertBefore(newTspanTag, this.cursorAttachElement);
 
-        let updateColumns = d3Selection.selectAll(`tspan[l="${line}"]`).filter(`tspan[f="${fid}"]`);
-        updateColumns.each(function(_) {
+        const updateColumns = d3Selection
+            .selectAll(`tspan[l="${line}"]`)
+            .filter(`tspan[f="${fid}"]`);
+        updateColumns.each(function (_) {
             const that = this as SVGTSpanElement;
             if (that === newTspanTag) return;
             const originalColumn = parseInt(that.getAttribute('c')!);
@@ -469,9 +471,9 @@ export class DviViewer {
         if (!this.cursorAttachElement) {
             return false;
         }
-        let column = parseInt(this.cursorAttachElement.getAttribute('c')!);
-        let line = parseInt(this.cursorAttachElement.getAttribute('l')!);
-        let fid = parseInt(this.cursorAttachElement.getAttribute('f')!);
+        const column = parseInt(this.cursorAttachElement.getAttribute('c')!);
+        const line = parseInt(this.cursorAttachElement.getAttribute('l')!);
+        const fid = parseInt(this.cursorAttachElement.getAttribute('f')!);
         let prevSib = this.cursorAttachElement.previousElementSibling as SVGTSpanElement;
         if (!prevSib) {
             // console.error("Attempt to find ");
@@ -488,8 +490,8 @@ export class DviViewer {
                 return false;
             }
             /* We need them to be on the same line */
-            let lastTspanColumn = parseInt(lastTspan.getAttribute('c')!);
-            let lastTspanLine = parseInt(lastTspan.getAttribute('l')!);
+            const lastTspanColumn = parseInt(lastTspan.getAttribute('c')!);
+            const lastTspanLine = parseInt(lastTspan.getAttribute('l')!);
             if (lastTspanLine === line && lastTspanColumn + 1 === column) {
                 prevSib = lastTspan as SVGTSpanElement;
             } else {
@@ -505,8 +507,10 @@ export class DviViewer {
         }
 
         /* Update Column */
-        let updateColumns = d3Selection.selectAll(`tspan[l="${line}"]`).filter(`tspan[f="${fid}"]`);
-        updateColumns.each(function(_) {
+        const updateColumns = d3Selection
+            .selectAll(`tspan[l="${line}"]`)
+            .filter(`tspan[f="${fid}"]`);
+        updateColumns.each(function (_) {
             const that = this as SVGTSpanElement;
             const originalColumn = parseInt(that.getAttribute('c')!);
             if (originalColumn >= column) {
@@ -543,9 +547,3 @@ export class DviViewer {
 }
 
 (window as any).SwiftLaTeXViewer = new DviViewer();
-
-
-
-
-
-

@@ -33,19 +33,14 @@ class ShareCode extends React.PureComponent<Props, State> {
 
     state: State;
 
-    componentDidMount() {
+    componentDidMount() {}
 
-    }
-
-    componentDidUpdate(_: Props, __: State) {
-
-    }
+    componentDidUpdate(_: Props, __: State) {}
 
     _handleCopy = () => {
         this.setState({ copied: true });
         setTimeout(() => this.setState({ copied: false }), 1000);
     };
-
 
     render() {
         const { theme, copied } = this.state;
@@ -60,7 +55,10 @@ class ShareCode extends React.PureComponent<Props, State> {
                     <div className={css(styles.inputContainer)}>
                         <input
                             readOnly
-                            className={css(styles.code, theme === 'light' ? styles.inputLight : styles.inputDark)}
+                            className={css(
+                                styles.code,
+                                theme === 'light' ? styles.inputLight : styles.inputDark
+                            )}
                             onClick={handleClick}
                             value={code}
                         />

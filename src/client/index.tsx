@@ -1,8 +1,8 @@
 import { GoogleStorage } from './storage/google';
 import { DropboxStorage } from './storage/dropbox';
-import { genRandomString } from './utils/fileUtilities';
-import { GithubStorage } from './storage/github';
-
+import { MinioStorage } from './storage/minio';
+import { LocalStorage } from './storage/localdisk';
+// import { GithubStorage } from './storage/github';
 
 export function wait4Token() {
     window.addEventListener('message', (event) => {
@@ -27,27 +27,20 @@ export function dropboxLogin() {
     wait4Token();
 }
 
-export function githubLogin() {
-    const dropbox_url = GithubStorage.getAuthUrl();
-    window.open(dropbox_url);
-    wait4Token();
+export function minioLogin() {
+    const local_url = MinioStorage.getAuthUrl();
+    window.location.href = local_url;
 }
 
 export function localLogin() {
-    let play_token = localStorage.getItem('playground_token');
-    if (!play_token) {
-        play_token = genRandomString();
-        localStorage.setItem('playground_token', play_token);
-    }
-    localStorage.setItem('provider', 'minio');
-    localStorage.setItem('access_token', play_token);
-    window.location.href = '/project.html';
+    const local_url = LocalStorage.getAuthUrl();
+    window.location.href = local_url;
 }
 
 export function init() {
     document.getElementById('googleLogin')!.addEventListener('click', googleLogin);
     document.getElementById('dropboxLogin')!.addEventListener('click', dropboxLogin);
-    document.getElementById('githubLogin')!.addEventListener('click', githubLogin);
+    document.getElementById('minioLogin')!.addEventListener('click', minioLogin);
     document.getElementById('localLogin')!.addEventListener('click', localLogin);
     const build_number = process.env.BUILD_NUMBER;
     document.getElementById('buildNumber')!.innerHTML += build_number!;
@@ -55,4 +48,3 @@ export function init() {
 
 //
 init();
-

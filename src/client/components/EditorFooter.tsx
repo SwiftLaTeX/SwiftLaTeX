@@ -4,7 +4,6 @@ import ToggleSwitch from './shared/ToggleSwitch';
 import FooterShell from './Shell/FooterShell';
 import MenuButton from './shared/MenuButton';
 import IconButton from './shared/IconButton';
-import colors from '../configs/colors';
 import { Annotation } from '../types';
 import { c } from './ColorsProvider';
 import EngineVersionSwitcher from './EngineVersionSwitcher';
@@ -25,7 +24,7 @@ type Props = {
     onSendCode: () => void;
     // onReloadSnack: () => void;
     theme: string;
-    engine: EngineVersion,
+    engine: EngineVersion;
     onChangeEngineVersion: (engine: EngineVersion) => Promise<void>;
 };
 
@@ -50,7 +49,7 @@ export default function Footer(props: Props) {
         theme,
     } = props;
 
-    const isErrorFatal = annotations.some(a => a.severity > 3);
+    const isErrorFatal = annotations.some((a) => a.severity > 3);
 
     return (
         <FooterShell type={isErrorFatal ? 'error' : null}>
@@ -62,13 +61,13 @@ export default function Footer(props: Props) {
                             styles.statusText,
                             annotations.length
                                 ? isErrorFatal
-                                ? styles.errorTextFatal
-                                : styles.errorText
-                                : styles.successText,
+                                    ? styles.errorTextFatal
+                                    : styles.errorText
+                                : styles.successText
                         )}>
                         {annotations.length
                             ? `${annotations[0].source}: ${annotations[0].message.split('\n')[0]}` +
-                            (annotations.length > 1 ? ` (+${annotations.length - 1} more)` : '')
+                              (annotations.length > 1 ? ` (+${annotations.length - 1} more)` : '')
                             : 'No errors'}
                     </button>
                 }
@@ -76,7 +75,7 @@ export default function Footer(props: Props) {
             {/*<FooterButton icon={require('../assets/prettify-icon.png')} onClick={onPrettifyCode}>
         <span className={css(styles.buttonLabel)}>Prettier</span>
       </FooterButton>*/}
-            <EngineVersionSwitcher sdkVersion={engine} onChange={onChangeEngineVersion}/>
+            <EngineVersionSwitcher sdkVersion={engine} onChange={onChangeEngineVersion} />
             <MenuButton
                 icon={require('../assets/settings-icon.png')}
                 label={
@@ -95,9 +94,12 @@ export default function Footer(props: Props) {
                                         label="Update as you type"
                                     />
                                 </div>
-                                <div className={css(styles.buttonItem, styles.buttonItemDevicePane)}>
-                                    <IconButton title={`Update changes`} label="Force Recompilation"
-                                                onClick={onSendCode}>
+                                <div
+                                    className={css(styles.buttonItem, styles.buttonItemDevicePane)}>
+                                    <IconButton
+                                        title={`Update changes`}
+                                        label="Force Recompilation"
+                                        onClick={onSendCode}>
                                         <svg width="14px" height="17px" viewBox="0 0 14 17">
                                             <path
                                                 transform="translate(-5.000000, -3.000000)"
@@ -116,11 +118,22 @@ export default function Footer(props: Props) {
                 label={<span className={css(styles.buttonLabel)}>Editor Settings</span>}
                 content={
                     <React.Fragment>
-                        <div className={css(styles.buttonItem, styles.buttonItemEditorPane)}>
-                        </div>
-                        <ToggleSwitch checked={fileTreeShown} onChange={onToggleFileTree} label="Files"/>
-                        <ToggleSwitch checked={panelsShown} onChange={onTogglePanels} label="Panel"/>
-                        <ToggleSwitch checked={theme !== 'light'} onChange={onToggleTheme} label="Dark theme"/>
+                        <div className={css(styles.buttonItem, styles.buttonItemEditorPane)}></div>
+                        <ToggleSwitch
+                            checked={fileTreeShown}
+                            onChange={onToggleFileTree}
+                            label="Files"
+                        />
+                        <ToggleSwitch
+                            checked={panelsShown}
+                            onChange={onTogglePanels}
+                            label="Panel"
+                        />
+                        <ToggleSwitch
+                            checked={theme !== 'light'}
+                            onChange={onToggleTheme}
+                            label="Dark theme"
+                        />
                         <ToggleSwitch
                             checked={devicePreviewShown}
                             onChange={onToggleDevicePreview}
@@ -129,8 +142,6 @@ export default function Footer(props: Props) {
                     </React.Fragment>
                 }
             />
-
-
         </FooterShell>
     );
 }
@@ -173,8 +184,7 @@ const styles = StyleSheet.create({
     },
 
     errorText: {
-        backgroundImage: `url(${require('../assets/cross-red.png')})`,
-        color: colors.error,
+        backgroundImage: `url(${require('../assets/exclamation.png')})`,
     },
 
     errorTextFatal: {
@@ -246,5 +256,4 @@ const styles = StyleSheet.create({
     title: {
         margin: '16px 0 8px',
     },
-
 });

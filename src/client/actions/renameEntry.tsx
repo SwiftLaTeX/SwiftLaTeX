@@ -4,40 +4,40 @@ import { changeParentPath, isInsideFolder } from '../utils/fileUtilities';
 import { FileSystemEntry } from '../types';
 
 export default function renameEntry(entries: FileSystemEntry[], oldPath: string, newPath: string) {
-  const entry = entries.find(e => e.item.path === oldPath);
+    const entry = entries.find((e) => e.item.path === oldPath);
 
-  if (!entry) {
-    return entries;
-  }
-
-  newPath = newPath.replace(/\s/g,'_');
-
-  const renamed = updateEntry(entry, {
-    item: {
-      path: newPath,
-    },
-  });
-
-  // @ts-ignore
-  delete renamed.state.isCreating;
-
-  const next: FileSystemEntry[] = entries.map(e => {
-    if (e.item.path === entry.item.path) {
-      return renamed;
+    if (!entry) {
+        return entries;
     }
 
-    if (renamed.item.type === 'folder' && isInsideFolder(e.item.path, entry.item.path)) {
-      return updateEntry(e, {
+    newPath = newPath.replace(/\s/g, '_');
+
+    const renamed = updateEntry(entry, {
         item: {
-          path: changeParentPath(e.item.path, entry.item.path, renamed.item.path),
+            path: newPath,
         },
-      });
-    }
+    });
 
-    return e;
-  });
+    // @ts-ignore
+    delete renamed.state.isCreating;
 
-  const parents = recursivelyCreateParents(next, renamed.item.path, true);
+    const next: FileSystemEntry[] = entries.map((e) => {
+        if (e.item.path === entry.item.path) {
+            return renamed;
+        }
 
-  return [...next, ...parents];
+        if (renamed.item.type === 'folder' && isInsideFolder(e.item.path, entry.item.path)) {
+            return updateEntry(e, {
+                item: {
+                    path: changeParentPath(e.item.path, entry.item.path, renamed.item.path),
+                },
+            });
+        }
+
+        return e;
+    });
+
+    const parents = recursivelyCreateParents(next, renamed.item.path, true);
+
+    return [...next, ...parents];
 }

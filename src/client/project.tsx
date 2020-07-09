@@ -49,31 +49,29 @@ For headers or \\emph{other} \\textbf{special} formatting you need a  \\LaTeX\\x
 \\end{document}
 `;
 
-
 type FileEntry = {
-    'id': string;
-    'path': string;
-    'uri': string;
-    'type': 'folder' | 'file';
-    'asset': string;
-
-}
+    id: string;
+    path: string;
+    uri: string;
+    type: 'folder' | 'file';
+    asset: string;
+};
 type ProjectEntry = {
-    'name': string;
-    'username': string;
-    'modifiedTime': string;
-    'fileEntries': FileEntry[];
-    'entryPoint': string;
-    'pid': string;
-    'shared'?: boolean;
-    'deleted'?: boolean;
-}
+    name: string;
+    username: string;
+    modifiedTime: string;
+    fileEntries: FileEntry[];
+    entryPoint: string;
+    pid: string;
+    shared?: boolean;
+    deleted?: boolean;
+};
 
 type Props = {};
 
 type State = {
     projects: ProjectEntry[];
-    isBusy: boolean
+    isBusy: boolean;
     currentModal: 'create' | undefined;
 };
 
@@ -85,7 +83,6 @@ class Project extends React.PureComponent<Props, State> {
             isBusy: true,
             currentModal: undefined,
         };
-
     }
 
     projectNameRef = React.createRef<HTMLInputElement>();
@@ -103,18 +100,24 @@ class Project extends React.PureComponent<Props, State> {
             return;
         }
 
-        this._listProjects().then(_ => {
+        this._listProjects()
+            .then((_) => {})
+            .catch((_) => {
+                alert('Unable to fetch projects, please refresh and try again');
+            })
+            .finally(() => {
+                this.setState({ isBusy: false });
+            });
 
-        }).catch(_ => {
-            alert('Unable to fetch projects, please refresh and try again');
-        }).finally(() => {
-            this.setState({ isBusy: false });
-        });
+        this.storage
+            .getUserInfo()
+            .then((info) => {
+                EventReporter.reportEvent('project', 'login', info);
+            })
+            .catch((_) => {});
     }
 
-    componentDidUpdate(_: Props, __: State) {
-
-    }
+    componentDidUpdate(_: Props, __: State) {}
 
     _handleLogout = () => {
         localStorage.removeItem('provider');
@@ -134,7 +137,7 @@ class Project extends React.PureComponent<Props, State> {
         try {
             const repoArrayBuffer = await this.storage.get('manifest', pid);
             const response_json = arrayBufferToJson(repoArrayBuffer);
-            response_json['deleted'] = true;
+            response_json.deleted = true;
             await this.storage.put('manifest', pid, new Blob([JSON.stringify(response_json)]));
             await this._listProjects();
         } catch {
@@ -152,7 +155,7 @@ class Project extends React.PureComponent<Props, State> {
             try {
                 const repoArrayBuffer = await this.storage.get('manifest', pid);
                 const response_json = arrayBufferToJson(repoArrayBuffer);
-                response_json['name'] = new_project_name;
+                response_json.name = new_project_name;
                 await this.storage.put('manifest', pid, new Blob([JSON.stringify(response_json)]));
                 await this._listProjects();
             } catch {
@@ -167,11 +170,10 @@ class Project extends React.PureComponent<Props, State> {
         EventReporter.reportEvent('project', 'download');
         this.setState({ isBusy: true });
         try {
-
             const zipobj = new JSZip();
             const repoArrayBuffer = await this.storage.get('manifest', pid);
             const response_json = arrayBufferToJson(repoArrayBuffer);
-            const fileEntries = response_json['fileEntries'];
+            const fileEntries = response_json.fileEntries;
             for (const entry of fileEntries) {
                 if (entry.type === 'file') {
                     const fileBuffer = await this.storage.get('asset', entry.id);
@@ -184,7 +186,6 @@ class Project extends React.PureComponent<Props, State> {
             alert('Unable to rename this project, please refresh and try again');
         }
         this.setState({ isBusy: false });
-
     };
 
     _popupEachProject = async (repoID: string) => {
@@ -202,10 +203,9 @@ class Project extends React.PureComponent<Props, State> {
             const timestampA = Date.parse(a.modifiedTime);
             const timestampB = Date.parse(b.modifiedTime);
             return timestampA < timestampB ? 1 : -1;
-
         });
 
-        const promises = repos.map(r => this._popupEachProject(r.itemKey));
+        const promises = repos.map((r) => this._popupEachProject(r.itemKey));
         while (promises.length) {
             // 10 at at time
             const projects: ProjectEntry[] = await Promise.all(promises.splice(0, 10));
@@ -229,15 +229,14 @@ class Project extends React.PureComponent<Props, State> {
         const url = await this.storage.put('asset', fid, new Blob([DEFAULT_CODE]));
         return [
             {
-                'id': fid,
-                'path': 'main.tex',
-                'uri': url,
-                'type': 'file',
-                'asset': false,
+                id: fid,
+                path: 'main.tex',
+                uri: url,
+                type: 'file',
+                asset: false,
             },
         ];
     };
-
 
     recursiveCreateParent = (path: string, parents: string[]) => {
         const parentPath = getParentPath(path);
@@ -264,11 +263,24 @@ class Project extends React.PureComponent<Props, State> {
         }
 
         try {
-            let importedEntries = [];
-            const allowed_extension = ['.tex', '.bib', '.bst', '.cls', '.pdf', '.jpg', '.png', '.txt', '.bbx', '.sty', '.ttf', '.otf'];
+            const importedEntries = [];
+            const allowed_extension = [
+                '.tex',
+                '.bib',
+                '.bst',
+                '.cls',
+                '.pdf',
+                '.jpg',
+                '.png',
+                '.txt',
+                '.bbx',
+                '.sty',
+                '.ttf',
+                '.otf',
+            ];
             const zip_handle = await JSZip.loadAsync(zip_blob);
-            let queues: any = [];
-            zip_handle.forEach(function(relativePath, zipEntry) {
+            const queues: any = [];
+            zip_handle.forEach(function (relativePath, zipEntry) {
                 if (zipEntry.dir) {
                     return;
                 }
@@ -290,16 +302,16 @@ class Project extends React.PureComponent<Props, State> {
             });
 
             let singleRoot = true;
-            let parents: any = [];
+            const parents: any = [];
 
-            for (let item of queues) {
+            for (const item of queues) {
                 this.recursiveCreateParent(item.path, parents);
             }
 
             if (parents.length === 0) {
                 singleRoot = false;
             } else {
-                for (let item of queues) {
+                for (const item of queues) {
                     if (!item.path.startsWith(parents[0])) {
                         singleRoot = false;
                     }
@@ -312,33 +324,33 @@ class Project extends React.PureComponent<Props, State> {
                 for (let j = 0; j < parents.length; j++) {
                     parents[j] = parents[j].slice(root.length + 1);
                 }
-                for (let item of queues) {
+                for (const item of queues) {
                     item.path = item.path.slice(root.length + 1);
                 }
             }
 
-            for (let item of queues) {
+            for (const item of queues) {
                 const isTextEntry = /\.(cls|bib|txt|tex|bst|sty|bbx|md|js|html)$/.test(item.path);
                 const randomID = genRandomFileID(item.path);
                 const zipEntryBlob = await item.entry.async('blob');
                 const uri = await this.storage.put('asset', randomID, zipEntryBlob);
                 const entry = {
-                    'id': randomID,
-                    'path': item.path,
-                    'uri': uri,
-                    'type': 'file',
-                    'asset': !isTextEntry,
+                    id: randomID,
+                    path: item.path,
+                    uri: uri,
+                    type: 'file',
+                    asset: !isTextEntry,
                 };
                 importedEntries.push(entry);
             }
 
             for (let j = 0; j < parents.length; j++) {
                 const entry = {
-                    'id': genRandomString(10),
-                    'path': parents[j],
-                    'uri': '',
-                    'type': 'folder',
-                    'asset': false,
+                    id: genRandomString(10),
+                    path: parents[j],
+                    uri: '',
+                    type: 'folder',
+                    asset: false,
                 };
                 importedEntries.push(entry);
             }
@@ -349,7 +361,6 @@ class Project extends React.PureComponent<Props, State> {
             console.error('Corrupted Zip ' + e.message);
             return this.prepareDefaultFileEntries();
         }
-
     };
 
     _handleCreateProj = async () => {
@@ -358,12 +369,12 @@ class Project extends React.PureComponent<Props, State> {
         EventReporter.reportEvent('project', 'create');
         this.setState({ isBusy: true, currentModal: undefined });
         try {
-            let title = this.projectNameRef.current!.value;
+            let title = this.projectNameRef.current.value;
             if (!title) {
                 title = 'My fancy project';
             }
             const selectedFiles = this.fileRef.current!.files;
-            let zipFile = undefined;
+            let zipFile;
             if (selectedFiles && selectedFiles.length > 0) {
                 zipFile = selectedFiles[0];
             }
@@ -381,16 +392,28 @@ class Project extends React.PureComponent<Props, State> {
                 templateUrl = 'boilerplate/tkiz.zip';
             }
             const entries = await this.prepareFileEntries(zipFile, templateUrl);
+
+            let mainEntry = 'main.tex';
+            for (let ent of entries) {
+                if (ent.path.endsWith('.tex') && !ent.path.includes('/')) {
+                    mainEntry = ent.path;
+                    /* Prefer the following main entry */
+                    if (ent.path === 'main.tex' || ent.path === 'manuscript.tex' || ent.path === 'paper.tex') {
+                        break;
+                    }
+                }
+            }
+
             const userInfo = await this.storage.getUserInfo();
 
-            let pid = genRandomFileID(title);
-            let newProject = {
-                'name': title,
-                'username': userInfo.username,
-                'modifiedTime': new Date().toString(),
-                'fileEntries': entries,
-                'entryPoint': 'main.tex',
-                'pid': pid,
+            const pid = genRandomFileID(title);
+            const newProject = {
+                name: title,
+                username: userInfo.username,
+                modifiedTime: new Date().toString(),
+                fileEntries: entries,
+                entryPoint: mainEntry,
+                pid: pid,
             };
             await this.storage.put('manifest', pid, new Blob([JSON.stringify(newProject)]));
             await this._listProjects();
@@ -402,86 +425,129 @@ class Project extends React.PureComponent<Props, State> {
     };
 
     render() {
-
         const items = [];
 
         for (const project of this.state.projects) {
-            if (project['deleted']) {
+            if (project.deleted) {
                 continue;
             }
-            items.push(<tr key={project.pid}>
-                <td>{project.name}</td>
-                <td>{project.username}</td>
-                <td>{new Date(project.modifiedTime).toDateString()}</td>
-                <td>
-                    <a className="button actionButton openButton" href="#"
-                       onClick={() => this._handleOpenProject(project.pid)}> Open</a>
-                    <a className="button actionButton deleteButton" href="#"
-                       onClick={() => this._handleDeleteProject(project.pid)}> Delete</a>
-                    <a className="button actionButton renameButton" href="#"
-                       onClick={() => this._handleRenameProject(project.pid)}> Rename</a>
-                    <a className="button actionButton downloadButton" href="#"
-                       onClick={() => this._handleDownloadProject(project.pid)}> Archive</a>
-                </td>
-            </tr>);
+            items.push(
+                <tr key={project.pid}>
+                    <td>{project.name}</td>
+                    <td>{project.username}</td>
+                    <td>{new Date(project.modifiedTime).toDateString()}</td>
+                    <td>
+                        <a
+                            className="button actionButton openButton"
+                            href="#"
+                            onClick={() => this._handleOpenProject(project.pid)}>
+                            {' '}
+                            Open
+                        </a>
+                        <a
+                            className="button actionButton deleteButton"
+                            href="#"
+                            onClick={() => this._handleDeleteProject(project.pid)}>
+                            {' '}
+                            Delete
+                        </a>
+                        <a
+                            className="button actionButton renameButton"
+                            href="#"
+                            onClick={() => this._handleRenameProject(project.pid)}>
+                            {' '}
+                            Rename
+                        </a>
+                        <a
+                            className="button actionButton downloadButton"
+                            href="#"
+                            onClick={() => this._handleDownloadProject(project.pid)}>
+                            {' '}
+                            Archive
+                        </a>
+                    </td>
+                </tr>
+            );
         }
 
         let createDialog = null;
         if (this.state.currentModal === 'create') {
-            createDialog = <div className="modal">
-                <div className="modal-content">
-                    <span className="close-button" onClick={this._handleHideModal}>&times;</span>
-                    <form className="createProjectForm">
-                        <div className="row">
-                            <div className="u-full-width">
-                                <label htmlFor="projectTitleInput">Project Title:</label>
-                                <input ref={this.projectNameRef} className="u-full-width" type="text"
-                                       placeholder="My Fancy Project"
-                                       id="projectTitleInput"/>
+            createDialog = (
+                <div className="modal">
+                    <div className="modal-content">
+                        <span className="close-button" onClick={this._handleHideModal}>
+                            &times;
+                        </span>
+                        <form className="createProjectForm">
+                            <div className="row">
+                                <div className="u-full-width">
+                                    <label htmlFor="projectTitleInput">Project Title:</label>
+                                    <input
+                                        ref={this.projectNameRef}
+                                        className="u-full-width"
+                                        type="text"
+                                        placeholder="My Fancy Project"
+                                        id="projectTitleInput"
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div className="row">
-                            <div className="u-full-width">
-                                <label htmlFor="zipInput">Upload a zip:</label>
-                                <input ref={this.fileRef} className="button-primary" type="file" accept=".zip"
-                                       id="zipInput"/>
+                            <div className="row">
+                                <div className="u-full-width">
+                                    <label htmlFor="zipInput">Upload a zip:</label>
+                                    <input
+                                        ref={this.fileRef}
+                                        className="button-primary"
+                                        type="file"
+                                        accept=".zip"
+                                        id="zipInput"
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div className="u-full-width">
-                            <label htmlFor="templateInput">Or select a boilerplate</label>
-                            <select className="u-full-width" id="templateInput" ref={this.selectRef}>
-                                <option value="Article">Article</option>
-                                <option value="IEEE">IEEE Conference Proceedings</option>
-                                <option value="ACM">ACM Master Article Template</option>
-                                <option value="Beamer">Beamer</option>
-                                <option value="CV">CV</option>
-                                <option value="Tkiz">Tkiz/PGF</option>
-                            </select>
-                        </div>
-                        <input className="button-primary" type="submit" value="Submit"
-                               onClick={this._handleCreateProj}/>
-                    </form>
+                            <div className="u-full-width">
+                                <label htmlFor="templateInput">Or select a boilerplate</label>
+                                <select
+                                    className="u-full-width"
+                                    id="templateInput"
+                                    ref={this.selectRef}>
+                                    <option value="Article">Article</option>
+                                    <option value="IEEE">IEEE Conference Proceedings</option>
+                                    <option value="ACM">ACM Master Article Template</option>
+                                    <option value="Beamer">Beamer</option>
+                                    <option value="CV">CV</option>
+                                    <option value="Tkiz">Tkiz/PGF</option>
+                                </select>
+                            </div>
+                            <input
+                                className="button-primary"
+                                type="submit"
+                                value="Submit"
+                                onClick={this._handleCreateProj}
+                            />
+                        </form>
+                    </div>
                 </div>
-            </div>;
+            );
         }
 
         return (
-            <div className='container'>
-
+            <div className="container">
                 <section className="header">
                     <h2 className="title">Your LaTeX Projects:</h2>
                 </section>
-                {this.state.isBusy ? <ProgressIndicator/> : null}
-                <div className="navbar-spacer"/>
+                {this.state.isBusy ? <ProgressIndicator /> : null}
+                <div className="navbar-spacer" />
                 <nav className="navbar">
                     <div className="container">
                         <ul className="navbar-list">
-                            <li className="navbar-item navbar-action "><a className="navbar-link" href="#"
-                                                                          onClick={this._handleOpenModal}>Create
-                                New
-                                Project</a></li>
-                            <li className="navbar-item navbar-action "><a className="navbar-link" href="#"
-                                                                          onClick={this._handleLogout}>Logout</a>
+                            <li className="navbar-item navbar-action ">
+                                <a className="navbar-link" href="#" onClick={this._handleOpenModal}>
+                                    Create New Project
+                                </a>
+                            </li>
+                            <li className="navbar-item navbar-action ">
+                                <a className="navbar-link" href="#" onClick={this._handleLogout}>
+                                    Logout
+                                </a>
                             </li>
                         </ul>
                     </div>
@@ -489,23 +555,20 @@ class Project extends React.PureComponent<Props, State> {
 
                 <table className="u-full-width">
                     <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Author</th>
-                        <th>Modified Time</th>
-                        <th>Actions</th>
-                    </tr>
+                        <tr>
+                            <th>Name</th>
+                            <th>Author</th>
+                            <th>Modified Time</th>
+                            <th>Actions</th>
+                        </tr>
                     </thead>
-                    <tbody id="project-list">
-                    {items}
-                    </tbody>
+                    <tbody id="project-list">{items}</tbody>
                 </table>
 
                 {createDialog}
-
             </div>
         );
     }
 }
 
-ReactDOM.render(<Project/>, document.getElementById('root'));
+ReactDOM.render(<Project />, document.getElementById('root'));

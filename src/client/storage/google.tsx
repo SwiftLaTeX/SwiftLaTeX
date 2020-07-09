@@ -2,20 +2,21 @@ import { ItemEntry, BackendStorage, UserInfo } from './backendStorage';
 import { genRandomString } from '../utils/fileUtilities';
 
 const GOOGLE_CLIENT_ID = '691913119884-481fqunn0n41a86p7rv1g4aqrr3t1dmr.apps.googleusercontent.com';
-const GOOGLE_REDIRECT_URL = process.env.NODE_ENV === 'production' ? 'https://www.swiftlatex.com/auth.html': 'http://localhost:3011/auth.html';
+const GOOGLE_REDIRECT_URL = window.location.href.startsWith('https://www.swiftlatex.com/')
+    ? 'https://www.swiftlatex.com/auth.html'
+    : 'http://localhost:3011/auth.html';
 const BASE_URL = 'https://www.googleapis.com';
 const ROOT_FOLDER_NAME = 'swiftlatex';
 
 export class GoogleStorage extends BackendStorage {
-
     refreshErrorDetected: boolean;
     __rootID: string = '';
+
     constructor(token: string) {
         super(token);
         this.refreshErrorDetected = false;
         setTimeout(() => this._autoRefreshToken(), 500);
     }
-
 
     _autoRefreshToken() {
         const google_url = GoogleStorage.getAuthUrl();
@@ -56,52 +57,54 @@ export class GoogleStorage extends BackendStorage {
             throw new Error('Get File Failure. File does not exist');
         }
         const headers = {
-            'Authorization': 'Bearer ' + this.token,
+            Authorization: 'Bearer ' + this.token,
         };
         const downloadUrl = `https://www.googleapis.com/drive/v2/files/${fid}?alt=media&source=downloadUrl`;
-        const response = await fetch(downloadUrl, { method: 'GET', headers: headers });
+        const response = await fetch(downloadUrl, { method: 'GET', headers });
         if (!response.ok) {
             throw new Error('Unable to get file');
         }
         return response.arrayBuffer();
     }
 
-    // async getPublicLink(scope: string, key: string): Promise<string> {
-    //     if (this.refreshErrorDetected) {
-    //         throw new Error('Token failure');
-    //     }
-    //
-    //     const itemKey = scope + '_' + key;
-    //     const fid = await this._itemKeyToFileInfo(itemKey);
-    //     if (!fid) {
-    //         throw new Error('Cannot get public link because the file does not exist');
-    //     }
-    //     return `https://drive.google.com/uc?id=${fid}`
-    // }
+    async getPublicUrl(scope: string, key: string): Promise<string> {
+        if (this.refreshErrorDetected) {
+            throw new Error('Token failure');
+        }
 
-
-    static getAuthUrl(): string {
-        const secureState = "google" + genRandomString();
-        window.localStorage.setItem("oauthState", secureState);
-        return `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&response_type=token&state=${secureState}&scope=https://www.googleapis.com/auth/drive.file email profile &redirect_uri=${GOOGLE_REDIRECT_URL}`;
+        const itemKey = scope + '_' + key;
+        const fid = await this._itemKeyToFileInfo(itemKey);
+        if (!fid) {
+            throw new Error('Cannot get public link because the file does not exist');
+        }
+        return `https://drive.google.com/uc?id=${fid}`
     }
 
+    static getAuthUrl(): string {
+        const secureState = 'google' + genRandomString();
+        window.localStorage.setItem('oauthState', secureState);
+        return `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&response_type=token&state=${secureState}&scope=https://www.googleapis.com/auth/drive.file email profile &redirect_uri=${GOOGLE_REDIRECT_URL}`;
+    }
 
     async list(scope: string): Promise<ItemEntry[]> {
         if (this.refreshErrorDetected) {
             throw new Error('Token failure');
         }
         const root_id = await this._resolveRootFolderID();
-        const query = '\'' + root_id + '\' in parents and title contains \'' + scope + '\'';
+        const query = "'" + root_id + "' in parents and title contains '" + scope + "'";
         const fields = 'items(webContentLink, id, title, modifiedDate)';
-        const url = BASE_URL + '/drive/v2/files?'
-            + 'q=' + encodeURIComponent(query)
-            + '&fields=' + encodeURIComponent(fields)
-            + '&maxResults=1000';
+        const url =
+            BASE_URL +
+            '/drive/v2/files?' +
+            'q=' +
+            encodeURIComponent(query) +
+            '&fields=' +
+            encodeURIComponent(fields) +
+            '&maxResults=1000';
         const headers = {
-            'Authorization': 'Bearer ' + this.token,
+            Authorization: 'Bearer ' + this.token,
         };
-        const response = await fetch(url, { method: 'GET', headers: headers });
+        const response = await fetch(url, { method: 'GET', headers });
         if (response.status !== 200) {
             throw new Error('Failed to list scope ' + scope);
         }
@@ -111,14 +114,13 @@ export class GoogleStorage extends BackendStorage {
             const item = jsonR.items[j];
             const entry = {
                 itemKey: item.title.slice(scope.length + 1),
-                scope: scope,
+                scope,
                 modifiedTime: item.modifiedDate,
                 _id: item.id,
             };
             result.push(entry);
         }
         return result;
-
     }
 
     async put(scope: string, key: string, blobLike: Blob): Promise<string> {
@@ -130,19 +132,20 @@ export class GoogleStorage extends BackendStorage {
         return this._uploadFile(itemKey, blobLike, fid);
     }
 
-
     async _uploadFile(itemKey: string, blobLike: Blob, fid: string | undefined): Promise<string> {
         const root_id = await this._resolveRootFolderID();
         const metadata = {
             title: itemKey,
             mimeType: 'application/octet-stream',
-            parents: [{
-                kind: 'drive#fileLink',
-                id: root_id,
-            }],
+            parents: [
+                {
+                    kind: 'drive#fileLink',
+                    id: root_id,
+                },
+            ],
         };
         const headers = {
-            'Authorization': 'Bearer ' + this.token,
+            Authorization: 'Bearer ' + this.token,
             'Content-Type': 'application/json; charset=UTF-8',
         };
 
@@ -153,13 +156,13 @@ export class GoogleStorage extends BackendStorage {
             method = 'PUT';
         }
 
-        const response = await fetch(url, { method: method, body: JSON.stringify(metadata), headers: headers });
+        const response = await fetch(url, { method, body: JSON.stringify(metadata), headers });
         if (response.status !== 200) {
             throw new Error('Unable to create file');
         }
         const locationStr = response.headers.get('location');
         const headers_upload = {
-            'Authorization': 'Bearer ' + this.token,
+            Authorization: 'Bearer ' + this.token,
         };
         const uploadResponse = await fetch(locationStr as string, {
             method: 'POST',
@@ -183,15 +186,19 @@ export class GoogleStorage extends BackendStorage {
     async _setPermission(fid: string): Promise<void> {
         const url = BASE_URL + `/drive/v2/files/${fid}/permissions`;
         const metadata = {
-            'role': 'reader',
-            'type': 'anyone',
-            'value': 'anyone',
+            role: 'reader',
+            type: 'anyone',
+            value: 'anyone',
         };
         const headers = {
-            'Authorization': 'Bearer ' + this.token,
+            Authorization: 'Bearer ' + this.token,
             'Content-Type': 'application/json; charset=UTF-8',
         };
-        const response = await fetch(url, { method: 'POST', body: JSON.stringify(metadata), headers: headers });
+        const response = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(metadata),
+            headers,
+        });
         if (response.status !== 200) {
             throw new Error('Unable to set permission');
         }
@@ -201,16 +208,20 @@ export class GoogleStorage extends BackendStorage {
         let fid = this._getCache(itemKey);
         if (fid) return fid;
         const root_id = await this._resolveRootFolderID();
-        const query = '\'' + root_id + '\' in parents and title contains \'' + itemKey + '\'';
+        const query = "'" + root_id + "' in parents and title contains '" + itemKey + "'";
         const fields = 'items(id)';
-        const url = BASE_URL + '/drive/v2/files?'
-            + 'q=' + encodeURIComponent(query)
-            + '&fields=' + encodeURIComponent(fields)
-            + '&maxResults=1000';
+        const url =
+            BASE_URL +
+            '/drive/v2/files?' +
+            'q=' +
+            encodeURIComponent(query) +
+            '&fields=' +
+            encodeURIComponent(fields) +
+            '&maxResults=1000';
         const headers = {
-            'Authorization': 'Bearer ' + this.token,
+            Authorization: 'Bearer ' + this.token,
         };
-        const response = await fetch(url, { method: 'GET', headers: headers });
+        const response = await fetch(url, { method: 'GET', headers });
         if (response.status !== 200) {
             throw new Error('Failed to get share link ' + itemKey);
         }
@@ -219,7 +230,7 @@ export class GoogleStorage extends BackendStorage {
             return undefined;
         }
         fid = jsonR.items[0].id;
-        this._putCache(itemKey, fid)
+        this._putCache(itemKey, fid);
         return fid;
     }
 
@@ -227,16 +238,20 @@ export class GoogleStorage extends BackendStorage {
         if (this.__rootID) {
             return this.__rootID;
         }
-        const query = '\'' + 'root' + '\' in parents and title=\'' + ROOT_FOLDER_NAME + '\'';
+        const query = "'" + 'root' + "' in parents and title='" + ROOT_FOLDER_NAME + "'";
         const fields = 'items(id)';
-        const url = BASE_URL + '/drive/v2/files?'
-            + 'q=' + encodeURIComponent(query)
-            + '&fields=' + encodeURIComponent(fields)
-            + '&maxResults=1000';
+        const url =
+            BASE_URL +
+            '/drive/v2/files?' +
+            'q=' +
+            encodeURIComponent(query) +
+            '&fields=' +
+            encodeURIComponent(fields) +
+            '&maxResults=1000';
         const headers = {
-            'Authorization': 'Bearer ' + this.token,
+            Authorization: 'Bearer ' + this.token,
         };
-        const response = await fetch(url, { method: 'GET', headers: headers });
+        const response = await fetch(url, { method: 'GET', headers });
         if (response.status !== 200) {
             throw new Error('Failed to resolve Root ID');
         }
@@ -246,17 +261,23 @@ export class GoogleStorage extends BackendStorage {
             const metadata = {
                 title: ROOT_FOLDER_NAME,
                 mimeType: 'application/vnd.google-apps.folder',
-                parents: [{
-                    kind: 'drive#fileLink',
-                    id: 'root',
-                }],
+                parents: [
+                    {
+                        kind: 'drive#fileLink',
+                        id: 'root',
+                    },
+                ],
             };
-            let createFolderUrl = BASE_URL + '/drive/v2/files';
+            const createFolderUrl = BASE_URL + '/drive/v2/files';
             const createFolderHeaders = {
-                'Authorization': 'Bearer ' + this.token,
-                'Content-Type': 'application/json; charset=UTF-8'
+                Authorization: 'Bearer ' + this.token,
+                'Content-Type': 'application/json; charset=UTF-8',
             };
-            const createFolderResponse = await fetch(createFolderUrl, { method: "POST", body: JSON.stringify(metadata), headers: createFolderHeaders });
+            const createFolderResponse = await fetch(createFolderUrl, {
+                method: 'POST',
+                body: JSON.stringify(metadata),
+                headers: createFolderHeaders,
+            });
             if (createFolderResponse.status !== 200) {
                 throw new Error('Unable to create root folder');
             }
@@ -271,17 +292,17 @@ export class GoogleStorage extends BackendStorage {
     async getUserInfo(): Promise<UserInfo> {
         const url = 'https://www.googleapis.com/oauth2/v2/userinfo';
         const headers = {
-            'Authorization': 'Bearer ' + this.token,
+            Authorization: 'Bearer ' + this.token,
         };
-        const response = await fetch(url, { method: 'GET', headers: headers });
+        const response = await fetch(url, { method: 'GET', headers });
         if (response.status !== 200) {
             throw new Error('getUserInfo failed with status ' + response.status);
         }
         const responseR = await response.json();
         return {
             username: responseR.name,
-            email: responseR.email
-        }
+            email: responseR.email,
+        };
     }
 
     _putCache(itemKey: string, url: string | undefined) {

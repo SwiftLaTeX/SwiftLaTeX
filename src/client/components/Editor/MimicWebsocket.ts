@@ -20,7 +20,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-
 /**
  * This behaves like a WebSocket in every way, except if it fails to connect,
  * or it gets disconnected, it will repeatedly poll until it succesfully connects
@@ -52,23 +51,23 @@
  * - David Doran
  */
 export class MimicWebsocket {
-    //Should only be used to read WebSocket readyState
-    public readyState:number;
+    // Should only be used to read WebSocket readyState
+    readyState: number;
 
-    //Set up the default 'noop' event handlers
-    public onopen:(ev:Event) => void = function (_:Event) {};
-    public onclose:(ev:CloseEvent) => void = function (_:CloseEvent) {};
-    public onmessage:(ev:MessageEvent) => void = function (_:MessageEvent) {};
-    public onerror:(ev:Event) => void = function (_:Event) {};
+    // Set up the default 'noop' event handlers
+    onopen: (ev: Event) => void = function (_: Event) {};
+    onclose: (ev: CloseEvent) => void = function (_: CloseEvent) {};
+    onmessage: (ev: MessageEvent) => void = function (_: MessageEvent) {};
+    onerror: (ev: Event) => void = function (_: Event) {};
 
     constructor() {
         this.readyState = WebSocket.CONNECTING;
     }
 
     langServer: Worker = undefined as any;
-    langServerPath: string = 'bin/langServer.js'
+    langServerPath: string = 'bin/langServer.js';
 
-    public connect() {
+    connect() {
         this.langServer = new Worker(this.langServerPath);
 
         this.langServer.onmessage = (ev: any) => {
@@ -79,7 +78,7 @@ export class MimicWebsocket {
             } else if (cmd === 'transmit') {
                 const wrapped_msg = data.msg;
                 // console.log('recv msg ' + wrapped_msg);
-                this.onmessage(new MessageEvent('message', {data: wrapped_msg}));
+                this.onmessage(new MessageEvent('message', { data: wrapped_msg }));
             } else if (cmd === 'error') {
                 console.error('Language server error detect! ');
                 this.onerror(new CustomEvent('error'));
@@ -90,25 +89,23 @@ export class MimicWebsocket {
         };
     }
 
-    public send(data:any) {
+    send(data: any) {
         if (this.langServer) {
-            // console.log('Send msg ' + data);
-            this.langServer!.postMessage({ cmd: 'process', msg: data });
+            this.langServer.postMessage({ cmd: 'process', msg: data });
         } else {
-            throw 'INVALID_STATE_ERR : Pausing to reconnect websocket';
+            throw new Error('INVALID_STATE_ERR : Pausing to reconnect websocket');
         }
     }
 
     /**
      * Returns boolean, whether websocket was FORCEFULLY closed.
      */
-    public close():boolean {
+    close(): boolean {
         this.readyState = WebSocket.CLOSED;
         if (this.langServer) {
-            this.langServer!.postMessage({ cmd: 'close' });
+            this.langServer.postMessage({ cmd: 'close' });
             return true;
         }
         return false;
     }
 }
-

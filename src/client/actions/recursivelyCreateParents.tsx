@@ -2,40 +2,40 @@ import { genRandomFileID, getParentPath } from '../utils/fileUtilities';
 import { FileSystemEntry } from '../types';
 
 export default function recursivelyCreateParents(
-  entries: FileSystemEntry[],
-  path: string,
-  expand?: boolean
+    entries: FileSystemEntry[],
+    path: string,
+    expand?: boolean
 ): FileSystemEntry[] {
-  const next: FileSystemEntry[] = [];
+    const next: FileSystemEntry[] = [];
 
-  let parent = getParentPath(path);
+    let parent = getParentPath(path);
 
-  while (parent) {
-    const parentEntry = entries.find(e => e.item.path === parent);
+    while (parent) {
+        const parentEntry = entries.find((e) => e.item.path === parent);
 
-    if (parentEntry) {
-      if (parentEntry.item.type !== 'folder') {
-        throw new Error('File path must be inside a folder');
-      }
-      break;
-    } else {
-      next.push({
-        item: {
-          type: 'folder',
-          path: parent,
-          asset: false,
-          uri: '',
-          content: '',
-          id: genRandomFileID(parent)
-        },
-        state: {
-          isExpanded: !!expand,
-        },
-      });
+        if (parentEntry) {
+            if (parentEntry.item.type !== 'folder') {
+                throw new Error('File path must be inside a folder');
+            }
+            break;
+        } else {
+            next.push({
+                item: {
+                    type: 'folder',
+                    path: parent,
+                    asset: false,
+                    uri: '',
+                    content: '',
+                    id: genRandomFileID(parent),
+                },
+                state: {
+                    isExpanded: !!expand,
+                },
+            });
 
-      parent = getParentPath(parent);
+            parent = getParentPath(parent);
+        }
     }
-  }
 
-  return next;
+    return next;
 }

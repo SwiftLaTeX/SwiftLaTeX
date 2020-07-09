@@ -31,12 +31,9 @@ export class CompileResult {
 }
 
 export class DvipdfmxEngine {
-
     private latexWorker: Worker | undefined = undefined;
     latexWorkerStatus: EngineStatus = EngineStatus.Init;
-    constructor() {
-
-    }
+    constructor() {}
 
     async loadEngine(): Promise<void> {
         if (this.latexWorker !== undefined) {
@@ -77,43 +74,43 @@ export class DvipdfmxEngine {
         const start_compile_time = performance.now();
         const res: CompileResult = await new Promise((resolve, _) => {
             this.latexWorker!.onmessage = (ev: any) => {
-                const data: any = ev['data'];
-                const cmd: string = data['cmd'] as string;
-                if (cmd !== "compile") return;
-                const result: string = data['result'] as string;
-                const log: string = data['log'] as string;
-                const status: number = data['status'] as number;
+                const data: any = ev.data;
+                const cmd: string = data.cmd as string;
+                if (cmd !== 'compile') return;
+                const result: string = data.result as string;
+                const log: string = data.log as string;
+                const status: number = data.status as number;
                 this.latexWorkerStatus = EngineStatus.Ready;
-                console.log('Engine compilation finish ' + (performance.now() - start_compile_time));
+                console.log(
+                    'Engine compilation finish ' + (performance.now() - start_compile_time)
+                );
                 const nice_report = new CompileResult();
                 nice_report.status = status;
                 nice_report.log = log;
                 if (result === 'ok') {
-                    const pdf: Uint8Array = new Uint8Array(data['pdf']);
+                    const pdf: Uint8Array = new Uint8Array(data.pdf);
                     nice_report.pdf = pdf;
                 } else {
-                    let dummyAnnotation: Annotation = {
+                    const dummyAnnotation: Annotation = {
                         startLineNumber: 1,
                         endLineNumber: 1,
                         startColumn: 0,
                         endColumn: 1024,
                         message: 'Unable error happened when generating PDF. Status ' + status,
                         severity: 4,
-                        source: 'Dvipdfmx'
-                    }
+                        source: 'Dvipdfmx',
+                    };
                     nice_report.errors = [dummyAnnotation];
                 }
                 resolve(nice_report);
             };
-            this.latexWorker!.postMessage({ 'cmd': 'compilepdf' });
+            this.latexWorker!.postMessage({ cmd: 'compilepdf' });
             console.log('Engine compilation start');
         });
-        this.latexWorker!.onmessage = (_: any) => {
-        };
+        this.latexWorker!.onmessage = (_: any) => {};
 
         return res;
     }
-
 
     setEngineMainFile(filename: string): void {
         this.checkEngineStatus();

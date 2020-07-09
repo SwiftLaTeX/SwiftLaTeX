@@ -13,10 +13,7 @@ import MonacoEditor from './Editor/MonacoEditor';
 import openEntry from '../actions/openEntry';
 import Banner from './shared/Banner';
 import ModalDialog from './shared/ModalDialog';
-import {
-    isInsideFolder,
-    changeParentPath,
-} from '../utils/fileUtilities';
+import { isInsideFolder, changeParentPath } from '../utils/fileUtilities';
 import withPreferences, { PreferencesContextType } from './Preferences/withPreferences';
 import { FileSystemEntry, Annotation } from '../types';
 import { EditorViewProps } from './EditorViewProps';
@@ -25,11 +22,9 @@ import SplitterLayout from 'react-splitter-layout';
 import './shared/Splitter.css';
 import WebFrame from './WebFrame';
 
+export type Props = PreferencesContextType & EditorViewProps;
 
-export type Props = PreferencesContextType &
-    EditorViewProps;
-
-type ModalName = 'shortcuts' | 'share' ;
+type ModalName = 'shortcuts' | 'share';
 type BannerName = 'no-entry' | 'entry-changed' | 'engine-changed';
 
 type State = {
@@ -90,23 +85,24 @@ class EditorView extends React.Component<Props, State> {
         return message;
     };
 
-
     _showBanner = (name: BannerName, duration: number) => {
         this.setState({ currentBanner: name });
 
         setTimeout(() => {
             // @ts-ignore
-            this.setState(state => (state.currentBanner === name ? { currentBanner: null } : state));
+            this.setState((state) =>
+                state.currentBanner === name ? { currentBanner: null } : state
+            );
         }, duration);
     };
-
 
     _handleOpenPath = (path: string): Promise<void> =>
         this.props.onFileEntriesChange(openEntry(this.props.fileEntries, path, true));
 
     _handlePreviewClick = async (path: string, line: number, column: number): Promise<void> => {
         await this.props.onFileEntriesChange(openEntry(this.props.fileEntries, path, true));
-        this._EditorComponentRef.current && this._EditorComponentRef.current.setCursor(line, column);
+        this._EditorComponentRef.current &&
+            this._EditorComponentRef.current.setCursor(line, column);
         // console.log(line + ' ' + column);
     };
 
@@ -181,6 +177,7 @@ class EditorView extends React.Component<Props, State> {
         });
 
     _handleShowShareCode = async () => {
+        await this.props.onShareProject();
         this.setState({ currentModal: 'share' });
     };
 
@@ -195,7 +192,6 @@ class EditorView extends React.Component<Props, State> {
     onDragEnd = () => {
         this.setState({ dragging: false });
     };
-
 
     render() {
         const { currentBanner, currentModal } = this.state;
@@ -227,33 +223,35 @@ class EditorView extends React.Component<Props, State> {
         let editorComponent;
         if (entry && entry.item.type === 'file') {
             if (entry.item.asset) {
-                editorComponent = <AssetViewer entry={entry}/>;
+                editorComponent = <AssetViewer entry={entry} />;
             } else {
                 const { content } = entry.item;
-                editorComponent = <React.Fragment>
-                    <MonacoEditor
-                        entries={this.props.fileEntries}
-                        autoFocus={!entry.state.isCreating}
-                        annotations={annotations}
-                        path={entry.item.path}
-                        theme={this.props.preferences.theme}
-                        value={content as string}
-                        onValueChange={this.props.onChangeCode}
-                        onCursorChange={this.props.onChangeCursor}
-                        onOpenPath={this._handleOpenPath}
-                        lineNumbers={'on'}
-                        onTypeContent={this.props.onTypeContent}
-                        ref={this._EditorComponentRef}
-                    />
-                </React.Fragment>;
+                editorComponent = (
+                    <React.Fragment>
+                        <MonacoEditor
+                            entries={this.props.fileEntries}
+                            autoFocus={!entry.state.isCreating}
+                            annotations={annotations}
+                            path={entry.item.path}
+                            theme={this.props.preferences.theme}
+                            value={content as string}
+                            onValueChange={this.props.onChangeCode}
+                            onCursorChange={this.props.onChangeCursor}
+                            onOpenPath={this._handleOpenPath}
+                            lineNumbers={'on'}
+                            onTypeContent={this.props.onTypeContent}
+                            ref={this._EditorComponentRef}
+                        />
+                    </React.Fragment>
+                );
             }
         } else {
-            editorComponent = <NoFileSelected/>;
+            editorComponent = <NoFileSelected />;
         }
 
         return (
             <ContentShell>
-                {this.props.isSystemBusy ? <ProgressIndicator/> : null}
+                {this.props.isSystemBusy ? <ProgressIndicator /> : null}
                 <EditorToolbar
                     name={name}
                     saveStatus={saveStatus}
@@ -278,16 +276,25 @@ class EditorView extends React.Component<Props, State> {
                                 entryPoint={entryPoint}
                                 onSetEntryPoint={onSetEntryPoint}
                             />
-                            <SplitterLayout onDragStart={this.onDragStart} onDragEnd={this.onDragEnd} percentage={true}
-                                            secondaryInitialSize={45}>
+                            <SplitterLayout
+                                onDragStart={this.onDragStart}
+                                onDragEnd={this.onDragEnd}
+                                percentage={true}
+                                secondaryInitialSize={45}>
                                 <div className={css(styles.editorArea)}>{editorComponent}</div>
-                                {preferences.devicePreviewShown && <div className={css(styles.previewerArea)}>
-                                    {this.state.dragging && <div className="my-iframe-overlay"/>}
-                                    <WebFrame engine={engine} previewRef={previewRef}
-                                              onPreviewClick={this._handlePreviewClick}/></div>}
+                                {preferences.devicePreviewShown && (
+                                    <div className={css(styles.previewerArea)}>
+                                        {this.state.dragging && (
+                                            <div className="my-iframe-overlay" />
+                                        )}
+                                        <WebFrame
+                                            engine={engine}
+                                            previewRef={previewRef}
+                                            onPreviewClick={this._handlePreviewClick}
+                                        />
+                                    </div>
+                                )}
                             </SplitterLayout>
-
-
                         </LayoutShell>
                         {preferences.panelsShown ? (
                             <EditorPanels
@@ -325,17 +332,17 @@ class EditorView extends React.Component<Props, State> {
                     autoSize={false}
                     visible={currentModal === 'share'}
                     onDismiss={this._handleHideModal}>
-                    <ShareCode
-                        theme={this.props.preferences.theme}
-                    />
+                    <ShareCode theme={this.props.preferences.theme} />
                 </ModalDialog>
 
                 <Banner type="success" visible={currentBanner === 'entry-changed'}>
                     Entry point is set to {this.props.entryPoint}
                 </Banner>
                 <Banner type="success" visible={currentBanner === 'engine-changed'}>
-                    Switch to the {this.props.engine} typesetting
-                    engine. {this.props.engine === 'PDFLaTeX' ? 'Note that PDFLaTeX engine has limited WYSIWYG functionalities' : ''}
+                    Switch to the {this.props.engine} typesetting engine.{' '}
+                    {this.props.engine === 'PDFLaTeX'
+                        ? 'Note that PDFLaTeX engine has limited WYSIWYG functionalities'
+                        : ''}
                 </Banner>
                 <Banner type="error" visible={!this.props.entryPoint}>
                     No entry point detected, please choose a tex file as the entry point.
@@ -384,5 +391,4 @@ const styles = StyleSheet.create({
         height: '100%',
         overflow: 'hidden',
     },
-
 });

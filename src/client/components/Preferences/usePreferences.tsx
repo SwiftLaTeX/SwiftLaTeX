@@ -3,7 +3,9 @@ import { PreferencesContext, PreferencesType, SetPreferencesType } from './Prefe
 import { PreferencesContextType } from './withPreferences';
 
 export default function usePreferences(): [PreferencesType, SetPreferencesType] {
-  const { preferences, setPreferences } = useContext(PreferencesContext) as PreferencesContextType;
+    const { preferences, setPreferences } = useContext(
+        PreferencesContext
+    ) as PreferencesContextType;
 
-  return [preferences, setPreferences];
+    return [preferences, setPreferences];
 }

@@ -4,9 +4,13 @@ import path from 'path';
 import Koa from 'koa';
 import serve from 'koa-static';
 import mount from 'koa-mount';
+import koaBody from 'koa-body'
 import stoppable from 'stoppable';
 import gaproxy from './analytics';
 import MinioBackend from './minio';
+// import localBackend from './localdisk';
+import shareHub from './sharing';
+import pdfViewer from './pdfviewer';
 import { AddressInfo } from 'net';
 
 type ShutdownSignal = 'SIGHUP' | 'SIGINT' | 'SIGTERM' | 'SIGUSR2';
@@ -56,9 +60,13 @@ if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
         );
     });
 }
+app.use(koaBody({multipart: true}));
 app.use(serve(path.join(__dirname, '..', '..', 'public')));
 app.use(gaproxy());
+app.use(shareHub());
+app.use(pdfViewer());
 app.use(MinioBackend());
+// app.use(localBackend());
 
 const httpServer = app.listen(port, host, backlog, () => {
     const { address, port } = server.address() as AddressInfo;

@@ -1,6 +1,5 @@
 import escapeRegExp from 'escape-string-regexp';
 
-
 export function isInsideFolder(path: string, folderPath: string) {
     return path.startsWith(`${folderPath}/`);
 }
@@ -25,7 +24,7 @@ export const genRandomString = (length: number = 32) => {
 
 export const triggerDownloadBlob = (blob: Blob, name: string) => {
     const tempPDFURL = URL.createObjectURL(blob);
-    setTimeout(_ => {
+    setTimeout((_) => {
         URL.revokeObjectURL(tempPDFURL);
     }, 30000);
     // Simulate link click to download file
@@ -42,7 +41,7 @@ export const triggerDownloadBlob = (blob: Blob, name: string) => {
 
 export function genRandomFileID(path: string) {
     // return encodeURIComponent(path).replace(/%/g, '_') + genRandomString(5);
-    const preCoded = encodeURIComponent(path).replace(/%20/g, '_');
+    const preCoded = encodeURIComponent(path).replace(/%/g, '_');
     const splits = preCoded.split('.');
     const extension = splits.pop();
     if (extension === preCoded) {
@@ -63,7 +62,6 @@ export function removeExtension(filename: string) {
     else return filename.substr(0, lastDotPosition);
 }
 
-
 export function getUniquePath(allPaths: string[], suggestedPath: string, initialSuffix?: string) {
     const parts = suggestedPath.includes('.') ? suggestedPath.split('.') : undefined;
     const ext = parts ? parts.pop() : '';
@@ -72,7 +70,7 @@ export function getUniquePath(allPaths: string[], suggestedPath: string, initial
     let path = suggestedPath;
     let counter = initialSuffix ? 0 : 1;
 
-    while (allPaths.some(p => p.toLowerCase() === path.toLowerCase())) {
+    while (allPaths.some((p) => p.toLowerCase() === path.toLowerCase())) {
         const suffix = `${initialSuffix || ''} ${counter || ''}`.trim();
 
         if (ext) {
@@ -116,4 +114,3 @@ export function arrayBufferToString(arrayBuf: ArrayBuffer) {
     const decoder = new TextDecoder('utf8');
     return decoder.decode(arrayBuf);
 }
-

@@ -16,12 +16,12 @@ export class EventReporter {
             handle('set', 'page', page);
             handle('send', 'pageview');
         }
-    }
+    };
 
     static reportTiming = (cat: string, action: string, value: number) => {
         const handle = (window as any).meow;
         if (handle) {
             handle('send', 'timing', cat, action, value);
         }
-    }
+    };
 }

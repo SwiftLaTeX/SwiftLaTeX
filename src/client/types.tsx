@@ -1,6 +1,6 @@
 export const EngineVersions = {
-  'XeLaTeX': true,
-  'PDFLaTeX': true
+    XeLaTeX: true,
+    PDFLaTeX: true,
 };
 
 export type EngineVersion = keyof typeof EngineVersions;
@@ -8,33 +8,32 @@ export type EngineVersion = keyof typeof EngineVersions;
 export const DEFAULT_ENGINE_VERSION: EngineVersion = 'XeLaTeX';
 
 export type Annotation = {
-  startLineNumber: number;
-  endLineNumber: number;
-  startColumn: number;
-  endColumn: number;
-  message: string;
-  severity: number;
-  source: string;
+    startLineNumber: number;
+    endLineNumber: number;
+    startColumn: number;
+    endColumn: number;
+    message: string;
+    severity: number;
+    source: string;
 };
 
 export type FileSystemEntry = {
-  item: {
-    path: string;
-    type: 'file' | 'folder';
-    uri: string;
-    content: string | ArrayBuffer;
-    asset: boolean;
-    id: string;
-  };
-  state: {
-    isOpen?: boolean;
-    isFocused?: boolean;
-    isSelected?: boolean;
-    isCreating?: boolean;
-    isExpanded?: boolean;
-  };
+    item: {
+        path: string;
+        type: 'file' | 'folder';
+        uri: string;
+        content: string | ArrayBuffer;
+        asset: boolean;
+        id: string;
+    };
+    state: {
+        isOpen?: boolean;
+        isFocused?: boolean;
+        isSelected?: boolean;
+        isCreating?: boolean;
+        isExpanded?: boolean;
+    };
 };
-
 
 export type SaveStatus = 'changed' | 'saving-draft' | 'saved-draft' | 'publishing' | 'published';
 

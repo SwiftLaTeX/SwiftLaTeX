@@ -24,10 +24,10 @@ import {
     EngineVersion,
     Annotation,
     FileSystemEntry,
-    SaveStatus, DEFAULT_ENGINE_VERSION,
+    SaveStatus,
+    DEFAULT_ENGINE_VERSION,
 } from '../types';
 import { DvipdfmxEngine } from '../swiftlatex/dvipdfmxEngine';
-
 
 const BROADCAST_CHANNEL_NAME = 'SWIFTLATEX_BROADCAST_CHANNEL';
 
@@ -56,7 +56,6 @@ type State = {
     engine: EngineVersion;
 };
 
-
 export default class App extends React.Component<any, State> {
     constructor(props: any) {
         super(props);
@@ -75,13 +74,12 @@ export default class App extends React.Component<any, State> {
             engineLogs: '',
             engineErrors: undefined,
             entryPoint: 'main.tex',
-            engine: DEFAULT_ENGINE_VERSION
+            engine: DEFAULT_ENGINE_VERSION,
         };
         EventReporter.reportPageView();
     }
 
     componentDidMount() {
-
         const project_id = this.state.id;
         if (project_id === '') {
             this.setState({ sessionStatus: SessionStatus.LoadFilesFailed });
@@ -93,13 +91,15 @@ export default class App extends React.Component<any, State> {
         });
 
         // Let other tabs know that a new tab is opened
-        this._broadcastChannel.postMessage({
-            type: 'NEW_TAB',
-            id: project_id,
-        }).then();
+        this._broadcastChannel
+            .postMessage({
+                type: 'NEW_TAB',
+                id: project_id,
+            })
+            .then();
 
         // Listen to messages from other tabs
-        this._broadcastChannel.addEventListener('message', e => {
+        this._broadcastChannel.addEventListener('message', (e) => {
             // Only respond to messages which have the same snack
             if (!e.id || e.id !== project_id) {
                 return;
@@ -125,22 +125,22 @@ export default class App extends React.Component<any, State> {
     _backendStorage: BackendStorage | undefined = undefined;
 
     async _loadEditorComponents() {
-            await new Promise((resolve, reject) => {
-                loadWASM('bin/onigasm.wasm').then(
-                    function() {
-                        resolve();
-                    },
-                    function() {
-                        reject();
-                    },
-                );
-            });
-            this._latexEngine = new LaTeXEngine();
-            await this._latexEngine.loadEngine();
+        await new Promise((resolve, reject) => {
+            loadWASM('bin/onigasm.wasm').then(
+                function() {
+                    resolve();
+                },
+                function() {
+                    reject();
+                },
+            );
+        });
+        this._latexEngine = new LaTeXEngine();
+        await this._latexEngine.loadEngine();
     }
 
     async __loadSingleFile(tmp: any): Promise<FileSystemEntry | undefined> {
-        let importedEntry: FileSystemEntry = {
+        const importedEntry: FileSystemEntry = {
             item: {
                 type: tmp.type,
                 asset: tmp.asset,
@@ -154,7 +154,8 @@ export default class App extends React.Component<any, State> {
 
         if (tmp.type === 'file') {
             try {
-                if (!tmp.asset) { /* Is a text file */
+                if (!tmp.asset) {
+                    /* Is a text file */
                     const tmp_content_buf = await this._backendStorage!.get('asset', tmp.id);
                     importedEntry.item.content = arrayBufferToString(tmp_content_buf);
                     return importedEntry;
@@ -165,7 +166,6 @@ export default class App extends React.Component<any, State> {
                 }
             } catch (e) {
                 console.error('Failed to load ' + tmp.path);
-
             }
         } else {
             return importedEntry;
@@ -174,58 +174,63 @@ export default class App extends React.Component<any, State> {
     }
 
     async _loadProjectFiles() {
+        const manifest_buffer = await this._backendStorage!.get('manifest', this.state.id);
+        const manifest = arrayBufferToJson(manifest_buffer);
+        const username = manifest.username;
+        const name = manifest.name;
+        let entryPoint = manifest.entryPoint;
+        const fileEntries = manifest.fileEntries;
+        if (!isString(username) || !isString(name) || !isString(entryPoint) || !fileEntries) {
+            throw new Error('Malformed Manifest');
+        }
 
-            const manifest_buffer = await this._backendStorage!.get('manifest', this.state.id);
-            const manifest = arrayBufferToJson(manifest_buffer);
-            const username = manifest['username'];
-            const name = manifest['name'];
-            let entryPoint = manifest['entryPoint'];
-            const fileEntries = manifest['fileEntries'];
-            if (!isString(username) || !isString(name) || !isString(entryPoint) || !fileEntries) {
+        if (!Array.isArray(fileEntries)) {
+            throw new Error('Malformed Manifest');
+        }
+
+        const importedEntries: FileSystemEntry[] = [];
+        let entryPointFound = false;
+        const fileLoadingPromises = [];
+        for (let j = 0; j < fileEntries.length; j++) {
+            const tmp = fileEntries[j];
+            if (
+                !isString(tmp.type) ||
+                !isString(tmp.id) ||
+                !isString(tmp.path) ||
+                !isString(tmp.uri) ||
+                !isBoolean(tmp.asset)
+            ) {
                 throw new Error('Malformed Manifest');
             }
+            fileLoadingPromises.push(this.__loadSingleFile(tmp));
+        }
 
-            if (!Array.isArray(fileEntries)) {
-                throw new Error('Malformed Manifest');
-            }
-
-            const importedEntries: FileSystemEntry[] = [];
-            let entryPointFound = false;
-            let fileLoadingPromises = [];
-            for (let j = 0; j < fileEntries.length; j++) {
-                const tmp = fileEntries[j];
-                if (!isString(tmp.type) || !isString(tmp.id) || !isString(tmp.path) || !isString(tmp.uri) || !isBoolean(tmp.asset)) {
-                    throw new Error('Malformed Manifest');
-                }
-                fileLoadingPromises.push(this.__loadSingleFile(tmp));
-            }
-
-            /* Multithreading */
-            while (fileLoadingPromises.length) {
-                // 10 at at time
-                const batch = await Promise.all(fileLoadingPromises.splice(0, 10));
-                for (let tmp of batch) {
-                    if (tmp) {
-                        if (tmp.item.path === entryPoint && tmp.item.type === 'file') {
-                            entryPointFound = true;
-                            tmp.state.isOpen = true;
-                            tmp.state.isFocused = true;
-                        }
-                        importedEntries.push(tmp);
+        /* Multithreading */
+        while (fileLoadingPromises.length) {
+            // 10 at at time
+            const batch = await Promise.all(fileLoadingPromises.splice(0, 10));
+            for (const tmp of batch) {
+                if (tmp) {
+                    if (tmp.item.path === entryPoint && tmp.item.type === 'file') {
+                        entryPointFound = true;
+                        tmp.state.isOpen = true;
+                        tmp.state.isFocused = true;
                     }
+                    importedEntries.push(tmp);
                 }
             }
+        }
 
-            if (!entryPointFound) {
-                entryPoint = '';
-            }
+        if (!entryPointFound) {
+            entryPoint = '';
+        }
 
-            this.setState({
-                username: username,
-                name: name,
-                fileEntries: importedEntries,
-                entryPoint: entryPoint,
-            });
+        this.setState({
+            username,
+            name,
+            fileEntries: importedEntries,
+            entryPoint,
+        });
     }
 
     async _initSession() {
@@ -239,9 +244,17 @@ export default class App extends React.Component<any, State> {
             return;
         }
 
-        this.setState({sessionStatus: SessionStatus.LoadFiles});
+        this._backendStorage
+            .getUserInfo()
+            .then((info) => {
+                EventReporter.reportEvent('editor', 'login', info);
+            })
+            .catch((_) => {
+            });
+
+        this.setState({ sessionStatus: SessionStatus.LoadFiles });
         try {
-            await this._loadProjectFiles()
+            await this._loadProjectFiles();
         } catch (e) {
             this.setState({
                 sessionStatus: SessionStatus.LoadFilesFailed,
@@ -249,40 +262,39 @@ export default class App extends React.Component<any, State> {
             return;
         }
 
-        this.setState({sessionStatus: SessionStatus.LoadComponents});
+        this.setState({ sessionStatus: SessionStatus.LoadComponents });
         try {
-            await this._loadEditorComponents()
+            await this._loadEditorComponents();
         } catch {
             this.setState({
                 sessionStatus: SessionStatus.LoadComponentsFailed,
             });
             return;
         }
-        this.setState({sessionStatus: SessionStatus.Ready});
+        this.setState({ sessionStatus: SessionStatus.Ready });
     }
 
     _handleChangeEngineVersion = async (engine: EngineVersion) => {
         if (this.state.isSystemBusy || this.state.engine === engine) {
             return;
         }
-        this.setState({isSystemBusy: true});
+        this.setState({ isSystemBusy: true });
         EventReporter.reportEvent('editor', 'switchEngine', engine);
         this._latexEngine && this._latexEngine.closeWorker();
         try {
             this._latexEngine = new LaTeXEngine(engine);
             await this._latexEngine.loadEngine();
             this._requiredFlushInEngine = true;
-            this.setState({engine: engine, isSystemBusy: false});
+            this.setState({ engine, isSystemBusy: false });
         } catch {
-            this.setState({sessionStatus: SessionStatus.LoadComponentsFailed});
+            this.setState({ sessionStatus: SessionStatus.LoadComponentsFailed });
         }
-    }
+    };
 
     _compareFileTreeStructure(
         nextFileEntries: FileSystemEntry[],
         originalFileEntries: FileSystemEntry[],
     ) {
-
         if (originalFileEntries.length !== nextFileEntries.length) {
             return true;
         } else {
@@ -312,7 +324,7 @@ export default class App extends React.Component<any, State> {
 
     _uploadFileTree = async () => {
         /* This function uploads all modified files and generate a manifest file for project infos */
-        let currentStateEntries = this.state.fileEntries;
+        const currentStateEntries = this.state.fileEntries;
         const fileEntriesCopy = [];
 
         for (let j = 0; j < currentStateEntries.length; j++) {
@@ -322,9 +334,11 @@ export default class App extends React.Component<any, State> {
             if (tmp.item.type === 'file') {
                 if (!tmp.item.asset) {
                     let needUpload = false;
-                    if (tmp.item.uri === '') { /* Without a url, indicate it is a newly create file, always need to upload */
+                    if (tmp.item.uri === '') {
+                        /* Without a url, indicate it is a newly create file, always need to upload */
                         needUpload = true;
-                    } else { /* Not empty uri, we need to compare and see whether it changes or not */
+                    } else {
+                        /* Not empty uri, we need to compare and see whether it changes or not */
                         if (this._requiredUploadFiles.includes(tmp.item.id)) {
                             needUpload = true;
                         }
@@ -333,11 +347,15 @@ export default class App extends React.Component<any, State> {
                         console.log('Uploading ' + tmp.item.path);
                         const theBlob = new Blob([tmp.item.content], { type: 'text/tex' });
                         try {
-                            const remoteUrl = await this._backendStorage!.put('asset', tmp.item.id, theBlob);
+                            const remoteUrl = await this._backendStorage!.put(
+                                'asset',
+                                tmp.item.id,
+                                theBlob,
+                            );
                             copyTmp.uri = remoteUrl;
                             if (remoteUrl !== tmp.item.uri) {
                                 this.setState((state: State) => ({
-                                    fileEntries: state.fileEntries.map(entry => {
+                                    fileEntries: state.fileEntries.map((entry) => {
                                         if (entry.item.path === tmp.item.path) {
                                             return updateEntry(entry, { item: { uri: remoteUrl } });
                                         }
@@ -346,7 +364,9 @@ export default class App extends React.Component<any, State> {
                                 }));
                             }
                         } catch (e) {
-                            console.log('An upload error is detected, silently ignored?' + tmp.item.path);
+                            console.log(
+                                'An upload error is detected, silently ignored?' + tmp.item.path,
+                            );
                         }
                         // console.log('Uploading finish' + tmp.item.path);
                     }
@@ -357,7 +377,6 @@ export default class App extends React.Component<any, State> {
         this._requiredUploadFiles = [];
         return fileEntriesCopy;
     };
-
 
     _requiredFlushInEngine = true;
     _requiredUpdateFilesInEngine: string[] = [];
@@ -397,15 +416,14 @@ export default class App extends React.Component<any, State> {
     _broadcastChannel: BroadcastChannel = undefined as any;
 
     _handleToggleSendCode = () =>
-        this.setState(state => ({ sendCodeOnChangeEnabled: !state.sendCodeOnChangeEnabled }));
+        this.setState((state) => ({ sendCodeOnChangeEnabled: !state.sendCodeOnChangeEnabled }));
 
     _handleSubmitTitle = async (name: string) => {
         if (!name) {
             name = 'Fancy Project';
         }
-        this.setState({ name: name, saveStatus: 'changed' });
+        this.setState({ name, saveStatus: 'changed' });
     };
-
 
     _syncManifestNoDebounce = async () => {
         EventReporter.reportEvent('editor', 'syncCode');
@@ -416,7 +434,7 @@ export default class App extends React.Component<any, State> {
             username: this.state.username,
             modifiedTime: new Date().toString(),
             fileEntries: fileEntriesCopy,
-            engine: this.state.engine
+            engine: this.state.engine,
         };
         const jsonStr = JSON.stringify(manifest);
         // console.log(jsonStr);
@@ -432,11 +450,10 @@ export default class App extends React.Component<any, State> {
 
     _syncManifest = debounce(this._syncManifestNoDebounce, 5000);
 
-
     _handleChangeCursor = (path: string, line: number, column: number) => {
         const preview = this._previewRef.current;
         if (preview) {
-            preview.postMessage({ cmd: 'setCursor', path: path, line: line, column: column }, '*');
+            preview.postMessage({ cmd: 'setCursor', path, line, column }, '*');
         }
     };
 
@@ -456,7 +473,6 @@ export default class App extends React.Component<any, State> {
         const currentFileEntries = this.state.fileEntries;
 
         if (this._requiredFlushInEngine) {
-
             this._latexEngine.flushCache();
             for (let j = 0; j < currentFileEntries.length; j++) {
                 const tmp = currentFileEntries[j];
@@ -470,7 +486,6 @@ export default class App extends React.Component<any, State> {
                 if (tmp.item.type === 'file') {
                     console.log('Write fresh file ' + tmp.item.path);
                     this._latexEngine.writeMemFSFile(tmp.item.path, tmp.item.content);
-
                 }
             }
         } else {
@@ -504,15 +519,15 @@ export default class App extends React.Component<any, State> {
         if (r.pdf) {
             EventReporter.reportEvent('editor', 'compile_ok');
             if (preview) {
-                let content: string | Uint8Array = r.pdf;
-                if (this.state.engine === 'XeLaTeX') {
-                    content = new TextDecoder('utf-8').decode(content);
-                }
-                preview.postMessage({
-                    cmd: 'setContent',
-                    source: content,
-                    resources: this._generateResourceUrlMap(),
-                }, '*');
+                let content = r.pdf;
+                preview.postMessage(
+                    {
+                        cmd: 'setContent',
+                        source: content,
+                        resources: this._generateResourceUrlMap(),
+                    },
+                    '*',
+                );
             }
             return true;
         } else {
@@ -537,15 +552,20 @@ export default class App extends React.Component<any, State> {
     _handleTypeContent = (delta: string, isInsert: boolean) => {
         const preview = this._previewRef.current;
         if (preview) {
-            preview.postMessage({ cmd: 'typeContent', delta: delta, isInsert: isInsert }, '*');
+            preview.postMessage({ cmd: 'typeContent', delta, isInsert }, '*');
         }
     };
 
     _handleChangeCode = (content: string, path: string) => {
         this.setState((state: State) => ({
             saveStatus: 'changed',
-            fileEntries: state.fileEntries.map(entry => {
-                if (entry.item.type === 'file' && !entry.item.asset && entry.item.path === path && entry.state.isFocused === true) {
+            fileEntries: state.fileEntries.map((entry) => {
+                if (
+                    entry.item.type === 'file' &&
+                    !entry.item.asset &&
+                    entry.item.path === path &&
+                    entry.state.isFocused === true
+                ) {
                     if (!this._requiredUpdateFilesInEngine.includes(path)) {
                         this._requiredUpdateFilesInEngine.push(path);
                     }
@@ -558,22 +578,22 @@ export default class App extends React.Component<any, State> {
             }),
             engineErrors: undefined,
         }));
-
     };
 
-
     _handleFileEntriesChange = (nextFileEntries: FileSystemEntry[]): Promise<void> => {
-        return new Promise(resolve => {
-                let fileStructureChanged = this._compareFileTreeStructure(this.state.fileEntries, nextFileEntries);
-                if (fileStructureChanged) {
-                    this._requiredFlushInEngine = true;
-                    this.setState({ saveStatus: 'changed' });
-                }
-                this.setState(_ => {
-                    return { fileEntries: nextFileEntries };
-                }, resolve);
-            },
-        );
+        return new Promise((resolve) => {
+            const fileStructureChanged = this._compareFileTreeStructure(
+                this.state.fileEntries,
+                nextFileEntries,
+            );
+            if (fileStructureChanged) {
+                this._requiredFlushInEngine = true;
+                this.setState({ saveStatus: 'changed' });
+            }
+            this.setState((_) => {
+                return { fileEntries: nextFileEntries };
+            }, resolve);
+        });
     };
 
     _handleClearDeviceLogs = () =>
@@ -598,7 +618,6 @@ export default class App extends React.Component<any, State> {
         triggerDownloadBlob(blobFile, 'export.zip');
 
         this.setState({ isSystemBusy: false });
-
     };
 
     _findFocusedEntry = (entries: FileSystemEntry[]): FileSystemEntry | undefined =>
@@ -632,7 +651,7 @@ export default class App extends React.Component<any, State> {
         } else {
             this._requiredFlushInEngine = true; /* Error, we require flush */
         }
-    }
+    };
 
     _handleXeTeXExport = async () => {
         /* Only XeLaTeX requires DVIPDFMX */
@@ -654,7 +673,7 @@ export default class App extends React.Component<any, State> {
 
         /* Feed XDV and Resources to DVIPDFMX */
         if (dviCompileOk) {
-            let currentFileEntries = this.state.fileEntries;
+            const currentFileEntries = this.state.fileEntries;
             for (let j = 0; j < currentFileEntries.length; j++) {
                 const tmp = currentFileEntries[j];
                 if (tmp.item.type === 'folder') {
@@ -669,7 +688,8 @@ export default class App extends React.Component<any, State> {
                     export_engine.writeMemFSFile(tmp.item.path, tmp.item.content);
                 }
             }
-            const xdvPath = this.state.entryPoint.substr(0, this.state.entryPoint.length - 4) + '.xdv';
+            const xdvPath =
+                this.state.entryPoint.substr(0, this.state.entryPoint.length - 4) + '.xdv';
             // console.error('Export: write xdv file ' + xdvPath);
             export_engine.writeMemFSFile(xdvPath, xdvResult.pdf!);
             export_engine.setEngineMainFile(this.state.entryPoint);
@@ -687,7 +707,7 @@ export default class App extends React.Component<any, State> {
         if (!dviCompileOk) {
             this._requiredFlushInEngine = true;
         }
-    }
+    };
 
     _handleExportPDF = async () => {
         if (!this._latexEngine || !this._latexEngine.isReady()) {
@@ -702,10 +722,6 @@ export default class App extends React.Component<any, State> {
             return;
         }
 
-        if (this.state.engineErrors && this.state.engineErrors.length > 0) {
-            return;
-        }
-
         EventReporter.reportEvent('editor', 'export');
 
         if (this.state.engine === 'PDFLaTeX') {
@@ -716,7 +732,8 @@ export default class App extends React.Component<any, State> {
     };
 
     _handleShareProject = async () => {
-
+        const manifestUrl = await this._backendStorage!.getPublicUrl('manifest', this.state.id);
+        console.log(btoa(manifestUrl));
     };
 
     render() {
@@ -750,23 +767,32 @@ export default class App extends React.Component<any, State> {
                     onChangeEngineVersion={this._handleChangeEngineVersion}
                 />
             );
-        } else if (this.state.sessionStatus === SessionStatus.Init || this.state.sessionStatus === SessionStatus.LoadComponents || this.state.sessionStatus === SessionStatus.LoadFiles) {
-
-            return (<div className={css(styles.container)}>
-                <div className={css(styles.logo)}>
-                    <AnimatedLogo/>
+        } else if (
+            this.state.sessionStatus === SessionStatus.Init ||
+            this.state.sessionStatus === SessionStatus.LoadComponents ||
+            this.state.sessionStatus === SessionStatus.LoadFiles
+        ) {
+            return (
+                <div className={css(styles.container)}>
+                    <div className={css(styles.logo)}>
+                        <AnimatedLogo/>
+                    </div>
+                    <p className={css(styles.loadingText)}>Loading data...</p>
                 </div>
-                <p className={css(styles.loadingText)}>Loading data...</p>
-            </div>);
+            );
         } else {
-            const errorMessage = this.state.sessionStatus === SessionStatus.LoadComponentsFailed ? 'Failed to start LaTeX engine.' : 'Project files you are looking for do not exist!';
-            return (<div className={css(styles.container)}>
-                <p className={css(styles.loadingText)}>Oops! {errorMessage} </p>
-            </div>);
+            const errorMessage =
+                this.state.sessionStatus === SessionStatus.LoadComponentsFailed
+                    ? 'Failed to start LaTeX engine.'
+                    : 'Project files you are looking for do not exist!';
+            return (
+                <div className={css(styles.container)}>
+                    <p className={css(styles.loadingText)}>Oops! {errorMessage} </p>
+                </div>
+            );
         }
     }
 }
-
 
 const styles = StyleSheet.create({
     container: {

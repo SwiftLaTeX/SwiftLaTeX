@@ -25,14 +25,14 @@ import { Registry } from 'monaco-textmate'; // peer dependency
 import { wireTmGrammars } from 'monaco-editor-textmate';
 import { MonacoYJSBinding } from './MonacoYjs';
 import {
-    MonacoLanguageClient, CloseAction, ErrorAction,
-    MonacoServices, createConnection
+    MonacoLanguageClient,
+    CloseAction,
+    ErrorAction,
+    MonacoServices,
+    createConnection,
 } from 'monaco-languageclient';
 import { MimicWebsocket } from './MimicWebsocket';
 import ResizeDetector from '../shared/ResizeDetector';
-
-
-
 
 /**
  * Monkeypatch to make 'Find All References' work across multiple files
@@ -41,8 +41,6 @@ import ResizeDetector from '../shared/ResizeDetector';
 // SimpleEditorModelResolverService.prototype.findModel = function(_: any, resource: any) {
 //   return monaco.editor.getModels().find(model => model.uri.toString() === resource.toString());
 // };
-
-
 
 // @ts-ignore
 global.MonacoEnvironment = {
@@ -54,7 +52,7 @@ global.MonacoEnvironment = {
 monaco.editor.defineTheme('light', light as any);
 monaco.editor.defineTheme('dark', dark as any);
 monaco.languages.register({ id: 'bibtex', extensions: ['.bib'] });
-monaco.languages.register({ id: 'latex', extensions: ['.tex'] });
+monaco.languages.register({ id: 'latex', extensions: ['.tex', '.cls', '.sty'] });
 
 type Props = EditorProps & {
     theme: ThemeName;
@@ -66,16 +64,14 @@ const editorStates = new Map<string, monaco.editor.ICodeEditorViewState | undefi
 const codeEditorService = StaticServices.codeEditorService.get();
 
 const findModel = (path: string) => {
-    return monaco.editor.getModels().find(model => model.uri.path === `/${path}`);
-}
-
-
+    return monaco.editor.getModels().find((model) => model.uri.path === `/${path}`);
+};
 
 class MonacoEditor extends React.Component<Props> {
-
     static hasHighlightingSetup = false;
     _languageServerDisposable: any = undefined;
     _websocketConnection: any = undefined;
+    // _languageServerPlugin: any = undefined;
     static defaultProps: Partial<Props> = {
         lineNumbers: 'on',
         wordWrap: 'on',
@@ -84,7 +80,7 @@ class MonacoEditor extends React.Component<Props> {
             enabled: false,
         },
         fontFamily: 'var(--font-monospace)',
-        fontLigatures: true,
+        fontLigatures: false,
     };
 
     static removePath(path: string) {
@@ -111,7 +107,7 @@ class MonacoEditor extends React.Component<Props> {
 
     setCursor(line: number, column: number) {
         if (this._editor) {
-            this._editor.setPosition({ lineNumber: line, column: column });
+            this._editor.setPosition({ lineNumber: line, column });
             this._editor.revealLine(line);
             this._editor.focus();
         }
@@ -119,22 +115,24 @@ class MonacoEditor extends React.Component<Props> {
 
     _createLanguageClient(connection: MessageConnection): MonacoLanguageClient {
         return new MonacoLanguageClient({
-            name: "Sample Language Client",
+            name: 'Sample Language Client',
             clientOptions: {
                 // use a language id as a document selector
                 documentSelector: ['latex', 'bibtex'],
                 // disable the default error handler
                 errorHandler: {
                     error: () => ErrorAction.Continue,
-                    closed: () => CloseAction.DoNotRestart
-                }
+                    closed: () => CloseAction.DoNotRestart,
+                },
             },
             // create a language client connection from the JSON RPC connection on demand
             connectionProvider: {
                 get: (errorHandler, closeHandler) => {
-                    return Promise.resolve(createConnection(connection, errorHandler, closeHandler))
-                }
-            }
+                    return Promise.resolve(
+                        createConnection(connection, errorHandler, closeHandler)
+                    );
+                },
+            },
         });
     }
 
@@ -142,13 +140,13 @@ class MonacoEditor extends React.Component<Props> {
         MonacoServices.install(editor);
         const webSocket: any = new MimicWebsocket();
         this._websocketConnection = webSocket;
-        listen ({
+        listen({
             webSocket,
-            onConnection: connection => {
+            onConnection: (connection) => {
                 // create and start the language client
                 const languageClient = this._createLanguageClient(connection);
                 this._languageServerDisposable = languageClient.start();
-            }
+            },
         });
         webSocket.connect();
     }
@@ -183,24 +181,23 @@ class MonacoEditor extends React.Component<Props> {
         grammars.set('bibtex', 'text.bibtex');
         grammars.set('latex', 'text.tex.latex');
         wireTmGrammars(monaco, registry, grammars).then(
-            function() {
+            function () {
                 console.log('Grammer loaded');
             },
-            function(err) {
+            function (err) {
                 console.log('Unabled to load grammer ' + err);
-            },
+            }
         );
     }
 
     componentDidMount() {
-
         const { path, value, annotations, autoFocus, ...rest } = this.props;
 
         // The methods provided by the service are on it's prototype
         // So spreading this object doesn't work, we must mutate it
         codeEditorService.openCodeEditor = async (
             { resource, options }: any,
-            editor: monaco.editor.IStandaloneCodeEditor,
+            editor: monaco.editor.IStandaloneCodeEditor
         ) => {
             // Remove the leading slash added by the Uri
             await this.props.onOpenPath(resource.path.replace(/^\//, ''));
@@ -216,7 +213,7 @@ class MonacoEditor extends React.Component<Props> {
         const editor = monaco.editor.create(
             this._node.current as HTMLDivElement,
             rest,
-            codeEditorService,
+            codeEditorService
         );
 
         MonacoEditor._setupHighlighting();
@@ -247,12 +244,21 @@ class MonacoEditor extends React.Component<Props> {
             }
         });
 
-
-
         this._editor = editor;
-        this._editor.layout();
         this._openFile(path, value, autoFocus);
         this._updateMarkers(annotations);
+
+        /* Load every file so language server can do their best */
+        this.props.entries.forEach(({ item }) => {
+            if (
+                item.type === 'file' &&
+                item.path !== path &&
+                !item.asset &&
+                typeof item.content === 'string'
+            ) {
+                this._initializeFile(item.path, item.content);
+            }
+        });
     }
 
     componentDidUpdate(prevProps: Props) {
@@ -287,7 +293,6 @@ class MonacoEditor extends React.Component<Props> {
             // Monaco doesn't have a way to change theme locally
             monaco.editor.setTheme(theme);
         }
-
     }
 
     componentWillUnmount() {
@@ -299,7 +304,6 @@ class MonacoEditor extends React.Component<Props> {
         this._languageServerDisposable && this._languageServerDisposable.dispose();
 
         this._editor && this._editor.dispose();
-
     }
 
     _initializeFile = (path: string, value: string) => {
@@ -317,13 +321,13 @@ class MonacoEditor extends React.Component<Props> {
                         range: model.getFullModelRange(),
                         text: value,
                     },
-                ],
+                ]
             );
         } else {
             model = monaco.editor.createModel(
                 value,
                 undefined,
-                monaco.Uri.from({ scheme: 'file', path }),
+                monaco.Uri.from({ scheme: 'file', path })
             );
 
             model.updateOptions({
@@ -334,7 +338,6 @@ class MonacoEditor extends React.Component<Props> {
             new MonacoYJSBinding(model, this.props.onTypeContent);
         }
     };
-
 
     _openFile = (path: string, value: string, focus?: boolean) => {
         this._initializeFile(path, value);
@@ -361,7 +364,9 @@ class MonacoEditor extends React.Component<Props> {
         // @ts-ignore
         monaco.editor.setModelMarkers(this._editor.getModel(), null, annotations);
 
-    _handleResize = debounce(() => {this._editor && this._editor.layout();}, 1000);
+    _handleResize = debounce(() => {
+        this._editor && this._editor.layout();
+    }, 250);
 
     _contentSubscription: monaco.IDisposable | undefined;
     _cursorSubscription: monaco.IDisposable | undefined;
@@ -373,14 +378,14 @@ class MonacoEditor extends React.Component<Props> {
     render() {
         return (
             <div className={css(styles.container)}>
-                <style type="text/css" dangerouslySetInnerHTML={{ __html: overrides }}/>
+                <style type="text/css" dangerouslySetInnerHTML={{ __html: overrides }} />
                 <ResizeDetector onResize={this._handleResize}>
                     <div
                         ref={this._node}
                         className={classnames(
                             css(styles.editor),
                             'snack-monaco-editor',
-                            `theme-${this.props.theme}`,
+                            `theme-${this.props.theme}`
                         )}
                     />
                 </ResizeDetector>

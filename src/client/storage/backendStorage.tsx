@@ -15,10 +15,11 @@ export abstract class BackendStorage {
 
     protected constructor(token: string) {
         this.token = token;
-
     }
 
     abstract get(scope: string, itemKey: string): Promise<ArrayBuffer>;
+
+    abstract getPublicUrl(scope: string, itemKey: string): Promise<string>;
 
     abstract put(scope: string, itemKey: string, bloblike: Blob): Promise<string>;
 
@@ -26,9 +27,7 @@ export abstract class BackendStorage {
 
     static getAuthUrl(): string {
         return '';
-    };
+    }
 
-    abstract getUserInfo():Promise<UserInfo>;
+    abstract getUserInfo(): Promise<UserInfo>;
 }
-
-

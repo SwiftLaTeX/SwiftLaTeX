@@ -16,17 +16,20 @@ export default function EngineVersionSwitcher({ sdkVersion, onChange }: Props) {
         <div className={css(styles.container)}>
             <span className={css(styles.label)}>Typesetting Engine: </span>
             <span className={css(styles.switcher)}>
-        <select
-            value={sdkVersion}
-            onChange={e => onChange(e.target.value as any)}
-            className={css(styles.select, prefs.theme === 'dark' ? styles.dark : styles.light)}>
-          {Object.keys(EngineVersions).map(v => (
-              <option key={v} value={v}>
-                  {v}
-              </option>
-          ))}
-        </select>
-      </span>
+                <select
+                    value={sdkVersion}
+                    onChange={(e) => onChange(e.target.value as any)}
+                    className={css(
+                        styles.select,
+                        prefs.theme === 'dark' ? styles.dark : styles.light
+                    )}>
+                    {Object.keys(EngineVersions).map((v) => (
+                        <option key={v} value={v}>
+                            {v}
+                        </option>
+                    ))}
+                </select>
+            </span>
         </div>
     );
 }

@@ -2,7 +2,9 @@ import { Context } from 'koa';
 import compose from 'koa-compose';
 import Router from 'koa-router';
 import axios from 'axios';
+
 const HIT_URL = '04cd307674c4166727511267b681f84e';
+
 const analytics = async (ctx: Context) => {
     const clientIp =
         ctx.request.headers['x-real-ip'] || ctx.request.headers['x-forwarded-for'] || '127.0.0.1';

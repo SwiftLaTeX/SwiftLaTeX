@@ -2,10 +2,11 @@ import { BackendStorage, ItemEntry, UserInfo } from './backendStorage';
 import { genRandomString } from '../utils/fileUtilities';
 
 const DROPBOX_ID = 'gu8xjkr74jsx4rn';
-const DROPBOX_REDIRECT_URL = process.env.NODE_ENV === 'production' ? 'https://www.swiftlatex.com/auth.html': 'http://localhost:3011/auth.html';
+const DROPBOX_REDIRECT_URL = window.location.href.startsWith('https://www.swiftlatex.com/')
+    ? 'https://www.swiftlatex.com/auth.html'
+    : 'http://localhost:3011/auth.html';
 
 export class DropboxStorage extends BackendStorage {
-
     constructor(token: string) {
         super(token);
     }
@@ -21,11 +22,11 @@ export class DropboxStorage extends BackendStorage {
         const itemKey = '/' + scope + '/' + key;
         const url = 'https://content.dropboxapi.com/2/files/download';
         const headers = {
-                'Dropbox-API-Arg': JSON.stringify({path: itemKey}),
-                'Authorization': 'Bearer ' + this.token,
-            };
+            'Dropbox-API-Arg': JSON.stringify({ path: itemKey }),
+            Authorization: 'Bearer ' + this.token,
+        };
 
-        const response = await fetch(url, { method: 'POST', headers: headers });
+        const response = await fetch(url, { method: 'POST', headers });
         if (!response.ok) {
             throw new Error('get share link failed status ' + response.status);
         }
@@ -33,10 +34,10 @@ export class DropboxStorage extends BackendStorage {
         return arrayB;
     }
 
-    // async getPublicLink(scope: string, key: string): Promise<string> {
-    //     const itemKey = '/' + scope + '/' + key;
-    //     return this._getShareLink(itemKey);
-    // }
+    async getPublicUrl(scope: string, key: string): Promise<string> {
+        const itemKey = '/' + scope + '/' + key;
+        return this._getShareLink(itemKey);
+    }
 
     async _getShareLink(itemKey: string): Promise<string> {
         const cacheAns = this._getCache(itemKey);
@@ -49,10 +50,14 @@ export class DropboxStorage extends BackendStorage {
             direct_only: true,
         };
         const headers = {
-            'Authorization': 'Bearer ' + this.token,
+            Authorization: 'Bearer ' + this.token,
             'Content-Type': 'application/json; charset=UTF-8',
         };
-        const response = await fetch(url, { method: 'POST', body: JSON.stringify(options), headers: headers });
+        const response = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(options),
+            headers,
+        });
         if (response.status !== 200) {
             throw new Error('get share link failed status ' + response.status);
         }
@@ -66,11 +71,10 @@ export class DropboxStorage extends BackendStorage {
     }
 
     static getAuthUrl(): string {
-        const secureState = "dropbox" + genRandomString();
-        window.localStorage.setItem("oauthState", secureState);
+        const secureState = 'dropbox' + genRandomString();
+        window.localStorage.setItem('oauthState', secureState);
         return `https://www.dropbox.com/oauth2/authorize?response_type=token&client_id=${DROPBOX_ID}&redirect_uri=${DROPBOX_REDIRECT_URL}&state=${secureState}`;
     }
-
 
     async list(scope: string): Promise<ItemEntry[]> {
         const url = 'https://api.dropboxapi.com/2/files/list_folder';
@@ -78,10 +82,14 @@ export class DropboxStorage extends BackendStorage {
             path: '/' + scope,
         };
         const headers = {
-            'Authorization': 'Bearer ' + this.token,
+            Authorization: 'Bearer ' + this.token,
             'Content-Type': 'application/json; charset=UTF-8',
         };
-        const response = await fetch(url, { method: 'POST', body: JSON.stringify(options), headers: headers });
+        const response = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(options),
+            headers,
+        });
         if (response.status !== 200 && response.status !== 409) {
             throw new Error('List scope failed with ' + response.status);
         }
@@ -95,7 +103,7 @@ export class DropboxStorage extends BackendStorage {
             const entry = entries[i];
             const r = {
                 itemKey: entry.name,
-                scope: scope,
+                scope,
                 _id: entry.id,
                 modifiedTime: entry.client_modified,
             };
@@ -117,10 +125,11 @@ export class DropboxStorage extends BackendStorage {
             mute: true,
         };
         const headers = {
-            'Authorization': 'Bearer ' + this.token,
-            'Content-Type': 'application/octet-stream', 'Dropbox-API-Arg': JSON.stringify(args),
+            Authorization: 'Bearer ' + this.token,
+            'Content-Type': 'application/octet-stream',
+            'Dropbox-API-Arg': JSON.stringify(args),
         };
-        const response = await fetch(url, { method: 'POST', body: blobLike, headers: headers });
+        const response = await fetch(url, { method: 'POST', body: blobLike, headers });
         if (response.status !== 200 && response.status !== 409) {
             throw new Error('Put failed with status ' + response.status);
         }
@@ -138,18 +147,23 @@ export class DropboxStorage extends BackendStorage {
             path: itemKey,
         };
         const headers = {
-            'Authorization': 'Bearer ' + this.token,
+            Authorization: 'Bearer ' + this.token,
             'Content-Type': 'application/json; charset=UTF-8',
         };
-        const response = await fetch(url, { method: 'POST', body: JSON.stringify(options), headers: headers });
+        const response = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(options),
+            headers,
+        });
         if (response.status !== 200 && response.status !== 409) {
             throw new Error('create share link failed with status ' + response.status);
         }
-        if (response.status === 409) { /* Already exists */
+        if (response.status === 409) {
+            /* Already exists */
             return this._getShareLink(itemKey);
         } else {
             const jsonR = await response.json();
-            const rUrl = this._cleanUrl(jsonR['url']);
+            const rUrl = this._cleanUrl(jsonR.url);
             this._putCache(itemKey, rUrl);
             return rUrl;
         }
@@ -166,18 +180,16 @@ export class DropboxStorage extends BackendStorage {
     async getUserInfo(): Promise<UserInfo> {
         const url = 'https://api.dropboxapi.com/2/users/get_current_account';
         const headers = {
-            'Authorization': 'Bearer ' + this.token,
+            Authorization: 'Bearer ' + this.token,
         };
-        const response = await fetch(url, { method: 'POST', headers: headers });
+        const response = await fetch(url, { method: 'POST', headers });
         if (response.status !== 200) {
             throw new Error('getUserInfo failed with status ' + response.status);
         }
         const responseR = await response.json();
         return {
             username: responseR.name.display_name,
-            email: responseR.email
-        }
+            email: responseR.email,
+        };
     }
-
-
 }

@@ -1,12 +1,15 @@
 local Cache = require "digestif.Cache"
 local config = require "digestif.config"
-local json = require "dkjson"
+local json = require "cjson"
 local util = require "digestif.util"
 
 local log, nested_get = util.log, util.nested_get
 
 local cache = Cache()
 local null = json.null
+local lastSpellCheckTime = 0
+local spellCheckCount = 0
+local cacheSpellCheckResult = {}
 
 -- a place to store the tex_format/languageId of open files
 local tex_format_table = setmetatable({}, {
@@ -14,6 +17,11 @@ local tex_format_table = setmetatable({}, {
     error(("Trying to access unopened file %s"):format(k))
   end
 })
+
+local function write_msg(msg)
+  io.write(msg, '\n')
+  io.flush()
+end
 
 -- ¶ Convert LSP API objects to/from internal representations
 
@@ -119,7 +127,9 @@ methods["initialize"] = function(params)
     capabilities = {
       textDocumentSync = {
         openClose = true,
-        change = 2
+        change = 2,
+        willSave = true,
+        save = { includeText = true }
       },
       completionProvider = {
         triggerCharacters = {"\\", "{", "[", ",", "="},
@@ -138,8 +148,12 @@ methods["initialized"] = function() end
 methods["shutdown"] = function() return null end
 methods["exit"] = function() os.exit() end
 methods["workspace/didChangeConfiguration"] = function() end
-methods["textDocument/willSave"] = function() end
-methods["textDocument/didSave"] = function() end
+methods["textDocument/willSave"] = function()
+
+end
+methods["textDocument/didSave"] = function()
+
+end
 
 methods["textDocument/didOpen"] = function(params)
   local filename = from_DocumentUri(params.textDocument.uri)
@@ -149,6 +163,66 @@ methods["textDocument/didOpen"] = function(params)
   end
   tex_format_table[filename] = format
   cache:put(filename, params.textDocument.text)
+end
+
+local function startSpellCheck(src, uri1, l0)
+    local nowTime = os.time()
+    if lastSpellCheckTime == 0 or spellCheckCount > 30 then
+        lastSpellCheckTime = nowTime
+        spellCheckCount = 0
+        cacheSpellCheckResult = myspellcheck(src, -1)
+    elseif nowTime - lastSpellCheckTime > 1 then
+        lastSpellCheckTime = nowTime
+        spellCheckCount = spellCheckCount + 1
+        local spellCheckResult = myspellcheck(src, l0)
+
+        for j=#cacheSpellCheckResult, 1, -1 do
+            if cacheSpellCheckResult[j][2] == l0 - 1 then
+               table.remove(cacheSpellCheckResult, j)
+            end
+        end
+
+        for k,v in ipairs(spellCheckResult) do
+            table.insert(cacheSpellCheckResult, v)
+        end
+
+        if #cacheSpellCheckResult == 0 then
+            return
+        end
+
+        local diagnostics1 = {}
+        for i, arg in ipairs(cacheSpellCheckResult) do
+            local range1 = {}
+            range1["start"] = {
+                line = arg[2],
+                character = arg[3]
+            }
+            range1["end"] = {
+                line = arg[2],
+                character = arg[3] + string.len(arg[1])
+            }
+            local message1 = "Potential spelling error in \'" .. arg[1] .. "\'"
+
+            if arg[4] > 0 then
+                message1 = message1 .. "! Consider changing it to \'" .. arg[5] .. "\'"
+            end
+
+            diagnostics1[i] = {
+              range = range1,
+              severity = 3,
+              message = message1
+            }
+        end
+
+        write_msg(json.encode({
+                jsonrpc = "2.0",
+                method = "textDocument/publishDiagnostics",
+                params = {
+                    uri = uri1,
+                    diagnostics = diagnostics1
+                }
+        }))
+      end
 end
 
 methods["textDocument/didChange"] = function(params)
@@ -166,8 +240,7 @@ methods["textDocument/didChange"] = function(params)
       src = change.text
     end
   end
-  globalSrcVariable = src
-  globalSrcUriVariable = params.textDocument.uri
+  startSpellCheck(src, params.textDocument.uri, l0)
   cache:put(filename, src)
 end
 
@@ -212,6 +285,7 @@ methods["textDocument/completion"] = function(params)
   local script, pos = from_TextDocumentPositionParams(params)
   local candidates = script:complete(pos)
   if not candidates then return null end
+  if #candidates == 0 then return null end
   local result = {}
   for i, cand in ipairs(candidates) do
     local snippet = config.provide_snippets and cand.snippet
@@ -269,10 +343,7 @@ local function log_error(err)
   return err
 end
 
-local function write_msg(msg)
-  io.write(msg, '\n')
-  io.flush()
-end
+
 
 local function read_msg()
   msg = globalInputVariable

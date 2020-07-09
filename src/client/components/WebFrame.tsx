@@ -27,9 +27,12 @@ function WebFrame({ previewRef, theme, onPreviewClick, engine }: Props) {
     return (
         <div className={css(styles.pane)}>
             <iframe
-                ref={c => (previewRef.current = c ? c.contentWindow : null)}
+                ref={(c) => (previewRef.current = c ? c.contentWindow : null)}
                 src={url}
-                className={css(styles.frame, theme === 'dark' ? styles.frameDark : styles.frameLight)}
+                className={css(
+                    styles.frame,
+                    theme === 'dark' ? styles.frameDark : styles.frameLight
+                )}
             />
         </div>
     );

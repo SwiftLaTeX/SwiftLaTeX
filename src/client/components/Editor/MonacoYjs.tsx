@@ -39,22 +39,31 @@ export class MonacoYJSBinding {
     private monacoHander: monaco.IDisposable | undefined;
     private initFlag: boolean = false; /* Prevent multiple sync events */
     private provider: WebsocketProvider | undefined;
-    constructor(protected monacoModel: monaco.editor.IModel, onTypeContent: (delta:string, isInserted:boolean) => void) {
+    constructor(
+        protected monacoModel: monaco.editor.IModel,
+        onTypeContent: (delta: string, isInserted: boolean) => void
+    ) {
         this.mux = createMutex();
         this.monacoHander = undefined;
         this.provider = undefined;
         this.init_yjs(monacoModel, onTypeContent);
     }
 
-    init_yjs(monacoModel: monaco.editor.IModel, onTypeContent: (delta:string, isInserted:boolean) => void): void {
+    init_yjs(
+        monacoModel: monaco.editor.IModel,
+        onTypeContent: (delta: string, isInserted: boolean) => void
+    ): void {
         console.log('Opening url ' + monacoModel.uri.toString());
         const ydoc = new Y.Doc();
-        const unique_id = (window.location.pathname + monacoModel.uri.toString()).replace(/\//gm, '_').replace(':', '_').replace(/\./gm, '_');
+        const unique_id = (window.location.pathname + monacoModel.uri.toString())
+            .replace(/\//gm, '_')
+            .replace(':', '_')
+            .replace(/\./gm, '_');
 
         const ytext = ydoc.getText('document');
 
         console.log('Start binding editor events');
-        this.monacoHander = monacoModel.onDidChangeContent(e => {
+        this.monacoHander = monacoModel.onDidChangeContent((e) => {
             this.mux(() => {
                 if (e.changes.length === 1) {
                     let character = '';
@@ -62,7 +71,11 @@ export class MonacoYJSBinding {
                     if (e.changes[0].rangeLength === 1) {
                         const internal_stack: any = (monacoModel as any)._commandManager;
                         const last_operation_reverse: any = internal_stack.currentOpenStackElement;
-                        if (last_operation_reverse && last_operation_reverse.editOperations && last_operation_reverse.editOperations.length >= 1) {
+                        if (
+                            last_operation_reverse &&
+                            last_operation_reverse.editOperations &&
+                            last_operation_reverse.editOperations.length >= 1
+                        ) {
                             const operationsArray = last_operation_reverse.editOperations;
                             const rev_ops: any = operationsArray[operationsArray.length - 1];
                             if (rev_ops && rev_ops.operations && rev_ops.operations.length === 1) {
@@ -79,33 +92,49 @@ export class MonacoYJSBinding {
                     }
                 }
                 if (!this.initFlag) return;
-                ydoc!.transact(() => {
-                    e.changes.sort((change1, change2) => change2.rangeOffset - change1.rangeOffset).forEach(change => {
-                        ytext.delete(change.rangeOffset, change.rangeLength);
-                        ytext.insert(change.rangeOffset, change.text);
-                    });
+                ydoc.transact(() => {
+                    e.changes
+                        .sort((change1, change2) => change2.rangeOffset - change1.rangeOffset)
+                        .forEach((change) => {
+                            ytext.delete(change.rangeOffset, change.rangeLength);
+                            ytext.insert(change.rangeOffset, change.text);
+                        });
                 });
             });
         });
 
-        ytext.observe(event => {
+        ytext.observe((event) => {
             this.mux(() => {
                 if (!this.initFlag) return;
                 let index = 0;
-                event.delta.forEach(op => {
+                event.delta.forEach((op) => {
                     if (op.retain !== undefined) {
                         index += op.retain;
                     } else if ((op as any).insert !== undefined) {
                         const pos = monacoModel.getPositionAt(index);
-                        const range = new monaco.Selection(pos.lineNumber, pos.column, pos.lineNumber, pos.column);
+                        const range = new monaco.Selection(
+                            pos.lineNumber,
+                            pos.column,
+                            pos.lineNumber,
+                            pos.column
+                        );
                         /* eslint-disable */
-                        monacoModel.pushEditOperations([], [{ range, text: (op as any).insert }], () => null);
+                        monacoModel.pushEditOperations(
+                            [],
+                            [{ range, text: (op as any).insert }],
+                            () => null
+                        );
                         index += (op as any).insert.length;
                         /* eslint-enable */
                     } else if (op.delete !== undefined) {
                         const pos = monacoModel.getPositionAt(index);
                         const endPos = monacoModel.getPositionAt(index + op.delete);
-                        const range = new monaco.Selection(pos.lineNumber, pos.column, endPos.lineNumber, endPos.column);
+                        const range = new monaco.Selection(
+                            pos.lineNumber,
+                            pos.column,
+                            endPos.lineNumber,
+                            endPos.column
+                        );
                         /* eslint-disable */
                         monacoModel.pushEditOperations([], [{ range, text: '' }], () => null);
                         /* eslint-enable */
@@ -131,10 +160,7 @@ export class MonacoYJSBinding {
             }
         });
 
-
-
-
-        let enableShare = false;
+        const enableShare = false;
         if (enableShare) {
             this.provider = new WebsocketProvider('ws://localhost:8081', unique_id, ydoc);
             this.provider.on('sync', () => {
@@ -155,6 +181,5 @@ export class MonacoYJSBinding {
             });
             this.provider.connect();
         }
-
     }
 }
