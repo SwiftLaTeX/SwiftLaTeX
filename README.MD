@@ -136,6 +136,11 @@ SwiftLaTeX is almost for production use, with the following exceptions. These ex
 1. No graphite fonts and international line-breaking support. We so far deem this functionalty not very useful for English-speaking people. 
 2. Sharing is not fully implemented yet, but it is on the way. 
 3. XeTeX engine cannot properly display standalone tikz pictures, we are still investigating this issue.
+
+### Slack Channel
+https://join.slack.com/t/swiftlatex/shared_invite/zt-fupygr84-HO2SStUb9UvRhqeYNa0~PQ
+
+We prefer Github Issues if you would like to submit bug reports.
  
 ## License
 
