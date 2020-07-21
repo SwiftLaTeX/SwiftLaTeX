@@ -47,14 +47,14 @@ export class GoogleStorage extends BackendStorage {
         document.body.appendChild(iframe);
     }
 
-    async get(scope: string, key: string): Promise<ArrayBuffer> {
+    async get(scope: string, key: string): Promise<ArrayBuffer | undefined> {
         if (this.refreshErrorDetected) {
             throw new Error('Token failure');
         }
         const itemKey = scope + '_' + key;
         const fid = await this._itemKeyToFileInfo(itemKey);
         if (!fid) {
-            throw new Error('Get File Failure. File does not exist');
+            return undefined;
         }
         const headers = {
             Authorization: 'Bearer ' + this.token,
@@ -67,7 +67,7 @@ export class GoogleStorage extends BackendStorage {
         return response.arrayBuffer();
     }
 
-    async getPublicUrl(scope: string, key: string): Promise<string> {
+    async getPublicUrl(scope: string, key: string): Promise<string | undefined> {
         if (this.refreshErrorDetected) {
             throw new Error('Token failure');
         }
@@ -75,7 +75,7 @@ export class GoogleStorage extends BackendStorage {
         const itemKey = scope + '_' + key;
         const fid = await this._itemKeyToFileInfo(itemKey);
         if (!fid) {
-            throw new Error('Cannot get public link because the file does not exist');
+            return undefined;
         }
         return `https://drive.google.com/uc?id=${fid}`
     }

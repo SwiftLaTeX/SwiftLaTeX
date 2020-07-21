@@ -39,17 +39,17 @@ export const triggerDownloadBlob = (blob: Blob, name: string) => {
     }
 };
 
-export function genRandomFileID(path: string) {
+export function genFileID(preCoded: string) {
     // return encodeURIComponent(path).replace(/%/g, '_') + genRandomString(5);
-    const preCoded = encodeURIComponent(path).replace(/%/g, '_');
+    // const preCoded = encodeURIComponent(path).replace(/%/g, '_');
+    const FILE_ID_LEN = 16;
     const splits = preCoded.split('.');
     const extension = splits.pop();
     if (extension === preCoded) {
         /* Without extension */
-        return preCoded + '.' + genRandomString(8);
+        return genRandomString(FILE_ID_LEN);
     }
-
-    return splits + '.' + genRandomString(5) + '.' + extension;
+    return genRandomString(FILE_ID_LEN) + '.' + extension;
 }
 
 export function getBaseName(path: string) {

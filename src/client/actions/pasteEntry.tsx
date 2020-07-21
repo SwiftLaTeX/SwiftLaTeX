@@ -1,12 +1,12 @@
 import createEntryAtPath from './createEntryAtPath';
 import updateEntry from './updateEntry';
 import { isInsideFolder, changeParentPath } from '../utils/fileUtilities';
-import { FileSystemEntry } from '../types';
+import { FileManagerEntry } from '../types';
 
 export default function handleEntryPaste(
-    entries: FileSystemEntry[],
+    entries: FileManagerEntry[],
     path: string | undefined,
-    e: FileSystemEntry
+    e: FileManagerEntry
 ) {
     const entry = createEntryAtPath(entries, path, e, '_copy');
 

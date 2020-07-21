@@ -18,7 +18,7 @@ export class DropboxStorage extends BackendStorage {
         return item;
     }
 
-    async get(scope: string, key: string): Promise<ArrayBuffer> {
+    async get(scope: string, key: string): Promise<ArrayBuffer | undefined> {
         const itemKey = '/' + scope + '/' + key;
         const url = 'https://content.dropboxapi.com/2/files/download';
         const headers = {
@@ -27,6 +27,10 @@ export class DropboxStorage extends BackendStorage {
         };
 
         const response = await fetch(url, { method: 'POST', headers });
+        if (response.status === 409) {
+            return undefined;
+        }
+
         if (!response.ok) {
             throw new Error('get share link failed status ' + response.status);
         }
@@ -34,12 +38,12 @@ export class DropboxStorage extends BackendStorage {
         return arrayB;
     }
 
-    async getPublicUrl(scope: string, key: string): Promise<string> {
+    async getPublicUrl(scope: string, key: string): Promise<string | undefined> {
         const itemKey = '/' + scope + '/' + key;
         return this._getShareLink(itemKey);
     }
 
-    async _getShareLink(itemKey: string): Promise<string> {
+    async _getShareLink(itemKey: string): Promise<string | undefined> {
         const cacheAns = this._getCache(itemKey);
         if (cacheAns) {
             return cacheAns;
@@ -63,7 +67,7 @@ export class DropboxStorage extends BackendStorage {
         }
         const jsonR = await response.json();
         if (jsonR.links.lenght === 0) {
-            throw new Error('no share link found');
+            return undefined;
         }
         const rUrl = this._cleanUrl(jsonR.links[0].url);
         this._putCache(itemKey, rUrl);
@@ -160,7 +164,8 @@ export class DropboxStorage extends BackendStorage {
         }
         if (response.status === 409) {
             /* Already exists */
-            return this._getShareLink(itemKey);
+            const existUrl = await this._getShareLink(itemKey);
+            return existUrl!;
         } else {
             const jsonR = await response.json();
             const rUrl = this._cleanUrl(jsonR.url);

@@ -1,11 +1,11 @@
 import updateEntry from './updateEntry';
-import { FileSystemEntry } from '../types';
+import { FileManagerEntry } from '../types';
 
 export default function openEntry(
-    entries: FileSystemEntry[],
+    entries: FileManagerEntry[],
     path: string,
     focus: boolean = false
-): FileSystemEntry[] {
+): FileManagerEntry[] {
     const entry = entries.find((e) => e.item.path === path);
     const isFolder = entry ? entry.item.type === 'folder' : false;
 

@@ -7,13 +7,13 @@ import { KeyMap } from '../shared/KeybindingsManager';
 import { getParentPath } from '../../utils/fileUtilities';
 import colors from '../../configs/colors';
 import { Action } from '../shared/ContextMenu';
-import { FileSystemEntry } from '../../types';
+import { FileManagerEntry } from '../../types';
 import { ThemeName } from '../Preferences/withThemeName';
 
 type Props = {
-    entry: FileSystemEntry;
-    rest: FileSystemEntry[];
-    clipboard: FileSystemEntry[];
+    entry: FileManagerEntry;
+    rest: FileManagerEntry[];
+    clipboard: FileManagerEntry[];
     onOpen: (path: string) => void;
     onFocus: (path: string) => void;
     onSelect: (path: string) => void;
@@ -23,10 +23,10 @@ type Props = {
     onRename: (oldPath: string, newPath: string) => void;
     onCreateFile: (path: string | undefined) => void;
     onCreateFolder: (path: string | undefined) => void;
-    onPaste: (path: string | undefined, entry: FileSystemEntry) => void;
+    onPaste: (path: string | undefined, entry: FileManagerEntry) => void;
     onClearClipboard: () => void;
     onSetEntryPoint: (path: string) => void;
-    getAdjacentEntries: () => FileSystemEntry[];
+    getAdjacentEntries: () => FileManagerEntry[];
     theme: ThemeName;
     entryPoint: string;
 };

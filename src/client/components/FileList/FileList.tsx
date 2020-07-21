@@ -19,14 +19,14 @@ import selectEntry from '../../actions/selectEntry';
 import openEntry from '../../actions/openEntry';
 import updateEntry from '../../actions/updateEntry';
 import { getUniquePath, isInsideFolder } from '../../utils/fileUtilities';
-import { FileSystemEntry, SaveStatus } from '../../types';
+import { FileManagerEntry, SaveStatus } from '../../types';
 
 type Props = {
     visible: boolean;
-    onEntriesChange: (entries: FileSystemEntry[]) => Promise<void>;
-    onRemoveFile: (path: string) => void;
-    onRenameFile: (oldPath: string, newPath: string) => void;
-    entries: FileSystemEntry[];
+    onEntriesChange: (entries: FileManagerEntry[]) => Promise<void>;
+    // onRemoveFile: (path: string) => void;
+    // onRenameFile: (oldPath: string, newPath: string) => void;
+    entries: FileManagerEntry[];
     uploadFileAsync: (file: File, id: string) => Promise<string>;
     saveStatus: SaveStatus;
     theme: ThemeName;
@@ -36,11 +36,11 @@ type Props = {
 };
 
 type State = {
-    clipboard: FileSystemEntry[];
+    clipboard: FileManagerEntry[];
     deleted: {
         id: number;
         path: string;
-        entries: FileSystemEntry[];
+        entries: FileManagerEntry[];
     }[];
     openFilesPane: boolean;
     projectPane: boolean;
@@ -77,14 +77,14 @@ class FileList extends React.PureComponent<Props, State> {
         this.props.onEntriesChange(expandEntry(this.props.entries, path, expand));
 
     _handleEntryRename = (oldPath: string, newPath: string) => {
-        if (oldPath !== newPath) {
-            this.props.onRenameFile(oldPath, newPath);
-        }
+        // if (oldPath !== newPath) {
+        //     this.props.onRenameFile(oldPath, newPath);
+        // }
 
         this.props.onEntriesChange(renameEntry(this.props.entries, oldPath, newPath));
     };
 
-    _restoreEntries = (entries: FileSystemEntry[]) =>
+    _restoreEntries = (entries: FileManagerEntry[]) =>
         this.props.onEntriesChange([
             ...this.props.entries,
             ...entries.map((e) =>
@@ -129,14 +129,14 @@ class FileList extends React.PureComponent<Props, State> {
 
     _handleEntryDelete = (path: string) => {
         const entry = this.props.entries.find((e) => e.item.path === path);
-        const entries: FileSystemEntry[] = [];
+        const entries: FileManagerEntry[] = [];
 
         this.props.onEntriesChange(
             this.props.entries.filter((e) => {
                 const remove = e.item.path === path || isInsideFolder(e.item.path, path);
                 if (remove) {
                     entries.push(e);
-                    this.props.onRemoveFile(path);
+                    // this.props.onRemoveFile(path);
                 }
                 return !remove;
             })
@@ -156,8 +156,8 @@ class FileList extends React.PureComponent<Props, State> {
 
     _currentDeleteID: number = 0;
 
-    _handleEntryImport = (entry: FileSystemEntry) => {
-        let entries: FileSystemEntry[];
+    _handleEntryImport = (entry: FileManagerEntry) => {
+        let entries: FileManagerEntry[];
 
         const parents = recursivelyCreateParents(this.props.entries, entry.item.path);
 
@@ -176,7 +176,7 @@ class FileList extends React.PureComponent<Props, State> {
         this.props.onEntriesChange(entries);
     };
 
-    _handleEntryPaste = (path: string | undefined, e: FileSystemEntry) =>
+    _handleEntryPaste = (path: string | undefined, e: FileManagerEntry) =>
         this.props.onEntriesChange(pasteEntry(this.props.entries, path, e));
 
     _handleCopy = (path: string) =>

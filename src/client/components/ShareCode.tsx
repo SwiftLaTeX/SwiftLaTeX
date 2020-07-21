@@ -44,8 +44,13 @@ class ShareCode extends React.PureComponent<Props, State> {
 
     render() {
         const { theme, copied } = this.state;
+        const urlParams = new URLSearchParams(window.location.search);
+        const project_id = urlParams.get('p') || '';
 
-        const code = `We are working hard to make sharing function work`;
+        let code = 'Not available';
+        if (project_id) {
+            code = `${window.location.protocol}//${window.location.host}/project.html?share=${project_id}`;
+        }
 
         return (
             <div className={css(styles.container)}>

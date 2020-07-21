@@ -1,15 +1,15 @@
 import updateEntry from './updateEntry';
 import createEntryAtPath from './createEntryAtPath';
 import { isInsideFolder } from '../utils/fileUtilities';
-import { FileSystemEntry } from '../types';
-import { genRandomFileID } from '../utils/fileUtilities';
+import { FileManagerEntry } from '../types';
+import { genFileID } from '../utils/fileUtilities';
 
 export default function createNewEntry(
-    entries: FileSystemEntry[],
+    entries: FileManagerEntry[],
     type: 'file' | 'folder',
     at?: string | undefined
 ) {
-    const e: FileSystemEntry =
+    const e: FileManagerEntry =
         type === 'file'
             ? {
                   item: {
@@ -18,7 +18,7 @@ export default function createNewEntry(
                       content: '',
                       uri: '',
                       asset: false,
-                      id: genRandomFileID('Untitled.tex'),
+                      id: genFileID('Untitled.tex'),
                   },
                   state: {
                       isCreating: true,
@@ -31,7 +31,7 @@ export default function createNewEntry(
                       content: '',
                       uri: '',
                       asset: false,
-                      id: genRandomFileID('UntitledFolder'),
+                      id: genFileID('UntitledFolder'),
                   },
                   state: {
                       isCreating: true,

@@ -83,7 +83,7 @@ const upload = async (ctx: Context) => {
                 key: fid,
                 ContentType: 'application/octet-stream',
             },
-            Condition: [['content-length-range', 0, 2000000]],
+            Condition: [['content-length-range', 0, 1000000]],
         };
         const presigned_url = await new Promise((resolve, reject) => {
             s3.createPresignedPost(params, function (err, data) {

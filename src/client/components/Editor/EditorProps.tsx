@@ -1,13 +1,14 @@
-import { FileSystemEntry, Annotation } from '../../types';
+import { FileManagerEntry, Annotation } from '../../types';
+import * as monaco from 'monaco-editor';
 
 export type EditorProps = {
-    entries: FileSystemEntry[];
+    entries: FileManagerEntry[];
     path: string;
     value: string;
-    onOpenPath: (path: string) => void;
     onValueChange: (value: string, path: string) => void;
     onCursorChange: (path: string, line: number, column: number) => void;
-    onTypeContent: (delta: string, isInsert: boolean) => void;
+    onKeyStroke: (delta: string, isInsert: boolean) => void;
+    onSubmitYJSEditingEvent: (e: monaco.editor.IModelContentChangedEvent) => void;
     annotations: Annotation[];
     lineNumbers?: 'on' | 'off' | 'relative' | 'interval';
     wordWrap?: 'off' | 'on' | 'wordWrapColumn' | 'bounded';

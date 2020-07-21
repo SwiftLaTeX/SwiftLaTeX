@@ -13,9 +13,9 @@ import MonacoEditor from './Editor/MonacoEditor';
 import openEntry from '../actions/openEntry';
 import Banner from './shared/Banner';
 import ModalDialog from './shared/ModalDialog';
-import { isInsideFolder, changeParentPath } from '../utils/fileUtilities';
+// import { isInsideFolder, changeParentPath } from '../utils/fileUtilities';
 import withPreferences, { PreferencesContextType } from './Preferences/withPreferences';
-import { FileSystemEntry, Annotation } from '../types';
+import { FileManagerEntry, Annotation } from '../types';
 import { EditorViewProps } from './EditorViewProps';
 import ShareCode from './ShareCode';
 import SplitterLayout from 'react-splitter-layout';
@@ -33,8 +33,9 @@ type State = {
     isDownloading: boolean;
     deviceLogsShown: boolean;
     shouldPreventRedirectWarning: boolean;
-    previousEntry: FileSystemEntry | undefined;
+    previousEntry: FileManagerEntry | undefined;
     dragging: boolean;
+    shareUrl: string;
 };
 
 const BANNER_TIMEOUT_SHORT = 3000;
@@ -50,10 +51,10 @@ class EditorView extends React.Component<Props, State> {
         shouldPreventRedirectWarning: false,
         previousEntry: undefined,
         dragging: false,
+        shareUrl: 'Not available',
     };
 
     componentDidMount() {
-        this._EditorComponentRef = React.createRef();
         window.addEventListener('beforeunload', this._handleUnload);
     }
 
@@ -100,40 +101,11 @@ class EditorView extends React.Component<Props, State> {
         this.props.onFileEntriesChange(openEntry(this.props.fileEntries, path, true));
 
     _handlePreviewClick = async (path: string, line: number, column: number): Promise<void> => {
-        await this.props.onFileEntriesChange(openEntry(this.props.fileEntries, path, true));
-        this._EditorComponentRef.current &&
-            this._EditorComponentRef.current.setCursor(line, column);
-        // console.log(line + ' ' + column);
-    };
-
-    _handleRemoveFile = (path: string) => {
-        const entry = this.props.fileEntries.find(({ item }) => item.path === path);
-        if (entry && entry.item.type === 'folder') {
-            this.props.fileEntries.forEach(({ item }) => {
-                if (isInsideFolder(item.path, path)) {
-                    MonacoEditor.removePath(item.path);
-                }
-            });
-        } else {
-            MonacoEditor.removePath(path);
+        if (this.props.editorRef.current) {
+            await this._handleOpenPath(path);
+            this.props.editorRef.current.setCursorPosition(line, column);
         }
     };
-
-    _handleRenameFile = (oldPath: string, newPath: string) => {
-        const entry = this.props.fileEntries.find(({ item }) => item.path === oldPath);
-        if (entry && entry.item.type === 'folder') {
-            this.props.fileEntries.forEach(({ item }) => {
-                if (isInsideFolder(item.path, oldPath)) {
-                    const renamedPath = changeParentPath(item.path, oldPath, newPath);
-                    MonacoEditor.renamePath(item.path, renamedPath);
-                }
-            });
-        } else {
-            MonacoEditor.renamePath(oldPath, newPath);
-        }
-    };
-
-    _EditorComponentRef: any;
 
     _showErrorPanel = () =>
         this.props.setPreferences({
@@ -177,8 +149,12 @@ class EditorView extends React.Component<Props, State> {
         });
 
     _handleShowShareCode = async () => {
-        await this.props.onShareProject();
-        this.setState({ currentModal: 'share' });
+        const r = await this.props.onShareProject();
+        if (r) {
+            this.setState({ currentModal: 'share' });
+        } else {
+            alert('Unexpected error detected when sharing this project.')
+        }
     };
 
     _handleHideModal = () => {
@@ -193,6 +169,20 @@ class EditorView extends React.Component<Props, State> {
         this.setState({ dragging: false });
     };
 
+    _handleKeyStroke = (delta: string, isInsert: boolean) => {
+        const preview = this.props.previewRef.current;
+        if (preview) {
+            preview.postMessage({ cmd: 'typeContent', delta, isInsert }, '*');
+        }
+    };
+
+    _handleChangeCursor = (path: string, line: number, column: number) => {
+        const preview = this.props.previewRef.current;
+        if (preview) {
+            preview.postMessage({ cmd: 'setCursor', path, line, column }, '*');
+        }
+    };
+
     render() {
         const { currentBanner, currentModal } = this.state;
 
@@ -203,13 +193,12 @@ class EditorView extends React.Component<Props, State> {
             engineLogs,
             deviceErrors,
             onSendCode,
-            // onReloadSnack,
-            onClearDeviceLogs,
             onToggleSendCode,
             uploadFileAsync,
             preferences,
             name,
             previewRef,
+            editorRef,
             entryPoint,
             onSetEntryPoint,
             engine,
@@ -225,22 +214,22 @@ class EditorView extends React.Component<Props, State> {
             if (entry.item.asset) {
                 editorComponent = <AssetViewer entry={entry} />;
             } else {
-                const { content } = entry.item;
+                const { content, path } = entry.item;
                 editorComponent = (
                     <React.Fragment>
                         <MonacoEditor
                             entries={this.props.fileEntries}
                             autoFocus={!entry.state.isCreating}
                             annotations={annotations}
-                            path={entry.item.path}
+                            path={path}
                             theme={this.props.preferences.theme}
                             value={content as string}
                             onValueChange={this.props.onChangeCode}
-                            onCursorChange={this.props.onChangeCursor}
-                            onOpenPath={this._handleOpenPath}
+                            onCursorChange={this._handleChangeCursor}
+                            onSubmitYJSEditingEvent={this.props.onYJSEditingEvent}
                             lineNumbers={'on'}
-                            onTypeContent={this.props.onTypeContent}
-                            ref={this._EditorComponentRef}
+                            onKeyStroke={this._handleKeyStroke}
+                            ref={editorRef}
                         />
                     </React.Fragment>
                 );
@@ -268,8 +257,6 @@ class EditorView extends React.Component<Props, State> {
                                 visible={preferences.fileTreeShown}
                                 entries={this.props.fileEntries}
                                 onEntriesChange={this.props.onFileEntriesChange}
-                                onRemoveFile={this._handleRemoveFile}
-                                onRenameFile={this._handleRenameFile}
                                 uploadFileAsync={uploadFileAsync}
                                 preventRedirectWarning={this._preventRedirectWarning}
                                 saveStatus={saveStatus}
@@ -303,7 +290,6 @@ class EditorView extends React.Component<Props, State> {
                                 onShowErrorPanel={this._showErrorPanel}
                                 onShowDeviceLogs={this._showDeviceLogs}
                                 onTogglePanels={this._togglePanels}
-                                onClearDeviceLogs={onClearDeviceLogs}
                                 panelType={preferences.panelType}
                             />
                         ) : null}

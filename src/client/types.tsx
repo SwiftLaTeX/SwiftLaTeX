@@ -3,6 +3,25 @@ export const EngineVersions = {
     PDFLaTeX: true,
 };
 
+export type ProjectFileEntry = {
+    id: string;
+    path: string;
+    uri: string;
+    type: 'folder' | 'file';
+    asset: boolean;
+};
+
+export type ProjectEntry = {
+    name: string;
+    username: string;
+    modifiedTime: string;
+    fileEntries: ProjectFileEntry[];
+    entryPoint: string;
+    pid: string;
+    shareEnabled?: boolean;
+    deleted?: boolean;
+};
+
 export type EngineVersion = keyof typeof EngineVersions;
 
 export const DEFAULT_ENGINE_VERSION: EngineVersion = 'XeLaTeX';
@@ -17,7 +36,7 @@ export type Annotation = {
     source: string;
 };
 
-export type FileSystemEntry = {
+export type FileManagerEntry = {
     item: {
         path: string;
         type: 'file' | 'folder';

@@ -12,7 +12,6 @@ type Props = {
     onShowErrorPanel: () => void;
     onShowDeviceLogs: () => void;
     onTogglePanels: () => void;
-    onClearDeviceLogs: () => void;
     panelType: 'errors' | 'logs';
 };
 
@@ -47,7 +46,6 @@ export default class EditorPanels extends React.Component<Props> {
             onShowErrorPanel,
             onShowDeviceLogs,
             onTogglePanels,
-            onClearDeviceLogs,
             panelType,
         } = this.props;
         return (
@@ -65,12 +63,6 @@ export default class EditorPanels extends React.Component<Props> {
                             Logs
                         </button>
                         <div className={css(styles.buttons)}>
-                            {panelType === 'logs' ? (
-                                <button
-                                    onClick={onClearDeviceLogs}
-                                    className={css(styles.button, styles.clear)}
-                                />
-                            ) : null}
                             <button
                                 onClick={onTogglePanels}
                                 className={css(styles.button, styles.close)}

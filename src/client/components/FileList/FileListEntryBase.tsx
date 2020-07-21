@@ -4,11 +4,11 @@ import FileListEntryDropTarget from './FileListEntryDropTarget';
 import { isKeyCombo } from '../shared/KeybindingsManager';
 import ContextMenu from '../shared/ContextMenu';
 import { Action } from '../shared/ContextMenu';
-import { FileSystemEntry } from '../../types';
+import { FileManagerEntry } from '../../types';
 
 type Props = {
-    entry: FileSystemEntry;
-    rest: FileSystemEntry[];
+    entry: FileManagerEntry;
+    rest: FileManagerEntry[];
     onOpen: (path: string) => void;
     onFocus: (path: string) => void;
     onRename: (oldPath: string, newPath: string) => void;
@@ -29,7 +29,7 @@ type State = {
     isHovered: boolean;
 };
 
-export let lastDraggedEntry: FileSystemEntry | null;
+export let lastDraggedEntry: FileManagerEntry | null;
 
 export default class FileListEntry extends React.Component<Props, State> {
     static defaultProps = {

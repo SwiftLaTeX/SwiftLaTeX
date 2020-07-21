@@ -3,10 +3,10 @@ import { StyleSheet, css } from 'aphrodite';
 import FileListEntryIcon from './FileListEntryIcon';
 import ContextMenu from '../shared/ContextMenu';
 import withThemeName, { ThemeName } from '../Preferences/withThemeName';
-import { FileSystemEntry } from '../../types';
+import { FileManagerEntry } from '../../types';
 
 type Props = {
-    entry: FileSystemEntry;
+    entry: FileManagerEntry;
     entryPoint: string;
     onOpen: () => void;
     onClose: () => void;

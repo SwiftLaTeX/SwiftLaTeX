@@ -8,10 +8,12 @@ export class MinioStorage extends BackendStorage {
         super(token);
     }
 
-    async get(scope: string, key: string): Promise<ArrayBuffer> {
-        const compound = this.token + '/' + scope + '/' + key;
-        const url = '/minio/get?uri=' + encodeURIComponent(compound);
+    async get(scope: string, key: string): Promise<ArrayBuffer | undefined> {
+        const url = await this.getPublicUrl(scope, key);
         const response = await fetch(url, { cache: 'no-cache' });
+        if (response.status === 404) {
+            return undefined;
+        }
         if (!response.ok) {
             throw new Error('Cannot fetch file');
         }
@@ -45,6 +47,7 @@ export class MinioStorage extends BackendStorage {
     }
 
     async put(scope: string, key: string, blobLike: Blob): Promise<string> {
+        // console.log('Putting ' + blobLike.size);
         const compound = this.token + '/' + scope + '/' + key;
         const url = '/minio/upload?uri=' + encodeURIComponent(compound);
         const presigned_req = await fetch(url, { cache: 'no-cache' });

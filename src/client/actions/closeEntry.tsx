@@ -1,7 +1,7 @@
 import updateEntry from './updateEntry';
-import { FileSystemEntry } from '../types';
+import { FileManagerEntry } from '../types';
 
-export default function closeEntry(entry: FileSystemEntry) {
+export default function closeEntry(entry: FileManagerEntry) {
     if (entry.item.type === 'file') {
         if (entry.state.isSelected || entry.state.isFocused || entry.state.isOpen) {
             // Unselect and unfocus the file

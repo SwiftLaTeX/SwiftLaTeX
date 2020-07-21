@@ -3,11 +3,11 @@ import withThemeName, { ThemeName } from '../Preferences/withThemeName';
 import { lastDraggedEntry } from './FileListEntryBase';
 import { getUniquePath } from '../../utils/fileUtilities';
 import dragEventIncludes from '../../utils/dragEventIncludes';
-import { FileSystemEntry } from '../../types';
+import { FileManagerEntry } from '../../types';
 
 type Props = {
-    entry?: FileSystemEntry;
-    rest: FileSystemEntry[];
+    entry?: FileManagerEntry;
+    rest: FileManagerEntry[];
     onExpand?: (path: string, expand?: boolean) => void;
     onRename: (oldPath: string, newPath: string) => void;
     className?: string;

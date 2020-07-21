@@ -13,15 +13,15 @@ import {
     isTextFile,
     isOpenTypeFontFile,
     supportedFileTypes,
-    genRandomFileID,
+    genFileID,
 } from '../../utils/fileUtilities';
 import { WebkitFileEntry, WebkitDirectoryEntry } from '../../utils/convertDataTransferItemsToFiles';
 import dragEventIncludes from '../../utils/dragEventIncludes';
-import { FileSystemEntry } from '../../types';
+import { FileManagerEntry } from '../../types';
 
 type Props = {
-    entries: FileSystemEntry[];
-    onImportFile: (e: FileSystemEntry) => void;
+    entries: FileManagerEntry[];
+    onImportFile: (e: FileManagerEntry) => void;
     uploadFileAsync: (file: File, id: string) => Promise<string>;
     render: (options: { onImportStart: () => void }) => React.ReactNode;
     className?: string;
@@ -148,7 +148,7 @@ class FileListImportManager extends React.PureComponent<Props, State> {
             files.map(async ({ file, path }) => {
                 try {
                     let metaContent: string | ArrayBuffer = '';
-                    const fid = genRandomFileID(path);
+                    const fid = genFileID(path);
                     const isTextEntry = isTextFile(path);
                     if (isTextEntry) {
                         // console.log('A text file');
@@ -184,7 +184,7 @@ class FileListImportManager extends React.PureComponent<Props, State> {
                             id: fid,
                         },
                         state: {},
-                    } as FileSystemEntry;
+                    } as FileManagerEntry;
 
                     // console.log(uploadEntry);
                     if (!this.state.itemsToImport.length) {

@@ -17,9 +17,9 @@ export abstract class BackendStorage {
         this.token = token;
     }
 
-    abstract get(scope: string, itemKey: string): Promise<ArrayBuffer>;
+    abstract get(scope: string, itemKey: string): Promise<ArrayBuffer | undefined>;
 
-    abstract getPublicUrl(scope: string, itemKey: string): Promise<string>;
+    abstract getPublicUrl(scope: string, itemKey: string): Promise<string | undefined>;
 
     abstract put(scope: string, itemKey: string, bloblike: Blob): Promise<string>;
 

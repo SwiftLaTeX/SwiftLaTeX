@@ -3,13 +3,13 @@ import { StyleSheet, css } from 'aphrodite';
 import escapeRegexp from 'escape-string-regexp';
 import FileListEntry from './FileListEntry';
 import { isInsideFolder } from '../../utils/fileUtilities';
-import { FileSystemEntry } from '../../types';
+import { FileManagerEntry } from '../../types';
 import { ThemeName } from '../Preferences/withThemeName';
 
 type Props = {
     parent: string;
-    entries: FileSystemEntry[];
-    clipboard: FileSystemEntry[];
+    entries: FileManagerEntry[];
+    clipboard: FileManagerEntry[];
     onOpen: (path: string) => void;
     onFocus: (path: string) => void;
     onSelect: (path: string) => void;
@@ -19,7 +19,7 @@ type Props = {
     onCreateFile: (path: string | undefined) => void;
     onCreateFolder: (path: string | undefined) => void;
     onRename: (oldPath: string, newPath: string) => void;
-    onPaste: (path: string | undefined, entry: FileSystemEntry) => void;
+    onPaste: (path: string | undefined, entry: FileManagerEntry) => void;
     onSetEntryPoint: (path: string) => void;
     onClearClipboard: () => void;
     theme: ThemeName;

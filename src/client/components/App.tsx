@@ -3,12 +3,10 @@ import { StyleSheet, css } from 'aphrodite';
 import debounce from 'lodash/debounce';
 import isString from 'lodash/isString';
 import isBoolean from 'lodash/isBoolean';
-import BroadcastChannel from 'broadcast-channel';
 import EditorView from './EditorView';
 import updateEntry from '../actions/updateEntry';
 import AnimatedLogo from './shared/AnimatedLogo';
 import { LaTeXEngine, CompileResult } from '../swiftlatex/latexEngine';
-import { loadWASM } from 'onigasm'; // peer dependency of 'monaco-textmate'
 import JSZip from 'jszip';
 import {
     arrayBufferToJson,
@@ -19,17 +17,20 @@ import {
 } from '../utils/fileUtilities';
 import { initializeStorage, BackendStorage } from '../storage/index';
 import { EventReporter } from '../utils/eventReport';
-
+import * as Y from 'yjs';
+import { WebsocketProvider } from 'y-websocket';
+import { IndexeddbPersistence } from 'y-indexeddb';
 import {
     EngineVersion,
     Annotation,
-    FileSystemEntry,
+    FileManagerEntry,
     SaveStatus,
-    DEFAULT_ENGINE_VERSION,
+    ProjectEntry,
+    DEFAULT_ENGINE_VERSION, ProjectFileEntry,
 } from '../types';
 import { DvipdfmxEngine } from '../swiftlatex/dvipdfmxEngine';
-
-const BROADCAST_CHANNEL_NAME = 'SWIFTLATEX_BROADCAST_CHANNEL';
+import * as monaco from 'monaco-editor';
+import { YTextEvent } from 'yjs';
 
 enum SessionStatus {
     Init,
@@ -44,17 +45,18 @@ type State = {
     id: string;
     username: string;
     name: string;
-    isSaved: boolean;
-    isSystemBusy: boolean;
+    shareEnabled: boolean;
+    isEngineBusy: boolean;
     sessionStatus: SessionStatus;
     sendCodeOnChangeEnabled: boolean;
     saveStatus: SaveStatus;
-    fileEntries: FileSystemEntry[];
+    fileEntries: FileManagerEntry[];
     engineErrors: Annotation[] | undefined;
     engineLogs: string;
     entryPoint: string;
     engine: EngineVersion;
 };
+
 
 export default class App extends React.Component<any, State> {
     constructor(props: any) {
@@ -65,8 +67,8 @@ export default class App extends React.Component<any, State> {
             id: project_id,
             username: '',
             name: '',
-            isSaved: false,
-            isSystemBusy: false,
+            shareEnabled: false,
+            isEngineBusy: false,
             sessionStatus: SessionStatus.Init,
             sendCodeOnChangeEnabled: true,
             saveStatus: 'changed',
@@ -86,61 +88,15 @@ export default class App extends React.Component<any, State> {
             return;
         }
 
-        this._broadcastChannel = new BroadcastChannel(BROADCAST_CHANNEL_NAME, {
-            webWorkerSupport: false,
-        });
-
-        // Let other tabs know that a new tab is opened
-        this._broadcastChannel
-            .postMessage({
-                type: 'NEW_TAB',
-                id: project_id,
-            })
-            .then();
-
-        // Listen to messages from other tabs
-        this._broadcastChannel.addEventListener('message', (e) => {
-            // Only respond to messages which have the same snack
-            if (!e.id || e.id !== project_id) {
-                return;
-            }
-
-            switch (e.type) {
-                case 'NEW_TAB':
-                    this._broadcastChannel.postMessage({
-                        type: 'DUPLICATE_TAB',
-                        id: project_id,
-                    });
-                    break;
-                case 'DUPLICATE_TAB':
-                    alert('Warning: another tab with the same project is opened!');
-                    break;
-            }
-        });
-
         this._initSession().then();
     }
 
     _latexEngine: LaTeXEngine = undefined as any;
     _backendStorage: BackendStorage | undefined = undefined;
 
-    async _loadEditorComponents() {
-        await new Promise((resolve, reject) => {
-            loadWASM('bin/onigasm.wasm').then(
-                function() {
-                    resolve();
-                },
-                function() {
-                    reject();
-                },
-            );
-        });
-        this._latexEngine = new LaTeXEngine();
-        await this._latexEngine.loadEngine();
-    }
 
-    async __loadSingleFile(tmp: any): Promise<FileSystemEntry | undefined> {
-        const importedEntry: FileSystemEntry = {
+    async _loadFileFromStorage(tmp: any): Promise<FileManagerEntry | undefined> {
+        const importedEntry: FileManagerEntry = {
             item: {
                 type: tmp.type,
                 asset: tmp.asset,
@@ -157,10 +113,16 @@ export default class App extends React.Component<any, State> {
                 if (!tmp.asset) {
                     /* Is a text file */
                     const tmp_content_buf = await this._backendStorage!.get('asset', tmp.id);
+                    if (!tmp_content_buf) {
+                        throw `Unable to fetch asset ${tmp.id}`;
+                    }
                     importedEntry.item.content = arrayBufferToString(tmp_content_buf);
                     return importedEntry;
                 } else if (isImageFile(tmp.path) || isOpenTypeFontFile(tmp.path)) {
                     const tmp_content_buf = await this._backendStorage!.get('asset', tmp.id);
+                    if (!tmp_content_buf) {
+                        throw `Unable to fetch asset ${tmp.id}`;
+                    }
                     importedEntry.item.content = tmp_content_buf;
                     return importedEntry;
                 }
@@ -175,20 +137,20 @@ export default class App extends React.Component<any, State> {
 
     async _loadProjectFiles() {
         const manifest_buffer = await this._backendStorage!.get('manifest', this.state.id);
-        const manifest = arrayBufferToJson(manifest_buffer);
+        if (!manifest_buffer) {
+            throw `Unable to fetch manifest ${this.state.id}`;
+        }
+        const manifest = arrayBufferToJson(manifest_buffer) as ProjectEntry;
         const username = manifest.username;
         const name = manifest.name;
         let entryPoint = manifest.entryPoint;
         const fileEntries = manifest.fileEntries;
-        if (!isString(username) || !isString(name) || !isString(entryPoint) || !fileEntries) {
+        const shareEnabled = !(!manifest.shareEnabled); /* Haha, javascript */
+        if (!isString(username) || !isString(name) || !isString(entryPoint) || !fileEntries || !Array.isArray(fileEntries)) {
             throw new Error('Malformed Manifest');
         }
 
-        if (!Array.isArray(fileEntries)) {
-            throw new Error('Malformed Manifest');
-        }
-
-        const importedEntries: FileSystemEntry[] = [];
+        const importedEntries: FileManagerEntry[] = [];
         let entryPointFound = false;
         const fileLoadingPromises = [];
         for (let j = 0; j < fileEntries.length; j++) {
@@ -202,7 +164,7 @@ export default class App extends React.Component<any, State> {
             ) {
                 throw new Error('Malformed Manifest');
             }
-            fileLoadingPromises.push(this.__loadSingleFile(tmp));
+            fileLoadingPromises.push(this._loadFileFromStorage(tmp));
         }
 
         /* Multithreading */
@@ -211,7 +173,7 @@ export default class App extends React.Component<any, State> {
             const batch = await Promise.all(fileLoadingPromises.splice(0, 10));
             for (const tmp of batch) {
                 if (tmp) {
-                    if (tmp.item.path === entryPoint && tmp.item.type === 'file') {
+                    if (tmp.item.path === entryPoint) {
                         entryPointFound = true;
                         tmp.state.isOpen = true;
                         tmp.state.isFocused = true;
@@ -230,7 +192,13 @@ export default class App extends React.Component<any, State> {
             name,
             fileEntries: importedEntries,
             entryPoint,
+            shareEnabled: shareEnabled,
         });
+
+        if (shareEnabled) {
+            /* Start YJS Instance */
+            await this._initYJSComponent();
+        }
     }
 
     async _initSession() {
@@ -244,13 +212,16 @@ export default class App extends React.Component<any, State> {
             return;
         }
 
-        this._backendStorage
-            .getUserInfo()
-            .then((info) => {
-                EventReporter.reportEvent('editor', 'login', info);
-            })
-            .catch((_) => {
+        this.setState({ sessionStatus: SessionStatus.LoadComponents });
+        try {
+            this._latexEngine = new LaTeXEngine();
+            await this._latexEngine.loadEngine();
+        } catch {
+            this.setState({
+                sessionStatus: SessionStatus.LoadComponentsFailed,
             });
+            return;
+        }
 
         this.setState({ sessionStatus: SessionStatus.LoadFiles });
         try {
@@ -262,47 +233,38 @@ export default class App extends React.Component<any, State> {
             return;
         }
 
-        this.setState({ sessionStatus: SessionStatus.LoadComponents });
-        try {
-            await this._loadEditorComponents();
-        } catch {
-            this.setState({
-                sessionStatus: SessionStatus.LoadComponentsFailed,
-            });
-            return;
-        }
+
         this.setState({ sessionStatus: SessionStatus.Ready });
     }
 
     _handleChangeEngineVersion = async (engine: EngineVersion) => {
-        if (this.state.isSystemBusy || this.state.engine === engine) {
+        if (this.state.isEngineBusy || this.state.engine === engine) {
             return;
         }
-        this.setState({ isSystemBusy: true });
+        this.setState({ isEngineBusy: true });
         EventReporter.reportEvent('editor', 'switchEngine', engine);
         this._latexEngine && this._latexEngine.closeWorker();
         try {
             this._latexEngine = new LaTeXEngine(engine);
             await this._latexEngine.loadEngine();
             this._requiredFlushInEngine = true;
-            this.setState({ engine, isSystemBusy: false });
+            this.setState({ engine, isEngineBusy: false });
         } catch {
             this.setState({ sessionStatus: SessionStatus.LoadComponentsFailed });
         }
     };
 
     _compareFileTreeStructure(
-        nextFileEntries: FileSystemEntry[],
-        originalFileEntries: FileSystemEntry[],
+        nextFileEntries: FileManagerEntry[],
+        originalFileEntries: FileManagerEntry[],
     ) {
         if (originalFileEntries.length !== nextFileEntries.length) {
             return true;
         } else {
             for (let i = 0; i < nextFileEntries.length; i++) {
                 if (
-                    nextFileEntries[i].item.type !== originalFileEntries[i].item.type ||
-                    nextFileEntries[i].item.path !== originalFileEntries[i].item.path ||
-                    nextFileEntries[i].item.asset !== originalFileEntries[i].item.asset
+                    nextFileEntries[i].item.id !== originalFileEntries[i].item.id
+                    || nextFileEntries[i].item.path !== originalFileEntries[i].item.path
                 ) {
                     return true;
                 }
@@ -311,7 +273,7 @@ export default class App extends React.Component<any, State> {
         return false;
     }
 
-    _copyEntryBeforeUpload = (tmp: FileSystemEntry) => {
+    _copyEntryBeforeUpload = (tmp: FileManagerEntry) => {
         const entry = {
             uri: tmp.item.uri,
             asset: tmp.item.asset,
@@ -364,7 +326,7 @@ export default class App extends React.Component<any, State> {
                                 }));
                             }
                         } catch (e) {
-                            console.log(
+                            console.error(
                                 'An upload error is detected, silently ignored?' + tmp.item.path,
                             );
                         }
@@ -383,11 +345,12 @@ export default class App extends React.Component<any, State> {
     _requiredUploadFiles: string[] = [];
 
     componentDidUpdate(_: any, __: State) {
+
         if (this.state.sessionStatus !== SessionStatus.Ready) {
             return;
         }
 
-        if (this.state.isSystemBusy) {
+        if (this.state.isEngineBusy) {
             return;
         }
 
@@ -407,11 +370,14 @@ export default class App extends React.Component<any, State> {
 
     componentWillUnmount() {
         this._latexEngine && this._latexEngine.closeWorker();
-
-        this._broadcastChannel.close().then();
+        this.ydoc && this.ydoc.destroy();
+        this.indexeddbProvider && this.indexeddbProvider.destroy();
+        this.websocketProvider && this.websocketProvider.destroy();
     }
 
     _previewRef = React.createRef<Window>();
+
+    _editorRef = React.createRef();
 
     _broadcastChannel: BroadcastChannel = undefined as any;
 
@@ -434,8 +400,9 @@ export default class App extends React.Component<any, State> {
             username: this.state.username,
             modifiedTime: new Date().toString(),
             fileEntries: fileEntriesCopy,
-            engine: this.state.engine,
-        };
+            shareEnabled: this.state.shareEnabled,
+            pid: this.state.id,
+        } as ProjectEntry;
         const jsonStr = JSON.stringify(manifest);
         // console.log(jsonStr);
         const manifestBlob = new Blob([jsonStr]);
@@ -448,14 +415,7 @@ export default class App extends React.Component<any, State> {
         this.setState({ saveStatus: 'published' });
     };
 
-    _syncManifest = debounce(this._syncManifestNoDebounce, 5000);
-
-    _handleChangeCursor = (path: string, line: number, column: number) => {
-        const preview = this._previewRef.current;
-        if (preview) {
-            preview.postMessage({ cmd: 'setCursor', path, line, column }, '*');
-        }
-    };
+    _syncManifest = debounce(this._syncManifestNoDebounce, 3000);
 
     _generateResourceUrlMap = () => {
         const resourceMap: any = {};
@@ -469,7 +429,7 @@ export default class App extends React.Component<any, State> {
     };
 
     _fireEngineNoDebounce = async () => {
-        if (!this._latexEngine.isReady()) return false;
+        if (!this._latexEngine || !this._latexEngine.isReady()) return false;
         const currentFileEntries = this.state.fileEntries;
 
         if (this._requiredFlushInEngine) {
@@ -501,7 +461,7 @@ export default class App extends React.Component<any, State> {
         this._requiredUpdateFilesInEngine = [];
 
         this._latexEngine.setEngineMainFile(this.state.entryPoint);
-        this.setState({ isSystemBusy: true });
+        this.setState({ isEngineBusy: true });
         const preview = this._previewRef.current;
         if (preview) {
             preview.postMessage({ cmd: 'compileStart' }, '*');
@@ -515,7 +475,7 @@ export default class App extends React.Component<any, State> {
         if (preview) {
             preview.postMessage({ cmd: 'compileEnd' }, '*');
         }
-        this.setState({ isSystemBusy: false, engineLogs: r.log, engineErrors: r.errors });
+        this.setState({ isEngineBusy: false, engineLogs: r.log, engineErrors: r.errors });
         if (r.pdf) {
             EventReporter.reportEvent('editor', 'compile_ok');
             if (preview) {
@@ -549,62 +509,58 @@ export default class App extends React.Component<any, State> {
         }
     };
 
-    _handleTypeContent = (delta: string, isInsert: boolean) => {
-        const preview = this._previewRef.current;
-        if (preview) {
-            preview.postMessage({ cmd: 'typeContent', delta, isInsert }, '*');
-        }
-    };
-
     _handleChangeCode = (content: string, path: string) => {
-        this.setState((state: State) => ({
-            saveStatus: 'changed',
-            fileEntries: state.fileEntries.map((entry) => {
-                if (
-                    entry.item.type === 'file' &&
-                    !entry.item.asset &&
-                    entry.item.path === path &&
-                    entry.state.isFocused === true
-                ) {
-                    if (!this._requiredUpdateFilesInEngine.includes(path)) {
-                        this._requiredUpdateFilesInEngine.push(path);
-                    }
-                    if (!this._requiredUploadFiles.includes(entry.item.id)) {
-                        this._requiredUploadFiles.push(entry.item.id);
-                    }
-                    return updateEntry(entry, { item: { content } });
+
+        const updatedEntry = this.state.fileEntries.map((entry) => {
+            if (
+                entry.item.type === 'file' &&
+                !entry.item.asset &&
+                entry.item.path === path
+            ) {
+                if (!this._requiredUpdateFilesInEngine.includes(path)) {
+                    this._requiredUpdateFilesInEngine.push(path);
                 }
-                return entry;
-            }),
-            engineErrors: undefined,
-        }));
-    };
-
-    _handleFileEntriesChange = (nextFileEntries: FileSystemEntry[]): Promise<void> => {
-        return new Promise((resolve) => {
-            const fileStructureChanged = this._compareFileTreeStructure(
-                this.state.fileEntries,
-                nextFileEntries,
-            );
-            if (fileStructureChanged) {
-                this._requiredFlushInEngine = true;
-                this.setState({ saveStatus: 'changed' });
+                if (!this._requiredUploadFiles.includes(entry.item.id)) {
+                    this._requiredUploadFiles.push(entry.item.id);
+                }
+                return updateEntry(entry, { item: { content } });
             }
-            this.setState((_) => {
-                return { fileEntries: nextFileEntries };
-            }, resolve);
+            return entry;
+        });
+        this.setState({
+            saveStatus: 'changed',
+            engineErrors: undefined,
+            fileEntries: updatedEntry,
         });
     };
 
-    _handleClearDeviceLogs = () =>
-        this.setState({
-            engineLogs: '',
+    _handleFileEntriesChange = (nextFileEntries: FileManagerEntry[]): Promise<void> => {
+        const fileStructureChanged = this._compareFileTreeStructure(
+            this.state.fileEntries,
+            nextFileEntries,
+        );
+        if (fileStructureChanged) {
+            if (this.state.shareEnabled) {
+                this._publicTreeToRemote(nextFileEntries);
+            }
+
+            if(this._editorRef.current) {
+                // Maybe rename or remove, we could free up some memory
+                const paths = nextFileEntries.map(e => e.item.path);
+                (this._editorRef.current as any).cleanUpModels(paths);
+            }
+
+            this._requiredFlushInEngine = true;
+            this.setState({ saveStatus: 'changed' });
+        }
+        return new Promise((resolve) => {
+            this.setState({ fileEntries: nextFileEntries }, resolve);
         });
+    };
 
     _handleDownloadAsync = async () => {
-        // Already check if Snack is saved in EditorView.js
         EventReporter.reportEvent('editor', 'download');
-        this.setState({ isSystemBusy: true });
+        this.setState({ isEngineBusy: true });
 
         const zipobj = new JSZip();
         for (let j = 0; j < this.state.fileEntries.length; j++) {
@@ -617,10 +573,10 @@ export default class App extends React.Component<any, State> {
         const blobFile = await zipobj.generateAsync({ type: 'blob' });
         triggerDownloadBlob(blobFile, 'export.zip');
 
-        this.setState({ isSystemBusy: false });
+        this.setState({ isEngineBusy: false });
     };
 
-    _findFocusedEntry = (entries: FileSystemEntry[]): FileSystemEntry | undefined =>
+    _findFocusedEntry = (entries: FileManagerEntry[]): FileManagerEntry | undefined =>
         // @ts-ignore
         entries.find(({ item, state }) => item.type === 'file' && state.isFocused === true);
 
@@ -635,7 +591,7 @@ export default class App extends React.Component<any, State> {
 
     _handlePDFTeXExport = async () => {
         let pdfCompileOk = true;
-        this.setState({ isSystemBusy: true });
+        this.setState({ isEngineBusy: true });
         let pdfResult: CompileResult = undefined as any;
         for (let j = 0; j < 3; j++) {
             pdfResult = await this._latexEngine.compileLaTeX(true);
@@ -645,7 +601,7 @@ export default class App extends React.Component<any, State> {
                 break;
             }
         }
-        this.setState({ isSystemBusy: false });
+        this.setState({ isEngineBusy: false });
         if (pdfCompileOk) {
             triggerDownloadBlob(new Blob([pdfResult.pdf!]), 'export.pdf');
         } else {
@@ -660,7 +616,7 @@ export default class App extends React.Component<any, State> {
         let dviCompileOk = true;
         /* Compile DVI First */
 
-        this.setState({ isSystemBusy: true });
+        this.setState({ isEngineBusy: true });
         let xdvResult: CompileResult = undefined as any;
         for (let j = 0; j < 3; j++) {
             xdvResult = await this._latexEngine.compileLaTeX(true);
@@ -700,7 +656,7 @@ export default class App extends React.Component<any, State> {
                 this.setState({ engineLogs: r.log, engineErrors: r.errors });
             }
         }
-        this.setState({ isSystemBusy: false });
+        this.setState({ isEngineBusy: false });
         export_engine.closeWorker();
 
         /* Weird */
@@ -732,8 +688,205 @@ export default class App extends React.Component<any, State> {
     };
 
     _handleShareProject = async () => {
-        const manifestUrl = await this._backendStorage!.getPublicUrl('manifest', this.state.id);
-        console.log(btoa(manifestUrl));
+        if (this.state.shareEnabled) {
+            return true;
+        }
+        try {
+            this.setState({ isEngineBusy: true });
+            const publicUrl = await this._backendStorage!.getPublicUrl('manifest', this.state.id);
+            if (publicUrl) {
+                const manifestUrl = encodeURIComponent(publicUrl);
+                const fetchResult = await fetch(`/s/create?p=${this.state.id}&uri=${manifestUrl}`);
+                if (fetchResult.status === 200) {
+                    this.setState({ shareEnabled: true, saveStatus: 'changed' });
+                    await this._initYJSComponent();
+                    return true;
+                }
+            }
+        } catch (e) {
+            console.error(e.message);
+        } finally {
+            this.setState({ isEngineBusy: false });
+        }
+
+        return false;
+    };
+
+
+    ydoc: Y.Doc = undefined as any;
+    yfiles: Y.Array<ProjectFileEntry> = undefined as any;
+    websocketProvider: WebsocketProvider = undefined as any;
+    indexeddbProvider: IndexeddbPersistence = undefined as any;
+    ytextmap: Map<string, Y.Text> = new Map<string, Y.Text>();
+    yJustPublishTree = false;
+    _mergeRemoteContentToLocal = async () => {
+        let importedEntries: FileManagerEntry[] = [];
+
+        let newAssets: { [key: string]: ArrayBuffer } = {};
+        // Download and save the newly added asset files
+        for (let remoteEntry of this.yfiles) {
+            if (remoteEntry.type === 'file' && remoteEntry.asset) {
+                const existingEntry = this.state.fileEntries.find(localEntry => {
+                    return localEntry.item.id === remoteEntry.id;
+                });
+                if (!existingEntry) {
+                    const uri = remoteEntry.uri;
+                    const assetRequest = await fetch(`/s/fetch?uri=${encodeURIComponent(uri)}`);
+                    if (!assetRequest.ok) {
+                        throw 'Unable to pull shared resources';
+                    }
+                    const arrayBlob = await assetRequest.arrayBuffer();
+                    newAssets[remoteEntry.id] = arrayBlob;
+                    await this._backendStorage!.put('asset', remoteEntry.id, new Blob([arrayBlob]));
+                }
+            }
+        }
+
+        // Make new fileEntries
+        for (let remoteEntry of this.yfiles) {
+            let content: string | ArrayBuffer = undefined as any;
+            const existingEntry = this.state.fileEntries.find(localEntry => {
+                return localEntry.item.id === remoteEntry.id;
+            });
+            if (remoteEntry.type === 'file') {
+                if (remoteEntry.asset) {
+                    if (!existingEntry) {
+                        content = newAssets[remoteEntry.id];
+                    } else {
+                        content = existingEntry.item.content;
+                    }
+                } else {
+                    const ytext = this.ydoc.getText(remoteEntry.id);
+                    content = ytext.toString();
+                    if (!this.ytextmap.has(remoteEntry.id)) {
+                        this.ytextmap.set(remoteEntry.id, ytext);
+                        /* Bind event */
+                        ytext.observe((event) => {
+                            this._yTextEventListener(event, ytext, remoteEntry.id);
+                        });
+                    }
+                }
+            }
+
+            let importedEntry: FileManagerEntry = {
+                item: {
+                    type: remoteEntry.type,
+                    asset: remoteEntry.asset,
+                    uri: remoteEntry.uri,
+                    content: content,
+                    id: remoteEntry.id,
+                    path: remoteEntry.path,
+                },
+                state: existingEntry ? existingEntry.state : {},
+            };
+
+            importedEntries.push(importedEntry);
+        }
+        this._requiredFlushInEngine = true;
+        this.setState({ fileEntries: importedEntries, saveStatus: 'changed' });
+    };
+
+    _yTextEventListener = (event: YTextEvent, ytext: Y.Text, id: string) => {
+        const found = this.state.fileEntries.find(element => {
+            return element.item.id === id;
+        });
+        if (found) {
+            if (found.state.isFocused) {
+                // It is the current editing document. Consider injecting the event to monaco
+                // monaco will call handleChangeCode later.
+                if (this._editorRef.current) {
+                    (this._editorRef.current as any).injectPeerEditingEvents(event);
+                }
+            } else {
+                // It is the document that is not currently edited. Directly update it.
+                this._handleChangeCode(ytext.toString(), found.item.path);
+            }
+        }
+    };
+
+    _handleYJSEditingEvent = (e: monaco.editor.IModelContentChangedEvent) => {
+        if (this.state.shareEnabled && this.ydoc) {
+            const currentEntry = this._findFocusedEntry(this.state.fileEntries);
+            if (currentEntry) {
+                const ytext = this.ytextmap.get(currentEntry.item.id);
+                if (ytext) {
+                    this.ydoc.transact(() => {
+                        e.changes
+                            .sort((change1, change2) => change2.rangeOffset - change1.rangeOffset)
+                            .forEach((change) => {
+                                ytext.delete(change.rangeOffset, change.rangeLength);
+                                ytext.insert(change.rangeOffset, change.text);
+                            });
+                    });
+                }
+            }
+        }
+    };
+
+    _publicTreeToRemote = (fileEntries: FileManagerEntry[]) => {
+
+        // Pump all editable files to yjs
+        for (const file of fileEntries) {
+            if (file.item.type === 'file' && !file.item.asset) {
+                if (!this.ytextmap.has(file.item.id)) {
+                    const ytext = this.ydoc.getText(file.item.id);
+                    this.ytextmap.set(file.item.id, ytext);
+                    ytext.insert(0, file.item.content as string);
+                    /* Bind event */
+                    ytext.observe((event) => {
+                        this._yTextEventListener(event, ytext, file.item.id);
+                    });
+                }
+            }
+        }
+
+        // Pump the file entries
+        const rs: ProjectFileEntry[] = [];
+        for (const file of fileEntries) {
+            let r: ProjectFileEntry = {
+                id: file.item.id,
+                uri: file.item.uri,
+                path: file.item.path,
+                asset: file.item.asset,
+                type: file.item.type,
+            };
+            rs.push(r);
+        }
+        this.ydoc.transact(() => {
+            this.yJustPublishTree = true;
+            this.yfiles.delete(0, this.yfiles.length);
+            this.yfiles.push(rs);
+        });
+    };
+
+    _initYJSComponent = async () => {
+        this.ydoc = new Y.Doc();
+        this.indexeddbProvider = new IndexeddbPersistence(this.state.id, this.ydoc);
+        await this.indexeddbProvider.whenSynced;
+        this.websocketProvider = new WebsocketProvider('wss://share.swiftlatex.com', this.state.id, this.ydoc);
+        await new Promise((resolve, _) => {
+            this.websocketProvider.on('sync', () => {
+                resolve();
+            });
+        });
+        this.yfiles = this.ydoc.getArray('files');
+        if (this.yfiles.length === 0) {
+            console.error('First Initialized');
+            await this._publicTreeToRemote(this.state.fileEntries);
+        } else {
+            await this._mergeRemoteContentToLocal();
+        }
+
+        /* Consider debounce */
+        this.yfiles.observe(_ => {
+            if (this.yJustPublishTree) {
+                this.yJustPublishTree = false; /* Prevent endless loop */
+                return;
+            }
+            this._mergeRemoteContentToLocal().then();
+        });
+
+        console.error('YJS initialized');
     };
 
     render() {
@@ -744,19 +897,17 @@ export default class App extends React.Component<any, State> {
                     engineLogs={this.state.engineLogs}
                     entry={this._findFocusedEntry(this.state.fileEntries)}
                     fileEntries={this.state.fileEntries}
-                    isSystemBusy={this.state.isSystemBusy}
+                    isSystemBusy={this.state.isEngineBusy}
                     name={this.state.name}
                     onChangeCode={this._handleChangeCode}
-                    onChangeCursor={this._handleChangeCursor}
-                    onTypeContent={this._handleTypeContent}
                     onExportPDF={this._handleExportPDF}
-                    onClearDeviceLogs={this._handleClearDeviceLogs}
                     onDownloadAsync={this._handleDownloadAsync}
                     onFileEntriesChange={this._handleFileEntriesChange}
                     onSubmitTitle={this._handleSubmitTitle}
                     onSendCode={this._handleOnSendCode}
                     onToggleSendCode={this._handleToggleSendCode}
                     previewRef={this._previewRef}
+                    editorRef={this._editorRef}
                     uploadFileAsync={this._uploadAssetAsync}
                     saveStatus={this.state.saveStatus}
                     sendCodeOnChangeEnabled={this.state.sendCodeOnChangeEnabled}
@@ -765,6 +916,7 @@ export default class App extends React.Component<any, State> {
                     onShareProject={this._handleShareProject}
                     engine={this.state.engine}
                     onChangeEngineVersion={this._handleChangeEngineVersion}
+                    onYJSEditingEvent={this._handleYJSEditingEvent}
                 />
             );
         } else if (

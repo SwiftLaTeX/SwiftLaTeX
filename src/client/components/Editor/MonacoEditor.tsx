@@ -2,7 +2,6 @@ import * as React from 'react';
 import { StyleSheet, css } from 'aphrodite';
 import classnames from 'classnames';
 import debounce from 'lodash/debounce';
-// import mapValues from 'lodash/mapValues';
 import 'monaco-editor/esm/vs/editor/browser/controller/coreCommands.js';
 import 'monaco-editor/esm/vs/editor/contrib/bracketMatching/bracketMatching.js';
 import 'monaco-editor/esm/vs/editor/contrib/caretOperations/caretOperations.js';
@@ -10,37 +9,21 @@ import 'monaco-editor/esm/vs/editor/contrib/clipboard/clipboard.js';
 import 'monaco-editor/esm/vs/editor/contrib/contextmenu/contextmenu.js';
 import 'monaco-editor/esm/vs/editor/contrib/find/findController.js';
 import 'monaco-editor/esm/vs/editor/contrib/hover/hover.js';
-import 'monaco-editor/esm/vs/editor/contrib/suggest/suggestController.js';
+// import 'monaco-editor/esm/vs/editor/contrib/suggest/suggestController.js';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-// import { SimpleEditorModelResolverService } from 'monaco-editor/esm/vs/editor/standalone/browser/simpleServices';
-import { StaticServices } from 'monaco-editor/esm/vs/editor/standalone/browser/standaloneServices';
 import { light, dark } from './themes/monaco';
 import overrides from './themes/monaco-overrides';
 import { ThemeName } from '../Preferences/withThemeName';
-
-import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
 import { Annotation } from '../../types';
 import { EditorProps } from './EditorProps';
 import { Registry } from 'monaco-textmate'; // peer dependency
 import { wireTmGrammars } from 'monaco-editor-textmate';
-import { MonacoYJSBinding } from './MonacoYjs';
-import {
-    MonacoLanguageClient,
-    CloseAction,
-    ErrorAction,
-    MonacoServices,
-    createConnection,
-} from 'monaco-languageclient';
-import { MimicWebsocket } from './MimicWebsocket';
+// import { MonacoYJSBinding } from './MonacoYjs';
 import ResizeDetector from '../shared/ResizeDetector';
-
-/**
- * Monkeypatch to make 'Find All References' work across multiple files
- * https://github.com/Microsoft/monaco-editor/issues/779#issuecomment-374258435
- */
-// SimpleEditorModelResolverService.prototype.findModel = function(_: any, resource: any) {
-//   return monaco.editor.getModels().find(model => model.uri.toString() === resource.toString());
-// };
+import { HunspellEngine } from './hunspell';
+import { createMutex } from '../../utils/mutex';
+import { YTextEvent } from 'yjs/dist/src/types/YText';
+import { loadWASM } from 'onigasm';
 
 // @ts-ignore
 global.MonacoEnvironment = {
@@ -61,17 +44,22 @@ type Props = EditorProps & {
 // Store editor states such as cursor position, selection and scroll position for each model
 const editorStates = new Map<string, monaco.editor.ICodeEditorViewState | undefined | null>();
 
-const codeEditorService = StaticServices.codeEditorService.get();
 
 const findModel = (path: string) => {
-    return monaco.editor.getModels().find((model) => model.uri.path === `/${path}`);
+    return monaco.editor.getModels().find((model) => {
+        return model.uri.path === `/${path}`;
+    });
 };
 
 class MonacoEditor extends React.Component<Props> {
     static hasHighlightingSetup = false;
-    _languageServerDisposable: any = undefined;
-    _websocketConnection: any = undefined;
-    // _languageServerPlugin: any = undefined;
+    _hoverProvider: monaco.IDisposable | undefined;
+    _completionProvider: monaco.IDisposable | undefined;
+    _spellCheck = debounce(this.spellCheckNoDebounce, 1000);
+    _toBeSpellCheckedLines: number[] = [];
+    _spellCheckEngine: HunspellEngine | undefined;
+    _lastSpeckResult: Annotation[] = [];
+    _editingMutex = createMutex();
     static defaultProps: Partial<Props> = {
         lineNumbers: 'on',
         wordWrap: 'on',
@@ -83,29 +71,21 @@ class MonacoEditor extends React.Component<Props> {
         fontLigatures: false,
     };
 
-    static removePath(path: string) {
-        // Remove editor states
-        editorStates.delete(path);
 
-        // Remove associated models
-        const model = findModel(path);
-
-        if (model) {
-            // console.error('disposing ' + path);
+    /* Clear up models that are not longer used due to file tree changed */
+    cleanUpModels(paths: string[]) {
+        const models = monaco.editor.getModels().filter(model => {
+            return !paths.includes(model.uri.path.substr(1));
+        });
+        for (let model of models) {
+            console.error('Cleaning up ' + model.uri.path);
+            editorStates.delete(model.uri.path);
             model.dispose();
         }
     }
 
-    static renamePath(oldPath: string, newPath: string) {
-        const selection = editorStates.get(oldPath);
-
-        editorStates.delete(oldPath);
-        editorStates.set(newPath, selection);
-
-        this.removePath(oldPath);
-    }
-
-    setCursor(line: number, column: number) {
+    /* Anti-react pattern, considering rewriting it */
+    setCursorPosition(line: number, column: number) {
         if (this._editor) {
             this._editor.setPosition({ lineNumber: line, column });
             this._editor.revealLine(line);
@@ -113,47 +93,57 @@ class MonacoEditor extends React.Component<Props> {
         }
     }
 
-    _createLanguageClient(connection: MessageConnection): MonacoLanguageClient {
-        return new MonacoLanguageClient({
-            name: 'Sample Language Client',
-            clientOptions: {
-                // use a language id as a document selector
-                documentSelector: ['latex', 'bibtex'],
-                // disable the default error handler
-                errorHandler: {
-                    error: () => ErrorAction.Continue,
-                    closed: () => CloseAction.DoNotRestart,
-                },
-            },
-            // create a language client connection from the JSON RPC connection on demand
-            connectionProvider: {
-                get: (errorHandler, closeHandler) => {
-                    return Promise.resolve(
-                        createConnection(connection, errorHandler, closeHandler)
+    /* Anti-react pattern, considering rewriting it */
+    async injectPeerEditingEvents(event: YTextEvent) {
+
+        this._editingMutex(() => {
+            if (!this._editor) return;
+            const monacoModel = this._editor.getModel();
+            if (!monacoModel) return;
+            let index = 0;
+            event.delta.forEach((op) => {
+                if (op.retain !== undefined) {
+                    index += op.retain;
+                } else if ((op as any).insert !== undefined) {
+                    const pos = monacoModel.getPositionAt(index);
+                    const range = new monaco.Selection(
+                        pos.lineNumber,
+                        pos.column,
+                        pos.lineNumber,
+                        pos.column,
                     );
-                },
-            },
+                    /* eslint-disable */
+                    monacoModel.pushEditOperations(
+                        [],
+                        [{ range, text: (op as any).insert }],
+                        () => null,
+                    );
+                    index += (op as any).insert.length;
+                    /* eslint-enable */
+                } else if (op.delete !== undefined) {
+                    const pos = monacoModel.getPositionAt(index);
+                    const endPos = monacoModel.getPositionAt(index + op.delete);
+                    const range = new monaco.Selection(
+                        pos.lineNumber,
+                        pos.column,
+                        endPos.lineNumber,
+                        endPos.column,
+                    );
+                    /* eslint-disable */
+                    monacoModel.pushEditOperations([], [{ range, text: '' }], () => null);
+                    /* eslint-enable */
+                } else {
+                    throw 'Unexpected sync protocol';
+                }
+            });
+            monacoModel.pushStackElement();
         });
     }
 
-    _setupLanguageServer(editor: any) {
-        MonacoServices.install(editor);
-        const webSocket: any = new MimicWebsocket();
-        this._websocketConnection = webSocket;
-        listen({
-            webSocket,
-            onConnection: (connection) => {
-                // create and start the language client
-                const languageClient = this._createLanguageClient(connection);
-                this._languageServerDisposable = languageClient.start();
-            },
-        });
-        webSocket.connect();
-    }
-
-    static _setupHighlighting() {
+    static async _setupHighlighting() {
         if (MonacoEditor.hasHighlightingSetup) return;
         MonacoEditor.hasHighlightingSetup = true;
+        await loadWASM('bin/onigasm.wasm');
         const registry = new Registry({
             getGrammarDefinition: async (scopeName: string) => {
                 // console.log(scopeName);
@@ -180,85 +170,131 @@ class MonacoEditor extends React.Component<Props> {
         const grammars = new Map();
         grammars.set('bibtex', 'text.bibtex');
         grammars.set('latex', 'text.tex.latex');
-        wireTmGrammars(monaco, registry, grammars).then(
-            function () {
-                console.log('Grammer loaded');
-            },
-            function (err) {
-                console.log('Unabled to load grammer ' + err);
+        await wireTmGrammars(monaco, registry, grammars);
+    }
+
+    async spellCheckNoDebounce() {
+        if (this._editor) {
+            const model = this._editor.getModel();
+            if (model) {
+                if (this._spellCheckEngine && this._spellCheckEngine.isReady()) {
+                    let checkEntireDocument = this._toBeSpellCheckedLines.includes(-1);
+                    if (checkEntireDocument) {
+                        const value = model.getValue();
+                        this._lastSpeckResult = await this._spellCheckEngine.checkSpell(value, -1);
+                    } else {
+                        this._lastSpeckResult = this._lastSpeckResult.filter(e => {
+                            return !(this._toBeSpellCheckedLines.includes(e.startLineNumber));
+                        });
+
+                        for (let line of this._toBeSpellCheckedLines) {
+                            const lineContent = model.getLineContent(line);
+                            const result = await this._spellCheckEngine.checkSpell(lineContent, line);
+                            this._lastSpeckResult = this._lastSpeckResult.concat(result);
+                        }
+                    }
+                    this._updateMarkers();
+                    this._toBeSpellCheckedLines = [];
+                }
+
             }
-        );
+        }
+    }
+
+    _extractKeyStrokeEvent(model: any, e: monaco.editor.IModelContentChangedEvent) {
+        // Mux is needed to remove the interference of ?YJS
+        this._editingMutex(() => {
+            if (e.changes.length === 1) {
+                let character = '';
+                // console.log(e.changes[0]);
+                if (e.changes[0].rangeLength === 1) {
+                    const internal_stack: any = model._commandManager;
+                    const last_operation_reverse: any = internal_stack.currentOpenStackElement;
+                    if (
+                        last_operation_reverse &&
+                        last_operation_reverse.editOperations &&
+                        last_operation_reverse.editOperations.length >= 1
+                    ) {
+                        const operationsArray = last_operation_reverse.editOperations;
+                        const rev_ops: any = operationsArray[operationsArray.length - 1];
+                        if (rev_ops && rev_ops.operations && rev_ops.operations.length === 1) {
+                            const rev_op: any = rev_ops.operations[0];
+                            if (rev_op && rev_op.text) {
+                                character = rev_op.text;
+                                this.props.onKeyStroke(character, false);
+                            }
+                        }
+                    }
+                } else {
+                    character = e.changes[0].text;
+                    this.props.onKeyStroke(character, true);
+                }
+            }
+            this.props.onSubmitYJSEditingEvent(e);
+        });
+    }
+
+    _onModelContentChanged(e: monaco.editor.IModelContentChangedEvent) {
+
+        const model = this._editor!.getModel();
+
+        if (model) {
+            // Report value Change
+            const value = model.getValue();
+            const path = model.uri.path.substr(1);
+            if (value !== this.props.value) {
+                this.props.onValueChange(value, path);
+            }
+
+            // Report Key Strokes for preview and YJS
+            this._extractKeyStrokeEvent(model, e);
+
+            // Queue for spell check
+            let spellCheckLine = -1;
+            if (e.changes.length === 1 && e.changes[0].text !== e.eol
+                && e.changes[0].range.startLineNumber === e.changes[0].range.endLineNumber) {
+                spellCheckLine = e.changes[0].range.endLineNumber;
+            }
+            if (!this._toBeSpellCheckedLines.includes(spellCheckLine)) {
+                this._toBeSpellCheckedLines.push(spellCheckLine);
+            }
+            this._spellCheck();
+        }
+    }
+
+    _onEditorCursorChanged(e: monaco.editor.ICursorPositionChangedEvent) {
+        const model = this._editor!.getModel();
+
+        if (model) {
+            const path = model.uri.path.substr(1);
+            const column = e.position.column;
+            const line = e.position.lineNumber;
+            this.props.onCursorChange(path, line, column);
+            // console.log('Path ' + path + ' ' + column + ' ' + line);
+        }
     }
 
     componentDidMount() {
         const { path, value, annotations, autoFocus, ...rest } = this.props;
 
-        // The methods provided by the service are on it's prototype
-        // So spreading this object doesn't work, we must mutate it
-        codeEditorService.openCodeEditor = async (
-            { resource, options }: any,
-            editor: monaco.editor.IStandaloneCodeEditor
-        ) => {
-            // Remove the leading slash added by the Uri
-            await this.props.onOpenPath(resource.path.replace(/^\//, ''));
-
-            editor.setSelection(options.selection);
-            editor.revealLine(options.selection.startLineNumber);
-
-            return {
-                getControl: () => editor,
-            };
-        };
-
         const editor = monaco.editor.create(
             this._node.current as HTMLDivElement,
             rest,
-            codeEditorService
         );
 
-        MonacoEditor._setupHighlighting();
+        MonacoEditor._setupHighlighting().then(); /* Global */
 
-        this._setupLanguageServer(editor);
+        this._spellCheckEngine = new HunspellEngine();
 
-        this._contentSubscription = editor.onDidChangeModelContent((_) => {
-            const model = editor.getModel();
+        this._contentSubscription = editor.onDidChangeModelContent((e) => this._onModelContentChanged(e));
 
-            if (model) {
-                const value = model.getValue();
-                const path = model.uri.path.substr(1);
-                if (value !== this.props.value) {
-                    this.props.onValueChange(value, path);
-                }
-            }
-        });
-
-        this._cursorSubscription = editor.onDidChangeCursorPosition((e) => {
-            const model = editor.getModel();
-
-            if (model) {
-                const path = model.uri.path.substr(1);
-                const column = e.position.column;
-                const line = e.position.lineNumber;
-                this.props.onCursorChange(path, line, column);
-                // console.log('Path ' + path + ' ' + column + ' ' + line);
-            }
-        });
+        this._cursorSubscription = editor.onDidChangeCursorPosition((e) => this._onEditorCursorChanged(e));
 
         this._editor = editor;
-        this._openFile(path, value, autoFocus);
-        this._updateMarkers(annotations);
 
-        /* Load every file so language server can do their best */
-        this.props.entries.forEach(({ item }) => {
-            if (
-                item.type === 'file' &&
-                item.path !== path &&
-                !item.asset &&
-                typeof item.content === 'string'
-            ) {
-                this._initializeFile(item.path, item.content);
-            }
-        });
+        this._createOrUpdateModel(path, value, autoFocus);
+
+        this._updateMarkers();
     }
 
     componentDidUpdate(prevProps: Props) {
@@ -267,25 +303,26 @@ class MonacoEditor extends React.Component<Props> {
         if (this._editor) {
             this._editor.updateOptions(rest);
 
-            const model = this._editor.getModel();
+            // const model = this._editor.getModel();
 
             if (path !== prevProps.path) {
                 // Save the editor state for the previous file so we can restore it when it's re-opened
                 editorStates.set(prevProps.path, this._editor.saveViewState());
-                this._openFile(path, value, autoFocus);
-            } else if (model && value !== model.getValue()) {
-                // @ts-ignore
-                this._editor.executeEdits(null, [
-                    {
-                        range: model.getFullModelRange(),
-                        text: value,
-                    },
-                ]);
+                this._createOrUpdateModel(path, value, autoFocus);
             }
+            // else if (model && value !== model.getValue()) {
+            //     // @ts-ignore
+            //     this._editor.executeEdits(null, [
+            //         {
+            //             range: model.getFullModelRange(),
+            //             text: value,
+            //         },
+            //     ]);
+            // }
         }
 
         if (annotations !== prevProps.annotations) {
-            this._updateMarkers(annotations);
+            this._updateMarkers();
         }
 
         if (theme !== prevProps.theme) {
@@ -298,53 +335,45 @@ class MonacoEditor extends React.Component<Props> {
     componentWillUnmount() {
         this._cursorSubscription && this._cursorSubscription.dispose();
         this._contentSubscription && this._contentSubscription.dispose();
-
-        // this._languageServerPlugin && this._languageServerPlugin.dispose();
-        this._websocketConnection && this._websocketConnection.close();
-        this._languageServerDisposable && this._languageServerDisposable.dispose();
-
+        this._hoverProvider && this._hoverProvider.dispose();
+        this._completionProvider && this._completionProvider.dispose();
+        this._spellCheckEngine && this._spellCheckEngine.closeWorker();
         this._editor && this._editor.dispose();
     }
 
-    _initializeFile = (path: string, value: string) => {
-        let model = findModel(path);
+    _createOrUpdateModel = (path: string, value: string, focus?: boolean) => {
+        if (this._editor) {
+            let model = findModel(path);
 
-        if (model && !model.isDisposed()) {
-            // If a model exists, we need to update it's value
-            // This is needed because the content for the file might have been modified externally
-            // Use `pushEditOperations` instead of `setValue` or `applyEdits` to preserve undo stack
-            // @ts-ignore
-            model.pushEditOperations(
-                [],
-                [
-                    {
-                        range: model.getFullModelRange(),
-                        text: value,
-                    },
-                ]
-            );
-        } else {
-            model = monaco.editor.createModel(
-                value,
-                undefined,
-                monaco.Uri.from({ scheme: 'file', path })
-            );
+            if (!model) {
+                console.log('Create ' + path);
+                model = monaco.editor.createModel(
+                    value,
+                    undefined,
+                    monaco.Uri.from({ scheme: 'file', path }),
+                );
 
-            model.updateOptions({
-                tabSize: 2,
-                insertSpaces: true,
-            });
+                model.updateOptions({
+                    tabSize: 2,
+                    insertSpaces: true,
+                });
 
-            new MonacoYJSBinding(model, this.props.onTypeContent);
-        }
-    };
+            } else if (!model.isDisposed()) {
+                // If a model exists, we need to update it's value
+                // This is needed because the content for the file might have been modified externally
+                // Use `pushEditOperations` instead of `setValue` or `applyEdits` to preserve undo stack
+                model.pushEditOperations(
+                    [],
+                    [
+                        {
+                            range: model.getFullModelRange(),
+                            text: value,
+                        },
+                    ],
+                    () => null,
+                );
+            }
 
-    _openFile = (path: string, value: string, focus?: boolean) => {
-        this._initializeFile(path, value);
-
-        const model = findModel(path);
-
-        if (this._editor && model) {
             this._editor.setModel(model);
 
             // Restore the editor state for the file
@@ -357,12 +386,18 @@ class MonacoEditor extends React.Component<Props> {
             if (focus) {
                 this._editor.focus();
             }
+
+            this._toBeSpellCheckedLines = [-1];
+            this._lastSpeckResult = [];
         }
     };
 
-    _updateMarkers = (annotations: Annotation[]) =>
+    _updateMarkers = () => {
+        const toShowAnnotation = this.props.annotations.concat(this._lastSpeckResult);
         // @ts-ignore
-        monaco.editor.setModelMarkers(this._editor.getModel(), null, annotations);
+        monaco.editor.setModelMarkers(this._editor.getModel(), null, toShowAnnotation);
+    };
+
 
     _handleResize = debounce(() => {
         this._editor && this._editor.layout();
@@ -378,14 +413,14 @@ class MonacoEditor extends React.Component<Props> {
     render() {
         return (
             <div className={css(styles.container)}>
-                <style type="text/css" dangerouslySetInnerHTML={{ __html: overrides }} />
+                <style type="text/css" dangerouslySetInnerHTML={{ __html: overrides }}/>
                 <ResizeDetector onResize={this._handleResize}>
                     <div
                         ref={this._node}
                         className={classnames(
                             css(styles.editor),
                             'snack-monaco-editor',
-                            `theme-${this.props.theme}`
+                            `theme-${this.props.theme}`,
                         )}
                     />
                 </ResizeDetector>

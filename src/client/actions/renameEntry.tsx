@@ -1,9 +1,9 @@
 import updateEntry from './updateEntry';
 import recursivelyCreateParents from './recursivelyCreateParents';
 import { changeParentPath, isInsideFolder } from '../utils/fileUtilities';
-import { FileSystemEntry } from '../types';
+import { FileManagerEntry } from '../types';
 
-export default function renameEntry(entries: FileSystemEntry[], oldPath: string, newPath: string) {
+export default function renameEntry(entries: FileManagerEntry[], oldPath: string, newPath: string) {
     const entry = entries.find((e) => e.item.path === oldPath);
 
     if (!entry) {
@@ -21,7 +21,7 @@ export default function renameEntry(entries: FileSystemEntry[], oldPath: string,
     // @ts-ignore
     delete renamed.state.isCreating;
 
-    const next: FileSystemEntry[] = entries.map((e) => {
+    const next: FileManagerEntry[] = entries.map((e) => {
         if (e.item.path === entry.item.path) {
             return renamed;
         }

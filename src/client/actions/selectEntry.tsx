@@ -1,7 +1,7 @@
 import updateEntry from './updateEntry';
-import { FileSystemEntry } from '../types';
+import { FileManagerEntry } from '../types';
 
-export default function selectEntry(entries: FileSystemEntry[], path: string): FileSystemEntry[] {
+export default function selectEntry(entries: FileManagerEntry[], path: string): FileManagerEntry[] {
     return entries.map((e) =>
         e.item.path === path
             ? updateEntry(e, {

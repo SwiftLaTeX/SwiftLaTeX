@@ -18,30 +18,17 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import * as Y from 'yjs';
 import { WebsocketProvider } from 'y-websocket';
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const createMutex = () => {
-    let token = true;
-    return (f: any, g: any) => {
-        if (token) {
-            token = false;
-            try {
-                f();
-            } finally {
-                token = true;
-            }
-        } else if (g !== undefined) {
-            g();
-        }
-    };
-};
+import { createMutex } from '../../utils/mutex';
 
 export class MonacoYJSBinding {
     private mux: any;
     private monacoHander: monaco.IDisposable | undefined;
     private initFlag: boolean = false; /* Prevent multiple sync events */
     private provider: WebsocketProvider | undefined;
+
     constructor(
         protected monacoModel: monaco.editor.IModel,
-        onTypeContent: (delta: string, isInserted: boolean) => void
+        onTypeContent: (delta: string, isInserted: boolean) => void,
     ) {
         this.mux = createMutex();
         this.monacoHander = undefined;
@@ -51,7 +38,7 @@ export class MonacoYJSBinding {
 
     init_yjs(
         monacoModel: monaco.editor.IModel,
-        onTypeContent: (delta: string, isInserted: boolean) => void
+        onTypeContent: (delta: string, isInserted: boolean) => void,
     ): void {
         console.log('Opening url ' + monacoModel.uri.toString());
         const ydoc = new Y.Doc();
@@ -116,13 +103,13 @@ export class MonacoYJSBinding {
                             pos.lineNumber,
                             pos.column,
                             pos.lineNumber,
-                            pos.column
+                            pos.column,
                         );
                         /* eslint-disable */
                         monacoModel.pushEditOperations(
                             [],
                             [{ range, text: (op as any).insert }],
-                            () => null
+                            () => null,
                         );
                         index += (op as any).insert.length;
                         /* eslint-enable */
@@ -133,7 +120,7 @@ export class MonacoYJSBinding {
                             pos.lineNumber,
                             pos.column,
                             endPos.lineNumber,
-                            endPos.column
+                            endPos.column,
                         );
                         /* eslint-disable */
                         monacoModel.pushEditOperations([], [{ range, text: '' }], () => null);

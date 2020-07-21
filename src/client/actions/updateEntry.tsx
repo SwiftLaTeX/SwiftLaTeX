@@ -1,6 +1,6 @@
-import { FileSystemEntry } from '../types';
+import { FileManagerEntry } from '../types';
 
-export default function updateEntry<T extends FileSystemEntry>(
+export default function updateEntry<T extends FileManagerEntry>(
     entry: T,
     updates: { item?: Partial<T['item']>; state?: Partial<T['state']> }
 ): T {

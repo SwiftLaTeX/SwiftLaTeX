@@ -1,11 +1,11 @@
 import updateEntry from './updateEntry';
-import { FileSystemEntry } from '../types';
+import { FileManagerEntry } from '../types';
 
 export default function expandEntry(
-    entries: FileSystemEntry[],
+    entries: FileManagerEntry[],
     path: string,
     expand: boolean = true
-): FileSystemEntry[] {
+): FileManagerEntry[] {
     return entries.map((entry) => {
         if (entry.item.path === path && entry.item.type === 'folder') {
             return updateEntry(entry, {

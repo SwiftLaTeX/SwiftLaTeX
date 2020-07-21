@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { StyleSheet, css } from 'aphrodite';
 import { isImageFile } from '../../utils/fileUtilities';
-import { FileSystemEntry } from '../../types';
+import { FileManagerEntry } from '../../types';
 
 type Props = {
-    entry: FileSystemEntry;
+    entry: FileManagerEntry;
     entryPoint: string;
 };
 

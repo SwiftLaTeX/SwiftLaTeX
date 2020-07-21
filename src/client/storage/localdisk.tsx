@@ -6,10 +6,13 @@ export class LocalStorage extends BackendStorage {
         super(token);
     }
 
-    async get(scope: string, key: string): Promise<ArrayBuffer> {
+    async get(scope: string, key: string): Promise<ArrayBuffer | undefined> {
         const compound = scope + '/' + key;
         const url = 'upload/' + encodeURIComponent(compound);
         const response = await fetch(url, { cache: 'no-cache' });
+        if (response.status === 404) {
+            return undefined;
+        }
         if (!response.ok) {
             throw new Error('Cannot fetch file');
         }
@@ -58,7 +61,7 @@ export class LocalStorage extends BackendStorage {
         };
     }
 
-    async getPublicUrl(scope: string, key: string): Promise<string> {
+    async getPublicUrl(scope: string, key: string): Promise<string | undefined> {
         const compound = scope + '/' + key;
         const url = window.location.protocol + '//' + window.location.host + '/upload/' + compound;
         return url;
