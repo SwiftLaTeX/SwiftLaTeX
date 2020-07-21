@@ -14,7 +14,7 @@ SwiftLaTeX, a WYSIWYG WebAssembly client-side LaTeX Editor. All computation is d
 
 3. __Flexible Storage Backend__. SwiftLaTeX stores files in user-provided cloud storage or potentially self-hosting S3/Minio. 
 
-4. __Realtime collaboration__. Send a secret link to your friend to start real-time collaboration. (Work in progress) 
+4. __Realtime collaboration__. Send a secret link to your friend to start real-time collaboration.
 
 ## Installation Guide
 
@@ -132,9 +132,8 @@ SwiftLaTeX is using Digestif as a LaTeX language server. It is amazingly small a
 You can check the detailed change logs in http://www.swiftlatex.com/changelogs.html
 
 ### Production Use
-SwiftLaTeX is almost for production use, with the following exceptions. These exceptions will be gradually removed.
+SwiftLaTeX is almost ready for production use, with the following exceptions. These exceptions will be gradually removed.
 1. No graphite fonts and international line-breaking support. We so far deem this functionalty not very useful for English-speaking people. 
-2. Sharing is not fully implemented yet, but it is on the way. 
 3. XeTeX engine cannot properly display standalone tikz pictures, we are still investigating this issue.
 
 ### Slack Channel
