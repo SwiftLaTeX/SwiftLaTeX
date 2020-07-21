@@ -118,7 +118,8 @@ For more concrete examples, please have a look at src/client/storage/minio.tsx.
 SwiftLaTeX adopts a simple sharing mechanism, which is agnostic to storage backends, provided that the storage backends provide a public url to each file. (For example, a user can store his project in Google Drive and share the project to users who use Dropbox).
 Exposing public urls is not a security risk, as they are usually very long and impractical to guess. 
 
-(More technical details to come. Sharing is always a headache considering the differences among storage backends)
+Sharing is achieved by using the YJS, A CRDT framework with a powerful abstraction of shared data. Every changed is synced among users.
+https://github.com/yjs/yjs
 
 
 ### CTAN files
