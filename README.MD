@@ -14,7 +14,7 @@ SwiftLaTeX, a WYSIWYG WebAssembly client-side LaTeX Editor. All computation is d
 
 3. __Flexible Storage Backend__. SwiftLaTeX stores files in user-provided cloud storage or potentially self-hosting S3/Minio. 
 
-4. __Realtime collaboration__. Send a secret link to your friend to start real-time collaboration. (Work in progress) 
+4. __Realtime collaboration__. Send a secret link to your friend to start real-time collaboration.
 
 ## Installation Guide
 
@@ -118,7 +118,10 @@ For more concrete examples, please have a look at src/client/storage/minio.tsx.
 SwiftLaTeX adopts a simple sharing mechanism, which is agnostic to storage backends, provided that the storage backends provide a public url to each file. (For example, a user can store his project in Google Drive and share the project to users who use Dropbox).
 Exposing public urls is not a security risk, as they are usually very long and impractical to guess. 
 
-(More technical details to come. Sharing is always a headache considering the differences among storage backends)
+Sharing is achieved by using the YJS, A CRDT framework with a powerful abstraction of shared data. Every changed is synced among users.
+https://github.com/yjs/yjs
+
+For sharing functionality to work, a mongodb is required. (More deteails to come)
 
 
 ### CTAN files
@@ -132,9 +135,8 @@ SwiftLaTeX is using Digestif as a LaTeX language server. It is amazingly small a
 You can check the detailed change logs in http://www.swiftlatex.com/changelogs.html
 
 ### Production Use
-SwiftLaTeX is almost for production use, with the following exceptions. These exceptions will be gradually removed.
+SwiftLaTeX is almost ready for production use, with the following exceptions. These exceptions will be gradually removed.
 1. No graphite fonts and international line-breaking support. We so far deem this functionalty not very useful for English-speaking people. 
-2. Sharing is not fully implemented yet, but it is on the way. 
 3. XeTeX engine cannot properly display standalone tikz pictures, we are still investigating this issue.
 
 ### Slack Channel
