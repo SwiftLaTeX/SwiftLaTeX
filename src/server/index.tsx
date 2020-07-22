@@ -4,7 +4,7 @@ import path from 'path';
 import Koa from 'koa';
 import serve from 'koa-static';
 import mount from 'koa-mount';
-import koaBody from 'koa-body'
+import koaBody from 'koa-body';
 import stoppable from 'stoppable';
 import gaproxy from './analytics';
 import MinioBackend from './minio';
@@ -60,7 +60,7 @@ if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
         );
     });
 }
-app.use(koaBody({multipart: true}));
+app.use(koaBody({ multipart: true }));
 app.use(serve(path.join(__dirname, '..', '..', 'public')));
 app.use(gaproxy());
 app.use(shareHub());

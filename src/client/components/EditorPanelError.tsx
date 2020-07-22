@@ -13,12 +13,15 @@ export default function EditorPanelError({ annotations }: Props) {
             <div className={css(styles.container)}>
                 <div className={css(styles.line)}>
                     {annotations.map((annotation, i) => (
-                        <div key={i} className={css(annotation.severity > 3 ? styles.error : styles.warning, styles.perLine)}>
+                        <div
+                            key={i}
+                            className={css(
+                                annotation.severity > 3 ? styles.error : styles.warning,
+                                styles.perLine
+                            )}>
                             {i}: {annotation.source}-({annotation.startLineNumber}:
                             {annotation.startColumn}) {annotation.message.split('\n')[0]}
-
                         </div>
-
                     ))}
                 </div>
             </div>
@@ -42,7 +45,7 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
     },
     perLine: {
-        flex: 1
+        flex: 1,
     },
     error: {
         color: colors.error,

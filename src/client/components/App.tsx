@@ -26,7 +26,8 @@ import {
     FileManagerEntry,
     SaveStatus,
     ProjectEntry,
-    DEFAULT_ENGINE_VERSION, ProjectFileEntry,
+    DEFAULT_ENGINE_VERSION,
+    ProjectFileEntry,
 } from '../types';
 import { DvipdfmxEngine } from '../swiftlatex/dvipdfmxEngine';
 import * as monaco from 'monaco-editor';
@@ -56,7 +57,6 @@ type State = {
     entryPoint: string;
     engine: EngineVersion;
 };
-
 
 export default class App extends React.Component<any, State> {
     constructor(props: any) {
@@ -94,7 +94,6 @@ export default class App extends React.Component<any, State> {
     _latexEngine: LaTeXEngine = undefined as any;
     _backendStorage: BackendStorage | undefined = undefined;
 
-
     async _loadFileFromStorage(tmp: any): Promise<FileManagerEntry | undefined> {
         const importedEntry: FileManagerEntry = {
             item: {
@@ -114,14 +113,14 @@ export default class App extends React.Component<any, State> {
                     /* Is a text file */
                     const tmp_content_buf = await this._backendStorage!.get('asset', tmp.id);
                     if (!tmp_content_buf) {
-                        throw `Unable to fetch asset ${tmp.id}`;
+                        throw new Error(`Unable to fetch asset ${tmp.id}`);
                     }
                     importedEntry.item.content = arrayBufferToString(tmp_content_buf);
                     return importedEntry;
                 } else if (isImageFile(tmp.path) || isOpenTypeFontFile(tmp.path)) {
                     const tmp_content_buf = await this._backendStorage!.get('asset', tmp.id);
                     if (!tmp_content_buf) {
-                        throw `Unable to fetch asset ${tmp.id}`;
+                        throw new Error(`Unable to fetch asset ${tmp.id}`);
                     }
                     importedEntry.item.content = tmp_content_buf;
                     return importedEntry;
@@ -138,15 +137,21 @@ export default class App extends React.Component<any, State> {
     async _loadProjectFiles() {
         const manifest_buffer = await this._backendStorage!.get('manifest', this.state.id);
         if (!manifest_buffer) {
-            throw `Unable to fetch manifest ${this.state.id}`;
+            throw new Error(`Unable to fetch manifest ${this.state.id}`);
         }
         const manifest = arrayBufferToJson(manifest_buffer) as ProjectEntry;
         const username = manifest.username;
         const name = manifest.name;
         let entryPoint = manifest.entryPoint;
         const fileEntries = manifest.fileEntries;
-        const shareEnabled = !(!manifest.shareEnabled); /* Haha, javascript */
-        if (!isString(username) || !isString(name) || !isString(entryPoint) || !fileEntries || !Array.isArray(fileEntries)) {
+        const shareEnabled = !!manifest.shareEnabled; /* Haha, javascript */
+        if (
+            !isString(username) ||
+            !isString(name) ||
+            !isString(entryPoint) ||
+            !fileEntries ||
+            !Array.isArray(fileEntries)
+        ) {
             throw new Error('Malformed Manifest');
         }
 
@@ -192,7 +197,7 @@ export default class App extends React.Component<any, State> {
             name,
             fileEntries: importedEntries,
             entryPoint,
-            shareEnabled: shareEnabled,
+            shareEnabled,
         });
 
         if (shareEnabled) {
@@ -227,12 +232,12 @@ export default class App extends React.Component<any, State> {
         try {
             await this._loadProjectFiles();
         } catch (e) {
+            console.error(e);
             this.setState({
                 sessionStatus: SessionStatus.LoadFilesFailed,
             });
             return;
         }
-
 
         this.setState({ sessionStatus: SessionStatus.Ready });
     }
@@ -263,8 +268,8 @@ export default class App extends React.Component<any, State> {
         } else {
             for (let i = 0; i < nextFileEntries.length; i++) {
                 if (
-                    nextFileEntries[i].item.id !== originalFileEntries[i].item.id
-                    || nextFileEntries[i].item.path !== originalFileEntries[i].item.path
+                    nextFileEntries[i].item.id !== originalFileEntries[i].item.id ||
+                    nextFileEntries[i].item.path !== originalFileEntries[i].item.path
                 ) {
                     return true;
                 }
@@ -345,7 +350,6 @@ export default class App extends React.Component<any, State> {
     _requiredUploadFiles: string[] = [];
 
     componentDidUpdate(_: any, __: State) {
-
         if (this.state.sessionStatus !== SessionStatus.Ready) {
             return;
         }
@@ -479,7 +483,7 @@ export default class App extends React.Component<any, State> {
         if (r.pdf) {
             EventReporter.reportEvent('editor', 'compile_ok');
             if (preview) {
-                let content = r.pdf;
+                const content = r.pdf;
                 preview.postMessage(
                     {
                         cmd: 'setContent',
@@ -510,13 +514,8 @@ export default class App extends React.Component<any, State> {
     };
 
     _handleChangeCode = (content: string, path: string) => {
-
         const updatedEntry = this.state.fileEntries.map((entry) => {
-            if (
-                entry.item.type === 'file' &&
-                !entry.item.asset &&
-                entry.item.path === path
-            ) {
+            if (entry.item.type === 'file' && !entry.item.asset && entry.item.path === path) {
                 if (!this._requiredUpdateFilesInEngine.includes(path)) {
                     this._requiredUpdateFilesInEngine.push(path);
                 }
@@ -540,13 +539,12 @@ export default class App extends React.Component<any, State> {
             nextFileEntries,
         );
         if (fileStructureChanged) {
-            if (this.state.shareEnabled) {
-                this._publicTreeToRemote(nextFileEntries);
-            }
 
-            if(this._editorRef.current) {
+            this._publicTreeToRemote(nextFileEntries);
+
+            if (this._editorRef.current) {
                 // Maybe rename or remove, we could free up some memory
-                const paths = nextFileEntries.map(e => e.item.path);
+                const paths = nextFileEntries.map((e) => e.item.path);
                 (this._editorRef.current as any).cleanUpModels(paths);
             }
 
@@ -688,6 +686,7 @@ export default class App extends React.Component<any, State> {
     };
 
     _handleShareProject = async () => {
+        EventReporter.reportEvent('editor', 'share');
         if (this.state.shareEnabled) {
             return true;
         }
@@ -704,7 +703,7 @@ export default class App extends React.Component<any, State> {
                 }
             }
         } catch (e) {
-            console.error(e.message);
+            EventReporter.reportEvent('editor', 'share', e.message);
         } finally {
             this.setState({ isEngineBusy: false });
         }
@@ -712,28 +711,30 @@ export default class App extends React.Component<any, State> {
         return false;
     };
 
-
     ydoc: Y.Doc = undefined as any;
     yfiles: Y.Array<ProjectFileEntry> = undefined as any;
     websocketProvider: WebsocketProvider = undefined as any;
     indexeddbProvider: IndexeddbPersistence = undefined as any;
     ytextmap: Map<string, Y.Text> = new Map<string, Y.Text>();
     yJustPublishTree = false;
+    yJustPublishEdit = false;
     _mergeRemoteContentToLocal = async () => {
-        let importedEntries: FileManagerEntry[] = [];
+        EventReporter.reportEvent('editor', 'mergeTree');
 
-        let newAssets: { [key: string]: ArrayBuffer } = {};
+        const importedEntries: FileManagerEntry[] = [];
+
+        const newAssets: { [key: string]: ArrayBuffer } = {};
         // Download and save the newly added asset files
-        for (let remoteEntry of this.yfiles) {
+        for (const remoteEntry of this.yfiles) {
             if (remoteEntry.type === 'file' && remoteEntry.asset) {
-                const existingEntry = this.state.fileEntries.find(localEntry => {
+                const existingEntry = this.state.fileEntries.find((localEntry) => {
                     return localEntry.item.id === remoteEntry.id;
                 });
                 if (!existingEntry) {
                     const uri = remoteEntry.uri;
                     const assetRequest = await fetch(`/s/fetch?uri=${encodeURIComponent(uri)}`);
                     if (!assetRequest.ok) {
-                        throw 'Unable to pull shared resources';
+                        throw new Error('Unable to pull shared resources');
                     }
                     const arrayBlob = await assetRequest.arrayBuffer();
                     newAssets[remoteEntry.id] = arrayBlob;
@@ -743,9 +744,9 @@ export default class App extends React.Component<any, State> {
         }
 
         // Make new fileEntries
-        for (let remoteEntry of this.yfiles) {
+        for (const remoteEntry of this.yfiles) {
             let content: string | ArrayBuffer = undefined as any;
-            const existingEntry = this.state.fileEntries.find(localEntry => {
+            const existingEntry = this.state.fileEntries.find((localEntry) => {
                 return localEntry.item.id === remoteEntry.id;
             });
             if (remoteEntry.type === 'file') {
@@ -768,12 +769,12 @@ export default class App extends React.Component<any, State> {
                 }
             }
 
-            let importedEntry: FileManagerEntry = {
+            const importedEntry: FileManagerEntry = {
                 item: {
                     type: remoteEntry.type,
                     asset: remoteEntry.asset,
                     uri: remoteEntry.uri,
-                    content: content,
+                    content,
                     id: remoteEntry.id,
                     path: remoteEntry.path,
                 },
@@ -787,7 +788,11 @@ export default class App extends React.Component<any, State> {
     };
 
     _yTextEventListener = (event: YTextEvent, ytext: Y.Text, id: string) => {
-        const found = this.state.fileEntries.find(element => {
+        if (this.yJustPublishEdit) {
+            this.yJustPublishEdit = false;
+            return;
+        }
+        const found = this.state.fileEntries.find((element) => {
             return element.item.id === id;
         });
         if (found) {
@@ -811,6 +816,7 @@ export default class App extends React.Component<any, State> {
                 const ytext = this.ytextmap.get(currentEntry.item.id);
                 if (ytext) {
                     this.ydoc.transact(() => {
+                        this.yJustPublishEdit = true;
                         e.changes
                             .sort((change1, change2) => change2.rangeOffset - change1.rangeOffset)
                             .forEach((change) => {
@@ -824,7 +830,10 @@ export default class App extends React.Component<any, State> {
     };
 
     _publicTreeToRemote = (fileEntries: FileManagerEntry[]) => {
-
+        if (!this.state.shareEnabled) {
+            return;
+        }
+        EventReporter.reportEvent('editor', 'publishTree');
         // Pump all editable files to yjs
         for (const file of fileEntries) {
             if (file.item.type === 'file' && !file.item.asset) {
@@ -843,7 +852,7 @@ export default class App extends React.Component<any, State> {
         // Pump the file entries
         const rs: ProjectFileEntry[] = [];
         for (const file of fileEntries) {
-            let r: ProjectFileEntry = {
+            const r: ProjectFileEntry = {
                 id: file.item.id,
                 uri: file.item.uri,
                 path: file.item.path,
@@ -863,7 +872,11 @@ export default class App extends React.Component<any, State> {
         this.ydoc = new Y.Doc();
         this.indexeddbProvider = new IndexeddbPersistence(this.state.id, this.ydoc);
         await this.indexeddbProvider.whenSynced;
-        this.websocketProvider = new WebsocketProvider('wss://share.swiftlatex.com', this.state.id, this.ydoc);
+        this.websocketProvider = new WebsocketProvider(
+            'wss://share.swiftlatex.com',
+            this.state.id,
+            this.ydoc,
+        );
         await new Promise((resolve, _) => {
             this.websocketProvider.on('sync', () => {
                 resolve();
@@ -878,7 +891,7 @@ export default class App extends React.Component<any, State> {
         }
 
         /* Consider debounce */
-        this.yfiles.observe(_ => {
+        this.yfiles.observe((_) => {
             if (this.yJustPublishTree) {
                 this.yJustPublishTree = false; /* Prevent endless loop */
                 return;

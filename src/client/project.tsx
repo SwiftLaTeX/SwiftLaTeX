@@ -50,7 +50,6 @@ For headers or \\emph{other} \\textbf{special} formatting you need a  \\LaTeX\\x
 \\end{document}
 `;
 
-
 type Props = {};
 
 type State = {
@@ -58,7 +57,7 @@ type State = {
     isBusy: boolean;
     currentModal: 'create' | undefined;
     sessionState: 'panel' | 'import' | 'error' | 'init';
-    errorMessage: string
+    errorMessage: string;
 };
 
 class Project extends React.PureComponent<Props, State> {
@@ -92,8 +91,7 @@ class Project extends React.PureComponent<Props, State> {
             .then((info) => {
                 EventReporter.reportEvent('project', 'login', info);
             })
-            .catch((_) => {
-            });
+            .catch((_) => {});
 
         const urlParams = new URLSearchParams(window.location.search);
         const shareID = urlParams.get('share') || '';
@@ -122,20 +120,22 @@ class Project extends React.PureComponent<Props, State> {
             } else if (this.state.sessionState === 'import') {
                 this.setState({ isBusy: true });
                 this._handleImportProject()
-                    .then(_ => {
-                        this.setState({ 'sessionState': 'panel' });
+                    .then((_) => {
+                        this.setState({ sessionState: 'panel' });
                     })
-                    .catch((_) => {
+                    .catch((e) => {
+                        console.error(e);
                         this.setState({
                             sessionState: 'error',
-                            errorMessage: 'Error detected when receiving a shared project, please  try again',
+                            errorMessage:
+                                'Error detected when receiving a shared project, please  try again',
                         });
-                    }).finally(() => {
-                    this.setState({ isBusy: false });
-                });
+                    })
+                    .finally(() => {
+                        this.setState({ isBusy: false });
+                    });
             }
         }
-
     }
 
     _handleImportProject = async () => {
@@ -144,30 +144,34 @@ class Project extends React.PureComponent<Props, State> {
 
         const result = await this.storage.get('manifest', shareID);
         if (result) {
-            return;
+            const resultJson = arrayBufferToJson(result);
+            if (!resultJson.deleted) {
+                /*if resultJson.deleted is false or undefined */
+                return;
+            }
         }
 
         const queryUrlRequest = await fetch(`/s/query?p=${shareID}`);
         if (!queryUrlRequest.ok) {
-            throw 'Shared Project not found.';
+            throw new Error('Shared Project not found.');
         }
 
         const queryUrl = await queryUrlRequest.text();
         /* Cors Fetch */
         const manifestRequest = await fetch(`/s/fetch?uri=${encodeURIComponent(queryUrl)}`);
         if (!manifestRequest.ok) {
-            throw 'Cannot copy the shared project.';
+            throw new Error('Cannot copy the shared project.');
         }
 
         /* Fetch each asset file */
         const manifest = (await manifestRequest.json()) as ProjectEntry;
-        for (let item of manifest.fileEntries) {
+        for (const item of manifest.fileEntries) {
             if (item.type === 'folder') continue;
 
             const uri = item.uri;
             const assetRequest = await fetch(`/s/fetch?uri=${encodeURIComponent(uri)}`);
             if (!assetRequest.ok) {
-                throw 'Cannot download the shared project.';
+                throw new Error('Cannot download the shared project.');
             }
             const arrayBlob = await assetRequest.blob();
             // console.log('Length ' + arrayBlob.size);
@@ -197,7 +201,7 @@ class Project extends React.PureComponent<Props, State> {
         try {
             const repoArrayBuffer = await this.storage.get('manifest', pid);
             if (!repoArrayBuffer) {
-                throw `manifest not found ${pid}`;
+                throw new Error(`manifest not found ${pid}`);
             }
             const response_json = arrayBufferToJson(repoArrayBuffer);
             response_json.deleted = true;
@@ -206,7 +210,7 @@ class Project extends React.PureComponent<Props, State> {
         } catch {
             this.setState({
                 sessionState: 'error',
-                errorMessage: 'Unable to delete this project, please  try again',
+                errorMessage: 'Unable to delete this project, please try again',
             });
         }
         this.setState({ isBusy: false });
@@ -221,7 +225,7 @@ class Project extends React.PureComponent<Props, State> {
             try {
                 const repoArrayBuffer = await this.storage.get('manifest', pid);
                 if (!repoArrayBuffer) {
-                    throw `Manifest File not found ${pid}`;
+                    throw new Error(`Manifest File not found ${pid}`);
                 }
                 const response_json = arrayBufferToJson(repoArrayBuffer);
                 response_json.name = new_project_name;
@@ -245,7 +249,7 @@ class Project extends React.PureComponent<Props, State> {
             const zipobj = new JSZip();
             const repoArrayBuffer = await this.storage.get('manifest', pid);
             if (!repoArrayBuffer) {
-                throw `Manifest not found ${pid}`;
+                throw new Error(`Manifest not found ${pid}`);
             }
             const response_json = arrayBufferToJson(repoArrayBuffer);
             const fileEntries = response_json.fileEntries;
@@ -253,7 +257,7 @@ class Project extends React.PureComponent<Props, State> {
                 if (entry.type === 'file') {
                     const fileBuffer = await this.storage.get('asset', entry.id);
                     if (!fileBuffer) {
-                        throw `Asset not found ${entry.id}`;
+                        throw new Error(`Asset not found ${entry.id}`);
                     }
                     zipobj.file(entry.path, fileBuffer);
                 }
@@ -272,7 +276,7 @@ class Project extends React.PureComponent<Props, State> {
     _popupEachProject = async (repoID: string) => {
         const repoArrayBuffer = await this.storage.get('manifest', repoID);
         if (!repoArrayBuffer) {
-            throw 'Manifest not found';
+            throw new Error('Manifest not found');
         }
         const entry = arrayBufferToJson(repoArrayBuffer) as ProjectEntry;
         entry.pid = repoID;
@@ -294,7 +298,7 @@ class Project extends React.PureComponent<Props, State> {
             // 10 at at time
             const batchResults = await Promise.allSettled(promises.splice(0, 10));
             const projects: ProjectEntry[] = [];
-            for (let item of batchResults) {
+            for (const item of batchResults) {
                 if (item.status === 'fulfilled') {
                     projects.push(item.value);
                 }
@@ -370,7 +374,7 @@ class Project extends React.PureComponent<Props, State> {
             ];
             const zip_handle = await JSZip.loadAsync(zip_blob);
             const queues: any = [];
-            zip_handle.forEach(function(relativePath, zipEntry) {
+            zip_handle.forEach(function (relativePath, zipEntry) {
                 if (zipEntry.dir) {
                     return;
                 }
@@ -427,7 +431,7 @@ class Project extends React.PureComponent<Props, State> {
                 const entry = {
                     id: randomID,
                     path: item.path,
-                    uri: uri,
+                    uri,
                     type: 'file',
                     asset: !isTextEntry,
                 };
@@ -484,11 +488,15 @@ class Project extends React.PureComponent<Props, State> {
             const entries = await this.prepareFileEntries(zipFile, templateUrl);
 
             let mainEntry = 'main.tex';
-            for (let ent of entries) {
+            for (const ent of entries) {
                 if (ent.path.endsWith('.tex') && !ent.path.includes('/')) {
                     mainEntry = ent.path;
                     /* Prefer the following main entry */
-                    if (ent.path === 'main.tex' || ent.path === 'manuscript.tex' || ent.path === 'paper.tex') {
+                    if (
+                        ent.path === 'main.tex' ||
+                        ent.path === 'manuscript.tex' ||
+                        ent.path === 'paper.tex'
+                    ) {
                         break;
                     }
                 }
@@ -503,7 +511,7 @@ class Project extends React.PureComponent<Props, State> {
                 modifiedTime: new Date().toString(),
                 fileEntries: entries,
                 entryPoint: mainEntry,
-                pid: pid,
+                pid,
             };
             await this.storage.put('manifest', pid, new Blob([JSON.stringify(newProject)]));
             await this._listProjects();
@@ -518,39 +526,46 @@ class Project extends React.PureComponent<Props, State> {
     };
 
     _renderErrorPage() {
-        return <div className="container">
-            <section className="header">
-                <h2 className="title">Oops: {this.state.errorMessage}</h2>
-            </section>
-            <div className="navbar-spacer"/>
-            <nav className="navbar">
-                <div className="container">
-                    <ul className="navbar-list">
-                        <li className="navbar-item navbar-action ">
-                            <a className="navbar-link" href="#" onClick={() => {
-                                window.location.reload();
-                            }}>
-                                Try again?
-                            </a>
-                        </li>
-                        <li className="navbar-item navbar-action ">
-                            <a className="navbar-link" href="#" onClick={this._handleLogout}>
-                                Go back to home page.
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </div>;
+        return (
+            <div className="container">
+                <section className="header">
+                    <h2 className="title">Oops: {this.state.errorMessage}</h2>
+                </section>
+                <div className="navbar-spacer" />
+                <nav className="navbar">
+                    <div className="container">
+                        <ul className="navbar-list">
+                            <li className="navbar-item navbar-action ">
+                                <a
+                                    className="navbar-link"
+                                    href="#"
+                                    onClick={() => {
+                                        window.location.reload();
+                                    }}>
+                                    Try again?
+                                </a>
+                            </li>
+                            <li className="navbar-item navbar-action ">
+                                <a className="navbar-link" href="#" onClick={this._handleLogout}>
+                                    Go back to home page.
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        );
     }
 
     _renderImportPage() {
-        return <div className="container">
-            <section className="header">
-                <h2 className="title">Importing a project...</h2>
-            </section>
-            {this.state.isBusy ? <ProgressIndicator/> : null}
-        </div>;
+        return (
+            <div className="container">
+                <section className="header">
+                    <h2 className="title">Importing a project...</h2>
+                </section>
+                {this.state.isBusy ? <ProgressIndicator /> : null}
+            </div>
+        );
     }
 
     _renderProjectPage() {
@@ -595,7 +610,7 @@ class Project extends React.PureComponent<Props, State> {
                             Archive
                         </a>
                     </td>
-                </tr>,
+                </tr>
             );
         }
 
@@ -663,8 +678,8 @@ class Project extends React.PureComponent<Props, State> {
                 <section className="header">
                     <h2 className="title">Your LaTeX Projects:</h2>
                 </section>
-                {this.state.isBusy ? <ProgressIndicator/> : null}
-                <div className="navbar-spacer"/>
+                {this.state.isBusy ? <ProgressIndicator /> : null}
+                <div className="navbar-spacer" />
                 <nav className="navbar">
                     <div className="container">
                         <ul className="navbar-list">
@@ -684,12 +699,12 @@ class Project extends React.PureComponent<Props, State> {
 
                 <table className="u-full-width">
                     <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Author</th>
-                        <th>Modified Time</th>
-                        <th>Actions</th>
-                    </tr>
+                        <tr>
+                            <th>Name</th>
+                            <th>Author</th>
+                            <th>Modified Time</th>
+                            <th>Actions</th>
+                        </tr>
                     </thead>
                     <tbody id="project-list">{items}</tbody>
                 </table>
@@ -709,4 +724,4 @@ class Project extends React.PureComponent<Props, State> {
     }
 }
 
-ReactDOM.render(<Project/>, document.getElementById('root'));
+ReactDOM.render(<Project />, document.getElementById('root'));

@@ -57,7 +57,7 @@ export class DviViewer {
             const res = this.showCursor(data.path, data.line, data.column);
             if (this.isBatching) {
                 if (res) {
-                    this.batchingQueue.push({ type: 'setCursor', data: data });
+                    this.batchingQueue.push({ type: 'setCursor', data });
                 } else {
                     this.isBatching = false; /* Give Up */
                     this.batchingQueue = [];
@@ -73,7 +73,7 @@ export class DviViewer {
             }
             if (this.isBatching) {
                 if (res) {
-                    this.batchingQueue.push({ type: 'typeContent', data: data });
+                    this.batchingQueue.push({ type: 'typeContent', data });
                 } else {
                     this.isBatching = false; /* Give Up */
                     this.batchingQueue = [];

@@ -55,7 +55,7 @@ export class PDFViewer {
             const res = this.showCursor(data.path, data.line, data.column);
             if (this.isBatching) {
                 if (res) {
-                    this.batchingQueue.push({ type: 'setCursor', data: data });
+                    this.batchingQueue.push({ type: 'setCursor', data });
                 } else {
                     this.isBatching = false; /* Give Up */
                     this.batchingQueue = [];
@@ -71,7 +71,7 @@ export class PDFViewer {
             }
             if (this.isBatching) {
                 if (res) {
-                    this.batchingQueue.push({ type: 'typeContent', data: data });
+                    this.batchingQueue.push({ type: 'typeContent', data });
                 } else {
                     this.isBatching = false; /* Give Up */
                     this.batchingQueue = [];
@@ -211,11 +211,11 @@ export class PDFViewer {
             let rawStr = (window as any).fileListStr;
             rawStr = rawStr.slice(0, -1);
             const files = rawStr.split('|');
-            for (let j = 0; j < files.length; j ++) {
-                let tmp : CachedFileEntry = {
+            for (let j = 0; j < files.length; j++) {
+                const tmp: CachedFileEntry = {
                     fid: j + 1,
-                    path: files[j].slice(2) /* remove ./ */
-                }
+                    path: files[j].slice(2) /* remove ./ */,
+                };
                 this.cachedFileList.push(tmp);
             }
         }

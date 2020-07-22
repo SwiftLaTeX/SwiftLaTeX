@@ -27,7 +27,7 @@ export class DropboxStorage extends BackendStorage {
         };
 
         const response = await fetch(url, { method: 'POST', headers });
-        if (response.status === 409) {
+        if (response.status === 409 || response.status === 404) {
             return undefined;
         }
 

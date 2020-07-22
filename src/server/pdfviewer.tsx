@@ -3,19 +3,17 @@ import compose from 'koa-compose';
 import Router from 'koa-router';
 import axios from 'axios';
 import * as Canvas from 'canvas';
-const pdfjsLib = require("pdfjs-dist/es5/build/pdf.js");
+const pdfjsLib = require('pdfjs-dist/es5/build/pdf.js');
 
-
-function NodeCanvasFactory() {
-}
+function NodeCanvasFactory() {}
 
 NodeCanvasFactory.prototype = {
     create: function NodeCanvasFactory_create(width: number, height: number) {
         const canvas = Canvas.createCanvas(width, height);
         const context = canvas.getContext('2d');
         return {
-            canvas: canvas,
-            context: context,
+            canvas,
+            context,
         };
     },
 
@@ -25,7 +23,6 @@ NodeCanvasFactory.prototype = {
     },
 
     destroy: function NodeCanvasFactory_destroy(canvasAndContext: any) {
-
         // Zeroing the width and height cause Firefox to release graphics
         // resources immediately, which can greatly reduce memory consumption.
         canvasAndContext.canvas.width = 0;
@@ -34,7 +31,6 @@ NodeCanvasFactory.prototype = {
         canvasAndContext.context = null;
     },
 };
-
 
 const pdfview = async (ctx: Context) => {
     try {
@@ -45,10 +41,11 @@ const pdfview = async (ctx: Context) => {
             return;
         }
 
-        const legal = dstUrl.startsWith('https://s3.swiftlatex.com/')
-            || dstUrl.startsWith('https://drive.google.com/')
-            || dstUrl.startsWith('https://www.dropbox.com/s/')
-            || dstUrl.startsWith('https://play.min.io:9000/');
+        const legal =
+            dstUrl.startsWith('https://s3.swiftlatex.com/') ||
+            dstUrl.startsWith('https://drive.google.com/') ||
+            dstUrl.startsWith('https://www.dropbox.com/s/') ||
+            dstUrl.startsWith('https://play.min.io:9000/');
 
         if (!legal) {
             ctx.status = 405;
@@ -67,14 +64,11 @@ const pdfview = async (ctx: Context) => {
         const viewport = page.getViewport({ scale: 2.5 });
         // @ts-ignore
         const canvasFactory = new NodeCanvasFactory();
-        const canvasAndContext = canvasFactory.create(
-            viewport.width,
-            viewport.height,
-        );
+        const canvasAndContext = canvasFactory.create(viewport.width, viewport.height);
         const renderContext = {
             canvasContext: canvasAndContext.context,
-            viewport: viewport,
-            canvasFactory: canvasFactory,
+            viewport,
+            canvasFactory,
         };
 
         await page.render(renderContext).promise;
@@ -85,7 +79,6 @@ const pdfview = async (ctx: Context) => {
         console.log(e);
         ctx.status = 403;
     }
-
 };
 
 export default function pdfViewer() {

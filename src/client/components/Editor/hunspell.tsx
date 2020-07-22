@@ -24,7 +24,6 @@ export enum EngineStatus {
 
 const HUNSPELL_ENGINE_PATH = 'bin/myspell.js';
 
-
 export class HunspellEngine {
     private hunspellWorker: Worker | undefined = undefined;
     hunspellWorkerStatus: EngineStatus = EngineStatus.Init;
@@ -54,15 +53,13 @@ export class HunspellEngine {
                 const data: any = ev.data;
                 const result: string = data.result as string;
                 this.hunspellWorkerStatus = EngineStatus.Ready;
-                console.log(
-                    'Engine hunspell finish ' + (performance.now() - start_compile_time),
-                );
+                console.log('Engine hunspell finish ' + (performance.now() - start_compile_time));
                 if (!result) {
                     resolve([]);
                 }
                 const nice_reports: Annotation[] = [];
                 const items = result.split('|');
-                for (let item of items) {
+                for (const item of items) {
                     const terms = item.split(',');
                     if (terms.length >= 3) {
                         // console.log(terms);
@@ -72,21 +69,21 @@ export class HunspellEngine {
                         }
                         const columnStart = parseInt(terms[2]) + 1;
                         const columnEnd = columnStart + terms[0].length;
-                        let message = `Potential spelling error in ${terms[0]}`;
+                        const message = `Potential spelling error in ${terms[0]}`;
                         // if (terms.length > 3) {
                         //     message += ', consider changing it to ';
                         //     for (let k = 3; k < terms.length; k++) {
                         //         message += ` "${terms[k]}"`
                         //     }
                         // }
-                        let r: Annotation = {
-                            message: message,
+                        const r: Annotation = {
+                            message,
                             startLineNumber: lineNo,
                             endLineNumber: lineNo,
                             startColumn: columnStart,
                             endColumn: columnEnd,
                             severity: 2,
-                            source: 'spell'
+                            source: 'spell',
                         };
                         nice_reports.push(r);
                     }
@@ -96,8 +93,7 @@ export class HunspellEngine {
             this.hunspellWorker!.postMessage({ cmd: 'process', msg: input });
             console.log('Engine hunspell start');
         });
-        this.hunspellWorker!.onmessage = (_: any) => {
-        };
+        this.hunspellWorker!.onmessage = (_: any) => {};
 
         return res;
     }

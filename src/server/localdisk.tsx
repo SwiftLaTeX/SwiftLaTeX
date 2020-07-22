@@ -49,13 +49,11 @@ const list = async (ctx: Context) => {
 export default function localBackend() {
     try {
         fs.promises.mkdir('public/upload/manifest', { recursive: true });
-    } catch (e) {
-    }
+    } catch (e) {}
 
     try {
         fs.promises.mkdir('public/upload/asset', { recursive: true });
-    } catch (e) {
-    }
+    } catch (e) {}
 
     const router = new Router();
     router.post('/local/upload', upload);

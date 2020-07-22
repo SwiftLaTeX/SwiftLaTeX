@@ -153,7 +153,7 @@ class EditorView extends React.Component<Props, State> {
         if (r) {
             this.setState({ currentModal: 'share' });
         } else {
-            alert('Unexpected error detected when sharing this project.')
+            alert('Unexpected error detected when sharing this project.');
         }
     };
 

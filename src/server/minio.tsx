@@ -7,7 +7,7 @@ import * as path from 'path';
 const AWS_ID = process.env.AWS_ID || '662de419d8317e5e668abf4e7b0180ce';
 const AWS_KEY = process.env.AWS_KEY || '61cacf855f3964a87f62defc0e897045';
 const AWS_ENDPOINT = process.env.AWS_ENDPOINT || 'https://s3.swiftlatex.com';
-const AWS_BUCKET =  process.env.AWS_BUCKET || 'swiftlatex2';
+const AWS_BUCKET = process.env.AWS_BUCKET || 'swiftlatex2';
 const s3 = new S3({
     accessKeyId: AWS_ID,
     secretAccessKey: AWS_KEY,

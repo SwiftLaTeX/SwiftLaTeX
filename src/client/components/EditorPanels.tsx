@@ -70,7 +70,9 @@ export default class EditorPanels extends React.Component<Props> {
                         </div>
                     </div>
                     <div ref={this._panel} className={css(styles.panel)}>
-                        {panelType === 'errors' ? <EditorPanelError annotations={annotations}/> : null}
+                        {panelType === 'errors' ? (
+                            <EditorPanelError annotations={annotations} />
+                        ) : null}
                         {panelType === 'logs' ? <EditorPanelLogs deviceLogs={deviceLogs} /> : null}
                     </div>
                 </div>

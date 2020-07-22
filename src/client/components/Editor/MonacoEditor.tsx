@@ -9,7 +9,7 @@ import 'monaco-editor/esm/vs/editor/contrib/clipboard/clipboard.js';
 import 'monaco-editor/esm/vs/editor/contrib/contextmenu/contextmenu.js';
 import 'monaco-editor/esm/vs/editor/contrib/find/findController.js';
 import 'monaco-editor/esm/vs/editor/contrib/hover/hover.js';
-// import 'monaco-editor/esm/vs/editor/contrib/suggest/suggestController.js';
+import 'monaco-editor/esm/vs/editor/contrib/suggest/suggestController.js';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { light, dark } from './themes/monaco';
 import overrides from './themes/monaco-overrides';
@@ -24,6 +24,7 @@ import { HunspellEngine } from './hunspell';
 import { createMutex } from '../../utils/mutex';
 import { YTextEvent } from 'yjs/dist/src/types/YText';
 import { loadWASM } from 'onigasm';
+import { laTeXCompletionProvider } from './LaTeXCompletionProvider';
 
 // @ts-ignore
 global.MonacoEnvironment = {
@@ -34,8 +35,6 @@ global.MonacoEnvironment = {
 
 monaco.editor.defineTheme('light', light as any);
 monaco.editor.defineTheme('dark', dark as any);
-monaco.languages.register({ id: 'bibtex', extensions: ['.bib'] });
-monaco.languages.register({ id: 'latex', extensions: ['.tex', '.cls', '.sty'] });
 
 type Props = EditorProps & {
     theme: ThemeName;
@@ -43,7 +42,6 @@ type Props = EditorProps & {
 
 // Store editor states such as cursor position, selection and scroll position for each model
 const editorStates = new Map<string, monaco.editor.ICodeEditorViewState | undefined | null>();
-
 
 const findModel = (path: string) => {
     return monaco.editor.getModels().find((model) => {
@@ -54,11 +52,11 @@ const findModel = (path: string) => {
 class MonacoEditor extends React.Component<Props> {
     static hasHighlightingSetup = false;
     _hoverProvider: monaco.IDisposable | undefined;
-    _completionProvider: monaco.IDisposable | undefined;
     _spellCheck = debounce(this.spellCheckNoDebounce, 1000);
     _toBeSpellCheckedLines: number[] = [];
     _spellCheckEngine: HunspellEngine | undefined;
     _lastSpeckResult: Annotation[] = [];
+    _completionProviderLaTeX: monaco.IDisposable | undefined;
     _editingMutex = createMutex();
     static defaultProps: Partial<Props> = {
         lineNumbers: 'on',
@@ -71,13 +69,12 @@ class MonacoEditor extends React.Component<Props> {
         fontLigatures: false,
     };
 
-
     /* Clear up models that are not longer used due to file tree changed */
     cleanUpModels(paths: string[]) {
-        const models = monaco.editor.getModels().filter(model => {
+        const models = monaco.editor.getModels().filter((model) => {
             return !paths.includes(model.uri.path.substr(1));
         });
-        for (let model of models) {
+        for (const model of models) {
             console.error('Cleaning up ' + model.uri.path);
             editorStates.delete(model.uri.path);
             model.dispose();
@@ -95,7 +92,6 @@ class MonacoEditor extends React.Component<Props> {
 
     /* Anti-react pattern, considering rewriting it */
     async injectPeerEditingEvents(event: YTextEvent) {
-
         this._editingMutex(() => {
             if (!this._editor) return;
             const monacoModel = this._editor.getModel();
@@ -133,7 +129,7 @@ class MonacoEditor extends React.Component<Props> {
                     monacoModel.pushEditOperations([], [{ range, text: '' }], () => null);
                     /* eslint-enable */
                 } else {
-                    throw 'Unexpected sync protocol';
+                    throw new Error('Unexpected sync protocol');
                 }
             });
             monacoModel.pushStackElement();
@@ -143,6 +139,55 @@ class MonacoEditor extends React.Component<Props> {
     static async _setupHighlighting() {
         if (MonacoEditor.hasHighlightingSetup) return;
         MonacoEditor.hasHighlightingSetup = true;
+        monaco.languages.register({ id: 'bibtex', extensions: ['.bib'] });
+        monaco.languages.register({ id: 'latex', extensions: ['.tex', '.cls', '.sty'] });
+        monaco.languages.setLanguageConfiguration('latex', {
+            comments: {
+                lineComment: '%',
+            },
+            brackets: [
+                ['{', '}'],
+                ['[', ']'],
+                ['(', ')'],
+            ],
+            autoClosingPairs: [
+                { open: '{', close: '}', notIn: ['string'] },
+                { open: '[', close: ']', notIn: ['string'] },
+                { open: '(', close: ')', notIn: ['string'] },
+                { open: '`', close: '`', notIn: ['string', 'comment'] },
+                { open: '"', close: '"', notIn: ['string', 'comment'] },
+                { open: '$', close: '$', notIn: ['string', 'comment'] },
+            ],
+            surroundingPairs: [
+                { open: '{', close: '}' },
+                { open: '[', close: ']' },
+                { open: '(', close: ')' },
+                { open: '`', close: '`' },
+                { open: '"', close: '"' },
+                { open: '$', close: '$' },
+            ],
+        });
+
+        monaco.languages.setLanguageConfiguration('bibtex', {
+            comments: {
+                lineComment: '%',
+            },
+            brackets: [
+                ['{', '}'],
+                ['[', ']'],
+                ['(', ')'],
+            ],
+            autoClosingPairs: [
+                { open: '{', close: '}', notIn: ['string'] },
+                { open: '[', close: ']', notIn: ['string'] },
+                { open: '(', close: ')', notIn: ['string'] },
+            ],
+            surroundingPairs: [
+                { open: '{', close: '}' },
+                { open: '[', close: ']' },
+                { open: '(', close: ')' },
+            ],
+        });
         await loadWASM('bin/onigasm.wasm');
         const registry = new Registry({
             getGrammarDefinition: async (scopeName: string) => {
@@ -178,25 +223,27 @@ class MonacoEditor extends React.Component<Props> {
             const model = this._editor.getModel();
             if (model) {
                 if (this._spellCheckEngine && this._spellCheckEngine.isReady()) {
-                    let checkEntireDocument = this._toBeSpellCheckedLines.includes(-1);
+                    const checkEntireDocument = this._toBeSpellCheckedLines.includes(-1);
                     if (checkEntireDocument) {
                         const value = model.getValue();
                         this._lastSpeckResult = await this._spellCheckEngine.checkSpell(value, -1);
                     } else {
-                        this._lastSpeckResult = this._lastSpeckResult.filter(e => {
-                            return !(this._toBeSpellCheckedLines.includes(e.startLineNumber));
+                        this._lastSpeckResult = this._lastSpeckResult.filter((e) => {
+                            return !this._toBeSpellCheckedLines.includes(e.startLineNumber);
                         });
 
-                        for (let line of this._toBeSpellCheckedLines) {
+                        for (const line of this._toBeSpellCheckedLines) {
                             const lineContent = model.getLineContent(line);
-                            const result = await this._spellCheckEngine.checkSpell(lineContent, line);
+                            const result = await this._spellCheckEngine.checkSpell(
+                                lineContent,
+                                line,
+                            );
                             this._lastSpeckResult = this._lastSpeckResult.concat(result);
                         }
                     }
                     this._updateMarkers();
                     this._toBeSpellCheckedLines = [];
                 }
-
             }
         }
     }
@@ -235,7 +282,6 @@ class MonacoEditor extends React.Component<Props> {
     }
 
     _onModelContentChanged(e: monaco.editor.IModelContentChangedEvent) {
-
         const model = this._editor!.getModel();
 
         if (model) {
@@ -251,8 +297,10 @@ class MonacoEditor extends React.Component<Props> {
 
             // Queue for spell check
             let spellCheckLine = -1;
-            if (e.changes.length === 1 && e.changes[0].text !== e.eol
-                && e.changes[0].range.startLineNumber === e.changes[0].range.endLineNumber) {
+            if (
+                e.changes[0].text !== e.eol &&
+                e.changes[0].range.startLineNumber === e.changes[0].range.endLineNumber
+            ) {
                 spellCheckLine = e.changes[0].range.endLineNumber;
             }
             if (!this._toBeSpellCheckedLines.includes(spellCheckLine)) {
@@ -277,20 +325,28 @@ class MonacoEditor extends React.Component<Props> {
     componentDidMount() {
         const { path, value, annotations, autoFocus, ...rest } = this.props;
 
-        const editor = monaco.editor.create(
-            this._node.current as HTMLDivElement,
-            rest,
-        );
+        const editor = monaco.editor.create(this._node.current as HTMLDivElement, rest);
 
         MonacoEditor._setupHighlighting().then(); /* Global */
 
         this._spellCheckEngine = new HunspellEngine();
 
-        this._contentSubscription = editor.onDidChangeModelContent((e) => this._onModelContentChanged(e));
+        this._contentSubscription = editor.onDidChangeModelContent((e) =>
+            this._onModelContentChanged(e),
+        );
 
-        this._cursorSubscription = editor.onDidChangeCursorPosition((e) => this._onEditorCursorChanged(e));
+        this._cursorSubscription = editor.onDidChangeCursorPosition((e) =>
+            this._onEditorCursorChanged(e),
+        );
+
+        editor.updateOptions({ wordBasedSuggestions: false });
 
         this._editor = editor;
+
+        this._completionProviderLaTeX = monaco.languages.registerCompletionItemProvider(
+            'latex',
+            laTeXCompletionProvider
+        );
 
         this._createOrUpdateModel(path, value, autoFocus);
 
@@ -335,8 +391,8 @@ class MonacoEditor extends React.Component<Props> {
     componentWillUnmount() {
         this._cursorSubscription && this._cursorSubscription.dispose();
         this._contentSubscription && this._contentSubscription.dispose();
-        this._hoverProvider && this._hoverProvider.dispose();
-        this._completionProvider && this._completionProvider.dispose();
+        // this._hoverProvider && this._hoverProvider.dispose();
+        this._completionProviderLaTeX && this._completionProviderLaTeX.dispose();
         this._spellCheckEngine && this._spellCheckEngine.closeWorker();
         this._editor && this._editor.dispose();
     }
@@ -357,7 +413,6 @@ class MonacoEditor extends React.Component<Props> {
                     tabSize: 2,
                     insertSpaces: true,
                 });
-
             } else if (!model.isDisposed()) {
                 // If a model exists, we need to update it's value
                 // This is needed because the content for the file might have been modified externally
@@ -397,7 +452,6 @@ class MonacoEditor extends React.Component<Props> {
         // @ts-ignore
         monaco.editor.setModelMarkers(this._editor.getModel(), null, toShowAnnotation);
     };
-
 
     _handleResize = debounce(() => {
         this._editor && this._editor.layout();

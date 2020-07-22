@@ -61,6 +61,9 @@ export class GoogleStorage extends BackendStorage {
         };
         const downloadUrl = `https://www.googleapis.com/drive/v2/files/${fid}?alt=media&source=downloadUrl`;
         const response = await fetch(downloadUrl, { method: 'GET', headers });
+        if (response.status === 404) {
+            return undefined;
+        }
         if (!response.ok) {
             throw new Error('Unable to get file');
         }
@@ -77,7 +80,7 @@ export class GoogleStorage extends BackendStorage {
         if (!fid) {
             return undefined;
         }
-        return `https://drive.google.com/uc?id=${fid}`
+        return `https://drive.google.com/uc?id=${fid}`;
     }
 
     static getAuthUrl(): string {

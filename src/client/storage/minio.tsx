@@ -2,7 +2,6 @@ import { BackendStorage, ItemEntry, UserInfo } from './backendStorage';
 import { getRandomName } from '../utils/randomNames';
 import { genRandomString } from '../utils/fileUtilities';
 
-
 export class MinioStorage extends BackendStorage {
     constructor(token: string) {
         super(token);
@@ -75,7 +74,7 @@ export class MinioStorage extends BackendStorage {
     }
 
     async getUserInfo(): Promise<UserInfo> {
-        let random_name = localStorage.getItem('playground_name')!;
+        const random_name = localStorage.getItem('playground_name')!;
         return {
             username: random_name,
             email: 'adventurer@swiftlatex.com',
@@ -84,7 +83,12 @@ export class MinioStorage extends BackendStorage {
 
     async getPublicUrl(scope: string, key: string): Promise<string> {
         const compound = this.token + '/' + scope + '/' + key;
-        const url = window.location.protocol + '//' + window.location.host + '/minio/get?uri=' + encodeURIComponent(compound);
+        const url =
+            window.location.protocol +
+            '//' +
+            window.location.host +
+            '/minio/get?uri=' +
+            encodeURIComponent(compound);
         return url;
     }
 

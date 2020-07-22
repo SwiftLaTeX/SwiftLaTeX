@@ -47,16 +47,15 @@ class ShareCode extends React.PureComponent<Props, State> {
         const urlParams = new URLSearchParams(window.location.search);
         const project_id = urlParams.get('p') || '';
 
-        let code = 'Not available';
-        if (project_id) {
-            code = `${window.location.protocol}//${window.location.host}/project.html?share=${project_id}`;
-        }
+        const code = `${window.location.protocol}//${window.location.host}/project.html?share=${project_id}`;
 
         return (
             <div className={css(styles.container)}>
                 <Banner visible={copied}>Copied to clipboard!</Banner>
                 <div className={css(styles.section)}>
-                    <h3 className={css(styles.header)}>Share Code</h3>
+                    <h3 className={css(styles.header)}>
+                        Share this link with your friends and start collaboration.
+                    </h3>
                     <div className={css(styles.inputContainer)}>
                         <input
                             readOnly
@@ -88,6 +87,7 @@ const styles = StyleSheet.create({
     },
     header: {
         margin: '.5em 0',
+        marginBottom: '0.5em',
         display: 'inline',
         fontWeight: 500,
     },
