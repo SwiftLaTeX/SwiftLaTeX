@@ -24,3 +24,6 @@ node_modules/
 .env
 release/
 win32/
+pack/
+analytics_db/
+sharelink_db/

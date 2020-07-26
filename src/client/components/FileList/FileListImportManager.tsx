@@ -9,11 +9,9 @@ import { c } from '../ColorsProvider';
 import { ThemeName } from '../Preferences/withThemeName';
 import {
     getUniquePath,
-    isImageFile,
     isTextFile,
-    isOpenTypeFontFile,
-    supportedFileTypes,
     genFileID,
+    escapeFilePath
 } from '../../utils/fileUtilities';
 import { WebkitFileEntry, WebkitDirectoryEntry } from '../../utils/convertDataTransferItemsToFiles';
 import dragEventIncludes from '../../utils/dragEventIncludes';
@@ -149,6 +147,7 @@ class FileListImportManager extends React.PureComponent<Props, State> {
                 try {
                     let metaContent: string | ArrayBuffer = '';
                     const fid = genFileID(path);
+                    const uri = await this.props.uploadFileAsync(file, fid);
                     const isTextEntry = isTextFile(path);
                     if (isTextEntry) {
                         // console.log('A text file');
@@ -160,7 +159,7 @@ class FileListImportManager extends React.PureComponent<Props, State> {
                             reader.onerror = (error) => reject(error);
                             reader.readAsText(file);
                         });
-                    } else if (isImageFile(path) || isOpenTypeFontFile(path)) {
+                    } else {
                         // console.log('A open font file');
                         metaContent = await new Promise<ArrayBuffer>((resolve, reject) => {
                             const reader = new FileReader();
@@ -171,9 +170,7 @@ class FileListImportManager extends React.PureComponent<Props, State> {
                             reader.readAsArrayBuffer(file);
                         });
                     }
-
-                    const uri = await this.props.uploadFileAsync(file, fid);
-                    path = path.replace(/ /g, '_'); /* Space may everything crack */
+                    path = escapeFilePath(path);
                     const uploadEntry = {
                         item: {
                             path,
@@ -327,7 +324,6 @@ class FileListImportManager extends React.PureComponent<Props, State> {
                                     <input
                                         multiple
                                         type="file"
-                                        accept={supportedFileTypes()}
                                         onChange={this._handleFilesChange}
                                         className={css(styles.fileInput)}
                                     />

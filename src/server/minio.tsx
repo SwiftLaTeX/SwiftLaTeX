@@ -83,7 +83,7 @@ const upload = async (ctx: Context) => {
                 key: fid,
                 ContentType: 'application/octet-stream',
             },
-            Condition: [['content-length-range', 0, 1000000]],
+            Condition: [["content-length-range", 0, 5000000]],
         };
         const presigned_url = await new Promise((resolve, reject) => {
             s3.createPresignedPost(params, function (err, data) {
@@ -139,6 +139,7 @@ const get = async (ctx: Context) => {
         ctx.status = 404;
         return;
     }
+    ctx.set('Access-Control-Allow-Origin', '*');
     ctx.redirect(`${AWS_ENDPOINT}/${AWS_BUCKET}/${uri}`);
 };
 

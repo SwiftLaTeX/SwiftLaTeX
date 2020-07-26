@@ -7,7 +7,7 @@ import ColorsProvider from './components/ColorsProvider';
 import App from './components/App';
 import { HelmetProvider } from 'react-helmet-async';
 
-class SnackEntry extends React.Component {
+class SwiftEditorEntry extends React.Component {
     render() {
         return (
             <React.StrictMode>
@@ -25,4 +25,4 @@ class SnackEntry extends React.Component {
     }
 }
 
-ReactDOM.render(<SnackEntry />, document.getElementById('root'));
+ReactDOM.render(<SwiftEditorEntry />, document.getElementById('root'));

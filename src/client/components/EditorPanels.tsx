@@ -6,6 +6,7 @@ import EditorPanelError from './EditorPanelError';
 import colors from '../configs/colors';
 import { Annotation } from '../types';
 
+
 type Props = {
     annotations: Annotation[];
     deviceLogs: string;

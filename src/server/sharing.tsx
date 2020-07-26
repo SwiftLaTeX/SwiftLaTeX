@@ -15,11 +15,8 @@ const fetchShareFile = async (ctx: Context) => {
     }
 
     const legal =
-        uri.startsWith('https://s3.swiftlatex.com/') ||
-        uri.startsWith('https://www.swiftlatex.com/') ||
         uri.startsWith('https://drive.google.com/') ||
-        uri.startsWith('https://www.dropbox.com/s/') ||
-        uri.startsWith('http://localhost:3011/');
+        uri.startsWith('https://www.dropbox.com/s/');
 
     if (!legal) {
         ctx.status = 404;
@@ -74,6 +71,7 @@ const shareProject = async (ctx: Context) => {
         uri.startsWith('https://www.swiftlatex.com/') ||
         uri.startsWith('https://drive.google.com/') ||
         uri.startsWith('https://www.dropbox.com/s/') ||
+        uri.startsWith('https://dl.dropboxusercontent.com/s/') ||
         uri.startsWith('http://localhost:3011/');
 
     if (!legal) {
@@ -99,6 +97,6 @@ export default function sharingHub() {
     const router = new Router();
     router.get(`/s/create`, shareProject);
     router.get(`/s/query`, queryProject);
-    router.get(`/s/fetch`, fetchShareFile);
+    router.get(`/cors/get`, fetchShareFile);
     return compose([router.routes(), router.allowedMethods()]);
 }

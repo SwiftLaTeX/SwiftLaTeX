@@ -8,7 +8,7 @@ export class LocalStorage extends BackendStorage {
 
     async get(scope: string, key: string): Promise<ArrayBuffer | undefined> {
         const compound = scope + '/' + key;
-        const url = 'upload/' + encodeURIComponent(compound);
+        const url = 'upload/' + compound;
         const response = await fetch(url, { cache: 'no-cache' });
         if (response.status === 404) {
             return undefined;
@@ -20,9 +20,10 @@ export class LocalStorage extends BackendStorage {
     }
 
     async list(scope: string): Promise<ItemEntry[]> {
-        const compound = scope;
-        const url = '/local/list?uri=' + encodeURIComponent(compound);
-        const response = await fetch(url, { cache: 'no-cache' });
+        const url = '/local/list?uri=' + scope;
+        // const queryFormData = new FormData();
+        // queryFormData.append('uri', scope);
+        const response = await fetch(url, { method: 'GET', cache: 'no-cache' });
         if (!response.ok) {
             throw new Error('Cannot list scope');
         }
@@ -34,7 +35,7 @@ export class LocalStorage extends BackendStorage {
             const r = {
                 itemKey: entry,
                 scope,
-                _id: entry.Key,
+                _id: entry,
                 modifiedTime: new Date().toString(),
             };
             result.push(r);
@@ -44,9 +45,9 @@ export class LocalStorage extends BackendStorage {
 
     async put(scope: string, key: string, blobLike: Blob): Promise<string> {
         const compound = scope + '/' + key;
-        const uploadUrl = '/local/upload?uri=' + encodeURIComponent(compound);
+        const uploadUrl = '/local/upload';
         const uploadFormData = new FormData();
-        uploadFormData.append('file', blobLike);
+        uploadFormData.append('file', blobLike, compound);
         const result = await fetch(uploadUrl, { method: 'POST', body: uploadFormData });
         if (!result.ok) {
             throw new Error('Upload failure');

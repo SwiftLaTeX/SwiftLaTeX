@@ -7,11 +7,14 @@ import {
     genRandomString,
     triggerDownloadBlob,
     getParentPath,
-    genFileID,
+    genFileID, escapeFilePath,
+    isTextFile,
+    sortDirsByDepth, makeExternalLinkCorsFriendly,
 } from './utils/fileUtilities';
 import JSZip from 'jszip';
 import { EventReporter } from './utils/eventReport';
-import { ProjectEntry } from './types';
+import { ProjectEntry, ProjectFileEntry } from './types';
+import Banner from './components/shared/Banner';
 
 const DEFAULT_CODE = `% SwiftLaTeX sample document, (C) SwiftLabs Auckland Inc. free for you to use for your own texts.
 \\documentclass[a4paper, 11pt]{article}
@@ -52,11 +55,19 @@ For headers or \\emph{other} \\textbf{special} formatting you need a  \\LaTeX\\x
 
 type Props = {};
 
+type BannerName =
+    | 'project-renamed'
+    | 'project-deleted'
+    | 'project-created'
+    | 'project-imported'
+    | undefined;
+
 type State = {
     projects: ProjectEntry[];
     isBusy: boolean;
     currentModal: 'create' | undefined;
-    sessionState: 'panel' | 'import' | 'error' | 'init';
+    sessionState: 'panel' | 'import-share' | 'import-zip' | 'error' | 'init';
+    currentBanner: BannerName;
     errorMessage: string;
 };
 
@@ -67,6 +78,7 @@ class Project extends React.PureComponent<Props, State> {
             projects: [],
             isBusy: true,
             currentModal: undefined,
+            currentBanner: undefined,
             sessionState: 'init',
             errorMessage: '',
         };
@@ -82,7 +94,7 @@ class Project extends React.PureComponent<Props, State> {
         try {
             this.storage = initializeStorage();
         } catch {
-            this.setState({ sessionState: 'error', errorMessage: 'Please login in first.' });
+            this.setState({ sessionState: 'error', errorMessage: 'Please login first.' });
             return;
         }
 
@@ -91,14 +103,18 @@ class Project extends React.PureComponent<Props, State> {
             .then((info) => {
                 EventReporter.reportEvent('project', 'login', info);
             })
-            .catch((_) => {});
+            .catch((_) => {
+            });
 
         const urlParams = new URLSearchParams(window.location.search);
         const shareID = urlParams.get('share') || '';
-        if (!shareID) {
-            this.setState({ sessionState: 'panel' });
+        const importUrl = urlParams.get('import') || '';
+        if (shareID) {
+            this.setState({ sessionState: 'import-share' });
+        } else if (importUrl) {
+            this.setState({ sessionState: 'import-zip' });
         } else {
-            this.setState({ sessionState: 'import' });
+            this.setState({ sessionState: 'panel' });
         }
     }
 
@@ -107,21 +123,22 @@ class Project extends React.PureComponent<Props, State> {
             if (this.state.sessionState === 'panel') {
                 this.setState({ isBusy: true });
                 this._listProjects()
-                    .then()
-                    .catch((_) => {
+                    .catch((e) => {
+                        console.error(e);
                         this.setState({
                             sessionState: 'error',
-                            errorMessage: 'Unable to fetch projects, please  try again',
+                            errorMessage: 'Unable to fetch projects, please try again',
                         });
                     })
                     .finally(() => {
                         this.setState({ isBusy: false });
                     });
-            } else if (this.state.sessionState === 'import') {
+            } else if (this.state.sessionState === 'import-share') {
                 this.setState({ isBusy: true });
                 this._handleImportProject()
                     .then((_) => {
                         this.setState({ sessionState: 'panel' });
+                        window.history.pushState({}, document.title, '/project.html');
                     })
                     .catch((e) => {
                         console.error(e);
@@ -134,9 +151,38 @@ class Project extends React.PureComponent<Props, State> {
                     .finally(() => {
                         this.setState({ isBusy: false });
                     });
+            } else if (this.state.sessionState === 'import-zip') {
+                this.setState({ isBusy: true });
+                this._handleImportZip()
+                    .then((_) => {
+                        this.setState({ sessionState: 'panel' });
+                        window.history.pushState({}, document.title, '/project.html');
+                    })
+                    .catch((e) => {
+                        console.error(e);
+                        this.setState({
+                            sessionState: 'error',
+                            errorMessage:
+                                'Error detected when importing a zip file, please try again',
+                        });
+                    })
+                    .finally(() => {
+                        this.setState({ isBusy: false });
+                    });
             }
         }
     }
+
+    _showBanner = (name: BannerName, duration: number) => {
+        this.setState({ currentBanner: name });
+
+        setTimeout(() => {
+            // @ts-ignore
+            this.setState((state) =>
+                state.currentBanner === name ? { currentBanner: null } : state,
+            );
+        }, duration);
+    };
 
     _handleImportProject = async () => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -146,6 +192,8 @@ class Project extends React.PureComponent<Props, State> {
         if (result) {
             const resultJson = arrayBufferToJson(result);
             if (!resultJson.deleted) {
+                /* Short cut */
+
                 /*if resultJson.deleted is false or undefined */
                 return;
             }
@@ -158,7 +206,7 @@ class Project extends React.PureComponent<Props, State> {
 
         const queryUrl = await queryUrlRequest.text();
         /* Cors Fetch */
-        const manifestRequest = await fetch(`/s/fetch?uri=${encodeURIComponent(queryUrl)}`);
+        const manifestRequest = await fetch(makeExternalLinkCorsFriendly(queryUrl));
         if (!manifestRequest.ok) {
             throw new Error('Cannot copy the shared project.');
         }
@@ -167,9 +215,8 @@ class Project extends React.PureComponent<Props, State> {
         const manifest = (await manifestRequest.json()) as ProjectEntry;
         for (const item of manifest.fileEntries) {
             if (item.type === 'folder') continue;
-
             const uri = item.uri;
-            const assetRequest = await fetch(`/s/fetch?uri=${encodeURIComponent(uri)}`);
+            const assetRequest = await fetch(makeExternalLinkCorsFriendly(uri));
             if (!assetRequest.ok) {
                 throw new Error('Cannot download the shared project.');
             }
@@ -180,7 +227,8 @@ class Project extends React.PureComponent<Props, State> {
         }
         manifest.shareEnabled = true;
         await this.storage.put('manifest', shareID, new Blob([JSON.stringify(manifest)]));
-        await this.setState({ sessionState: 'panel' });
+        this._showBanner('project-imported', 5000);
+
     };
 
     _handleLogout = () => {
@@ -207,6 +255,7 @@ class Project extends React.PureComponent<Props, State> {
             response_json.deleted = true;
             await this.storage.put('manifest', pid, new Blob([JSON.stringify(response_json)]));
             await this._listProjects();
+            this._showBanner('project-deleted', 5000);
         } catch {
             this.setState({
                 sessionState: 'error',
@@ -231,6 +280,7 @@ class Project extends React.PureComponent<Props, State> {
                 response_json.name = new_project_name;
                 await this.storage.put('manifest', pid, new Blob([JSON.stringify(response_json)]));
                 await this._listProjects();
+                this._showBanner('project-renamed', 5000);
             } catch {
                 this.setState({
                     sessionState: 'error',
@@ -241,7 +291,7 @@ class Project extends React.PureComponent<Props, State> {
         }
     };
 
-    _handleDownloadProject = async (pid: string) => {
+    _handleDownloadProject = async (pid: string, name: string) => {
         if (this.state.isBusy) return;
         EventReporter.reportEvent('project', 'download');
         this.setState({ isBusy: true });
@@ -263,7 +313,9 @@ class Project extends React.PureComponent<Props, State> {
                 }
             }
             const blobFile = await zipobj.generateAsync({ type: 'blob' });
-            triggerDownloadBlob(blobFile, pid + '.zip');
+            const niceName = escapeFilePath(name);
+            triggerDownloadBlob(blobFile, niceName);
+            // await this.storage.put('export', niceName, blobFile);
         } catch {
             this.setState({
                 sessionState: 'error',
@@ -294,19 +346,24 @@ class Project extends React.PureComponent<Props, State> {
         });
 
         const promises = repos.map((r) => this._popupEachProject(r.itemKey));
+
         while (promises.length) {
             // 10 at at time
             const batchResults = await Promise.allSettled(promises.splice(0, 10));
             const projects: ProjectEntry[] = [];
             for (const item of batchResults) {
                 if (item.status === 'fulfilled') {
-                    projects.push(item.value);
+                    const project = item.value;
+                    if (!project.deleted) {
+                        projects.push(project);
+                    }
                 }
             }
             this.setState((state: State) => ({
                 projects: state.projects.concat(projects),
             }));
         }
+
     };
 
     _handleHideModal = () => {
@@ -318,7 +375,7 @@ class Project extends React.PureComponent<Props, State> {
         this.setState({ currentModal: 'create' });
     };
 
-    prepareDefaultFileEntries = async () => {
+    prepareDefaultFileEntries = async (): Promise<ProjectFileEntry[]> => {
         const fid = genFileID('main.tex');
         const url = await this.storage.put('asset', fid, new Blob([DEFAULT_CODE]));
         return [
@@ -328,11 +385,11 @@ class Project extends React.PureComponent<Props, State> {
                 uri: url,
                 type: 'file',
                 asset: false,
-            },
+            } as ProjectFileEntry,
         ];
     };
 
-    recursiveCreateParent = (path: string, parents: string[]) => {
+    _recursiveCreateParent = (path: string, parents: string[]) => {
         const parentPath = getParentPath(path);
         if (!parentPath) {
             return;
@@ -340,66 +397,36 @@ class Project extends React.PureComponent<Props, State> {
         if (parents.includes(parentPath)) {
             return;
         }
+        this._recursiveCreateParent(parentPath, parents);
         parents.push(parentPath);
-        this.recursiveCreateParent(parentPath, parents);
     };
 
-    prepareFileEntries = async (user_zip_blob: Blob | undefined, remote_zip_url: string) => {
-        let zip_blob = user_zip_blob;
-        if (remote_zip_url) {
-            const response = await fetch(remote_zip_url);
-            if (response.ok) {
-                zip_blob = await response.blob();
-            }
-        }
+    unzipFileEntries = async (zip_blob: Blob | undefined): Promise<ProjectFileEntry[]> => {
         if (!zip_blob) {
             return this.prepareDefaultFileEntries();
         }
 
         try {
             const importedEntries = [];
-            const allowed_extension = [
-                '.tex',
-                '.bib',
-                '.bst',
-                '.cls',
-                '.pdf',
-                '.jpg',
-                '.png',
-                '.txt',
-                '.bbx',
-                '.sty',
-                '.ttf',
-                '.otf',
-            ];
+
             const zip_handle = await JSZip.loadAsync(zip_blob);
             const queues: any = [];
-            zip_handle.forEach(function (relativePath, zipEntry) {
+            zip_handle.forEach(function(relativePath, zipEntry) {
+                // console.log(relativePath);
                 if (zipEntry.dir) {
                     return;
                 }
-                if ((zipEntry as any).size > 1024 * 1024 * 2) {
-                    return;
-                }
-                let legalExtension = false;
-                allowed_extension.some((ext: string) => {
-                    if (zipEntry.name.endsWith(ext)) {
-                        legalExtension = true;
-                        return true;
-                    }
-                    return false;
-                });
-                if (!legalExtension) {
+                if ((zipEntry as any).size > 1024 * 1024 * 3) {
                     return;
                 }
                 queues.push({ path: relativePath, entry: zipEntry });
             });
 
             let singleRoot = true;
-            const parents: any = [];
+            let parents: string[] = [];
 
             for (const item of queues) {
-                this.recursiveCreateParent(item.path, parents);
+                this._recursiveCreateParent(item.path, parents);
             }
 
             if (parents.length === 0) {
@@ -412,19 +439,24 @@ class Project extends React.PureComponent<Props, State> {
                 }
             }
 
+            parents = sortDirsByDepth(parents);
+
             if (singleRoot) {
-                // console.log('Single Root');
-                const root = parents.pop();
-                for (let j = 0; j < parents.length; j++) {
-                    parents[j] = parents[j].slice(root.length + 1);
-                }
-                for (const item of queues) {
-                    item.path = item.path.slice(root.length + 1);
+                const root = parents.shift();
+                if (root) {
+                    // console.log('Single Root' + root);
+                    for (let j = 0; j < parents.length; j++) {
+                        parents[j] = parents[j].slice(root.length + 1);
+                    }
+                    for (const item of queues) {
+                        item.path = item.path.slice(root.length + 1);
+                    }
                 }
             }
 
+
             for (const item of queues) {
-                const isTextEntry = /\.(cls|bib|txt|tex|bst|sty|bbx|md|js|html)$/.test(item.path);
+                const isTextEntry = isTextFile(item.path);
                 const randomID = genFileID(item.path);
                 const zipEntryBlob = await item.entry.async('blob');
                 const uri = await this.storage.put('asset', randomID, zipEntryBlob);
@@ -434,7 +466,7 @@ class Project extends React.PureComponent<Props, State> {
                     uri,
                     type: 'file',
                     asset: !isTextEntry,
-                };
+                } as ProjectFileEntry;
                 importedEntries.push(entry);
             }
 
@@ -445,9 +477,10 @@ class Project extends React.PureComponent<Props, State> {
                     uri: '',
                     type: 'folder',
                     asset: false,
-                };
+                } as ProjectFileEntry;
                 importedEntries.push(entry);
             }
+
 
             // console.log(importedEntries);
             return importedEntries;
@@ -457,72 +490,103 @@ class Project extends React.PureComponent<Props, State> {
         }
     };
 
+    _handleImportZip = async () => {
+        EventReporter.reportEvent('project', 'import-zip');
+        const urlParams = new URLSearchParams(window.location.search);
+        const importUrl = urlParams.get('import') || '';
+        const importName = urlParams.get('import_name') || 'An imported project';
+        if (!importUrl.startsWith('https://') || !importUrl.endsWith('.zip')) {
+            throw 'Malform Zip files';
+        }
+
+        let zipFile = undefined;
+        const response = await fetch(importUrl);
+        if (!response.ok) {
+            throw 'Unable to fetch the zip file';
+        }
+        zipFile = await response.blob();
+
+        const entries = await this.unzipFileEntries(zipFile);
+        await this._createProjManifest(importName, entries);
+        this._showBanner('project-imported', 5000);
+    };
+
+    _createProjManifest = async (title: string, entries: ProjectFileEntry[]) => {
+        let mainEntry = 'main.tex';
+        for (const ent of entries) {
+            if (ent.path.endsWith('.tex') && !ent.path.includes('/')) {
+                mainEntry = ent.path;
+                /* Prefer the following main entry */
+                if (
+                    ent.path === 'main.tex' ||
+                    ent.path === 'manuscript.tex' ||
+                    ent.path === 'paper.tex'
+                ) {
+                    break;
+                }
+            }
+        }
+        const userInfo = await this.storage.getUserInfo();
+
+        const pid = genFileID(title);
+        const newProject = {
+            name: title,
+            username: userInfo.username,
+            modifiedTime: new Date().toString(),
+            fileEntries: entries,
+            entryPoint: mainEntry,
+            pid,
+        };
+        await this.storage.put('manifest', pid, new Blob([JSON.stringify(newProject)]));
+    };
+
     _handleCreateProj = async () => {
         if (this.state.isBusy) return false;
         if (!this.projectNameRef.current) return false;
         EventReporter.reportEvent('project', 'create');
         this.setState({ isBusy: true, currentModal: undefined });
-        try {
-            let title = this.projectNameRef.current.value;
-            if (!title) {
-                title = 'My fancy project';
-            }
-            const selectedFiles = this.fileRef.current!.files;
-            let zipFile;
-            if (selectedFiles && selectedFiles.length > 0) {
-                zipFile = selectedFiles[0];
-            }
-            const templateInput = this.selectRef.current!.value;
-            let templateUrl = '';
-            if (templateInput === 'Beamer') {
-                templateUrl = 'boilerplate/beamer.zip';
-            } else if (templateInput === 'CV') {
-                templateUrl = 'boilerplate/cv.zip';
-            } else if (templateInput === 'IEEE') {
-                templateUrl = 'boilerplate/ieee.zip';
-            } else if (templateInput === 'ACM') {
-                templateUrl = 'boilerplate/acm.zip';
-            } else if (templateInput === 'Tkiz') {
-                templateUrl = 'boilerplate/tkiz.zip';
-            }
-            const entries = await this.prepareFileEntries(zipFile, templateUrl);
-
-            let mainEntry = 'main.tex';
-            for (const ent of entries) {
-                if (ent.path.endsWith('.tex') && !ent.path.includes('/')) {
-                    mainEntry = ent.path;
-                    /* Prefer the following main entry */
-                    if (
-                        ent.path === 'main.tex' ||
-                        ent.path === 'manuscript.tex' ||
-                        ent.path === 'paper.tex'
-                    ) {
-                        break;
-                    }
-                }
-            }
-
-            const userInfo = await this.storage.getUserInfo();
-
-            const pid = genFileID(title);
-            const newProject = {
-                name: title,
-                username: userInfo.username,
-                modifiedTime: new Date().toString(),
-                fileEntries: entries,
-                entryPoint: mainEntry,
-                pid,
-            };
-            await this.storage.put('manifest', pid, new Blob([JSON.stringify(newProject)]));
-            await this._listProjects();
-        } catch {
-            this.setState({
-                sessionState: 'error',
-                errorMessage: 'Unable to create the project. Please  try again',
-            });
+        let title = this.projectNameRef.current.value;
+        if (!title) {
+            title = 'My fancy project';
         }
-        this.setState({ isBusy: false });
-        return false;
+        const selectedFiles = this.fileRef.current!.files;
+        let zipFile = undefined;
+        if (selectedFiles && selectedFiles.length > 0) {
+            zipFile = selectedFiles[0];
+        }
+        const templateInput = this.selectRef.current!.value;
+        let templateUrl = undefined;
+        if (templateInput === 'Beamer') {
+            templateUrl = 'boilerplate/beamer.zip';
+        } else if (templateInput === 'CV') {
+            templateUrl = 'boilerplate/cv.zip';
+        } else if (templateInput === 'IEEE') {
+            templateUrl = 'boilerplate/ieee.zip';
+        } else if (templateInput === 'ACM') {
+            templateUrl = 'boilerplate/acm.zip';
+        } else if (templateInput === 'Tkiz') {
+            templateUrl = 'boilerplate/tkiz.zip';
+        }
+
+        /* Prefer remote url */
+        if (templateUrl) {
+            const response = await fetch(templateUrl);
+            if (response.ok) {
+                zipFile = await response.blob();
+            }
+        }
+
+        try {
+            const entries = await this.unzipFileEntries(zipFile);
+            await this._createProjManifest(title, entries);
+            await this._listProjects();
+            this.setState({ isBusy: false });
+            this._showBanner('project-created', 5000);
+            return true;
+        } catch (e) {
+            this.setState({sessionState: 'error', errorMessage: 'Unable to create project, please try again.'});
+            return false;
+        }
     };
 
     _renderErrorPage() {
@@ -531,7 +595,7 @@ class Project extends React.PureComponent<Props, State> {
                 <section className="header">
                     <h2 className="title">Oops: {this.state.errorMessage}</h2>
                 </section>
-                <div className="navbar-spacer" />
+                <div className="navbar-spacer"/>
                 <nav className="navbar">
                     <div className="container">
                         <ul className="navbar-list">
@@ -563,7 +627,7 @@ class Project extends React.PureComponent<Props, State> {
                 <section className="header">
                     <h2 className="title">Importing a project...</h2>
                 </section>
-                {this.state.isBusy ? <ProgressIndicator /> : null}
+                {this.state.isBusy ? <ProgressIndicator/> : null}
             </div>
         );
     }
@@ -572,9 +636,6 @@ class Project extends React.PureComponent<Props, State> {
         const items = [];
 
         for (const project of this.state.projects) {
-            if (project.deleted) {
-                continue;
-            }
             items.push(
                 <tr key={project.pid}>
                     <td>{project.name}</td>
@@ -605,12 +666,12 @@ class Project extends React.PureComponent<Props, State> {
                         <a
                             className="button actionButton downloadButton"
                             href="#"
-                            onClick={() => this._handleDownloadProject(project.pid)}>
+                            onClick={() => this._handleDownloadProject(project.pid, project.name)}>
                             {' '}
                             Archive
                         </a>
                     </td>
-                </tr>
+                </tr>,
             );
         }
 
@@ -648,7 +709,8 @@ class Project extends React.PureComponent<Props, State> {
                                 </div>
                             </div>
                             <div className="u-full-width">
-                                <label htmlFor="templateInput">Or select a boilerplate</label>
+                                <label htmlFor="templateInput">Or select a popular template (Checkout more <a
+                                    href="https://swiftlatex.github.io/LaTeXBoilerPlate/">templates</a>)</label>
                                 <select
                                     className="u-full-width"
                                     id="templateInput"
@@ -678,17 +740,23 @@ class Project extends React.PureComponent<Props, State> {
                 <section className="header">
                     <h2 className="title">Your LaTeX Projects:</h2>
                 </section>
-                {this.state.isBusy ? <ProgressIndicator /> : null}
-                <div className="navbar-spacer" />
+                {this.state.isBusy ? <ProgressIndicator/> : null}
+                <div className="navbar-spacer"/>
                 <nav className="navbar">
                     <div className="container">
                         <ul className="navbar-list">
-                            <li className="navbar-item navbar-action ">
+                            <li className="navbar-item navbar-action">
                                 <a className="navbar-link" href="#" onClick={this._handleOpenModal}>
-                                    Create New Project
+                                    Create a blank Project
                                 </a>
                             </li>
-                            <li className="navbar-item navbar-action ">
+                            <li className="navbar-item navbar-action">
+                                <a className="navbar-link" href="https://swiftlatex.github.io/LaTeXBoilerPlate/"
+                                >
+                                    Start from a LaTeX Template
+                                </a>
+                            </li>
+                            <li className="navbar-item navbar-action">
                                 <a className="navbar-link" href="#" onClick={this._handleLogout}>
                                     Logout
                                 </a>
@@ -699,15 +767,27 @@ class Project extends React.PureComponent<Props, State> {
 
                 <table className="u-full-width">
                     <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Author</th>
-                            <th>Modified Time</th>
-                            <th>Actions</th>
-                        </tr>
+                    <tr>
+                        <th>Project</th>
+                        <th>Owner</th>
+                        <th>Modified Time</th>
+                        <th>Actions</th>
+                    </tr>
                     </thead>
                     <tbody id="project-list">{items}</tbody>
                 </table>
+                <Banner type="success" visible={this.state.currentBanner === 'project-created'}>
+                    Gr8, a new project is created.
+                </Banner>
+                <Banner type="success" visible={this.state.currentBanner === 'project-renamed'}>
+                    The project is renamed successfully.
+                </Banner>
+                <Banner type="success" visible={this.state.currentBanner === 'project-deleted'}>
+                    The project is removed successfully.
+                </Banner>
+                <Banner type="success" visible={this.state.currentBanner === 'project-imported'}>
+                    Gr8, you just received a new project.
+                </Banner>
                 {createDialog}
             </div>
         );
@@ -716,7 +796,7 @@ class Project extends React.PureComponent<Props, State> {
     render() {
         if (this.state.sessionState === 'error') {
             return this._renderErrorPage();
-        } else if (this.state.sessionState === 'import') {
+        } else if (this.state.sessionState === 'import-share' || this.state.sessionState === 'import-zip') {
             return this._renderImportPage();
         } else {
             return this._renderProjectPage();
@@ -724,4 +804,4 @@ class Project extends React.PureComponent<Props, State> {
     }
 }
 
-ReactDOM.render(<Project />, document.getElementById('root'));
+ReactDOM.render(<Project/>, document.getElementById('root'));

@@ -10,9 +10,7 @@ import { LaTeXEngine, CompileResult } from '../swiftlatex/latexEngine';
 import JSZip from 'jszip';
 import {
     arrayBufferToJson,
-    arrayBufferToString,
-    isImageFile,
-    isOpenTypeFontFile,
+    arrayBufferToString, makeExternalLinkCorsFriendly, sortDirsByDepth,
     triggerDownloadBlob,
 } from '../utils/fileUtilities';
 import { initializeStorage, BackendStorage } from '../storage/index';
@@ -117,7 +115,8 @@ export default class App extends React.Component<any, State> {
                     }
                     importedEntry.item.content = arrayBufferToString(tmp_content_buf);
                     return importedEntry;
-                } else if (isImageFile(tmp.path) || isOpenTypeFontFile(tmp.path)) {
+                }
+                {
                     const tmp_content_buf = await this._backendStorage!.get('asset', tmp.id);
                     if (!tmp_content_buf) {
                         throw new Error(`Unable to fetch asset ${tmp.id}`);
@@ -278,17 +277,6 @@ export default class App extends React.Component<any, State> {
         return false;
     }
 
-    _copyEntryBeforeUpload = (tmp: FileManagerEntry) => {
-        const entry = {
-            uri: tmp.item.uri,
-            asset: tmp.item.asset,
-            type: tmp.item.type,
-            path: tmp.item.path,
-            id: tmp.item.id,
-        };
-        return entry;
-    };
-
     _uploadFileTree = async () => {
         /* This function uploads all modified files and generate a manifest file for project infos */
         const currentStateEntries = this.state.fileEntries;
@@ -296,7 +284,13 @@ export default class App extends React.Component<any, State> {
 
         for (let j = 0; j < currentStateEntries.length; j++) {
             const tmp = currentStateEntries[j];
-            const copyTmp = this._copyEntryBeforeUpload(tmp);
+            const copyTmp = {
+                uri: tmp.item.uri,
+                asset: tmp.item.asset,
+                type: tmp.item.type,
+                path: tmp.item.path,
+                id: tmp.item.id,
+            };
             /* Handle upload modified code files */
             if (tmp.item.type === 'file') {
                 if (!tmp.item.asset) {
@@ -419,7 +413,7 @@ export default class App extends React.Component<any, State> {
         this.setState({ saveStatus: 'published' });
     };
 
-    _syncManifest = debounce(this._syncManifestNoDebounce, 3000);
+    _syncManifest = debounce(this._syncManifestNoDebounce, 1500);
 
     _generateResourceUrlMap = () => {
         const resourceMap: any = {};
@@ -438,23 +432,26 @@ export default class App extends React.Component<any, State> {
 
         if (this._requiredFlushInEngine) {
             this._latexEngine.flushCache();
-            for (let j = 0; j < currentFileEntries.length; j++) {
-                const tmp = currentFileEntries[j];
+            let toMakeDirs: string[] = []; /* We have to make parent paths first */
+            for (let tmp of currentFileEntries) {
                 if (tmp.item.type === 'folder') {
-                    console.log('Make fresh dir ' + tmp.item.path);
-                    this._latexEngine.makeMemFSFolder(tmp.item.path);
+                    toMakeDirs.push(tmp.item.path);
                 }
             }
-            for (let j = 0; j < currentFileEntries.length; j++) {
-                const tmp = currentFileEntries[j];
+            toMakeDirs = sortDirsByDepth(toMakeDirs);
+            for (let p of toMakeDirs) {
+                console.log('Make fresh dir ' + p);
+                this._latexEngine.makeMemFSFolder(p);
+            }
+
+            for (let tmp of currentFileEntries) {
                 if (tmp.item.type === 'file') {
                     console.log('Write fresh file ' + tmp.item.path);
                     this._latexEngine.writeMemFSFile(tmp.item.path, tmp.item.content);
                 }
             }
         } else {
-            for (let j = 0; j < currentFileEntries.length; j++) {
-                const tmp = currentFileEntries[j];
+            for (let tmp of currentFileEntries) {
                 if (this._requiredUpdateFilesInEngine.includes(tmp.item.path)) {
                     console.log('Update modified file ' + tmp.item.path);
                     this._latexEngine.writeMemFSFile(tmp.item.path, tmp.item.content);
@@ -579,6 +576,10 @@ export default class App extends React.Component<any, State> {
         entries.find(({ item, state }) => item.type === 'file' && state.isFocused === true);
 
     _uploadAssetAsync = async (fileObj: File, id: string) => {
+        const MAX_ALLOWED_ASSET_SIZE = 1024 * 1024 * 5;
+        if (fileObj.size > MAX_ALLOWED_ASSET_SIZE) {
+            throw 'Asset too large';
+        }
         return this._backendStorage!.put('asset', id, fileObj);
     };
 
@@ -628,15 +629,19 @@ export default class App extends React.Component<any, State> {
         /* Feed XDV and Resources to DVIPDFMX */
         if (dviCompileOk) {
             const currentFileEntries = this.state.fileEntries;
-            for (let j = 0; j < currentFileEntries.length; j++) {
-                const tmp = currentFileEntries[j];
+            let toMakeDirs: string[] = []; /* We have to make parent paths first */
+            for (let tmp of currentFileEntries) {
                 if (tmp.item.type === 'folder') {
-                    // console.error('Export: Make fresh dir ' + tmp.item.path);
-                    export_engine.makeMemFSFolder(tmp.item.path);
+                    toMakeDirs.push(tmp.item.path);
                 }
             }
-            for (let j = 0; j < currentFileEntries.length; j++) {
-                const tmp = currentFileEntries[j];
+            toMakeDirs = sortDirsByDepth(toMakeDirs);
+            for (let p of toMakeDirs) {
+                console.log('Make fresh dir ' + p);
+                export_engine.makeMemFSFolder(p);
+            }
+
+            for (let tmp of currentFileEntries) {
                 if (tmp.item.type === 'file') {
                     // console.error('Export: write fresh file ' + tmp.item.path);
                     export_engine.writeMemFSFile(tmp.item.path, tmp.item.content);
@@ -732,7 +737,7 @@ export default class App extends React.Component<any, State> {
                 });
                 if (!existingEntry) {
                     const uri = remoteEntry.uri;
-                    const assetRequest = await fetch(`/s/fetch?uri=${encodeURIComponent(uri)}`);
+                    const assetRequest = await fetch(makeExternalLinkCorsFriendly(uri));
                     if (!assetRequest.ok) {
                         throw new Error('Unable to pull shared resources');
                     }
@@ -760,6 +765,7 @@ export default class App extends React.Component<any, State> {
                     const ytext = this.ydoc.getText(remoteEntry.id);
                     content = ytext.toString();
                     if (!this.ytextmap.has(remoteEntry.id)) {
+                        this._requiredUploadFiles.push(remoteEntry.id);
                         this.ytextmap.set(remoteEntry.id, ytext);
                         /* Bind event */
                         ytext.observe((event) => {
@@ -885,7 +891,7 @@ export default class App extends React.Component<any, State> {
         this.yfiles = this.ydoc.getArray('files');
         if (this.yfiles.length === 0) {
             console.error('First Initialized');
-            await this._publicTreeToRemote(this.state.fileEntries);
+            this._publicTreeToRemote(this.state.fileEntries);
         } else {
             await this._mergeRemoteContentToLocal();
         }

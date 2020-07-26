@@ -85,12 +85,12 @@ export function getUniquePath(allPaths: string[], suggestedPath: string, initial
     return path;
 }
 
-export function supportedFileTypes(): string {
-    return '.jpg,.png,.pdf,.cls,.bib,.txt,.tex,.bst,.sty,.bbx,.bmp,.md';
+export function escapeFilePath(name: string): string {
+    return encodeURI(name).replace(/%20/g, '_').replace(/%/g, '');
 }
 
 export function isTextFile(name: string): boolean {
-    return /\.(cls|bib|txt|tex|bst|sty|bbx|md|js|html)$/.test(name);
+    return /\.(cls|bib|txt|tex|bst|sty|bbx|md|js|html|py|c|xml|cpp|java|h|pl|cs)$/.test(name);
 }
 
 export function isImageFile(name: string): boolean {
@@ -101,10 +101,6 @@ export function isPDFImage(name: string): boolean {
     return /\.(pdf)$/.test(name);
 }
 
-export function isOpenTypeFontFile(name: string): boolean {
-    return /\.(ttf|otf)$/.test(name);
-}
-
 export function arrayBufferToJson(arrayBuf: ArrayBuffer) {
     const jsonStr = arrayBufferToString(arrayBuf);
     return JSON.parse(jsonStr);
@@ -113,4 +109,31 @@ export function arrayBufferToJson(arrayBuf: ArrayBuffer) {
 export function arrayBufferToString(arrayBuf: ArrayBuffer) {
     const decoder = new TextDecoder('utf8');
     return decoder.decode(arrayBuf);
+}
+
+export function sortDirsByDepth(paths: string[]) {
+    return paths.sort((a, b) => {
+        const ac = (a.match(/\//g) || []).length;
+        const bc = (b.match(/\//g) || []).length;
+        return ac - bc;
+    });
+}
+
+export function makeExternalLinkCorsFriendly(uri: string) {
+    if (uri.startsWith('https://s3.swiftlatex.com/')
+        || uri.startsWith('https://www.swiftlatex.com/minio/' +
+            '')
+        || uri.startsWith('https://dl.dropboxusercontent.com/')
+        || uri.startsWith('http://localhost:3011/')
+    ) {
+        return uri;
+    }
+
+    let corsBackend = 'cors/get?uri=';
+
+    if (process.env.NODE_ENV === 'production' && window.location.host.startsWith('localhost')) {
+        corsBackend = 'https://vast-depths-38277.herokuapp.com/cors/get?uri='
+    }
+    /* Use cors support */
+    return corsBackend + encodeURIComponent(uri);
 }

@@ -13,8 +13,9 @@ export class DropboxStorage extends BackendStorage {
 
     _cleanUrl(item: string): string {
         if (item.endsWith('?dl=0')) {
-            return item.slice(0, item.length - 4) + 'raw=1';
+            item = item.slice(0, item.length - 4) + 'raw=1';
         }
+        item = 'https://dl.dropboxusercontent.com/' + item.slice(24); /* replace to cors friendly endpoint */
         return item;
     }
 
@@ -168,7 +169,7 @@ export class DropboxStorage extends BackendStorage {
             return existUrl!;
         } else {
             const jsonR = await response.json();
-            const rUrl = this._cleanUrl(jsonR.url);
+            let rUrl = this._cleanUrl(jsonR.url);
             this._putCache(itemKey, rUrl);
             return rUrl;
         }

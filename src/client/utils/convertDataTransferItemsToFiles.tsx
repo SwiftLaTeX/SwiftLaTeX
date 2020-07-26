@@ -1,4 +1,3 @@
-import { isImageFile, isOpenTypeFontFile, isTextFile } from './fileUtilities';
 
 export type WebkitDirectoryReaderResult = (WebkitFileEntry | WebkitDirectoryEntry)[];
 
@@ -31,13 +30,6 @@ const processEntry = async (
     path: string
 ) => {
     if (entry.isFile) {
-        if (
-            !isTextFile(entry.name) &&
-            !isImageFile(entry.name) &&
-            !isOpenTypeFontFile(entry.name)
-        ) {
-            return;
-        }
         const file = await new Promise<File>((resolve, reject) => entry.file(resolve, reject));
         files.push({
             path,

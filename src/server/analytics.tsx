@@ -13,9 +13,9 @@ const analytics = async (ctx: Context) => {
     url = url + (url.indexOf('?') === -1 ? '?' : '&') + 'uip=' + encodeURIComponent(clientIp);
     const headerConfigs = {
         headers: {
-            'user-agent': ctx.request.headers['user-agent'],
-            cookie: ctx.request.headers.cookie,
-            'accept-language': ctx.request.headers['accept-language'],
+            'user-agent': ctx.request.headers['user-agent'] || '',
+            'cookie': ctx.request.headers['cookie'] || '',
+            'accept-language': ctx.request.headers['accept-language'] || '',
         },
     };
     try {

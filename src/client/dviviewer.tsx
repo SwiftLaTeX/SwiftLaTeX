@@ -1,5 +1,7 @@
-import { getBaseName, removeExtension } from './utils/fileUtilities';
+import { getBaseName, makeExternalLinkCorsFriendly, removeExtension } from './utils/fileUtilities';
 import * as d3Selection from 'd3-selection';
+import { set, get } from 'idb-keyval';
+import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
 import { EventReporter } from './utils/eventReport';
 
 type CachedFileEntry = {
@@ -18,7 +20,6 @@ type CursorPosition = {
     column: number;
 };
 
-const PUBLIC_PDFVIEWER_ENDPOINT = '/pdfviewer?uri=';
 
 export class DviViewer {
     totalPage = 1;
@@ -183,7 +184,7 @@ export class DviViewer {
             this.currentPage = this.totalPage;
         }
         (document.getElementById(
-            'toolbar-input'
+            'toolbar-input',
         )! as HTMLInputElement).value = `${this.currentPage}/${this.totalPage}`;
 
         /* File List */
@@ -204,7 +205,7 @@ export class DviViewer {
                 this.showCursor(
                     this.lastKnownCursorPosition.path,
                     this.lastKnownCursorPosition.line,
-                    this.lastKnownCursorPosition.column
+                    this.lastKnownCursorPosition.column,
                 );
             }
         }
@@ -236,6 +237,36 @@ export class DviViewer {
         return '';
     }
 
+    async _loadPDFImage(target: Element, uri: string) {
+        const cache: string = await get(uri);
+        if (cache) {
+            target.setAttribute('href', cache);
+            return;
+        }
+
+        try {
+            GlobalWorkerOptions.workerSrc =
+                '//cdn.jsdelivr.net/npm/pdfjs-dist@2.4.456/build/pdf.worker.min.js';
+            const tempPDFURL = makeExternalLinkCorsFriendly(uri);
+
+            const pdfDoc = await getDocument(tempPDFURL).promise;
+            const page = await pdfDoc.getPage(1);
+            const viewport = page.getViewport({ scale: 1 });
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d')!;
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            await page.render({ canvasContext: context, viewport: viewport }).promise;
+            const pdfImage: string = canvas.toDataURL('image/png');
+            pdfDoc.destroy();
+            target.setAttribute('href', pdfImage);
+            await set(uri, pdfImage);
+
+        } catch (e) {
+            console.error(`Unable to view pdf document ${uri}, due to` + e);
+        }
+    }
+
     _loadImage(target: Element) {
         if (target.hasAttribute('loaded')) return;
         target.setAttribute('loaded', '1');
@@ -244,7 +275,7 @@ export class DviViewer {
         const remoteUrl = this._lookupResources(url);
         if (!remoteUrl) return;
         if (url.endsWith('pdf')) {
-            target.setAttribute('href', PUBLIC_PDFVIEWER_ENDPOINT + encodeURIComponent(remoteUrl));
+            this._loadPDFImage(target, remoteUrl).then();
         } else {
             target.setAttribute('href', remoteUrl);
         }
@@ -433,7 +464,7 @@ export class DviViewer {
         const updateColumns = d3Selection
             .selectAll(`tspan[l="${line}"]`)
             .filter(`tspan[f="${fid}"]`);
-        updateColumns.each(function (_) {
+        updateColumns.each(function(_) {
             const that = this as SVGTSpanElement;
             if (that === newTspanTag) return;
             const originalColumn = parseInt(that.getAttribute('c')!);
@@ -510,7 +541,7 @@ export class DviViewer {
         const updateColumns = d3Selection
             .selectAll(`tspan[l="${line}"]`)
             .filter(`tspan[f="${fid}"]`);
-        updateColumns.each(function (_) {
+        updateColumns.each(function(_) {
             const that = this as SVGTSpanElement;
             const originalColumn = parseInt(that.getAttribute('c')!);
             if (originalColumn >= column) {

@@ -4,10 +4,10 @@ import classnames from 'classnames';
 import debounce from 'lodash/debounce';
 import 'monaco-editor/esm/vs/editor/browser/controller/coreCommands.js';
 import 'monaco-editor/esm/vs/editor/contrib/bracketMatching/bracketMatching.js';
-import 'monaco-editor/esm/vs/editor/contrib/caretOperations/caretOperations.js';
 import 'monaco-editor/esm/vs/editor/contrib/clipboard/clipboard.js';
 import 'monaco-editor/esm/vs/editor/contrib/contextmenu/contextmenu.js';
 import 'monaco-editor/esm/vs/editor/contrib/find/findController.js';
+import 'monaco-editor/esm/vs/editor/contrib/codeAction/codeActionContributions.js';
 import 'monaco-editor/esm/vs/editor/contrib/hover/hover.js';
 import 'monaco-editor/esm/vs/editor/contrib/suggest/suggestController.js';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
@@ -20,7 +20,7 @@ import { Registry } from 'monaco-textmate'; // peer dependency
 import { wireTmGrammars } from 'monaco-editor-textmate';
 // import { MonacoYJSBinding } from './MonacoYjs';
 import ResizeDetector from '../shared/ResizeDetector';
-import { HunspellEngine } from './hunspell';
+import { HunspellEngine } from './SpellChecker';
 import { createMutex } from '../../utils/mutex';
 import { YTextEvent } from 'yjs/dist/src/types/YText';
 import { loadWASM } from 'onigasm';
@@ -57,6 +57,7 @@ class MonacoEditor extends React.Component<Props> {
     _spellCheckEngine: HunspellEngine | undefined;
     _lastSpeckResult: Annotation[] = [];
     _completionProviderLaTeX: monaco.IDisposable | undefined;
+    _spellActionProvider: monaco.IDisposable | undefined;
     _editingMutex = createMutex();
     static defaultProps: Partial<Props> = {
         lineNumbers: 'on',
@@ -345,7 +346,98 @@ class MonacoEditor extends React.Component<Props> {
 
         this._completionProviderLaTeX = monaco.languages.registerCompletionItemProvider(
             'latex',
-            laTeXCompletionProvider
+            laTeXCompletionProvider,
+        );
+
+        (this._editor as any)._commandService.addCommand({id: "spellchecker_addignoreword",
+            handler: (_: any, ...args: any[]) => {
+                if(this._spellCheckEngine) {
+                    this._spellCheckEngine.addIgnoreWord(args[0]);
+                    this._toBeSpellCheckedLines = [-1];
+                }
+            },
+        });
+
+        (this._editor as any)._commandService.addCommand({id: "spellchecker_removeignoreword",
+            handler: (_: any, ...args: any[]) => {
+                if(this._spellCheckEngine) {
+                    this._spellCheckEngine.removeIgnoreWord(args[0]);
+                    this._toBeSpellCheckedLines = [-1];
+                }
+            },
+        });
+
+        this._spellActionProvider = monaco.languages.registerCodeActionProvider(
+            'latex',
+            {
+                provideCodeActions: (
+                    model /**ITextModel*/,
+                    range /**Range*/,
+                    _context /**CodeActionContext*/,
+                    _token, /**CancellationToken*/
+                ) => {
+
+                    if (!this._spellCheckEngine || !this._spellCheckEngine.isReady()) {
+                        return undefined;
+                    }
+                    let marker = this._lastSpeckResult.find(e => {
+                        return e.startLineNumber === range.startLineNumber && e.startColumn === range.startColumn &&
+                            e.endColumn === range.endColumn;
+                    });
+                    if (!marker) {
+                        return undefined;
+                    }
+                    const misspell = model.getValueInRange(range);
+
+                    return this._spellCheckEngine.suggest(misspell).then(suggestions => {
+                        const codeActions: monaco.languages.CodeAction[] = [];
+                        for (let sug of suggestions) {
+                            const fix: monaco.languages.TextEdit = {
+                                range: range,
+                                text: sug,
+                            };
+                            codeActions.push({
+                                title: `Change to ${sug}`,
+                                edit: {
+                                    edits: [{
+                                        edit: fix,
+                                        resource: model.uri,
+                                    }],
+                                },
+                                kind: 'quickfix', // not sure if necessary / what value should be used
+                            });
+                        }
+
+                        if (marker!.severity === 2) {
+                            codeActions.push({
+                                title: `Add ${misspell} to dictionary`,
+                                command: {
+                                    id: 'spellchecker_addignoreword',
+                                    title: 'Add ignore word',
+                                    arguments: [misspell]
+                                },
+                                kind: 'quickfix', // not sure if necessary / what value should be used
+                            });
+                        } else if (marker!.severity === 1) {
+                            codeActions.push({
+                                title: `Remove ${misspell} from dictionary`,
+                                command: {
+                                    id: 'spellchecker_removeignoreword',
+                                    title: 'Remove ignore word',
+                                    arguments: [misspell]
+                                },
+                                kind: 'quickfix', // not sure if necessary / what value should be used
+                            });
+                        }
+
+                        return {
+                            actions: codeActions, dispose() {
+                            },
+                        };
+                    });
+
+                },
+            },
         );
 
         this._createOrUpdateModel(path, value, autoFocus);
@@ -392,6 +484,7 @@ class MonacoEditor extends React.Component<Props> {
         this._cursorSubscription && this._cursorSubscription.dispose();
         this._contentSubscription && this._contentSubscription.dispose();
         // this._hoverProvider && this._hoverProvider.dispose();
+        this._spellActionProvider && this._spellActionProvider.dispose();
         this._completionProviderLaTeX && this._completionProviderLaTeX.dispose();
         this._spellCheckEngine && this._spellCheckEngine.closeWorker();
         this._editor && this._editor.dispose();
@@ -448,9 +541,23 @@ class MonacoEditor extends React.Component<Props> {
     };
 
     _updateMarkers = () => {
-        const toShowAnnotation = this.props.annotations.concat(this._lastSpeckResult);
+        if (!this._editor) {
+            return;
+        }
+        const currentModel = this._editor!.getModel();
+        if (!currentModel) {
+            return;
+        }
+        const toShowCompileError = this.props.annotations.filter(e => {
+            const filename = e.source;
+            if (e.source.startsWith('./')) {
+                return 'file://' + filename.slice(1) === currentModel.uri.toString();
+            }
+            return false;
+        });
+        const toShowAnnotation = toShowCompileError.concat(this._lastSpeckResult);
         // @ts-ignore
-        monaco.editor.setModelMarkers(this._editor.getModel(), null, toShowAnnotation);
+        monaco.editor.setModelMarkers(currentModel, 'editor', toShowAnnotation);
     };
 
     _handleResize = debounce(() => {
