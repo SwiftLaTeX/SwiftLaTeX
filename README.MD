@@ -25,6 +25,11 @@ Download the latest release from https://github.com/SwiftLaTeX/SwiftLaTeX/releas
 
 Unzip the file, and execute the windows_webserver.exe, linux_webserver, or mac_webserver based on your OSs.
 
+For Linux users, you may need to grant execution permission by doing 
+```
+chmod a+x linux_webserver
+```
+
 Open your browser, and go to http://localhost:3011.
 
 This option allows you to store files in your local hard drive, Google, or Dropbox.
