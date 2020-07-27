@@ -115,9 +115,6 @@ Exposing public urls is not a security risk, as they are usually very long and i
 Sharing is achieved by using the YJS, A CRDT framework with a powerful abstraction of shared data. Every changed is synced among users.
 https://github.com/yjs/yjs
 
-For sharing functionality to work, a mongodb is required. (More deteails to come)
-
-
 ### CTAN files
 LaTeX is not a stand-alone typesetting program in itself, but document preparation software that runs on top of Donald E. Knuth's TeX typesetting system. TeX distributions usually bundle together all the parts needed for a working TeX system and they generally add to this both configuration and maintenance utilities. Nowadays LaTeX, and many of the packages built on it, form an important component of any major TeX distribution. 
 In SwiftLaTeX, all required files are fetched from CTAN (Comprehensive TeX Archive Network), https://www.ctan.org, or our mirror server. 
@@ -141,4 +138,4 @@ We prefer Github Issues if you would like to submit bug reports.
 ## License
 
 The code in this repository is released under the GNU AFFERO GENERAL PUBLIC LICENSE, version 3. A copy can be found in the LICENSE file.
-Copyright (c) SwiftLab, 2014-2020.
+Copyright (c) SwiftLab, 2018-2020.
