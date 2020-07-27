@@ -66,9 +66,9 @@ All storage options should work of the box. You could host your own Minio server
 ### XeTeX Engine
 SwiftLaTeX engine is based on Tectonic (a C++ reimplementation of XeTeX), which supports UTF-8 and Opentype fonts out of box.
 The engine is not 100% faithful to XeTeX. 
-First, though XeTeX does support Chinese/Japanese/Korea/Arabic languages, the locale line breaking function is not available yet. This function is rarely used but supporting it requires a fully working ICU library, whose size may be unbearable in browser environments.
-Secondly, This engine not support graphite fonts, which are rarely used.
-You can find the engine source code in https://github.com/SwiftLaTeX/SwiftLaTeX-Engine. Nevertheless, compiling it requires an Emscripten toolchain and some basic knowledge about WebAssembly. We would strongly recommend you to use the prebuilt binaries in this repo. 
+First, though XeTeX does support Chinese/Japanese/Korea/Arabic languages, the locale line breaking function is not available yet. This function is rarely used and supporting it requires a fully working ICU library, whose size may be unbearable in browser environments.
+Secondly, This engine not support graphite fonts, which are rarely used too.
+You can find the engine source code in https://github.com/SwiftLaTeX/SwiftLaTeX-Engine. Nevertheless, compiling it requires an Emscripten toolchain and some in-depth knowledge about WebAssembly. We would strongly recommend you to use the prebuilt binaries in this repo. 
 
 ![Screenshot](https://s3.swiftlatex.com/swiftlatex2/9FSa0rkYnHCWlA9ThUbeUYWKyE2A4yrK/asset/cn9tf1YLHmlocalhost_3011_editor.html_p_3D0KaL0q7np8(iPad_20Pro)_20(2).png)
 
