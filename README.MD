@@ -4,8 +4,6 @@
 
 SwiftLaTeX, a WYSIWYG WebAssembly client-side LaTeX Editor. All computation is done locally and files are stored in user-provided cloud storage. 
 
-![Screenshot](https://www.swiftlatex.com/images/screenshot-light.png)
-
 ## Main Features
 
 1. __Speed__. SwiftLaTeX engines run in browsers, all computation is done strictly locally. It makes SwiftLaTeX more responsive (i.e., faster compilation) and scalable.
@@ -19,20 +17,6 @@ SwiftLaTeX, a WYSIWYG WebAssembly client-side LaTeX Editor. All computation is d
 ## Installation Guide
 
 No installation needed, just try it in https://www.swiftlatex.com
-
-### Host in Windows, MAC, Linux using precompiled binaries.
-Download the latest release from https://github.com/SwiftLaTeX/SwiftLaTeX/releases.
-
-Unzip the file, and execute the windows_webserver.exe, linux_webserver, or mac_webserver based on your OSs.
-
-For Linux users, you may need to grant execution permission by doing 
-```
-chmod a+x linux_webserver
-```
-
-Open your browser, and go to http://localhost:3011.
-
-This option allows you to store files in your local hard drive, Google, or Dropbox.
 
 #### Compile by yourself
 If you do not have node and yarn yet, try the following commands first.
@@ -49,17 +33,6 @@ cd SwiftLaTeX
 yarn
 yarn start
 ```
-
-#### Use Docker
-If you prefer using Docker, you could try the following commands.
-```
-git clone https://github.com/SwiftLaTeX/SwiftLaTeX
-cd SwiftLaTeX
-docker build . -t swiftlatex/swiftlatexv2
-docker run -p 3011:3011 swiftlatex/swiftlatexv2
-```
-The server will be up and running in http://localhost:3011.
-All storage options should work of the box. You could host your own Minio server and provide the credential info to src/server/minio.tsx, such that you can store playgroud files in your server. 
 
 ## SwiftLaTeX Technical Details
 
@@ -84,14 +57,36 @@ SwiftLaTeX also supports opentype fonts (ttf, otf), SwiftLaTeX provides a set of
 
 ![Screenshot](https://s3.swiftlatex.com/swiftlatex2/AWdSGuPe60mHwNXnzqDeuOLzWUgkaeaE/asset/localhost_3011_editor,html_p%3DMy_fancy_project,cCBkO57V(iPad_Pro).iBO26.png)
 
-### PDFTeX Engine
-Despite XeTeX engine is considered to be much modern, many users may still prefer the good-old PdfTeX engine.
-In fact, the first SwiftLaTeX prototype was based on PdfTeX. 
-PdfTeX possesses some advantages such as 3x faster compilation, faithful PDF display (means full support to Tikz and PGF) and a broader LaTeX package support.
-Therefore, we now allow users to use the legacy PdfTeX engine. 
-PDFTeX engine does not fully support WYSIWYG editing.  
-Also Unicode and Freetype are not supported. You could switch the engine as shown below.
-![Screenshot](https://s3.swiftlatex.com/swiftlatex2/7PWFAFkNUJsIqFbEj1rPdGWgqELHX1AH/asset/www,swiftlatex,com_editor,html_p%3D8hYjNAR9XQ.hhE3R.png)
+#### Build Engine
+If you wanna build or enhance XeTeX engine by yourself, you need to install Emscripten first.
+```
+# Get the emsdk repo
+git clone https://github.com/emscripten-core/emsdk.git
+
+# Enter that directory
+cd emsdk
+
+# Fetch the latest version of the emsdk (not needed the first time you clone)
+git pull
+
+# Download and install the latest SDK tools.
+./emsdk install latest
+
+# Make the "latest" SDK "active" for the current user. (writes .emscripten file)
+./emsdk activate latest
+
+# Activate PATH and other environment variables in the current terminal
+source ./emsdk_env.sh
+```
+
+Then go to the directory 'webassembly' and type make. After that, you will find the engine files swiftlatex.wasm and swiftlatex.js over there.
+```
+cd webassembly
+make
+```
+
+#### Enhance Engine Display Backend
+Our engine outputs html directly, you can find and hack the backend in this file(https://github.com/SwiftLaTeX/SwiftLaTeX/blob/aaaba052def4b0b7e770ac46126cdaf0b9fc39f1/webassembly/xetexdir/XeTeX_ext.c#L313). Currently, Tikz is still not fully supported. Any contributions will be appreciated. We are consider moving this logic to javascript instead.
 
 ### Storage Backends
 SwiftLaTeX has few requirements on storage backends. A developer who wishes to add new storage backends just needs to implement the following three simple methods. 
@@ -119,9 +114,6 @@ https://github.com/yjs/yjs
 LaTeX is not a stand-alone typesetting program in itself, but document preparation software that runs on top of Donald E. Knuth's TeX typesetting system. TeX distributions usually bundle together all the parts needed for a working TeX system and they generally add to this both configuration and maintenance utilities. Nowadays LaTeX, and many of the packages built on it, form an important component of any major TeX distribution. 
 In SwiftLaTeX, all required files are fetched from CTAN (Comprehensive TeX Archive Network), https://www.ctan.org, or our mirror server. 
 
-### Language Server
-SwiftLaTeX is using Digestif as a LaTeX language server. It is amazingly small and powerful. You could check out the project at https://github.com/astoff/digestif.
-
 ### Change Logs
 You can check the detailed change logs in http://www.swiftlatex.com/changelogs.html
 
@@ -130,12 +122,7 @@ SwiftLaTeX is almost ready for production use, with the following exceptions. Th
 1. No graphite fonts and international line-breaking support. We so far deem this functionalty not very useful for English-speaking people. 
 3. XeTeX engine cannot properly display standalone tikz pictures, we are still investigating this issue.
 
-### Slack Channel
-https://join.slack.com/t/swiftlatex/shared_invite/zt-fupygr84-HO2SStUb9UvRhqeYNa0~PQ
 
-We prefer Github Issues if you would like to submit bug reports.
- 
 ## License
-
 The code in this repository is released under the GNU AFFERO GENERAL PUBLIC LICENSE, version 3. A copy can be found in the LICENSE file.
-Copyright (c) SwiftLab, 2018-2020.
+Copyright (c) SwiftLab, 2018-2021.
