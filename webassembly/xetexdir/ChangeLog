@@ -1,0 +1,817 @@
+2019-12-31  Akira Kakuto  <kakuto@w32tex.org>
+
+	* XeTeX_ext.c: Support system poppler version 0.84.0.
+
+2019-12-10  Hironori Kitagawa  <h_kitagawa2001@yahoo.co.jp>
+
+	* xetex.defines (gzFile): move to ../web2c/common.defines.
+
+2019-06-30  Hironori Kitagawa  <h_kitagawa2001@yahoo.co.jp>
+
+	* xetex-filedump.test, filedump.tex, filedump.log: New tests.
+	* am/xetex.am: Adjusted for new test.
+
+2019-05-30  Khaled Hosny  <dr.khaled.hosny@gmail.com>
+
+	* XeTeXLayoutInterface.cpp: Do not use hb-icu if HarfBuzz
+	version is 2.5.0 or newer.
+
+2019-01-03  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* NEWS, xetex_version.h, xetex.web: Sync with the upstream.
+	XeTeX version is 0.999991.
+
+2018-12-25  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* pdfimage.cpp: Simplify the support of Rotate.
+
+2018-12-24  Stefan Br\"uns  <stefan.bruens@rwth-aachen.de>
+
+	* pdfimage.cpp: Avoid modification of internal poppler object,
+	fix compilation with poppler 0.70.0 and newer ones.
+	Improve the change on 2018-10-22.
+
+2018-11-17  Joseph Wright  <joseph.wright@morningstar2.co.uk>
+
+	* xetex.web, xetex.defines: Support some primitives from
+	pdfTeX in XeTeX. Add \expanded and extend \Uchar a bit.
+
+2018-10-22  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* pdfimage.cpp: Support poppler 0.70.0.
+
+2018-09-09  Karl Berry  <karl@tug.org>
+
+	* xetex-bug73.test: LC_ALL=LANGUAGE=C.
+
+2018-05-11  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* XeTeX_pic.c: Allow non-ascii image names (W32 only).
+
+2018-03-24  Hironobu Yamashita <h.y.acetaminophen@gmail.com>
+            Hironori Kitagawa  <h_kitagawa2001@yahoo.co.jp>
+
+	* xetex.ch: Recover the right \lastnodetype initialization
+	value ignored by tex.ch.
+
+2018-02-26  Jonathan Kew <jfkthame@gmail.com>
+
+	* xetex.web: Fix the code to skip discretionaries when looking
+	for a |native_word|.
+
+2018-02-04  Jonathan Kew <jfkthame@gmail.com>
+
+	* NEWS: Update for 0.99999.
+
+2018-02-03  Jonathan Kew <jfkthame@gmail.com>
+
+	* Bump version number to 0.99999, aiming for the TL'18 release.
+	Fix issues reported on https://sourceforge.net/p/xetex/bugs
+	* xetex.web, xetex.ch: Patch from Hironori Kitagawa to
+	integrate prim_eqtb into eqtb. Fixes issue where
+	\primitive\vrule\q incorrectly swallows the \q instead of
+	giving an error. Fixes #143.
+	* xetex.web: Patch from Hironobu Yamashita for \strcmp and
+	\mdfivesum errors. Fixes #144.
+	* xetex.web: Patch from Hironobu Yamashita for \uchyph with
+	native fonts. Fixes #145.
+	* XeTeX_ext.[ch]: Patch from Hironobu Yamashita to properly
+	close input pipes. Fixes 147.
+	* xetex.web: Leave text as UTF-16 in trick_buf for better
+	error context printing. (Mostly) fixes #146.
+	It's still possible that error context could include half of
+	a supplementary-plane character (i.e. an unpaired surrogate).
+	Should be a lot less likely, and less troublesome than broken
+	UTF-8, however.
+	* XeTeXFontMgr.cpp, XeTeXFontMgr.h: Convert optical size info
+	in OpenType 'size' feature from PostScript to TeX points.
+	Note that this will change behavior for existing documents
+	that use OpenType fonts from optically-sized families, and
+	depend on XeTeX choosing the appropriate face for a given
+	size: the boundaries at which face selection changes will be
+	slightly shifted (corrected) from how earlier versions behaved.
+	* xetex.web: Avoid prematurely merging following text with the
+	no-break text of a \discretionary. We don't want to combine
+	text after \discretionary{A}{B}{C} into the same node as the
+	(trailing node of the) no-break parameter {C}, because this
+	would result in following text being lost in the case where
+	the discretionary break is taken. When this happens, its
+	no-break text (recorded as a count of nodes) is supposed
+	to be skipped over, but if we've combined following characters
+	with the trailing node, they will also be (incorrectly)
+	skipped. Fixes #137.
+
+2018-01-17  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* am/xetex.am (OBJCXXFLAGS) [XETEX_MACOSX]: add -std=c++11.
+
+2017-12-22  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* image/jpegimage.c: If j_info->xdpi and j_info->ydpi are not
+	determined in some JPEG format, they are assumed to be 72.0
+	in order to avoid division by zero.
+
+2017-11-07  Jonathan Kew  <jfkthame@gmail.com>
+
+	* XeTeX_ext.c: Guard against out-of-range result from UTF-8
+	decoding, and return U+FFFD Replacement Character instead
+	to avoid a crash for invalid inputs (from A. Kakuto).
+
+2017-09-24  Hironori Kitagawa  <h_kitagawa2001@yahoo.co.jp>
+
+	* xetex.web: Avoid overwriting prim_* entries by primitive().
+
+2017-09-05  Karl Berry  <karl@tug.org>
+        and Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* xetexdir/XeTeX_ext.c (IS_SPC_OR_EOL): new macro.
+	(input_line): use it, instead of ISBLANK.
+	See also analogous change in lib/texmfmp.c.
+	Original bug report from Evan Aad,
+	http://tug.org/pipermail/tex-k/2017-August/002801.html
+
+2017-08-06  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* pdfimage.cpp: Support /Rotate in PDF image inclusion with
+	the new xdvipdfmx-20170806.
+
+2017-07-17  Jonathan Kew  <jfkthame@gmail.com>
+
+	* xetex.ch: Set a non-zero exit code if the pipe
+	to the output driver closes with a non-zero code.
+
+2017-04-27  Karl Berry  <karl@tug.org>
+
+	* am/xetex.am (xetex_ldadd): add $(ICU_LIBS_EXTRA).
+
+2017-04-22  Jonathan Kew  <jfkthame@gmail.com>
+
+	* xetex.web, xetex_version.h, NEWS: Fixed long-standing bug that made
+	\ifcat\span...\fi (and similar constructions with \cr, \crcr) behave
+	incorrectly. Also fixed initialization of \delcode values for
+	supplementary-plane characters. version 0.99998.
+
+2017-03-17  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* Sync with the upstream (version 0.99997).
+
+2017-03-12  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* Sync with the upstream.
+
+2016-10-03  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* XeTeXOTMath.cpp: Sync with the upstream.
+
+2016-09-25  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* MathTable.h, XeTeXOTMath.cpp: Sync with the upstream.
+
+2016-09-24  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* xetex.web: Sync with the upstream.
+
+2016-02-09  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* XeTeX_ext.c: Revert the change on 2015-11-06.
+	That is, recover the original *outputdriver = "xdvipdfmx -q -E",
+	because asynchronous outputs of XeTeX and xdvipdfmx are messy.
+
+2016-02-07  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* xetex.web, NEWS: sync with the upstream.
+
+2015-11-06  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* XeTeX_ext.c: Change const char *outputdriver = "xdvipdfmx -q -E";
+	as const char *outputdriver = "xdvipdfmx -E"; by removing the quiet
+	option, in order to show useful messages for users.
+
+2015-08-25  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* image/bmpimage.c, image/pngimage.c: Drop set but unused vars.
+	* image/mfileio.c: ANSI C function definition.
+
+2015-08-25  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* am/xetex.am (libxetex_a_CFLAGS): Enable gcc warnings.
+
+	* XeTeX_ext.[ch], XeTeXFontInst{cpp,h}, XeTeXFontMgr.cpp,
+	XeTeXLayoutInterface.{cpp,h}, XeTeX_pic.c:
+	ANSI C prototypes, unconstify, drop (set but) unused variable,
+	remove useless or misleading casts.
+
+2015-08-25  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* XeTeXFontInst.cpp: Support pair kerning for native type1 fonts.
+	Thanks Werner Lemberg and Jiang Jiang.
+
+2015-08-19  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* am/xetex.am (xetex_CFLAGS): Enable compiler warnings.
+	* xetex.web: Drop unused label 'done'.
+
+2015-07-24  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* xetex.web, xetex.h: Support pagebox=artbox etc. as in pdfTeX
+	in PDF inclusion. It works with a new xetex.def and xdvipdfmx.
+	Nothing changes if the present xetex.def is used.
+
+2015-07-11  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* xetex.web: Change \pdfmdfivesum to \mdfivesum, to be consistent
+	with \strcmp and \shellescape.
+
+2015-07-10  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* am/xetex.am: Dependencies for 'make check'.
+
+2015-07-09  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* xetex.web: Added \pdfmdfivesum, version 0.99993.
+	* xetex.defines: Added getmd5sum().
+	* am/xetex.am: Added libmd5.
+
+2015-06-22  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* am/xetex.am: Use $(tie_c).
+
+2015-05-07  Jonathan Kew  <jfkthame@gmail.com>
+
+	* xetex.web: Merged UTF-16 surrogate-handling fixes from github.
+	* xetex.web: New \Uchar and \Ucharcat primitives.
+
+2015-05-05  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* XeTeX_ext.c: Can not use non-locking getc() for MinGW.
+
+2015-05-03  Jonathan Kew  <jfkthame@gmail.com>
+
+	* XeTeX_ext.c: use non-locking getc() for faster file reading.
+
+2015-03-27  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* image/mfileio.[ch]: Use mfgets() parameters as for fgets().
+
+2015-03-26  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* image/jpegimage.c: Drop redundant #include directives.
+	* image/{mfileio,numbers}.c: First '#include <w2c/config.h>'.
+	* image/mfileio.h, image/numbers.[ch]: Drop unused types and
+	functions.
+
+2015-03-22  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* XeTeX_ext.c: The SELFAUTOLOC issue has been considered on W32
+	independently.
+
+2015-03-17  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* xetex-bug73.test: The equivalent of 'tail -n+2' is 'sed 1d'.
+
+2015-03-16  Karl Berry  <karl@tug.org>
+
+	* xetex-bug73.test: sed 1,2d instead of tail -n+2, which
+	is not supported on Solaris 10.  tlbuild mail from Mojca,
+	16 Mar 2015 17:03:25.
+
+2015-03-12  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* image/jpegimage.c: Fix a bug introduced by me on 2015-02-15.
+
+2015-02-15  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* XeTeX_pic.c and image/jpegimage.c: Revert. The changes in 2015-02-09
+	are discarded. The picture sizes obtained by the previous XeTeX are
+	correct. Problems may be in xdvipdfmx or maybe cmyk colors are not
+	supported.
+
+2015-02-09  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* XeTeX_pic.c and image/jpegimage.c: Fix a bug to include jpeg images
+	correctly (borrowed from dvipdfm-x).
+
+2014-08-19  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* image/pngimage.c: Avoid PNG warnings.
+
+2014-07-22  Khaled Hosny  <khaledhosny@eglug.org>
+
+	* xetex.web, xetex.ch, tex.ch0: Switch right-to-left support from
+	e-TeX's TeX--XeT to Knuth's original TeX-XeT code (with some fixes and
+	slight modification to the DVI opcode) to fix TeX--XeT paired specials
+	issue.
+
+2014-07-15  Khaled Hosny  <khaledhosny@eglug.org>
+            Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* xetex-bug73.test: Shell script for a new test.
+	* tests/bug73.{log,tex} (new): Test input and expected output.
+	* am/xetex.am: Adjusted.
+
+2014-07-15  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* xetex_version.h: 0.99992
+
+2014-07-04  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* xetex.web: Remove unused variables k,and l in function
+	get_strings_started, and q, and r in procedure set_math_char().
+	* image/mfileio.c: Change type of a variable i in mfgets() in order to
+	suppress warnings.
+	* image/bmpimage.c: Remove an unused variable i in bmp_scan_file().
+	* image/jpegimage.c: Remove an unused variable rational_value in
+	read_APP1_Exif().
+	* image/pngimage.c: Remove unused variables stream_data_ptr,
+	trans_type, and rowbytes in png_scan_file().
+	* XeTeXFontMgr_FC.cpp: Remove an unused label restart.
+
+2014-05-10  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* image/bmpimage.c: Error exit instead of crashing for unsupported
+	bmp in bmp_scan_file().
+
+2014-04-28  TANAKA Takuji  <KXD02663@nifty.ne.jp>
+
+	* XeTeX_ext.c: Accept Ctrl+Z as EOF in console (keyboard).
+	(Windows only)
+
+2014-03-17  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* XeTeXFontInst.cpp, XeTeXFontInst_Mac.cpp, XeTeXFontMgr.cpp,
+	XeTeXFontMgr_FC.cpp, XeTeXLayoutInterface.cpp, XeTeXOTMath.cpp,
+	hz.cpp, pdfimage.cpp: <w2c/config.h> is now C++ safe.
+
+	* XeTeXFontMgr.cpp, XeTeXLayoutInterface.cpp, XeTeXOTMath.cpp,
+	hz.cpp: Move extern declarations from the Pascal/WEB side ...
+	* XeTeX_web.h (new): ... to here.
+	* am/xetex.am: Add the new file.
+
+2014-02-08  TANAKA Takuji  <KXD02663@nifty.ne.jp>
+
+	* XeTeX_ext.h: Display output of Unicode characters
+	on console. (Windows only)
+
+2014-01-20  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	TeX tuneup of 2014.
+	* xetex.web: Adapt to TeX Version 3.14159265.
+
+2014-01-17  TANAKA Takuji  <KXD02663@nifty.ne.jp>
+
+	* XeTeX_ext.c, xetex.h: Accept Unicode characters from STDIN
+	on console. (Windows only)
+
+2013-12-06  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* XeTeX_ext.c: Remove unused variables.
+	'i' in read_tag_with_param(const char* cp, int* param), and
+	'x', 'y' in a block if (fontarea[f] == OTGR_FONT_FLAG) {
+	in measure_native_node(void* pNode, int use_glyph_metrics).
+
+2013-12-05  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* XeTeX_ext.c: Rewrite command line for popen(). Windows only.
+
+2013-09-25  Karl Berry  <karl@tug.org>
+
+	* xetexextra.h (BANNER),
+	* am/xetex.am (xetex_cppflags): remove XETEX_BUILD_DATE,
+	so we have reproducible binaries again.  (Change already made
+	upstream.)
+
+2013-07-02  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* XeTeX_ext.c: Undefine timezone before reading time.h for MSVC.
+
+2013-07-02  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* XeTeXFontInst.cpp, XeTeXFontInst_Mac.cpp, XeTeXFontMgr.cpp,
+	XeTeXFontMgr_FC.cpp, XeTeXFontMgr_Mac.mm,
+	XeTeXLayoutInterface.cpp, XeTeXOTMath.cpp, XeTeX_ext.c,
+	hz.cpp, pdfimage.cpp: Always first include <w2c/config.h>.
+	* XeTeX_ext.h: Do not include <w2c/config.h>.
+	* image/bmpimage.[ch], image/jpegimage.[ch]: First include
+	<w2c/config.h> in C files and not in headers.
+
+2013-06-28  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* XeTeXFontInst.h: Include "XeTeXFontMgr.h" before <stdio.h>.
+	* XeTeX_ext.h: Include <w2c/c-auto.h> before <unicode/utypes.h>.
+	* pdfimage.cpp: Include "XeTeX_ext.h" before "pdfimage.h".
+
+2013-05-30  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* pdfimage.cpp [MINGW]: Include kpathsea/mingw32.h (via
+	XeTeX_ext.h) before PDFDoc.h etc to avoid conflicting typedef of
+	boolean from rpcndr.h.
+
+2013-03-27  Khaled Hosny  <khaledhosny@eglug.org>
+
+	XeTeX 0.9999.2
+
+2013-03-25  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* am/xetex.am (EXTRA_DIST): Add NEWS and image/README.
+
+2013-03-22  Khaled Hosny  <khaledhosny@eglug.org>
+
+	XeTeX 0.9999.1
+
+2013-03-12  Khaled Hosny  <khaledhosny@eglug.org>
+
+	* xetex.web: Fix \XeTeXrevision.
+
+2013-03-11  Khaled Hosny  <khaledhosny@eglug.org>
+
+	XeTeX 0.9999.0
+
+2013-03-07  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* XeTeXFontInst.cpp: Fix a typo.
+
+2013-03-06  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* xetex.web: Typo.
+
+2013-03-04  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* am/xetex.am: Better rules for {e,xe}tex_version.h.
+
+2013-02-28  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* xetex.web: Adapt to e-TeX 2.5.
+
+2013-02-23  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* etex_version.h: New file extracted from xetex.web.
+	* am/xetex.am, xetexextra.h: Adjust.
+
+2013-02-03  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* XeTeX_ext.c: (W32) change to match the simplified win32_popen.
+
+2013-01-11  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* XeTeX_ext.h: Add #ifndef __cplusplus ... #endif for
+	#define bool boolean to avoid compile error in cplusplus files.
+
+2013-01-06  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* XeTeX_ext.c: Move u_getVersion(icuVersion) etc. below variable
+	definitions, because Visual Studio 2005 does not know c99.
+
+2013-01-05  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* XeTeX_ext.c: If necessary define or declare strndup().
+
+	* XeTeXFontMgr.cpp, XeTeXLayoutInterface.cpp: Drop definition
+	of M_PI here ...
+	* trans.h: ... and '#define M_PI' here immediately after
+	'#include <math.h>'.
+
+	* XeTeX_ext.c: Print the Graphite2 version (from Akira).
+
+2013-01-04  Khaled Hosny  <khaledhosny@eglug.org>
+
+	Merge changes from XeTeX repository.
+
+2013-01-04  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* XeTeX_ext.c: Use xcalloc() and strncpy() instead of strndup()
+	because there are systems without it, e.g., MinGW.
+	* xetex.h: Include "XeTeXOTMath.h" (protos for xetex.web).
+	* am/xetex.am: Drop obsolete files from XeTeX change file merge.
+
+2013-01-03  Khaled Hosny  <khaledhosny@eglug.org>
+
+	Merge changes from XeTeX repository.
+
+2012-12-16  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* am/xetex.am (xetex_version.h): Enable silent rules.
+
+2012-11-11  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	Merge the XeTeX change files.
+	* xetex.ch: Moved most from here ...
+	* xetex-hz.ch (removed): ... and all from here ...
+	* xetex-latex3.ch (removed): ... and here ...
+	* xetex.web: ... and the results of merging ../tex.web with
+	../etexdir/etex.ch into this new file.
+	* tex.ch0 (new): Glue between xetex.web and ../tex.ch.
+	* am/xetex.am: Adapted to the new layout.
+
+2012-10-22  Khaled Hosny  <khaledhosny@eglug.org>
+
+	* XeTeXFontInst.cpp, XeTeXOTMath.cpp, XeTeXOTMath.h, XeTeX_ext.c,
+	XeTeX_ext.h, xetex.ch, xetex.h: Merge changes from XeTeX repository.
+
+2012-09-15  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* XeTeX_ext.c (open_dvi_output): sync with W32TeX. On Windows,
+	use $SELFAUTOLOC/xdvipdfmx.exe as a driver for security reason.
+	Otherwise a malicious xdvipdfmx.bat in the current directory can
+	be called.
+
+2012-08-29  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* am/xetex.am: Use Automake generated rule for ObjC++ file,
+	it is no longer necessary to build a separate libxetexmm.a.
+	* XeTeXFontMgr_Mac.cpp (removed): Obsolete.
+
+2012-08-25  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* XeTeXswap.h [WIN32]: Do not '#define inline __inline';
+	if needed this comes via c-auto.h or ../../kpathsea/config.h.
+
+2012-08-10  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* XeTeXFontMgr.cpp, XeTeXLayoutInterface.cpp: Always put
+	'#define M_PI' immediately after '#include <math.h>'.
+	* numbers.h: Drop unused definition of M_PI.
+
+2012-08-10  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* XeTeX_ext.c: use rewind(f) instead of fseek(f, 0, SEEK_SET)
+	in u_open_in() in order to work also on W32.
+
+2012-08-09  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* XeTeXFontMgr.cpp: Add 'extern "C" {' to avoid link error in MSVC.
+	* XeTeX_ext.c: Change order of inlusion of headers to be able to
+	compile by using MSVC.
+	* XeTeX_ext.h: Add 'extern "C" {' to avoid link error in MSVC.
+
+2012-08-02  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* am/xetex.am: Clarify *tex_version.h dependencies.
+
+2012-07-19  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* am/xetex.am: Distribute xetex_version.h.
+	* xetexextra.h: Use ../etexdir/etex_version.h.
+
+2012-06-25  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* xetex.ch: XeTeX uses 256 math font families.
+
+2012-05-07  Khaled Hosny  <khaledhosny@eglug.org>
+
+	* am/xetex.am (xetex_web_srcs): Drop enctex.ch.
+	* xetex.ch, xetex-latex3.ch: Adjusted.
+
+2012-05-06  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* am/xetex.am (EXTRA_DIST): Drop pool2c.pl (is removed).
+
+2012-05-05  Khaled Hosny  <khaledhosny@eglug.org>
+
+	* xetex.ch, xetex.defines, XeTeX_ext.h, am/xetex.am: Use makecpool
+	instead of out pool2c.pl.
+	* pool2c.pl: Removed.
+
+2012-04-24  Khaled Hosny  <khaledhosny@eglug.org>
+
+	* xetex.ch: Merge changes from XeTeX repository.
+
+2012-04-19  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* xetex-hz.ch: Added copyright statement.
+	Removed useless blank lines at end of change sets.
+
+2012-04-18  Khaled Hosny  <khaledhosny@eglug.org>
+
+	* xetex-hz.ch, xetex.ch: Merge changes from XeTeX repository.
+
+2012-03-25  Khaled Hosny  <khaledhosny@eglug.org>
+
+	* XeTeX_ext.h, xetex.ch: Merge changes from XeTeX repository.
+
+2012-03-17  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* XeTeX_ext.c, xetex.h (Byte): Remove temporary #define to my_Byte
+	and subsequent #undef.  The typedef conflict between TECkit_Common.h
+	and zlib is now handled differently (by zlib and TECkit).
+
+2012-03-16  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* XeTeXGrLayout.h: Declare XeTeXGrTextSource::featureVariations()
+	required for graphite-2.4.
+
+2012-02-16  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* xetex.ch: Remove test for end-of-file after undump.
+	* xetex.defines: Remove weof().
+
+2012-02-11  Jonathan Kew  <jfkthame@gmail.com>
+
+	* XeTeX_ext.c (makefontdef): pass font pathname to xdvipdfmx
+	  whenever possible, to avoid fontconfig search mismatches
+
+	* xetex.ch (XeTeX_version_string): bump to .6.
+
+2012-02-11  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* xetex.ch: Adapt to zlib-1.2.6 (problem found by Akira).
+	From zlib-1.2.6/ChangeLog: Fix gzeof() to behave just like
+	  feof() when read is not past end of file
+
+2011-09-01  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* XeTeX_ext.h: Do not #include "XeTeXOTMath.h".
+
+2011-08-12  Akira Kakuto  <kakuto@fuk.kindai.ac.jp>
+
+	* XeTeX_ext.c: fix to allow font definition like
+	\font\x="[msmincho.ttc:1]"
+
+2011-07-08  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* xetex.ch: Fix an off-by-one bug initializing mubyte_cswrite.
+	From Roderich Schupp <roderich.schupp@googlemail.com>,
+	Debian Bug#633011, tex-k mail Fri, 8 Jul 2011 15:56:23.
+
+2011-07-06  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* XeTeX_ext.c, pdfimage.cpp, am/xetex.am: Always use poppler
+	instead of xpdf.
+
+2011-04-19  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	Avoid 'differ in signedness' warnings.
+	* xetex.ch (pack_buffered_name): Adapt to modified ../tex.ch.
+	(read_font_info): Cast print_c_string() arg to string.
+
+2011-04-11  Karl Berry  <karl@tug.org>
+
+	* xetex.ch (XeTeX_version_string): bump to .5.
+
+2011-04-07  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* xetex.ch: Reformulate to not depend on eTeX_version_string.
+
+2011-02-25  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* XeTeXFontInst.h: Fix prototype for xmalloc().
+
+	* XeTeXFontMgr_FC.cpp, XeTeX_ext.c: Move (nested) extern
+	declaration of gFreeTypeLibrary from here ...
+	* XeTeX_ext.h: ... to here.
+
+2011-02-22  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* XeTeXOTLayoutEngine.{cpp,h}: Drop support for ICU < 4.2.
+
+2011-01-17  Karl Berry  <karl@tug.org>
+
+	* XeTeX_ext.h: #include <w2c/c-auto.h> for SIZEOF_LONG and
+	NO_DUMP_SHARE, else segfaults/stretchy math problems on
+	x86_64-linux, at least sometimes.  Contributed by Paul Vojta,
+	confirmed by Thanh.
+	https://sourceforge.net/tracker/index.php?func=detail&aid=3053287&group_id=194926&atid=951385
+
+2011-01-08  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* am/xetex.am (xetex_web_srcs): Added enctex.ch.
+
+2011-01-01  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* xetexextra.in: Renamed ...
+	* xetexextra.h: ... into this; #include {e,xe}tex_version.h
+	for {E,XE}TEX_VERSION.
+
+	* xetexextra.c (new): #include <xetexd.h> and <lib/texmfmp.c>.
+
+	* am/xetex.am: xetexextra.[ch] are now distributed;
+	create {e,xe}tex_version.h instead of {e,xe}tex.version. 
+
+2010-09-28  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* xetex.test (new): Just testing 'xetex -version'.
+	* am/xetex.am: Adjusted.
+
+2010-06-10  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* am/xetex.am (xetex_cppflags): Add $(AM_CPPFLAGS).
+
+2010-06-10  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	Reorganize web2c headers.
+	* bmpimage.h, pngimage.[ch]: #include <w2c/config.h> instead
+	of "config.h".
+
+2010-05-18  Karl Berry  <karl@tug.org>
+
+	* xetex.ch (XeTeX_version_string): incr to 0.9995.3.
+
+2010-04-19  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* XeTeX_ext.h: Move extern declarations of papersize and
+	outputdriver from ../lib/texmfmp.c to here; use 'const char *',
+	'const_string' is not defined in this file.
+	* XeTeX_ext.c (papersize, outputdriver): Use 'const char *'.
+
+2010-03-30  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* XeTeXLayoutInterface.cpp: #include "unicode/platform.h" first,
+	required with ICU 4.4 for MinGW32.
+
+2010-02-25  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* XeTeX_ext.c [MINGW32]: First #include <kpathsea/config.h> to
+	avoid conflicting eof() declarations.
+
+2010-02-22  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* pngimage.c (check_for_png): Replace png_check_sig() by
+	png_sig_cmp() for libpng-1.4.
+	From Hanno Boeck <hanno@hboeck,de>.
+
+2009-12-12  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* am/xetex.am: Replace the obsolete $(mkdir_p) by $(MKDIR_P).
+
+2009-12-04  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* XeTeX_ext.c: Remove extern declaration of gettexstring(),
+	now in ../web2c/coerce.h.
+
+2009-11-19  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* XeTeX_ext.c, XeTeX_mac.c: #include <teckit/TECkit_Engine.h>
+	instead of "TECkit_Engine.h".
+	* xetex.h: #include <teckit/TECkit_Common.h> instead of
+	"TECkit_Common.h".
+
+2009-10-25  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* XeTeXOTLayoutEngine,{cpp,h}: Adjust to ICU-4.2.1.
+
+2009-10-24  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* xetex.ch: Use kpse_{in,out}_name_ok(), now in Kpathsea,
+	instead of open_{in,out}_name_ok().
+
+2009-10-12  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* XeTeXOTLayoutEngine.h: Drop #include "layout/HanLayoutEngine.h".
+	Move #include "layout/{Arabic,Indic,Tibetan}LayoutEngine.h" and
+	declaration of class XeTeXHanLayoutEngine from here ...
+	* XeTeXOTLayoutEngine.cpp: ... to here.
+
+2009-10-09  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* FontTableCache.{cpp,h}, MathTable.h, XeTeXFontInst.{cpp,h},
+	XeTeXFontMgr.cpp, XeTeXLayoutInterface.cpp,
+	XeTeXOTLayoutEngine.{cpp,h}, XeTeXOTMath.{cpp,h}, cmaps.{cpp,h},
+	sfnt.h: Include, e.g., "layout/LETypes.h" instead of "LETypes.h"
+	for consistency with installed (system) headers.
+
+2009-10-04  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* xetex.ch (do_extension): Recover variables unused by TeX.
+
+2009-09-04  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* am/xetex.am: Prepare compiler warnings.
+
+2009-08-18  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* am/xetex.am: SyncTeX now integrated into ../texmfmp.h.
+
+2009-08-16  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* am/xetex.am: Adapt to tangle-sh and web2c-sh.
+
+2009-08-13  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	* am/xetex.am (xetex_c_h): avoid to split the C code.
+
+2009-07-16  Peter Breitenlohner <peb@mppmu.mpg.de>
+
+	* am/xetex.am: Put ICU_INCLUDES first to avoid an installed
+	version.
+
+2009-05-13  Peter Breitenlohner <peb@mppmu.mpg.de>
+
+	* am/xetex.am: Put FREETYPE2_INCLUDES as early as possible to
+	avoid freetype1/freetype2 problems when both are installed under
+	the same prefix.
+
+2009-05-06  Karl Berry  <karl@tug.org>
+
+	* jpegimage.c: #include <stdlib.h> and <string.h>
+	instead of <memory.h>.
+
+2009-05-05  Peter Breitenlohner <peb@mppmu.mpg.de>
+
+	* am/xetex.am: in CPPFLAGS define U_STATIC_IMPLEMENTATION
+	instead of DLE_USE_CMEMORY, required for Cygwin but also works for
+	others.
+
+2009-05-05  Peter Breitenlohner <peb@mppmu.mpg.de>
+
+	* XeTeX_ext.c, image/pdfimage.cpp: adapt for poppler.
+
+	patches from Norbert Preinig <preining@logic.at>

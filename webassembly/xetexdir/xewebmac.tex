@@ -1,0 +1,106 @@
+% standard macros for WEB listings (in addition to PLAIN.TEX)
+%
+% pdfTeX adjustments mainained by Han The Thanh <hanthethanh@gmx.net>.
+% XeTeX adjustments mainited by Khaled Hosny <khaledhosny@eglug.org>
+%
+
+\ifdefined\botofcontents\else\input webmac.tex\fi
+
+% Some changes for xetex
+\def\note#1#2.{\Y\noindent{\hangindent2em\baselineskip10pt\eightrm#1~\pdfnote#2..\par}}
+
+\def\linkcolor#1{\special{color push rgb 0.4 0.6 1.0}#1\special{color pop}}
+\def\link#1#2{\special{pdf:bann<</Type/Annot/Subtype/Link/Border[0 0 0]/A<</S/GoTo/D(#1)>>>>}\linkcolor{#2}\special{pdf:eann}}
+
+\newtoks\toksA
+\newtoks\toksB
+\newtoks\toksC
+\newtoks\toksD
+\newcount\countA
+\countA=0
+\def\pdfnote#1.{\setbox0=\hbox{\toksA={#1.}\toksB={}\maketoks}\the\toksA}
+\def\addtokens#1#2{\edef\addtoks{\noexpand#1={\the#1#2}}\addtoks}
+\def\adn#1{\addtokens{\toksC}{#1}\global\countA=1\let\next=\maketoks}
+\def\poptoks#1#2|ENDTOKS|{\let\first=#1\toksD={#1}\toksA={#2}}
+\def\maketoks{%
+    \expandafter\poptoks\the\toksA|ENDTOKS|
+    \ifx\first0\adn0
+    \else\ifx\first1\adn1 \else\ifx\first2\adn2 \else\ifx\first3\adn3
+    \else\ifx\first4\adn4 \else\ifx\first5\adn5 \else\ifx\first6\adn6
+    \else\ifx\first7\adn7 \else\ifx\first8\adn8 \else\ifx\first9\adn9 
+    \else
+        \ifnum0=\countA\else\makenote\fi
+        \ifx\first.\let\next=\done\else
+            \let\next=\maketoks
+            \addtokens{\toksB}{\the\toksD}
+            \ifx\first,\addtokens{\toksB}{\space}\fi
+        \fi
+    \fi\fi\fi\fi\fi\fi\fi\fi\fi\fi
+    \next
+}
+\def\n#1{\link{#1}{#1}}
+\def\makenote{\addtokens{\toksB}%
+    {\noexpand\n{\the\toksC}}\toksC={}\global\countA=0}
+\def\done{\edef\st{\global\noexpand\toksA={\the\toksB}}\st}
+
+\def\startsection{\Q{\let\*=\empty\special{pdf:dest (\modstar) [@thispage /XYZ @xpos @ypos null]}}%
+    \noindent{\let\*=\lapstar\bf\modstar.\quad}}
+
+\def\X#1:#2\X{\ifmmode\gdef\XX{\null$\null}\else\gdef\XX{}\fi % section name
+  \XX$\langle\,$#2{\eightrm\kern.5em\pdfnote#1.}$\,\rangle$\XX}
+\def\inx{\par\vskip6pt plus 1fil % we are beginning the index
+  \write\cont{} % ensure that the contents file isn't empty
+  \closeout\cont % the contents information has been fully gathered
+  \output{\ifpagesaved\normaloutput{\box\sbox}\lheader\rheader\fi
+    \global\setbox\sbox=\page \global\pagesavedtrue}
+  \pagesavedfalse \eject % eject the page-so-far and predecessors
+  \setbox\sbox\vbox{\unvbox\sbox} % take it out of its box
+  \vsize=\pageheight \advance\vsize by -\ht\sbox % the remaining height
+  \hsize=.5\pagewidth \advance\hsize by -10pt
+    % column width for the index (20pt between cols)
+  \parfillskip 0pt plus .6\hsize % try to avoid almost empty lines
+  \def\lr{L} % this tells whether the left or right column is next
+  \output{\if L\lr\global\setbox\lbox=\page \gdef\lr{R}
+    \else\normaloutput{\vbox to\pageheight{\box\sbox\vss
+        \hbox to\pagewidth{\box\lbox\hfil\page}}}\lheader\rheader
+    \global\vsize\pageheight\gdef\lr{L}\global\pagesavedfalse\fi}
+  \message{Index:}
+  \parskip 0pt plus .5pt
+  \outer\def\:##1, {\par\hangindent2em\noindent##1:\kern1em\pdfnote} % index entry
+  \let\ttentry=\. \def\.##1{\ttentry{##1\kern.2em}} % give \tt a little room
+  \def\[##1]{$\underline{##1}$} % underlined index item
+  \rm \rightskip0pt plus 2.5em \tolerance 10000 \let\*=\lapstar
+  \hyphenpenalty 10000 \parindent0pt}
+\def\fin{\par\vfill\eject % this is done when we are ending the index
+  \ifpagesaved\null\vfill\eject\fi % output a null index column
+  \if L\lr\else\null\vfill\eject\fi % finish the current page
+  \parfillskip 0pt plus 1fil
+  \def\rhead{NAMES OF THE SECTIONS}
+  \message{Section names:}
+  \output{\normaloutput\page\lheader\rheader}
+  \setpage
+  \def\note##1##2.{\hfil\penalty-1\hfilneg\quad{\eightrm##1~\pdfnote##2..}}
+  \linepenalty=10 % try to conserve lines
+  \def\U{\note{Used in section}} % crossref for use of a section
+  \def\Us{\note{Used in sections}} % crossref for uses of a section
+  \def\:{\par\hangindent 2em}\let\*=*\let\.=\ttentry}
+\def\con{\par\vfill\eject % finish the section names
+  \rightskip 0pt \hyphenpenalty 50 \tolerance 200
+  \setpage
+  \output{\normaloutput\page\lheader\rheader}
+  \titletrue % prepare to output the table of contents
+  \pageno=\contentspagenumber \def\rhead{TABLE OF CONTENTS}
+  \message{Table of contents:}
+  \topofcontents
+  \line{\hfil Section\hbox to3em{\hss Page}}
+  \def\Z##1##2##3{\line{\link{##2}{\ignorespaces##1
+    \leaders\hbox to .5em{.\hfil}\hfil\ ##2}
+    \hbox to3em{\hss##3}}}
+  \readcontents\relax % read the contents info
+  \botofcontents \makeoutlines\end} % print the contents page(s) and terminate
+
+\newcount\countB
+\def\makeoutlines{%
+  \def\?##1]{}\def\Z##1##2##3{\special{pdf:out 1 <</Title(##1)/A<</S/GoTo/D(##2)>>>>}}
+  \input CONTENTS\relax}
+\endinput

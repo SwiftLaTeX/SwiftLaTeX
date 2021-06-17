@@ -1,0 +1,2254 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  ms/call  ms/call  name    
+ 35.00      0.21     0.21 42055505     0.00     0.00  getnext
+ 20.00      0.33     0.12  1678917     0.00     0.00  macrocall
+ 15.00      0.42     0.09        1    90.00    90.00  loadfmtfile
+  6.67      0.46     0.04  1496345     0.00     0.00  expand
+  5.00      0.49     0.03   498367     0.00     0.00  conditional
+  3.33      0.51     0.02  6624143     0.00     0.00  endtokenlist
+  3.33      0.53     0.02   104044     0.00     0.00  zeqdestroy
+  1.67      0.54     0.01 13101401     0.00     0.00  getavail
+  1.67      0.55     0.01  5431134     0.00     0.00  zbegintokenlist
+  1.67      0.56     0.01  1678917     0.00     0.00  fillcsinfo
+  1.67      0.57     0.01   168534     0.00     0.00  zidlookup
+  1.67      0.58     0.01   158670     0.00     0.00  scangeneraltext
+  1.67      0.59     0.01    83942     0.00     0.00  zscantoks
+  1.67      0.60     0.01    73550     0.00     0.00  input_line
+  0.00      0.60     0.00  3272526     0.00     0.00  get_uni_c
+  0.00      0.60     0.00  1923576     0.00     0.00  getcharsigslot
+  0.00      0.60     0.00  1259469     0.00     0.00  gettoken
+  0.00      0.60     0.00  1193009     0.00     0.00  backinput
+  0.00      0.60     0.00   855324     0.00     0.00  println
+  0.00      0.60     0.00   788093     0.00     0.00  scanint
+  0.00      0.60     0.00   682830     0.00     0.00  zprintchar
+  0.00      0.60     0.00   509738     0.00     0.00  convtoks
+  0.00      0.60     0.00   509734     0.00     0.00  zstrtokscat
+  0.00      0.60     0.00   498872     0.00     0.00  zgetnode
+  0.00      0.60     0.00   450084     0.00     0.00  zscansomethinginternal
+  0.00      0.60     0.00   253370     0.00     0.00  zprintromanint
+  0.00      0.60     0.00   175236     0.00     0.00  scanleftbrace
+  0.00      0.60     0.00   163131     0.00     0.00  thetoks
+  0.00      0.60     0.00   159651     0.00     0.00  zstreqbuf
+  0.00      0.60     0.00   152323     0.00     0.00  zprintint
+  0.00      0.60     0.00   122032     0.00     0.00  prefixedcommand
+  0.00      0.60     0.00   112279     0.00     0.00  getrtoken
+  0.00      0.60     0.00   110080     0.00     0.00  scanexpr
+  0.00      0.60     0.00   108632     0.00     0.00  zeqdefine
+  0.00      0.60     0.00    73550     0.00     0.00  getinputnormalizationstate
+  0.00      0.60     0.00    67488     0.00     0.00  scanfourbitintor18
+  0.00      0.60     0.00    52739     0.00     0.00  getxtoken
+  0.00      0.60     0.00    46274     0.00     0.00  zstreqstr
+  0.00      0.60     0.00    45977     0.00     0.00  zshowtokenlist
+  0.00      0.60     0.00    38920     0.00     0.00  firmuptheline
+  0.00      0.60     0.00    37857     0.00     0.00  zscankeyword
+  0.00      0.60     0.00    34636     0.00     0.00  beginfilereading
+  0.00      0.60     0.00    34636     0.00     0.00  endfilereading
+  0.00      0.60     0.00    34622     0.00     0.00  zreadtoks
+  0.00      0.60     0.00    33745     0.00     0.00  zmakeleftright
+  0.00      0.60     0.00    24487     0.00     0.00  do_undump
+  0.00      0.60     0.00    11500     0.00     0.00  zprint
+  0.00      0.60     0.00    10308     0.00     0.00  zgeqdefine
+  0.00      0.60     0.00     7698     0.00     0.00  comparestrings
+  0.00      0.60     0.00     7397     0.00     0.00  scanoptionalequals
+  0.00      0.60     0.00     6374     0.00     0.00  zeqworddefine
+  0.00      0.60     0.00     4866     0.00     0.00  zsprintcs
+  0.00      0.60     0.00     4292     0.00     0.00  scanusvnum
+  0.00      0.60     0.00     3578     0.00     0.00  zprintcs
+  0.00      0.60     0.00     2778     0.00     0.00  zdoregistercommand
+  0.00      0.60     0.00     2697     0.00     0.00  zeqsave
+  0.00      0.60     0.00     1971     0.00     0.00  zxetexscandimen
+  0.00      0.60     0.00     1968     0.00     0.00  unsave
+  0.00      0.60     0.00     1968     0.00     0.00  znewsavelevel
+  0.00      0.60     0.00     1689     0.00     0.00  zscandimen
+  0.00      0.60     0.00     1605     0.00     0.00  scanfontident
+  0.00      0.60     0.00     1568     0.00     0.00  zfindfontdimen
+  0.00      0.60     0.00     1354     0.00     0.00  zmorename
+  0.00      0.60     0.00     1210     0.00     0.00  zprintesc
+  0.00      0.60     0.00     1206     0.00     0.00  zappendstr
+  0.00      0.60     0.00     1192     0.00     0.00  scanregisternum
+  0.00      0.60     0.00      752     0.00     0.00  printmeaning
+  0.00      0.60     0.00      752     0.00     0.00  zprintcmdchr
+  0.00      0.60     0.00      344     0.00     0.00  xmalloc
+  0.00      0.60     0.00      302     0.00     0.00  shiftcase
+  0.00      0.60     0.00      296     0.00     0.00  zflushnodelist
+  0.00      0.60     0.00      273     0.00     0.00  checkoutervalidity
+  0.00      0.60     0.00      264     0.00     0.00  zprintnl
+  0.00      0.60     0.00      263     0.00     0.00  doextension
+  0.00      0.60     0.00      263     0.00     0.00  znewwritewhatsit
+  0.00      0.60     0.00      262     0.00     0.00  handlerightbrace
+  0.00      0.60     0.00      262     0.00     0.00  zoutwhat
+  0.00      0.60     0.00      260     0.00     0.00  zwriteout
+  0.00      0.60     0.00      144     0.00     0.00  xcalloc
+  0.00      0.60     0.00      135     0.00     0.00  zsearchstring
+  0.00      0.60     0.00      108     0.00     0.00  endname
+  0.00      0.60     0.00      108     0.00     0.00  slowmakestring
+  0.00      0.60     0.00       96     0.00     0.00  zscanglue
+  0.00      0.60     0.00       85     0.00     0.00  trapzeroglue
+  0.00      0.60     0.00       79     0.00     0.00  znewspec
+  0.00      0.60     0.00       74     0.00     0.00  kpse_find_file
+  0.00      0.60     0.00       74     0.00     0.00  zgeqworddefine
+  0.00      0.60     0.00       71     0.00     0.00  XeTeXFontInst::mapCharToGlyph(int) const
+  0.00      0.60     0.00       71     0.00     0.00  mapCharToGlyph
+  0.00      0.60     0.00       69     0.00     0.00  zpackfilename
+  0.00      0.60     0.00       65     0.00     0.00  getCachedGlyphBBox
+  0.00      0.60     0.00       65     0.00     0.00  mapchartoglyph
+  0.00      0.60     0.00       58     0.00     0.00  scanfilename
+  0.00      0.60     0.00       53     0.00     0.00  xstrdup
+  0.00      0.60     0.00       51     0.00     0.00  kpse_fetch_from_network
+  0.00      0.60     0.00       50     0.00     0.00  makeutf16name
+  0.00      0.60     0.00       50     0.00     0.00  open_input
+  0.00      0.60     0.00       50     0.00     0.00  openorclosein
+  0.00      0.60     0.00       48     0.00     0.00  zprintrawchar
+  0.00      0.60     0.00       45     0.00     0.00  xfopen
+  0.00      0.60     0.00       39     0.00     0.00  kpse_in_name_ok
+  0.00      0.60     0.00       39     0.00     0.00  u_open_in
+  0.00      0.60     0.00       34     0.00     0.00  setinputfileencoding
+  0.00      0.60     0.00       34     0.00     0.00  u_close_inout
+  0.00      0.60     0.00       28     0.00     0.00  gettexstring
+  0.00      0.60     0.00       28     0.00     0.00  zdvifour
+  0.00      0.60     0.00       27     0.00     0.00  XeTeXFontMgr::GetFontManager()
+  0.00      0.60     0.00       27     0.00     0.00  getDefaultDirection
+  0.00      0.60     0.00       27     0.00     0.00  getGlyphAdvances
+  0.00      0.60     0.00       27     0.00     0.00  getGlyphPositions
+  0.00      0.60     0.00       27     0.00     0.00  getGlyphs
+  0.00      0.60     0.00       27     0.00     0.00  layoutChars
+  0.00      0.60     0.00       27     0.00     0.00  measure_native_node
+  0.00      0.60     0.00       27     0.00     0.00  zmovement
+  0.00      0.60     0.00       27     0.00     0.00  zprintscaled
+  0.00      0.60     0.00       25     0.00     0.00  _get_glyph(hb_font_t*, void*, unsigned int, unsigned int, unsigned int*, void*)
+  0.00      0.60     0.00       25     0.00     0.00  setupboundvariable
+  0.00      0.60     0.00       23     0.00     0.00  buildpage
+  0.00      0.60     0.00       23     0.00     0.00  zbeginbox
+  0.00      0.60     0.00       23     0.00     0.00  zboxend
+  0.00      0.60     0.00       22     0.00     0.00  pushnest
+  0.00      0.60     0.00       22     0.00     0.00  ztrybreak
+  0.00      0.60     0.00       21     0.00     0.00  debugloc
+  0.00      0.60     0.00       21     0.00     0.00  makeXDVGlyphArrayData
+  0.00      0.60     0.00       21     0.00     0.00  normalparagraph
+  0.00      0.60     0.00       21     0.00     0.00  zdeleteglueref
+  0.00      0.60     0.00       20     0.00     0.00  zdolocalelinebreaks
+  0.00      0.60     0.00       19     0.00     0.00  XeTeXFontInst::getGlyphBounds(unsigned short, GlyphBBox*)
+  0.00      0.60     0.00       19     0.00     0.00  std::_Rb_tree<unsigned int, std::pair<unsigned int const, GlyphBBox>, std::_Select1st<std::pair<unsigned int const, GlyphBBox> >, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, GlyphBBox> > >::_M_get_insert_hint_unique_pos(std::_Rb_tree_const_iterator<std::pair<unsigned int const, GlyphBBox> >, unsigned int const&)
+  0.00      0.60     0.00       19     0.00     0.00  cacheGlyphBBox
+  0.00      0.60     0.00       19     0.00     0.00  getGlyphBounds
+  0.00      0.60     0.00       19     0.00     0.00  znewglue
+  0.00      0.60     0.00       19     0.00     0.00  zprintparam
+  0.00      0.60     0.00       18     0.00     0.00  makestring
+  0.00      0.60     0.00       18     0.00     0.00  znewfont
+  0.00      0.60     0.00       17     0.00     0.00  zscanbox
+  0.00      0.60     0.00       16     0.00     0.00  zpackage
+  0.00      0.60     0.00       16     0.00     0.00  zreadfontinfo
+  0.00      0.60     0.00       16     0.00     0.00  zscanspec
+  0.00      0.60     0.00       15     0.00     0.00  scanfifteenbitint
+  0.00      0.60     0.00       15     0.00     0.00  zvpackage
+  0.00      0.60     0.00       14     0.00     0.00  makefullnamestring
+  0.00      0.60     0.00       14     0.00     0.00  startinput
+  0.00      0.60     0.00       13     0.00     0.00  close_file
+  0.00      0.60     0.00       13     0.00     0.00  endgraf
+  0.00      0.60     0.00       13     0.00     0.00  xfclose
+  0.00      0.60     0.00       13     0.00     0.00  zprinthex
+  0.00      0.60     0.00       12     0.00     0.00  Fix2D
+  0.00      0.60     0.00       11     0.00     0.00  zhpack
+  0.00      0.60     0.00       10     0.00     0.00  appendglue
+  0.00      0.60     0.00       10     0.00     0.00  checkfortfmfontmapping
+  0.00      0.60     0.00       10     0.00     0.00  loadtfmfontmapping
+  0.00      0.60     0.00       10     0.00     0.00  zprintspec
+  0.00      0.60     0.00        9     0.00     0.00  setReqEngine
+  0.00      0.60     0.00        9     0.00     0.00  zappendtovlist
+  0.00      0.60     0.00        8     0.00     0.00  getExtendFactor
+  0.00      0.60     0.00        8     0.00     0.00  getFont
+  0.00      0.60     0.00        8     0.00     0.00  getSlantFactor
+  0.00      0.60     0.00        8     0.00     0.00  zprintfilename
+  0.00      0.60     0.00        7     0.00     0.00  zprunemovements
+  0.00      0.60     0.00        6     0.00     0.00  D2Fix
+  0.00      0.60     0.00        6     0.00     0.00  XeTeXFontMgr::getDesignSize(XeTeXFont_rec*)
+  0.00      0.60     0.00        6     0.00     0.00  XeTeXFontInst::initialize(char const*, int, int&)
+  0.00      0.60     0.00        6     0.00     0.00  XeTeXFontInst::getGlyphHeightDepth(unsigned short, float*, float*)
+  0.00      0.60     0.00        6     0.00     0.00  XeTeXFontInst::XeTeXFontInst(char const*, int, float, int&)
+  0.00      0.60     0.00        6     0.00     0.00  createFontFromFile
+  0.00      0.60     0.00        6     0.00     0.00  createLayoutEngine
+  0.00      0.60     0.00        6     0.00     0.00  findnativefont
+  0.00      0.60     0.00        6     0.00     0.00  getAscentAndDescent
+  0.00      0.60     0.00        6     0.00     0.00  getCapAndXHeight
+  0.00      0.60     0.00        6     0.00     0.00  getDesignSize
+  0.00      0.60     0.00        6     0.00     0.00  getGlyphHeightDepth
+  0.00      0.60     0.00        6     0.00     0.00  getReqEngine
+  0.00      0.60     0.00        6     0.00     0.00  getSlant
+  0.00      0.60     0.00        6     0.00     0.00  gettracingfontsstate
+  0.00      0.60     0.00        6     0.00     0.00  isOpenTypeMathFont
+  0.00      0.60     0.00        6     0.00     0.00  loadOTfont
+  0.00      0.60     0.00        6     0.00     0.00  otgetfontmetrics
+  0.00      0.60     0.00        6     0.00     0.00  scanrulespec
+  0.00      0.60     0.00        6     0.00     0.00  xrealloc
+  0.00      0.60     0.00        6     0.00     0.00  zloadnativefont
+  0.00      0.60     0.00        6     0.00     0.00  znewnativecharacter
+  0.00      0.60     0.00        5     0.00     0.00  unpackage
+  0.00      0.60     0.00        4     0.00     0.00  load_mapping_file
+  0.00      0.60     0.00        4     0.00     0.00  printutf8str
+  0.00      0.60     0.00        4     0.00     0.00  readCommonFeatures
+  0.00      0.60     0.00        4     0.00     0.00  zfireup
+  0.00      0.60     0.00        4     0.00     0.00  zfontmappingwarning
+  0.00      0.60     0.00        4     0.00     0.00  zfreenode
+  0.00      0.60     0.00        4     0.00     0.00  zfreezepagespecs
+  0.00      0.60     0.00        4     0.00     0.00  znewskipparam
+  0.00      0.60     0.00        3     0.00     0.00  std::_Rb_tree<unsigned int, std::pair<unsigned int const, GlyphBBox>, std::_Select1st<std::pair<unsigned int const, GlyphBBox> >, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, GlyphBBox> > >::_M_erase(std::_Rb_tree_node<std::pair<unsigned int const, GlyphBBox> >*)
+  0.00      0.60     0.00        3     0.00     0.00  hlistout
+  0.00      0.60     0.00        3     0.00     0.00  kpse_absolute_p
+  0.00      0.60     0.00        3     0.00     0.00  newnullbox
+  0.00      0.60     0.00        3     0.00     0.00  open_output
+  0.00      0.60     0.00        3     0.00     0.00  usingOpenType
+  0.00      0.60     0.00        2     0.00     0.00  getLargerScriptListTable(XeTeXFont_rec*, unsigned int**)
+  0.00      0.60     0.00        2     0.00     0.00  alterinteger
+  0.00      0.60     0.00        2     0.00     0.00  countScripts
+  0.00      0.60     0.00        2     0.00     0.00  getEmboldenFactor
+  0.00      0.60     0.00        2     0.00     0.00  getFontFilename
+  0.00      0.60     0.00        2     0.00     0.00  getFontRef
+  0.00      0.60     0.00        2     0.00     0.00  getPointSize
+  0.00      0.60     0.00        2     0.00     0.00  getRgbValue
+  0.00      0.60     0.00        2     0.00     0.00  itsallover
+  0.00      0.60     0.00        2     0.00     0.00  makefontdef
+  0.00      0.60     0.00        2     0.00     0.00  otfontget
+  0.00      0.60     0.00        2     0.00     0.00  popnest
+  0.00      0.60     0.00        2     0.00     0.00  preparemag
+  0.00      0.60     0.00        2     0.00     0.00  zdvifontdef
+  0.00      0.60     0.00        2     0.00     0.00  zdvinativefontdef
+  0.00      0.60     0.00        2     0.00     0.00  zlinebreak
+  0.00      0.60     0.00        2     0.00     0.00  znewgraf
+  0.00      0.60     0.00        2     0.00     0.00  znewparamglue
+  0.00      0.60     0.00        2     0.00     0.00  zpostlinebreak
+  0.00      0.60     0.00        2     0.00     0.00  zprunepagetop
+  0.00      0.60     0.00        2     0.00     0.00  zvertbreak
+  0.00      0.60     0.00        2     0.00     0.00  zvsplit
+  0.00      0.60     0.00        1     0.00     0.00  _GLOBAL__sub_I_getCachedGlyphBBox
+  0.00      0.60     0.00        1     0.00     0.00  _GLOBAL__sub_I_leftProt
+  0.00      0.60     0.00        1     0.00     0.00  XeTeXFontMgr::Terminate()
+  0.00      0.60     0.00        1     0.00     0.00  XeTeXFontMgr_FC::initialize()
+  0.00      0.60     0.00        1     0.00     0.00  XeTeXFontMgr_FC::terminate()
+  0.00      0.60     0.00        1     0.00     0.00  alterboxdimen
+  0.00      0.60     0.00        1     0.00     0.00  appspace
+  0.00      0.60     0.00        1     0.00     0.00  closefilesandterminate
+  0.00      0.60     0.00        1     0.00     0.00  dviclose
+  0.00      0.60     0.00        1     0.00     0.00  finalcleanup
+  0.00      0.60     0.00        1     0.00     0.00  get_date_and_time
+  0.00      0.60     0.00        1     0.00     0.00  get_seconds_and_micros
+  0.00      0.60     0.00        1     0.00     0.00  getjobname
+  0.00      0.60     0.00        1     0.00     0.00  groupwarning
+  0.00      0.60     0.00        1     0.00     0.00  initialize
+  0.00      0.60     0.00        1     0.00     0.00  initstarttime
+  0.00      0.60     0.00        1     0.00     0.00  initterminal
+  0.00      0.60     0.00        1     0.00     0.00  kpse_out_name_ok
+  0.00      0.60     0.00        1     0.00   510.01  maincontrol
+  0.00      0.60     0.00        1     0.00     0.00  open_dvi_output
+  0.00      0.60     0.00        1     0.00     0.00  openfmtfile
+  0.00      0.60     0.00        1     0.00     0.00  openlogfile
+  0.00      0.60     0.00        1     0.00     0.00  recorder_change_filename
+  0.00      0.60     0.00        1     0.00     0.00  terminatefontmanager
+  0.00      0.60     0.00        1     0.00     0.00  topenin
+  0.00      0.60     0.00        1     0.00     0.00  vlistout
+  0.00      0.60     0.00        1     0.00     0.00  zinitrandoms
+  0.00      0.60     0.00        1     0.00     0.00  zpackbufferedname
+  0.00      0.60     0.00        1     0.00     0.00  zshipout
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 2 byte(s) for 1.67% of 0.60 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]    100.0    0.00    0.60                 mainbody [1]
+                0.00    0.51       1/1           maincontrol [2]
+                0.09    0.00       1/1           loadfmtfile [8]
+                0.00    0.00       1/837341      startinput <cycle 1> [52]
+                0.00    0.00       1/1           finalcleanup [65]
+                0.00    0.00      25/25          setupboundvariable [136]
+                0.00    0.00      17/344         xmalloc [99]
+                0.00    0.00       1/1           initialize [223]
+                0.00    0.00       1/1           initterminal [225]
+                0.00    0.00       1/1           get_date_and_time [219]
+                0.00    0.00       1/1           zinitrandoms [233]
+                0.00    0.00       1/1           closefilesandterminate [217]
+                0.00    0.00       1/1           openfmtfile [228]
+                0.00    0.00       1/13          xfclose [155]
+                0.00    0.00       1/13          close_file [153]
+-----------------------------------------------
+                0.00    0.51       1/1           mainbody [1]
+[2]     85.0    0.00    0.51       1         maincontrol [2]
+                0.07    0.18  666038/837341      expand <cycle 1> [6]
+                0.06    0.08  869629/1678917     macrocall [4]
+                0.00    0.10  122032/122032      prefixedcommand [7]
+                0.01    0.00 1666439/42055505     getnext [5]
+                0.00    0.00    1948/1968        unsave [32]
+                0.00    0.00     263/263         doextension [33]
+                0.00    0.00     302/302         shiftcase [35]
+                0.00    0.00      50/50          openorclosein [40]
+                0.00    0.00       6/6           scanrulespec [42]
+                0.00    0.00       8/23          zbeginbox [43]
+                0.00    0.00      11/837341      getxtoken <cycle 1> [25]
+                0.00    0.00      16/16          zpackage [49]
+                0.00    0.00      10/10          appendglue [50]
+                0.00    0.00       5/5           unpackage [51]
+                0.00    0.00       9/108632      zeqdefine [15]
+                0.00    0.00       4/837341      scanint <cycle 1> [10]
+                0.00    0.00      22/23          buildpage [53]
+                0.00    0.00     262/262         handlerightbrace [54]
+                0.00    0.00       1/1           zshipout [59]
+                0.00    0.00       1/837341      zxetexscandimen <cycle 1> [39]
+                0.00    0.00      17/1259469     gettoken [23]
+                0.00    0.00       2/2           itsallover [62]
+                0.00    0.00       2/17          zscanbox [61]
+                0.00    0.00       2/1193009     backinput [24]
+                0.00    0.00       1/5431134     zbegintokenlist [20]
+                0.00    0.00    1948/1968        znewsavelevel [91]
+                0.00    0.00      59/71          mapCharToGlyph [112]
+                0.00    0.00      59/65          mapchartoglyph [115]
+                0.00    0.00      21/27          measure_native_node [133]
+                0.00    0.00      20/20          zdolocalelinebreaks [144]
+                0.00    0.00      19/19          znewglue [147]
+                0.00    0.00      18/23          zboxend [137]
+                0.00    0.00       8/21          normalparagraph [142]
+                0.00    0.00       5/498872      zgetnode [71]
+                0.00    0.00       2/2           znewgraf [210]
+                0.00    0.00       2/13          endgraf [154]
+                0.00    0.00       1/10308       zgeqdefine [84]
+                0.00    0.00       1/1           appspace [216]
+                0.00    0.00       1/79          znewspec [109]
+-----------------------------------------------
+[3]     53.5    0.09    0.23  837341+3769750 <cycle 1 as a whole> [3]
+                0.04    0.08 1496345+847457      expand <cycle 1> [6]
+                0.03    0.03  498367             conditional <cycle 1> [9]
+                0.00    0.06  788093             scanint <cycle 1> [10]
+                0.00    0.05  175236             scanleftbrace <cycle 1> [11]
+                0.01    0.01  158670             scangeneraltext <cycle 1> [12]
+                0.01    0.01   83942             zscantoks <cycle 1> [16]
+                0.00    0.00   52739             getxtoken <cycle 1> [25]
+                0.00    0.00  110080             scanexpr <cycle 1> [27]
+                0.00    0.00  509738             convtoks <cycle 1> [29]
+                0.00    0.00   37857             zscankeyword <cycle 1> [31]
+                0.00    0.00  163131             thetoks <cycle 1> [38]
+                0.00    0.00    1971             zxetexscandimen <cycle 1> [39]
+                0.00    0.00      58             scanfilename <cycle 1> [44]
+                0.00    0.00      14             startinput <cycle 1> [52]
+                0.00    0.00      96             zscanglue <cycle 1> [57]
+                0.00    0.00  450084             zscansomethinginternal <cycle 1> [60]
+                0.00    0.00   67488             scanfourbitintor18 <cycle 1> [76]
+                0.00    0.00    7698             comparestrings <cycle 1> [85]
+                0.00    0.00    4292             scanusvnum <cycle 1> [88]
+                0.00    0.00    1192             scanregisternum <cycle 1> [96]
+-----------------------------------------------
+                0.00    0.00       4/1678917     znewfont [41]
+                0.00    0.00       8/1678917     openorclosein [40]
+                0.00    0.00      27/1678917     zxetexscandimen <cycle 1> [39]
+                0.00    0.00      54/1678917     scanoptionalequals [34]
+                0.00    0.00      64/1678917     scanfilename <cycle 1> [44]
+                0.00    0.00      78/1678917     zscankeyword <cycle 1> [31]
+                0.00    0.00     485/1678917     scanexpr <cycle 1> [27]
+                0.00    0.00   11380/1678917     getxtoken <cycle 1> [25]
+                0.00    0.00   26354/1678917     conditional <cycle 1> [9]
+                0.02    0.02  247424/1678917     expand <cycle 1> [6]
+                0.02    0.02  255410/1678917     scanint <cycle 1> [10]
+                0.02    0.03  268000/1678917     scanleftbrace <cycle 1> [11]
+                0.06    0.08  869629/1678917     maincontrol [2]
+[4]     46.3    0.12    0.16 1678917         macrocall [4]
+                0.12    0.02 24087709/42055505     getnext [5]
+                0.01    0.00 1678917/1678917     fillcsinfo [21]
+                0.01    0.00 6607525/13101401     getavail [19]
+                0.00    0.00 1678917/5431134     zbegintokenlist [20]
+                0.00    0.00  836711/6624143     endtokenlist [13]
+-----------------------------------------------
+                0.00    0.00       1/42055505     alterboxdimen [56]
+                0.00    0.00       2/42055505     alterinteger [55]
+                0.00    0.00      17/42055505     zscanbox [61]
+                0.00    0.00      22/42055505     znewfont [41]
+                0.00    0.00      34/42055505     openorclosein [40]
+                0.00    0.00     100/42055505     zscanglue <cycle 1> [57]
+                0.00    0.00     260/42055505     zwriteout [36]
+                0.00    0.00     263/42055505     doextension [33]
+                0.00    0.00     873/42055505     scanfilename <cycle 1> [44]
+                0.00    0.00    1605/42055505     scanfontident [46]
+                0.00    0.00    2782/42055505     zdoregistercommand [26]
+                0.00    0.00    4142/42055505     zxetexscandimen <cycle 1> [39]
+                0.00    0.00    4461/42055505     thetoks <cycle 1> [38]
+                0.00    0.00   11409/42055505     scanoptionalequals [34]
+                0.00    0.00   72963/42055505     zscankeyword <cycle 1> [31]
+                0.00    0.00   76816/42055505     getxtoken <cycle 1> [25]
+                0.00    0.00  106839/42055505     convtoks <cycle 1> [29]
+                0.00    0.00  112279/42055505     getrtoken [28]
+                0.00    0.00  222077/42055505     scanexpr <cycle 1> [27]
+                0.00    0.00  581692/42055505     scanleftbrace <cycle 1> [11]
+                0.00    0.00  951077/42055505     zscantoks <cycle 1> [16]
+                0.01    0.00 1259469/42055505     gettoken [23]
+                0.01    0.00 1666439/42055505     maincontrol [2]
+                0.01    0.00 1690615/42055505     zreadtoks [17]
+                0.01    0.00 1938546/42055505     scangeneraltext <cycle 1> [12]
+                0.01    0.00 2244534/42055505     scanint <cycle 1> [10]
+                0.02    0.00 3204101/42055505     expand <cycle 1> [6]
+                0.02    0.00 3814378/42055505     conditional <cycle 1> [9]
+                0.12    0.02 24087709/42055505     macrocall [4]
+[5]     39.9    0.21    0.03 42055505         getnext [5]
+                0.02    0.00 5146103/6624143     endtokenlist [13]
+                0.01    0.00 3107876/5431134     zbegintokenlist [20]
+                0.01    0.00   38914/73550       input_line [22]
+                0.00    0.00   50263/168534      zidlookup [18]
+                0.00    0.00 1923576/1923576     getcharsigslot [68]
+                0.00    0.00   38906/38920       firmuptheline [79]
+                0.00    0.00     273/273         checkoutervalidity [101]
+                0.00    0.00      13/34636       endfilereading [81]
+                0.00    0.00      13/855324      println [69]
+-----------------------------------------------
+                              847457             expand <cycle 1> [6]
+                                   1             zscanglue <cycle 1> [57]
+                                   2             zscankeyword <cycle 1> [31]
+                                   4             zxetexscandimen <cycle 1> [39]
+                                   9             scanfilename <cycle 1> [44]
+                                 342             scanexpr <cycle 1> [27]
+                                7272             conditional <cycle 1> [9]
+                               12697             getxtoken <cycle 1> [25]
+                              138456             scanleftbrace <cycle 1> [11]
+                              216896             zscantoks <cycle 1> [16]
+                              454353             scanint <cycle 1> [10]
+                0.00    0.00       1/837341      openorclosein [40]
+                0.00    0.00       1/837341      doextension [33]
+                0.00    0.00       3/837341      zdoregistercommand [26]
+                0.00    0.00     270/837341      scanoptionalequals [34]
+                0.07    0.18  666038/837341      maincontrol [2]
+[6]     19.8    0.04    0.08 1496345+847457  expand <cycle 1> [6]
+                0.02    0.02  247424/1678917     macrocall [4]
+                0.02    0.00 3204101/42055505     getnext [5]
+                0.00    0.01 1237343/1259469     gettoken [23]
+                0.01    0.00  114460/168534      zidlookup [18]
+                0.00    0.00 2447438/13101401     getavail [19]
+                0.00    0.00  740735/1193009     backinput [24]
+                0.00    0.00  643249/5431134     zbegintokenlist [20]
+                0.00    0.00    5232/108632      zeqdefine [15]
+                0.00    0.00   31473/33745       zmakeleftright [64]
+                              509738             convtoks <cycle 1> [29]
+                              498367             conditional <cycle 1> [9]
+                              133515             thetoks <cycle 1> [38]
+                                  13             startinput <cycle 1> [52]
+                              847457             expand <cycle 1> [6]
+-----------------------------------------------
+                0.00    0.10  122032/122032      maincontrol [2]
+[7]     16.7    0.00    0.10  122032         prefixedcommand [7]
+                0.01    0.02   67719/837341      zscantoks <cycle 1> [16]
+                0.00    0.02  103385/108632      zeqdefine [15]
+                0.00    0.02   34622/34622       zreadtoks [17]
+                0.00    0.01   39462/837341      scanint <cycle 1> [10]
+                0.00    0.01   34622/837341      zscankeyword <cycle 1> [31]
+                0.00    0.00   17640/837341      getxtoken <cycle 1> [25]
+                0.00    0.00    2778/2778        zdoregistercommand [26]
+                0.00    0.00    4351/104044      zeqdestroy [14]
+                0.00    0.00    1689/837341      zxetexscandimen <cycle 1> [39]
+                0.00    0.00  112261/112279      getrtoken [28]
+                0.00    0.00    1568/1568        zfindfontdimen [30]
+                0.00    0.00     826/837341      scanusvnum <cycle 1> [88]
+                0.00    0.00    7397/7397        scanoptionalequals [34]
+                0.00    0.00   22023/1259469     gettoken [23]
+                0.00    0.00     175/837341      scanregisternum <cycle 1> [96]
+                0.00    0.00      85/837341      zscanglue <cycle 1> [57]
+                0.00    0.00      18/18          znewfont [41]
+                0.00    0.00    8240/1193009     backinput [24]
+                0.00    0.00      15/23          zbeginbox [43]
+                0.00    0.00      15/15          scanfifteenbitint [47]
+                0.00    0.00    4447/13101401     getavail [19]
+                0.00    0.00       2/2           alterinteger [55]
+                0.00    0.00       1/1           alterboxdimen [56]
+                0.00    0.00      15/17          zscanbox [61]
+                0.00    0.00      10/1605        scanfontident [46]
+                0.00    0.00   10307/10308       zgeqdefine [84]
+                0.00    0.00    6374/6374        zeqworddefine [86]
+                0.00    0.00    1689/1689        zscandimen [92]
+                0.00    0.00      85/85          trapzeroglue [108]
+                0.00    0.00      74/74          zgeqworddefine [111]
+                0.00    0.00       5/23          zboxend [137]
+-----------------------------------------------
+                0.09    0.00       1/1           mainbody [1]
+[8]     15.0    0.09    0.00       1         loadfmtfile [8]
+                0.00    0.00   24487/24487       do_undump [82]
+                0.00    0.00      37/344         xmalloc [99]
+-----------------------------------------------
+                              498367             expand <cycle 1> [6]
+[9]      9.4    0.03    0.03  498367         conditional <cycle 1> [9]
+                0.02    0.00 3814378/42055505     getnext [5]
+                0.00    0.00   26354/1678917     macrocall [4]
+                0.00    0.00    3811/168534      zidlookup [18]
+                0.00    0.00   92892/13101401     getavail [19]
+                0.00    0.00  498367/498872      zgetnode [71]
+                              163904             scanint <cycle 1> [10]
+                               67488             scanfourbitintor18 <cycle 1> [76]
+                               35088             getxtoken <cycle 1> [25]
+                                7272             expand <cycle 1> [6]
+                                  96             zxetexscandimen <cycle 1> [39]
+                                   6             scanregisternum <cycle 1> [96]
+-----------------------------------------------
+                                1192             scanregisternum <cycle 1> [96]
+                                1707             zxetexscandimen <cycle 1> [39]
+                                4292             scanusvnum <cycle 1> [88]
+                               67488             scanfourbitintor18 <cycle 1> [76]
+                              110597             scanexpr <cycle 1> [27]
+                              163904             conditional <cycle 1> [9]
+                              394793             convtoks <cycle 1> [29]
+                0.00    0.00       2/837341      alterinteger [55]
+                0.00    0.00       4/837341      maincontrol [2]
+                0.00    0.00      15/837341      scanfifteenbitint [47]
+                0.00    0.00      50/837341      openorclosein [40]
+                0.00    0.00     263/837341      znewwritewhatsit [37]
+                0.00    0.00    1568/837341      zfindfontdimen [30]
+                0.00    0.00    2756/837341      zdoregistercommand [26]
+                0.00    0.01   39462/837341      prefixedcommand [7]
+[10]     9.3    0.00    0.06  788093         scanint <cycle 1> [10]
+                0.02    0.02  255410/1678917     macrocall [4]
+                0.01    0.00 2244534/42055505     getnext [5]
+                0.00    0.00  228650/1193009     backinput [24]
+                              454353             expand <cycle 1> [6]
+                              443594             zscansomethinginternal <cycle 1> [60]
+-----------------------------------------------
+                               16546             zscantoks <cycle 1> [16]
+                              158670             scangeneraltext <cycle 1> [12]
+                0.00    0.00       4/837341      buildpage [53]
+                0.00    0.00      16/837341      zbeginbox [43]
+[11]     7.9    0.00    0.05  175236         scanleftbrace <cycle 1> [11]
+                0.02    0.03  268000/1678917     macrocall [4]
+                0.00    0.00  581692/42055505     getnext [5]
+                              138456             expand <cycle 1> [6]
+-----------------------------------------------
+                              158670             thetoks <cycle 1> [38]
+[12]     3.5    0.01    0.01  158670         scangeneraltext <cycle 1> [12]
+                0.01    0.00 1938546/42055505     getnext [5]
+                0.00    0.00  158670/13101401     getavail [19]
+                              158670             scanleftbrace <cycle 1> [11]
+-----------------------------------------------
+                0.00    0.00       2/6624143     finalcleanup [65]
+                0.00    0.00       4/6624143     handlerightbrace [54]
+                0.00    0.00     260/6624143     zwriteout [36]
+                0.00    0.00  641063/6624143     backinput [24]
+                0.00    0.00  836711/6624143     macrocall [4]
+                0.02    0.00 5146103/6624143     getnext [5]
+[13]     3.3    0.02    0.00 6624143         endtokenlist [13]
+-----------------------------------------------
+                0.00    0.00      30/104044      znewfont [41]
+                0.00    0.00    2475/104044      unsave [32]
+                0.00    0.00    4351/104044      prefixedcommand [7]
+                0.02    0.00   97188/104044      zeqdefine [15]
+[14]     3.3    0.02    0.00  104044         zeqdestroy [14]
+-----------------------------------------------
+                0.00    0.00       6/108632      znewfont [41]
+                0.00    0.00       9/108632      maincontrol [2]
+                0.00    0.00    5232/108632      expand <cycle 1> [6]
+                0.00    0.02  103385/108632      prefixedcommand [7]
+[15]     3.1    0.00    0.02  108632         zeqdefine [15]
+                0.02    0.00   97188/104044      zeqdestroy [14]
+                0.00    0.00    2475/2697        zeqsave [90]
+                0.00    0.00       8/296         zflushnodelist [100]
+-----------------------------------------------
+                                   4             convtoks <cycle 1> [29]
+                               15396             comparestrings <cycle 1> [85]
+                0.00    0.00     260/837341      zwriteout [36]
+                0.00    0.00     261/837341      doextension [33]
+                0.00    0.00     302/837341      shiftcase [35]
+                0.01    0.02   67719/837341      prefixedcommand [7]
+[16]     2.7    0.01    0.01   83942         zscantoks <cycle 1> [16]
+                0.00    0.00  951077/42055505     getnext [5]
+                0.00    0.00  669839/13101401     getavail [19]
+                0.00    0.00    2272/33745       zmakeleftright [64]
+                              216896             expand <cycle 1> [6]
+                               29616             thetoks <cycle 1> [38]
+                               16546             scanleftbrace <cycle 1> [11]
+-----------------------------------------------
+                0.00    0.02   34622/34622       prefixedcommand [7]
+[17]     2.6    0.00    0.02   34622         zreadtoks [17]
+                0.01    0.00 1690615/42055505     getnext [5]
+                0.00    0.00   34622/73550       input_line [22]
+                0.00    0.00 1821197/13101401     getavail [19]
+                0.00    0.00   34622/34636       beginfilereading [80]
+                0.00    0.00   34622/34636       endfilereading [81]
+                0.00    0.00       2/34          u_close_inout [125]
+-----------------------------------------------
+                0.00    0.00    3811/168534      conditional <cycle 1> [9]
+                0.00    0.00   50263/168534      getnext [5]
+                0.01    0.00  114460/168534      expand <cycle 1> [6]
+[18]     1.7    0.01    0.00  168534         zidlookup [18]
+                0.00    0.00  159651/159651      zstreqbuf [73]
+-----------------------------------------------
+                0.00    0.00       1/13101401     unsave [32]
+                0.00    0.00       3/13101401     hlistout [66]
+                0.00    0.00       8/13101401     zmakeleftright [64]
+                0.00    0.00     119/13101401     zxetexscandimen <cycle 1> [39]
+                0.00    0.00     780/13101401     zwriteout [36]
+                0.00    0.00    4447/13101401     prefixedcommand [7]
+                0.00    0.00    5824/13101401     zstrtokscat [48]
+                0.00    0.00   29844/13101401     thetoks <cycle 1> [38]
+                0.00    0.00   69805/13101401     zscankeyword <cycle 1> [31]
+                0.00    0.00   92892/13101401     conditional <cycle 1> [9]
+                0.00    0.00  158670/13101401     scangeneraltext <cycle 1> [12]
+                0.00    0.00  669839/13101401     zscantoks <cycle 1> [16]
+                0.00    0.00 1193009/13101401     backinput [24]
+                0.00    0.00 1821197/13101401     zreadtoks [17]
+                0.00    0.00 2447438/13101401     expand <cycle 1> [6]
+                0.01    0.00 6607525/13101401     macrocall [4]
+[19]     1.7    0.01    0.00 13101401         getavail [19]
+-----------------------------------------------
+                0.00    0.00       1/5431134     maincontrol [2]
+                0.00    0.00       1/5431134     zscankeyword <cycle 1> [31]
+                0.00    0.00       4/5431134     zfireup [63]
+                0.00    0.00       4/5431134     convtoks <cycle 1> [29]
+                0.00    0.00     302/5431134     shiftcase [35]
+                0.00    0.00     780/5431134     zwriteout [36]
+                0.00    0.00  643249/5431134     expand <cycle 1> [6]
+                0.00    0.00 1678917/5431134     macrocall [4]
+                0.01    0.00 3107876/5431134     getnext [5]
+[20]     1.7    0.01    0.00 5431134         zbegintokenlist [20]
+-----------------------------------------------
+                0.01    0.00 1678917/1678917     macrocall [4]
+[21]     1.7    0.01    0.00 1678917         fillcsinfo [21]
+-----------------------------------------------
+                0.00    0.00      14/73550       startinput <cycle 1> [52]
+                0.00    0.00   34622/73550       zreadtoks [17]
+                0.01    0.00   38914/73550       getnext [5]
+[22]     1.7    0.01    0.00   73550         input_line [22]
+                0.00    0.00 3272526/3272526     get_uni_c [67]
+                0.00    0.00   73550/73550       getinputnormalizationstate [75]
+-----------------------------------------------
+                0.00    0.00      17/1259469     maincontrol [2]
+                0.00    0.00      86/1259469     zxetexscandimen <cycle 1> [39]
+                0.00    0.00   22023/1259469     prefixedcommand [7]
+                0.00    0.01 1237343/1259469     expand <cycle 1> [6]
+[23]     1.2    0.00    0.01 1259469         gettoken [23]
+                0.01    0.00 1259469/42055505     getnext [5]
+-----------------------------------------------
+                0.00    0.00       1/1193009     unsave [32]
+                0.00    0.00       1/1193009     alterboxdimen [56]
+                0.00    0.00       1/1193009     itsallover [62]
+                0.00    0.00       1/1193009     doextension [33]
+                0.00    0.00       2/1193009     alterinteger [55]
+                0.00    0.00       2/1193009     maincontrol [2]
+                0.00    0.00       4/1193009     znewfont [41]
+                0.00    0.00      13/1193009     scanfilename <cycle 1> [44]
+                0.00    0.00      25/1193009     openorclosein [40]
+                0.00    0.00      54/1193009     zscanglue <cycle 1> [57]
+                0.00    0.00      55/1193009     zdoregistercommand [26]
+                0.00    0.00    1969/1193009     zxetexscandimen <cycle 1> [39]
+                0.00    0.00    3059/1193009     zscankeyword <cycle 1> [31]
+                0.00    0.00    8240/1193009     prefixedcommand [7]
+                0.00    0.00  210197/1193009     scanexpr <cycle 1> [27]
+                0.00    0.00  228650/1193009     scanint <cycle 1> [10]
+                0.00    0.00  740735/1193009     expand <cycle 1> [6]
+[24]     0.5    0.00    0.00 1193009         backinput [24]
+                0.00    0.00  641063/6624143     endtokenlist [13]
+                0.00    0.00 1193009/13101401     getavail [19]
+-----------------------------------------------
+                               35088             conditional <cycle 1> [9]
+                0.00    0.00      11/837341      maincontrol [2]
+                0.00    0.00   17640/837341      prefixedcommand [7]
+[25]     0.4    0.00    0.00   52739         getxtoken <cycle 1> [25]
+                0.00    0.00   11380/1678917     macrocall [4]
+                0.00    0.00   76816/42055505     getnext [5]
+                               12697             expand <cycle 1> [6]
+-----------------------------------------------
+                0.00    0.00    2778/2778        prefixedcommand [7]
+[26]     0.4    0.00    0.00    2778         zdoregistercommand [26]
+                0.00    0.00    2756/837341      scanint <cycle 1> [10]
+                0.00    0.00    2668/837341      zscankeyword <cycle 1> [31]
+                0.00    0.00     399/837341      scanregisternum <cycle 1> [96]
+                0.00    0.00    2782/42055505     getnext [5]
+                0.00    0.00      20/837341      zxetexscandimen <cycle 1> [39]
+                0.00    0.00       3/837341      expand <cycle 1> [6]
+                0.00    0.00       2/837341      zscanglue <cycle 1> [57]
+                0.00    0.00      55/1193009     backinput [24]
+-----------------------------------------------
+                              110080             zscansomethinginternal <cycle 1> [60]
+[27]     0.3    0.00    0.00  110080         scanexpr <cycle 1> [27]
+                0.00    0.00  222077/42055505     getnext [5]
+                0.00    0.00  210197/1193009     backinput [24]
+                0.00    0.00     485/1678917     macrocall [4]
+                0.00    0.00      15/498872      zgetnode [71]
+                              110597             scanint <cycle 1> [10]
+                                 342             expand <cycle 1> [6]
+                                   9             zxetexscandimen <cycle 1> [39]
+                                   4             zscanglue <cycle 1> [57]
+-----------------------------------------------
+                0.00    0.00      18/112279      znewfont [41]
+                0.00    0.00  112261/112279      prefixedcommand [7]
+[28]     0.1    0.00    0.00  112279         getrtoken [28]
+                0.00    0.00  112279/42055505     getnext [5]
+-----------------------------------------------
+                              509738             expand <cycle 1> [6]
+[29]     0.1    0.00    0.00  509738         convtoks <cycle 1> [29]
+                0.00    0.00  106839/42055505     getnext [5]
+                0.00    0.00  509734/509734      zstrtokscat [48]
+                0.00    0.00       4/5431134     zbegintokenlist [20]
+                0.00    0.00  253370/253370      zprintromanint [72]
+                0.00    0.00  148175/152323      zprintint [74]
+                0.00    0.00  104760/855324      println [69]
+                0.00    0.00  104760/682830      zprintchar [70]
+                0.00    0.00    4867/11500       zprint [83]
+                0.00    0.00    4866/4866        zsprintcs [87]
+                0.00    0.00     752/752         printmeaning [97]
+                0.00    0.00     717/45977       zshowtokenlist [78]
+                0.00    0.00       7/8           zprintfilename [167]
+                0.00    0.00       4/18          makestring [149]
+                              394793             scanint <cycle 1> [10]
+                                7698             comparestrings <cycle 1> [85]
+                                1342             scanusvnum <cycle 1> [88]
+                                   4             zscantoks <cycle 1> [16]
+-----------------------------------------------
+                0.00    0.00    1568/1568        prefixedcommand [7]
+[30]     0.1    0.00    0.00    1568         zfindfontdimen [30]
+                0.00    0.00    1568/837341      scanint <cycle 1> [10]
+                0.00    0.00    1568/1605        scanfontident [46]
+-----------------------------------------------
+                                 134             zscanglue <cycle 1> [57]
+                                 331             zxetexscandimen <cycle 1> [39]
+                0.00    0.00       2/837341      zbeginbox [43]
+                0.00    0.00      18/837341      znewfont [41]
+                0.00    0.00      28/837341      zscanspec [45]
+                0.00    0.00      54/837341      scanrulespec [42]
+                0.00    0.00    2668/837341      zdoregistercommand [26]
+                0.00    0.01   34622/837341      prefixedcommand [7]
+[31]     0.1    0.00    0.00   37857         zscankeyword <cycle 1> [31]
+                0.00    0.00   72963/42055505     getnext [5]
+                0.00    0.00   69805/13101401     getavail [19]
+                0.00    0.00      78/1678917     macrocall [4]
+                0.00    0.00    3059/1193009     backinput [24]
+                0.00    0.00       1/5431134     zbegintokenlist [20]
+                                   2             expand <cycle 1> [6]
+-----------------------------------------------
+                0.00    0.00       4/1968        handlerightbrace [54]
+                0.00    0.00      16/1968        zpackage [49]
+                0.00    0.00    1948/1968        maincontrol [2]
+[32]     0.1    0.00    0.00    1968         unsave [32]
+                0.00    0.00    2475/104044      zeqdestroy [14]
+                0.00    0.00       1/1193009     backinput [24]
+                0.00    0.00       1/13101401     getavail [19]
+                0.00    0.00       6/296         zflushnodelist [100]
+                0.00    0.00       1/1           groupwarning [222]
+-----------------------------------------------
+                                 261             doextension [33]
+                0.00    0.00     263/263         maincontrol [2]
+[33]     0.1    0.00    0.00     263+261     doextension [33]
+                0.00    0.00     259/260         zwriteout [36]
+                0.00    0.00     263/263         znewwritewhatsit [37]
+                0.00    0.00     261/837341      zscantoks <cycle 1> [16]
+                0.00    0.00     263/42055505     getnext [5]
+                0.00    0.00       1/837341      expand <cycle 1> [6]
+                0.00    0.00       1/837341      scanfilename <cycle 1> [44]
+                0.00    0.00       1/1193009     backinput [24]
+                0.00    0.00     261/262         zoutwhat [103]
+                0.00    0.00     261/296         zflushnodelist [100]
+                                 261             doextension [33]
+-----------------------------------------------
+                0.00    0.00    7397/7397        prefixedcommand [7]
+[34]     0.0    0.00    0.00    7397         scanoptionalequals [34]
+                0.00    0.00     270/837341      expand <cycle 1> [6]
+                0.00    0.00   11409/42055505     getnext [5]
+                0.00    0.00      54/1678917     macrocall [4]
+-----------------------------------------------
+                0.00    0.00     302/302         maincontrol [2]
+[35]     0.0    0.00    0.00     302         shiftcase [35]
+                0.00    0.00     302/837341      zscantoks <cycle 1> [16]
+                0.00    0.00     302/5431134     zbegintokenlist [20]
+-----------------------------------------------
+                0.00    0.00       1/260         vlistout [58]
+                0.00    0.00     259/260         doextension [33]
+[36]     0.0    0.00    0.00     260         zwriteout [36]
+                0.00    0.00     260/837341      zscantoks <cycle 1> [16]
+                0.00    0.00     260/42055505     getnext [5]
+                0.00    0.00     780/5431134     zbegintokenlist [20]
+                0.00    0.00     260/6624143     endtokenlist [13]
+                0.00    0.00     780/13101401     getavail [19]
+                0.00    0.00     260/855324      println [69]
+                0.00    0.00     260/45977       zshowtokenlist [78]
+                0.00    0.00     259/11500       zprint [83]
+                0.00    0.00     259/264         zprintnl [102]
+-----------------------------------------------
+                0.00    0.00     263/263         doextension [33]
+[37]     0.0    0.00    0.00     263         znewwritewhatsit [37]
+                0.00    0.00     263/837341      scanint <cycle 1> [10]
+                0.00    0.00     263/498872      zgetnode [71]
+-----------------------------------------------
+                               29616             zscantoks <cycle 1> [16]
+                              133515             expand <cycle 1> [6]
+[38]     0.0    0.00    0.00  163131         thetoks <cycle 1> [38]
+                0.00    0.00    4461/42055505     getnext [5]
+                0.00    0.00   29844/13101401     getavail [19]
+                0.00    0.00   29604/45977       zshowtokenlist [78]
+                0.00    0.00    4114/152323      zprintint [74]
+                0.00    0.00      17/11500       zprint [83]
+                0.00    0.00      17/27          zprintscaled [135]
+                0.00    0.00      10/21          zdeleteglueref [143]
+                0.00    0.00      10/10          zprintspec [161]
+                              158670             scangeneraltext <cycle 1> [12]
+                                4461             zscansomethinginternal <cycle 1> [60]
+-----------------------------------------------
+                                   9             scanexpr <cycle 1> [27]
+                                  96             conditional <cycle 1> [9]
+                                 113             zscanglue <cycle 1> [57]
+                0.00    0.00       1/837341      alterboxdimen [56]
+                0.00    0.00       1/837341      maincontrol [2]
+                0.00    0.00       2/837341      zbeginbox [43]
+                0.00    0.00       4/837341      zscanspec [45]
+                0.00    0.00      18/837341      scanrulespec [42]
+                0.00    0.00      18/837341      znewfont [41]
+                0.00    0.00      20/837341      zdoregistercommand [26]
+                0.00    0.00    1689/837341      prefixedcommand [7]
+[39]     0.0    0.00    0.00    1971         zxetexscandimen <cycle 1> [39]
+                0.00    0.00    4142/42055505     getnext [5]
+                0.00    0.00    1969/1193009     backinput [24]
+                0.00    0.00      27/1678917     macrocall [4]
+                0.00    0.00      86/1259469     gettoken [23]
+                0.00    0.00     119/13101401     getavail [19]
+                                1987             zscansomethinginternal <cycle 1> [60]
+                                1707             scanint <cycle 1> [10]
+                                 331             zscankeyword <cycle 1> [31]
+                                   4             expand <cycle 1> [6]
+-----------------------------------------------
+                0.00    0.00      50/50          maincontrol [2]
+[40]     0.0    0.00    0.00      50         openorclosein [40]
+                0.00    0.00      50/837341      scanint <cycle 1> [10]
+                0.00    0.00      25/837341      scanfilename <cycle 1> [44]
+                0.00    0.00       8/1678917     macrocall [4]
+                0.00    0.00       1/837341      expand <cycle 1> [6]
+                0.00    0.00      34/42055505     getnext [5]
+                0.00    0.00      25/1193009     backinput [24]
+                0.00    0.00     349/1354        zmorename [93]
+                0.00    0.00      25/69          zpackfilename [113]
+                0.00    0.00      25/39          kpse_in_name_ok [122]
+                0.00    0.00      25/39          u_open_in [123]
+                0.00    0.00      20/50          makeutf16name [118]
+                0.00    0.00      20/108         endname [106]
+                0.00    0.00      18/34          u_close_inout [125]
+-----------------------------------------------
+                0.00    0.00      18/18          prefixedcommand [7]
+[41]     0.0    0.00    0.00      18         znewfont [41]
+                0.00    0.00      18/837341      scanfilename <cycle 1> [44]
+                0.00    0.00      18/837341      zscankeyword <cycle 1> [31]
+                0.00    0.00      18/837341      zxetexscandimen <cycle 1> [39]
+                0.00    0.00      30/104044      zeqdestroy [14]
+                0.00    0.00       6/108632      zeqdefine [15]
+                0.00    0.00       4/1678917     macrocall [4]
+                0.00    0.00      22/42055505     getnext [5]
+                0.00    0.00      18/112279      getrtoken [28]
+                0.00    0.00       4/1193009     backinput [24]
+                0.00    0.00    1206/1206        zappendstr [95]
+                0.00    0.00     859/46274       zstreqstr [77]
+                0.00    0.00      16/16          zreadfontinfo [150]
+-----------------------------------------------
+                0.00    0.00       6/6           maincontrol [2]
+[42]     0.0    0.00    0.00       6         scanrulespec [42]
+                0.00    0.00      54/837341      zscankeyword <cycle 1> [31]
+                0.00    0.00      18/837341      zxetexscandimen <cycle 1> [39]
+                0.00    0.00       6/498872      zgetnode [71]
+-----------------------------------------------
+                0.00    0.00       8/23          maincontrol [2]
+                0.00    0.00      15/23          prefixedcommand [7]
+[43]     0.0    0.00    0.00      23         zbeginbox [43]
+                0.00    0.00      16/16          zscanspec [45]
+                0.00    0.00      16/837341      scanleftbrace <cycle 1> [11]
+                0.00    0.00       7/837341      scanregisternum <cycle 1> [96]
+                0.00    0.00       2/837341      zscankeyword <cycle 1> [31]
+                0.00    0.00       2/837341      zxetexscandimen <cycle 1> [39]
+                0.00    0.00      16/22          pushnest [138]
+                0.00    0.00       7/21          normalparagraph [142]
+                0.00    0.00       2/15          zvpackage [151]
+                0.00    0.00       2/2           zvsplit [215]
+-----------------------------------------------
+                                  14             startinput <cycle 1> [52]
+                0.00    0.00       1/837341      doextension [33]
+                0.00    0.00      18/837341      znewfont [41]
+                0.00    0.00      25/837341      openorclosein [40]
+[44]     0.0    0.00    0.00      58         scanfilename <cycle 1> [44]
+                0.00    0.00      64/1678917     macrocall [4]
+                0.00    0.00     873/42055505     getnext [5]
+                0.00    0.00      13/1193009     backinput [24]
+                0.00    0.00     787/1354        zmorename [93]
+                0.00    0.00      58/108         endname [106]
+                                   9             expand <cycle 1> [6]
+-----------------------------------------------
+                0.00    0.00      16/16          zbeginbox [43]
+[45]     0.0    0.00    0.00      16         zscanspec [45]
+                0.00    0.00      28/837341      zscankeyword <cycle 1> [31]
+                0.00    0.00       4/837341      zxetexscandimen <cycle 1> [39]
+                0.00    0.00      16/1968        znewsavelevel [91]
+-----------------------------------------------
+                0.00    0.00      10/1605        prefixedcommand [7]
+                0.00    0.00      27/1605        zscansomethinginternal <cycle 1> [60]
+                0.00    0.00    1568/1605        zfindfontdimen [30]
+[46]     0.0    0.00    0.00    1605         scanfontident [46]
+                0.00    0.00    1605/42055505     getnext [5]
+-----------------------------------------------
+                0.00    0.00      15/15          prefixedcommand [7]
+[47]     0.0    0.00    0.00      15         scanfifteenbitint [47]
+                0.00    0.00      15/837341      scanint <cycle 1> [10]
+-----------------------------------------------
+                0.00    0.00  509734/509734      convtoks <cycle 1> [29]
+[48]     0.0    0.00    0.00  509734         zstrtokscat [48]
+                0.00    0.00    5824/13101401     getavail [19]
+-----------------------------------------------
+                0.00    0.00      16/16          maincontrol [2]
+[49]     0.0    0.00    0.00      16         zpackage [49]
+                0.00    0.00      16/1968        unsave [32]
+                0.00    0.00       9/11          zhpack [158]
+                0.00    0.00       7/15          zvpackage [151]
+-----------------------------------------------
+                0.00    0.00      10/10          maincontrol [2]
+[50]     0.0    0.00    0.00      10         appendglue [50]
+                0.00    0.00       5/837341      zscanglue <cycle 1> [57]
+                0.00    0.00      10/498872      zgetnode [71]
+-----------------------------------------------
+                0.00    0.00       5/5           maincontrol [2]
+[51]     0.0    0.00    0.00       5         unpackage [51]
+                0.00    0.00       5/837341      scanregisternum <cycle 1> [96]
+-----------------------------------------------
+                                  13             expand <cycle 1> [6]
+                0.00    0.00       1/837341      mainbody [1]
+[52]     0.0    0.00    0.00      14         startinput <cycle 1> [52]
+                0.00    0.00      14/73550       input_line [22]
+                0.00    0.00     218/1354        zmorename [93]
+                0.00    0.00      28/108         endname [106]
+                0.00    0.00      24/855324      println [69]
+                0.00    0.00      14/34636       beginfilereading [80]
+                0.00    0.00      14/69          zpackfilename [113]
+                0.00    0.00      14/39          kpse_in_name_ok [122]
+                0.00    0.00      14/39          u_open_in [123]
+                0.00    0.00      14/50          makeutf16name [118]
+                0.00    0.00      14/18          makestring [149]
+                0.00    0.00      14/74          kpse_find_file [110]
+                0.00    0.00      14/14          makefullnamestring [152]
+                0.00    0.00      14/11500       zprint [83]
+                0.00    0.00      14/38920       firmuptheline [79]
+                0.00    0.00       1/1           getjobname [221]
+                0.00    0.00       1/1           openlogfile [229]
+                                  14             scanfilename <cycle 1> [44]
+-----------------------------------------------
+                0.00    0.00       1/23          itsallover [62]
+                0.00    0.00      22/23          maincontrol [2]
+[53]     0.0    0.00    0.00      23         buildpage [53]
+                0.00    0.00       4/837341      scanleftbrace <cycle 1> [11]
+                0.00    0.00       4/4           zfireup [63]
+                0.00    0.00       9/296         zflushnodelist [100]
+                0.00    0.00       4/4           znewskipparam [192]
+                0.00    0.00       4/4           zfreezepagespecs [191]
+-----------------------------------------------
+                0.00    0.00     262/262         maincontrol [2]
+[54]     0.0    0.00    0.00     262         handlerightbrace [54]
+                0.00    0.00       4/1968        unsave [32]
+                0.00    0.00       4/6624143     endtokenlist [13]
+                0.00    0.00      11/13          endgraf [154]
+                0.00    0.00       4/296         zflushnodelist [100]
+-----------------------------------------------
+                0.00    0.00       2/2           prefixedcommand [7]
+[55]     0.0    0.00    0.00       2         alterinteger [55]
+                0.00    0.00       2/837341      scanint <cycle 1> [10]
+                0.00    0.00       2/42055505     getnext [5]
+                0.00    0.00       2/1193009     backinput [24]
+-----------------------------------------------
+                0.00    0.00       1/1           prefixedcommand [7]
+[56]     0.0    0.00    0.00       1         alterboxdimen [56]
+                0.00    0.00       1/837341      scanregisternum <cycle 1> [96]
+                0.00    0.00       1/837341      zxetexscandimen <cycle 1> [39]
+                0.00    0.00       1/42055505     getnext [5]
+                0.00    0.00       1/1193009     backinput [24]
+-----------------------------------------------
+                                   4             scanexpr <cycle 1> [27]
+                0.00    0.00       2/837341      zdoregistercommand [26]
+                0.00    0.00       5/837341      appendglue [50]
+                0.00    0.00      85/837341      prefixedcommand [7]
+[57]     0.0    0.00    0.00      96         zscanglue <cycle 1> [57]
+                0.00    0.00     100/42055505     getnext [5]
+                0.00    0.00      54/1193009     backinput [24]
+                0.00    0.00      67/79          znewspec [109]
+                                 134             zscankeyword <cycle 1> [31]
+                                 113             zxetexscandimen <cycle 1> [39]
+                                  42             zscansomethinginternal <cycle 1> [60]
+                                   1             expand <cycle 1> [6]
+-----------------------------------------------
+                                   3             vlistout [58]
+                0.00    0.00       1/1           zshipout [59]
+[58]     0.0    0.00    0.00       1+3       vlistout [58]
+                0.00    0.00       1/260         zwriteout [36]
+                0.00    0.00       3/3           hlistout [66]
+                0.00    0.00       6/27          zmovement [134]
+                0.00    0.00       4/7           zprunemovements [168]
+                0.00    0.00       4/28          zdvifour [127]
+                0.00    0.00       1/262         zoutwhat [103]
+                                   3             vlistout [58]
+-----------------------------------------------
+                0.00    0.00       1/1           maincontrol [2]
+[59]     0.0    0.00    0.00       1         zshipout [59]
+                0.00    0.00       1/1           vlistout [58]
+                0.00    0.00      14/855324      println [69]
+                0.00    0.00      14/28          zdvifour [127]
+                0.00    0.00       8/682830      zprintchar [70]
+                0.00    0.00       3/11500       zprint [83]
+                0.00    0.00       2/152323      zprintint [74]
+                0.00    0.00       1/69          zpackfilename [113]
+                0.00    0.00       1/3           open_output [195]
+                0.00    0.00       1/1           open_dvi_output [227]
+                0.00    0.00       1/108         endname [106]
+                0.00    0.00       1/2           preparemag [206]
+                0.00    0.00       1/296         zflushnodelist [100]
+-----------------------------------------------
+                                  42             zscanglue <cycle 1> [57]
+                                1987             zxetexscandimen <cycle 1> [39]
+                                4461             thetoks <cycle 1> [38]
+                              443594             scanint <cycle 1> [10]
+[60]     0.0    0.00    0.00  450084         zscansomethinginternal <cycle 1> [60]
+                0.00    0.00      27/1605        scanfontident [46]
+                0.00    0.00       3/3           usingOpenType [196]
+                0.00    0.00       2/2           getLargerScriptListTable(XeTeXFont_rec*, unsigned int**) [773]
+                0.00    0.00       2/2           countScripts [197]
+                0.00    0.00       2/2           otfontget [204]
+                              110080             scanexpr <cycle 1> [27]
+                                2124             scanusvnum <cycle 1> [88]
+                                 599             scanregisternum <cycle 1> [96]
+-----------------------------------------------
+                0.00    0.00       2/17          maincontrol [2]
+                0.00    0.00      15/17          prefixedcommand [7]
+[61]     0.0    0.00    0.00      17         zscanbox [61]
+                0.00    0.00      17/42055505     getnext [5]
+-----------------------------------------------
+                0.00    0.00       2/2           maincontrol [2]
+[62]     0.0    0.00    0.00       2         itsallover [62]
+                0.00    0.00       1/23          buildpage [53]
+                0.00    0.00       1/1193009     backinput [24]
+                0.00    0.00       2/498872      zgetnode [71]
+                0.00    0.00       1/3           newnullbox [194]
+-----------------------------------------------
+                0.00    0.00       4/4           buildpage [53]
+[63]     0.0    0.00    0.00       4         zfireup [63]
+                0.00    0.00       4/5431134     zbegintokenlist [20]
+                0.00    0.00       4/15          zvpackage [151]
+                0.00    0.00       4/22          pushnest [138]
+                0.00    0.00       4/21          normalparagraph [142]
+                0.00    0.00       4/1968        znewsavelevel [91]
+-----------------------------------------------
+                0.00    0.00    2272/33745       zscantoks <cycle 1> [16]
+                0.00    0.00   31473/33745       expand <cycle 1> [6]
+[64]     0.0    0.00    0.00   33745         zmakeleftright [64]
+                0.00    0.00       8/13101401     getavail [19]
+-----------------------------------------------
+                0.00    0.00       1/1           mainbody [1]
+[65]     0.0    0.00    0.00       1         finalcleanup [65]
+                0.00    0.00       2/6624143     endtokenlist [13]
+                0.00    0.00       2/11500       zprint [83]
+                0.00    0.00       1/34636       endfilereading [81]
+                0.00    0.00       1/264         zprintnl [102]
+-----------------------------------------------
+                0.00    0.00       3/3           vlistout [58]
+[66]     0.0    0.00    0.00       3         hlistout [66]
+                0.00    0.00       3/13101401     getavail [19]
+                0.00    0.00      21/21          debugloc [140]
+                0.00    0.00      21/27          zmovement [134]
+                0.00    0.00      21/21          makeXDVGlyphArrayData [141]
+                0.00    0.00       3/7           zprunemovements [168]
+                0.00    0.00       1/28          zdvifour [127]
+                0.00    0.00       1/2           zdvinativefontdef [208]
+                0.00    0.00       1/2           zdvifontdef [207]
+-----------------------------------------------
+                0.00    0.00 3272526/3272526     input_line [22]
+[67]     0.0    0.00    0.00 3272526         get_uni_c [67]
+-----------------------------------------------
+                0.00    0.00 1923576/1923576     getnext [5]
+[68]     0.0    0.00    0.00 1923576         getcharsigslot [68]
+                0.00    0.00      28/28          gettexstring [126]
+                0.00    0.00       1/344         xmalloc [99]
+-----------------------------------------------
+                                   9             println [69]
+                0.00    0.00       1/855324      zoutwhat [103]
+                0.00    0.00       2/855324      closefilesandterminate [217]
+                0.00    0.00       4/855324      zfontmappingwarning [189]
+                0.00    0.00       6/855324      zprintromanint [72]
+                0.00    0.00      10/855324      openlogfile [229]
+                0.00    0.00      13/855324      getnext [5]
+                0.00    0.00      14/855324      zshipout [59]
+                0.00    0.00      19/855324      zprintparam [148]
+                0.00    0.00      24/855324      startinput <cycle 1> [52]
+                0.00    0.00      28/855324      zprintfilename [167]
+                0.00    0.00      63/855324      zprinthex [156]
+                0.00    0.00      74/855324      zprintscaled [135]
+                0.00    0.00     260/855324      zwriteout [36]
+                0.00    0.00     700/855324      zprintcmdchr [98]
+                0.00    0.00    1210/855324      zprintesc [94]
+                0.00    0.00    1434/855324      printmeaning [97]
+                0.00    0.00    3609/855324      zprintcs [89]
+                0.00    0.00    4798/855324      zsprintcs [87]
+                0.00    0.00   99012/855324      zprint [83]
+                0.00    0.00  104760/855324      convtoks <cycle 1> [29]
+                0.00    0.00  301731/855324      zprintint [74]
+                0.00    0.00  337552/855324      zshowtokenlist [78]
+[69]     0.0    0.00    0.00  855324+9       println [69]
+                                   9             println [69]
+-----------------------------------------------
+                0.00    0.00       4/682830      openlogfile [229]
+                0.00    0.00       6/682830      zprintromanint [72]
+                0.00    0.00       8/682830      zshipout [59]
+                0.00    0.00      17/682830      zprint [83]
+                0.00    0.00      19/682830      zprintparam [148]
+                0.00    0.00      28/682830      zprintfilename [167]
+                0.00    0.00      50/682830      zprinthex [156]
+                0.00    0.00     700/682830      zprintcmdchr [98]
+                0.00    0.00    1210/682830      zprintesc [94]
+                0.00    0.00    3609/682830      zprintcs [89]
+                0.00    0.00    4798/682830      zsprintcs [87]
+                0.00    0.00  104760/682830      convtoks <cycle 1> [29]
+                0.00    0.00  233606/682830      zprintint [74]
+                0.00    0.00  334015/682830      zshowtokenlist [78]
+[70]     0.0    0.00    0.00  682830         zprintchar [70]
+-----------------------------------------------
+                0.00    0.00       1/498872      appspace [216]
+                0.00    0.00       2/498872      znewparamglue [211]
+                0.00    0.00       2/498872      zprunepagetop [213]
+                0.00    0.00       2/498872      zpostlinebreak [212]
+                0.00    0.00       2/498872      itsallover [62]
+                0.00    0.00       2/498872      znewgraf [210]
+                0.00    0.00       2/498872      zlinebreak [209]
+                0.00    0.00       3/498872      newnullbox [194]
+                0.00    0.00       4/498872      znewskipparam [192]
+                0.00    0.00       4/498872      ztrybreak [139]
+                0.00    0.00       5/498872      zappendtovlist [163]
+                0.00    0.00       5/498872      maincontrol [2]
+                0.00    0.00       6/498872      znewnativecharacter [185]
+                0.00    0.00       6/498872      scanrulespec [42]
+                0.00    0.00      10/498872      appendglue [50]
+                0.00    0.00      11/498872      zhpack [158]
+                0.00    0.00      15/498872      zvpackage [151]
+                0.00    0.00      15/498872      scanexpr <cycle 1> [27]
+                0.00    0.00      19/498872      znewglue [147]
+                0.00    0.00      20/498872      zdolocalelinebreaks [144]
+                0.00    0.00      27/498872      zmovement [134]
+                0.00    0.00      79/498872      znewspec [109]
+                0.00    0.00     263/498872      znewwritewhatsit [37]
+                0.00    0.00  498367/498872      conditional <cycle 1> [9]
+[71]     0.0    0.00    0.00  498872         zgetnode [71]
+-----------------------------------------------
+                0.00    0.00  253370/253370      convtoks <cycle 1> [29]
+[72]     0.0    0.00    0.00  253370         zprintromanint [72]
+                0.00    0.00       6/855324      println [69]
+                0.00    0.00       6/682830      zprintchar [70]
+-----------------------------------------------
+                0.00    0.00  159651/159651      zidlookup [18]
+[73]     0.0    0.00    0.00  159651         zstreqbuf [73]
+-----------------------------------------------
+                0.00    0.00       1/152323      zoutwhat [103]
+                0.00    0.00       2/152323      closefilesandterminate [217]
+                0.00    0.00       2/152323      openlogfile [229]
+                0.00    0.00       2/152323      zshipout [59]
+                0.00    0.00      27/152323      zprintscaled [135]
+                0.00    0.00    4114/152323      thetoks <cycle 1> [38]
+                0.00    0.00  148175/152323      convtoks <cycle 1> [29]
+[74]     0.0    0.00    0.00  152323         zprintint [74]
+                0.00    0.00  301731/855324      println [69]
+                0.00    0.00  233606/682830      zprintchar [70]
+-----------------------------------------------
+                0.00    0.00   73550/73550       input_line [22]
+[75]     0.0    0.00    0.00   73550         getinputnormalizationstate [75]
+-----------------------------------------------
+                               67488             conditional <cycle 1> [9]
+[76]     0.0    0.00    0.00   67488         scanfourbitintor18 <cycle 1> [76]
+                               67488             scanint <cycle 1> [10]
+-----------------------------------------------
+                0.00    0.00      15/46274       zloadnativefont [184]
+                0.00    0.00     859/46274       znewfont [41]
+                0.00    0.00   14864/46274       slowmakestring [107]
+                0.00    0.00   30536/46274       zsearchstring [105]
+[77]     0.0    0.00    0.00   46274         zstreqstr [77]
+-----------------------------------------------
+                0.00    0.00     260/45977       zwriteout [36]
+                0.00    0.00     717/45977       convtoks <cycle 1> [29]
+                0.00    0.00   15396/45977       comparestrings <cycle 1> [85]
+                0.00    0.00   29604/45977       thetoks <cycle 1> [38]
+[78]     0.0    0.00    0.00   45977         zshowtokenlist [78]
+                0.00    0.00  337552/855324      println [69]
+                0.00    0.00  334015/682830      zprintchar [70]
+                0.00    0.00    3578/3578        zprintcs [89]
+                0.00    0.00     717/11500       zprint [83]
+-----------------------------------------------
+                0.00    0.00      14/38920       startinput <cycle 1> [52]
+                0.00    0.00   38906/38920       getnext [5]
+[79]     0.0    0.00    0.00   38920         firmuptheline [79]
+-----------------------------------------------
+                0.00    0.00      14/34636       startinput <cycle 1> [52]
+                0.00    0.00   34622/34636       zreadtoks [17]
+[80]     0.0    0.00    0.00   34636         beginfilereading [80]
+-----------------------------------------------
+                0.00    0.00       1/34636       finalcleanup [65]
+                0.00    0.00      13/34636       getnext [5]
+                0.00    0.00   34622/34636       zreadtoks [17]
+[81]     0.0    0.00    0.00   34636         endfilereading [81]
+                0.00    0.00      14/34          u_close_inout [125]
+-----------------------------------------------
+                0.00    0.00   24487/24487       loadfmtfile [8]
+[82]     0.0    0.00    0.00   24487         do_undump [82]
+-----------------------------------------------
+                0.00    0.00       2/11500       finalcleanup [65]
+                0.00    0.00       3/11500       zshipout [59]
+                0.00    0.00       4/11500       zoutwhat [103]
+                0.00    0.00       8/11500       closefilesandterminate [217]
+                0.00    0.00      10/11500       zprintspec [161]
+                0.00    0.00      12/11500       openlogfile [229]
+                0.00    0.00      14/11500       startinput <cycle 1> [52]
+                0.00    0.00      16/11500       zfontmappingwarning [189]
+                0.00    0.00      17/11500       thetoks <cycle 1> [38]
+                0.00    0.00      36/11500       zprintfilename [167]
+                0.00    0.00     259/11500       zwriteout [36]
+                0.00    0.00     717/11500       zshowtokenlist [78]
+                0.00    0.00     739/11500       printmeaning [97]
+                0.00    0.00    1220/11500       zprintcmdchr [98]
+                0.00    0.00    3576/11500       zprintcs [89]
+                0.00    0.00    4867/11500       convtoks <cycle 1> [29]
+[83]     0.0    0.00    0.00   11500         zprint [83]
+                0.00    0.00   99012/855324      println [69]
+                0.00    0.00      17/682830      zprintchar [70]
+-----------------------------------------------
+                0.00    0.00       1/10308       maincontrol [2]
+                0.00    0.00   10307/10308       prefixedcommand [7]
+[84]     0.0    0.00    0.00   10308         zgeqdefine [84]
+                0.00    0.00       1/296         zflushnodelist [100]
+-----------------------------------------------
+                                7698             convtoks <cycle 1> [29]
+[85]     0.0    0.00    0.00    7698         comparestrings <cycle 1> [85]
+                0.00    0.00   15396/45977       zshowtokenlist [78]
+                               15396             zscantoks <cycle 1> [16]
+-----------------------------------------------
+                0.00    0.00    6374/6374        prefixedcommand [7]
+[86]     0.0    0.00    0.00    6374         zeqworddefine [86]
+                0.00    0.00     222/2697        zeqsave [90]
+-----------------------------------------------
+                0.00    0.00    4866/4866        convtoks <cycle 1> [29]
+[87]     0.0    0.00    0.00    4866         zsprintcs [87]
+                0.00    0.00    4798/855324      println [69]
+                0.00    0.00    4798/682830      zprintchar [70]
+-----------------------------------------------
+                                1342             convtoks <cycle 1> [29]
+                                2124             zscansomethinginternal <cycle 1> [60]
+                0.00    0.00     826/837341      prefixedcommand [7]
+[88]     0.0    0.00    0.00    4292         scanusvnum <cycle 1> [88]
+                                4292             scanint <cycle 1> [10]
+-----------------------------------------------
+                0.00    0.00    3578/3578        zshowtokenlist [78]
+[89]     0.0    0.00    0.00    3578         zprintcs [89]
+                0.00    0.00    3609/855324      println [69]
+                0.00    0.00    3609/682830      zprintchar [70]
+                0.00    0.00    3576/11500       zprint [83]
+-----------------------------------------------
+                0.00    0.00     222/2697        zeqworddefine [86]
+                0.00    0.00    2475/2697        zeqdefine [15]
+[90]     0.0    0.00    0.00    2697         zeqsave [90]
+-----------------------------------------------
+                0.00    0.00       4/1968        zfireup [63]
+                0.00    0.00      16/1968        zscanspec [45]
+                0.00    0.00    1948/1968        maincontrol [2]
+[91]     0.0    0.00    0.00    1968         znewsavelevel [91]
+-----------------------------------------------
+                0.00    0.00    1689/1689        prefixedcommand [7]
+[92]     0.0    0.00    0.00    1689         zscandimen [92]
+-----------------------------------------------
+                0.00    0.00     218/1354        startinput <cycle 1> [52]
+                0.00    0.00     349/1354        openorclosein [40]
+                0.00    0.00     787/1354        scanfilename <cycle 1> [44]
+[93]     0.0    0.00    0.00    1354         zmorename [93]
+-----------------------------------------------
+                0.00    0.00       3/1210        printmeaning [97]
+                0.00    0.00    1207/1210        zprintcmdchr [98]
+[94]     0.0    0.00    0.00    1210         zprintesc [94]
+                0.00    0.00    1210/855324      println [69]
+                0.00    0.00    1210/682830      zprintchar [70]
+-----------------------------------------------
+                0.00    0.00    1206/1206        znewfont [41]
+[95]     0.0    0.00    0.00    1206         zappendstr [95]
+-----------------------------------------------
+                                   6             conditional <cycle 1> [9]
+                                 599             zscansomethinginternal <cycle 1> [60]
+                0.00    0.00       1/837341      alterboxdimen [56]
+                0.00    0.00       5/837341      unpackage [51]
+                0.00    0.00       7/837341      zbeginbox [43]
+                0.00    0.00     175/837341      prefixedcommand [7]
+                0.00    0.00     399/837341      zdoregistercommand [26]
+[96]     0.0    0.00    0.00    1192         scanregisternum <cycle 1> [96]
+                                1192             scanint <cycle 1> [10]
+-----------------------------------------------
+                0.00    0.00     752/752         convtoks <cycle 1> [29]
+[97]     0.0    0.00    0.00     752         printmeaning [97]
+                0.00    0.00    1434/855324      println [69]
+                0.00    0.00     752/752         zprintcmdchr [98]
+                0.00    0.00     739/11500       zprint [83]
+                0.00    0.00      19/19          zprintparam [148]
+                0.00    0.00      13/13          zprinthex [156]
+                0.00    0.00       3/1210        zprintesc [94]
+-----------------------------------------------
+                0.00    0.00     752/752         printmeaning [97]
+[98]     0.0    0.00    0.00     752         zprintcmdchr [98]
+                0.00    0.00    1220/11500       zprint [83]
+                0.00    0.00    1207/1210        zprintesc [94]
+                0.00    0.00     700/855324      println [69]
+                0.00    0.00     700/682830      zprintchar [70]
+-----------------------------------------------
+                0.00    0.00       1/344         zpackbufferedname [234]
+                0.00    0.00       1/344         getcharsigslot [68]
+                0.00    0.00       1/344         makefontdef [203]
+                0.00    0.00       2/344         initialize [223]
+                0.00    0.00       4/344         load_mapping_file [186]
+                0.00    0.00       6/344         XeTeXFontMgr::getDesignSize(XeTeXFont_rec*) [768]
+                0.00    0.00      16/344         findnativefont [172]
+                0.00    0.00      17/344         mainbody [1]
+                0.00    0.00      18/344         _get_table(hb_face_t*, unsigned int, void*) [797]
+                0.00    0.00      28/344         gettexstring [126]
+                0.00    0.00      37/344         loadfmtfile [8]
+                0.00    0.00      39/344         u_open_in [123]
+                0.00    0.00      45/344         open_input [119]
+                0.00    0.00      60/344         kpse_find_file [110]
+                0.00    0.00      69/344         zpackfilename [113]
+[99]     0.0    0.00    0.00     344         xmalloc [99]
+-----------------------------------------------
+                                  19             zflushnodelist [100]
+                0.00    0.00       1/296         zgeqdefine [84]
+                0.00    0.00       1/296         zshipout [59]
+                0.00    0.00       2/296         zprunepagetop [213]
+                0.00    0.00       2/296         zvsplit [215]
+                0.00    0.00       2/296         zlinebreak [209]
+                0.00    0.00       4/296         handlerightbrace [54]
+                0.00    0.00       6/296         unsave [32]
+                0.00    0.00       8/296         zeqdefine [15]
+                0.00    0.00       9/296         buildpage [53]
+                0.00    0.00     261/296         doextension [33]
+[100]    0.0    0.00    0.00     296+19      zflushnodelist [100]
+                                  19             zflushnodelist [100]
+-----------------------------------------------
+                0.00    0.00     273/273         getnext [5]
+[101]    0.0    0.00    0.00     273         checkoutervalidity [101]
+-----------------------------------------------
+                0.00    0.00       1/264         finalcleanup [65]
+                0.00    0.00       2/264         closefilesandterminate [217]
+                0.00    0.00       2/264         zoutwhat [103]
+                0.00    0.00     259/264         zwriteout [36]
+[102]    0.0    0.00    0.00     264         zprintnl [102]
+-----------------------------------------------
+                0.00    0.00       1/262         vlistout [58]
+                0.00    0.00     261/262         doextension [33]
+[103]    0.0    0.00    0.00     262         zoutwhat [103]
+                0.00    0.00       4/11500       zprint [83]
+                0.00    0.00       2/264         zprintnl [102]
+                0.00    0.00       1/69          zpackfilename [113]
+                0.00    0.00       1/1           kpse_out_name_ok [226]
+                0.00    0.00       1/3           open_output [195]
+                0.00    0.00       1/152323      zprintint [74]
+                0.00    0.00       1/8           zprintfilename [167]
+                0.00    0.00       1/855324      println [69]
+                0.00    0.00       1/13          xfclose [155]
+                0.00    0.00       1/13          close_file [153]
+-----------------------------------------------
+                0.00    0.00       2/144         makeutf16name [118]
+                0.00    0.00       3/144         layoutChars [132]
+                0.00    0.00       4/144         getLargerScriptListTable(XeTeXFont_rec*, unsigned int**) [773]
+                0.00    0.00     135/144         measure_native_node [133]
+[104]    0.0    0.00    0.00     144         xcalloc [104]
+-----------------------------------------------
+                0.00    0.00     135/135         endname [106]
+[105]    0.0    0.00    0.00     135         zsearchstring [105]
+                0.00    0.00   30536/46274       zstreqstr [77]
+-----------------------------------------------
+                                  16             endname [106]
+                0.00    0.00       1/108         openlogfile [229]
+                0.00    0.00       1/108         zshipout [59]
+                0.00    0.00      20/108         openorclosein [40]
+                0.00    0.00      28/108         startinput <cycle 1> [52]
+                0.00    0.00      58/108         scanfilename <cycle 1> [44]
+[106]    0.0    0.00    0.00     108+16      endname [106]
+                0.00    0.00     135/135         zsearchstring [105]
+                0.00    0.00     108/108         slowmakestring [107]
+                0.00    0.00      16/50          makeutf16name [118]
+                                  16             endname [106]
+-----------------------------------------------
+                0.00    0.00     108/108         endname [106]
+[107]    0.0    0.00    0.00     108         slowmakestring [107]
+                0.00    0.00   14864/46274       zstreqstr [77]
+-----------------------------------------------
+                0.00    0.00      85/85          prefixedcommand [7]
+[108]    0.0    0.00    0.00      85         trapzeroglue [108]
+                0.00    0.00       9/21          zdeleteglueref [143]
+-----------------------------------------------
+                0.00    0.00       1/79          appspace [216]
+                0.00    0.00       1/79          maincontrol [2]
+                0.00    0.00       2/79          zprunepagetop [213]
+                0.00    0.00       4/79          znewskipparam [192]
+                0.00    0.00       4/79          zappendtovlist [163]
+                0.00    0.00      67/79          zscanglue <cycle 1> [57]
+[109]    0.0    0.00    0.00      79         znewspec [109]
+                0.00    0.00      79/498872      zgetnode [71]
+-----------------------------------------------
+                0.00    0.00       4/74          load_mapping_file [186]
+                0.00    0.00       6/74          findnativefont [172]
+                0.00    0.00      14/74          startinput <cycle 1> [52]
+                0.00    0.00      50/74          open_input [119]
+[110]    0.0    0.00    0.00      74         kpse_find_file [110]
+                0.00    0.00      60/344         xmalloc [99]
+                0.00    0.00      51/51          kpse_fetch_from_network [117]
+-----------------------------------------------
+                0.00    0.00      74/74          prefixedcommand [7]
+[111]    0.0    0.00    0.00      74         zgeqworddefine [111]
+-----------------------------------------------
+                0.00    0.00       6/71          znewnativecharacter [185]
+                0.00    0.00       6/71          otgetfontmetrics [182]
+                0.00    0.00      59/71          maincontrol [2]
+[112]    0.0    0.00    0.00      71         mapCharToGlyph [112]
+                0.00    0.00      71/71          XeTeXFontInst::mapCharToGlyph(int) const [763]
+-----------------------------------------------
+                0.00    0.00       1/69          zoutwhat [103]
+                0.00    0.00       1/69          zshipout [59]
+                0.00    0.00       2/69          openlogfile [229]
+                0.00    0.00      14/69          startinput <cycle 1> [52]
+                0.00    0.00      25/69          openorclosein [40]
+                0.00    0.00      26/69          zreadfontinfo [150]
+[113]    0.0    0.00    0.00      69         zpackfilename [113]
+                0.00    0.00      69/344         xmalloc [99]
+-----------------------------------------------
+                0.00    0.00      65/65          measure_native_node [133]
+[114]    0.0    0.00    0.00      65         getCachedGlyphBBox [114]
+-----------------------------------------------
+                0.00    0.00       6/65          znewnativecharacter [185]
+                0.00    0.00      59/65          maincontrol [2]
+[115]    0.0    0.00    0.00      65         mapchartoglyph [115]
+-----------------------------------------------
+                0.00    0.00       2/53          makefontdef [203]
+                0.00    0.00       6/53          XeTeXFontInst::initialize(char const*, int, int&) [769]
+                0.00    0.00      45/53          open_input [119]
+[116]    0.0    0.00    0.00      53         xstrdup [116]
+-----------------------------------------------
+                0.00    0.00      51/51          kpse_find_file [110]
+[117]    0.0    0.00    0.00      51         kpse_fetch_from_network [117]
+-----------------------------------------------
+                0.00    0.00      14/50          startinput <cycle 1> [52]
+                0.00    0.00      16/50          endname [106]
+                0.00    0.00      20/50          openorclosein [40]
+[118]    0.0    0.00    0.00      50         makeutf16name [118]
+                0.00    0.00       2/144         xcalloc [104]
+-----------------------------------------------
+                0.00    0.00       1/50          openfmtfile [228]
+                0.00    0.00      10/50          zreadfontinfo [150]
+                0.00    0.00      39/50          u_open_in [123]
+[119]    0.0    0.00    0.00      50         open_input [119]
+                0.00    0.00      50/74          kpse_find_file [110]
+                0.00    0.00      45/53          xstrdup [116]
+                0.00    0.00      45/45          xfopen [121]
+                0.00    0.00      45/344         xmalloc [99]
+-----------------------------------------------
+                0.00    0.00      48/48          printutf8str [187]
+[120]    0.0    0.00    0.00      48         zprintrawchar [120]
+-----------------------------------------------
+                0.00    0.00      45/45          open_input [119]
+[121]    0.0    0.00    0.00      45         xfopen [121]
+-----------------------------------------------
+                0.00    0.00      14/39          startinput <cycle 1> [52]
+                0.00    0.00      25/39          openorclosein [40]
+[122]    0.0    0.00    0.00      39         kpse_in_name_ok [122]
+-----------------------------------------------
+                0.00    0.00      14/39          startinput <cycle 1> [52]
+                0.00    0.00      25/39          openorclosein [40]
+[123]    0.0    0.00    0.00      39         u_open_in [123]
+                0.00    0.00      39/344         xmalloc [99]
+                0.00    0.00      39/50          open_input [119]
+                0.00    0.00      34/34          setinputfileencoding [124]
+-----------------------------------------------
+                0.00    0.00      34/34          u_open_in [123]
+[124]    0.0    0.00    0.00      34         setinputfileencoding [124]
+-----------------------------------------------
+                0.00    0.00       2/34          zreadtoks [17]
+                0.00    0.00      14/34          endfilereading [81]
+                0.00    0.00      18/34          openorclosein [40]
+[125]    0.0    0.00    0.00      34         u_close_inout [125]
+-----------------------------------------------
+                0.00    0.00      28/28          getcharsigslot [68]
+[126]    0.0    0.00    0.00      28         gettexstring [126]
+                0.00    0.00      28/344         xmalloc [99]
+-----------------------------------------------
+                0.00    0.00       1/28          hlistout [66]
+                0.00    0.00       2/28          zdvinativefontdef [208]
+                0.00    0.00       4/28          vlistout [58]
+                0.00    0.00       7/28          closefilesandterminate [217]
+                0.00    0.00      14/28          zshipout [59]
+[127]    0.0    0.00    0.00      28         zdvifour [127]
+-----------------------------------------------
+                0.00    0.00      27/27          measure_native_node [133]
+[128]    0.0    0.00    0.00      27         getDefaultDirection [128]
+-----------------------------------------------
+                0.00    0.00      27/27          measure_native_node [133]
+[129]    0.0    0.00    0.00      27         getGlyphAdvances [129]
+-----------------------------------------------
+                0.00    0.00      27/27          measure_native_node [133]
+[130]    0.0    0.00    0.00      27         getGlyphPositions [130]
+-----------------------------------------------
+                0.00    0.00      27/27          measure_native_node [133]
+[131]    0.0    0.00    0.00      27         getGlyphs [131]
+-----------------------------------------------
+                0.00    0.00      27/27          measure_native_node [133]
+[132]    0.0    0.00    0.00      27         layoutChars [132]
+                0.00    0.00       3/144         xcalloc [104]
+-----------------------------------------------
+                0.00    0.00       6/27          znewnativecharacter [185]
+                0.00    0.00      21/27          maincontrol [2]
+[133]    0.0    0.00    0.00      27         measure_native_node [133]
+                0.00    0.00     135/144         xcalloc [104]
+                0.00    0.00      65/65          getCachedGlyphBBox [114]
+                0.00    0.00      27/27          getDefaultDirection [128]
+                0.00    0.00      27/27          layoutChars [132]
+                0.00    0.00      27/27          getGlyphs [131]
+                0.00    0.00      27/27          getGlyphAdvances [129]
+                0.00    0.00      27/27          getGlyphPositions [130]
+                0.00    0.00      19/19          cacheGlyphBBox [145]
+                0.00    0.00      19/19          getGlyphBounds [146]
+-----------------------------------------------
+                0.00    0.00       6/27          vlistout [58]
+                0.00    0.00      21/27          hlistout [66]
+[134]    0.0    0.00    0.00      27         zmovement [134]
+                0.00    0.00      27/498872      zgetnode [71]
+-----------------------------------------------
+                0.00    0.00      10/27          zprintspec [161]
+                0.00    0.00      17/27          thetoks <cycle 1> [38]
+[135]    0.0    0.00    0.00      27         zprintscaled [135]
+                0.00    0.00      74/855324      println [69]
+                0.00    0.00      27/152323      zprintint [74]
+-----------------------------------------------
+                0.00    0.00      25/25          mainbody [1]
+[136]    0.0    0.00    0.00      25         setupboundvariable [136]
+-----------------------------------------------
+                0.00    0.00       5/23          prefixedcommand [7]
+                0.00    0.00      18/23          maincontrol [2]
+[137]    0.0    0.00    0.00      23         zboxend [137]
+                0.00    0.00       7/9           zappendtovlist [163]
+-----------------------------------------------
+                0.00    0.00       2/22          znewgraf [210]
+                0.00    0.00       4/22          zfireup [63]
+                0.00    0.00      16/22          zbeginbox [43]
+[138]    0.0    0.00    0.00      22         pushnest [138]
+-----------------------------------------------
+                0.00    0.00      22/22          zlinebreak [209]
+[139]    0.0    0.00    0.00      22         ztrybreak [139]
+                0.00    0.00       4/498872      zgetnode [71]
+-----------------------------------------------
+                0.00    0.00      21/21          hlistout [66]
+[140]    0.0    0.00    0.00      21         debugloc [140]
+-----------------------------------------------
+                0.00    0.00      21/21          hlistout [66]
+[141]    0.0    0.00    0.00      21         makeXDVGlyphArrayData [141]
+-----------------------------------------------
+                0.00    0.00       2/21          endgraf [154]
+                0.00    0.00       4/21          zfireup [63]
+                0.00    0.00       7/21          zbeginbox [43]
+                0.00    0.00       8/21          maincontrol [2]
+[142]    0.0    0.00    0.00      21         normalparagraph [142]
+-----------------------------------------------
+                0.00    0.00       2/21          zlinebreak [209]
+                0.00    0.00       9/21          trapzeroglue [108]
+                0.00    0.00      10/21          thetoks <cycle 1> [38]
+[143]    0.0    0.00    0.00      21         zdeleteglueref [143]
+-----------------------------------------------
+                0.00    0.00      20/20          maincontrol [2]
+[144]    0.0    0.00    0.00      20         zdolocalelinebreaks [144]
+                0.00    0.00      20/498872      zgetnode [71]
+-----------------------------------------------
+                0.00    0.00      19/19          measure_native_node [133]
+[145]    0.0    0.00    0.00      19         cacheGlyphBBox [145]
+                0.00    0.00      19/19          std::_Rb_tree<unsigned int, std::pair<unsigned int const, GlyphBBox>, std::_Select1st<std::pair<unsigned int const, GlyphBBox> >, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, GlyphBBox> > >::_M_get_insert_hint_unique_pos(std::_Rb_tree_const_iterator<std::pair<unsigned int const, GlyphBBox> >, unsigned int const&) [767]
+-----------------------------------------------
+                0.00    0.00      19/19          measure_native_node [133]
+[146]    0.0    0.00    0.00      19         getGlyphBounds [146]
+                0.00    0.00      19/25          _get_glyph(hb_font_t*, void*, unsigned int, unsigned int, unsigned int*, void*) [765]
+                0.00    0.00      19/19          XeTeXFontInst::getGlyphBounds(unsigned short, GlyphBBox*) [766]
+-----------------------------------------------
+                0.00    0.00      19/19          maincontrol [2]
+[147]    0.0    0.00    0.00      19         znewglue [147]
+                0.00    0.00      19/498872      zgetnode [71]
+-----------------------------------------------
+                0.00    0.00      19/19          printmeaning [97]
+[148]    0.0    0.00    0.00      19         zprintparam [148]
+                0.00    0.00      19/855324      println [69]
+                0.00    0.00      19/682830      zprintchar [70]
+-----------------------------------------------
+                0.00    0.00       4/18          convtoks <cycle 1> [29]
+                0.00    0.00      14/18          startinput <cycle 1> [52]
+[149]    0.0    0.00    0.00      18         makestring [149]
+-----------------------------------------------
+                0.00    0.00      16/16          znewfont [41]
+[150]    0.0    0.00    0.00      16         zreadfontinfo [150]
+                0.00    0.00      26/69          zpackfilename [113]
+                0.00    0.00      10/10          checkfortfmfontmapping [159]
+                0.00    0.00      10/50          open_input [119]
+                0.00    0.00      10/10          loadtfmfontmapping [160]
+                0.00    0.00      10/13          xfclose [155]
+                0.00    0.00      10/13          close_file [153]
+                0.00    0.00       6/6           zloadnativefont [184]
+-----------------------------------------------
+                0.00    0.00       2/15          zvsplit [215]
+                0.00    0.00       2/15          zbeginbox [43]
+                0.00    0.00       4/15          zfireup [63]
+                0.00    0.00       7/15          zpackage [49]
+[151]    0.0    0.00    0.00      15         zvpackage [151]
+                0.00    0.00      15/498872      zgetnode [71]
+-----------------------------------------------
+                0.00    0.00      14/14          startinput <cycle 1> [52]
+[152]    0.0    0.00    0.00      14         makefullnamestring [152]
+-----------------------------------------------
+                0.00    0.00       1/13          closefilesandterminate [217]
+                0.00    0.00       1/13          zoutwhat [103]
+                0.00    0.00       1/13          mainbody [1]
+                0.00    0.00      10/13          zreadfontinfo [150]
+[153]    0.0    0.00    0.00      13         close_file [153]
+-----------------------------------------------
+                0.00    0.00       2/13          maincontrol [2]
+                0.00    0.00      11/13          handlerightbrace [54]
+[154]    0.0    0.00    0.00      13         endgraf [154]
+                0.00    0.00       2/2           zlinebreak [209]
+                0.00    0.00       2/21          normalparagraph [142]
+-----------------------------------------------
+                0.00    0.00       1/13          closefilesandterminate [217]
+                0.00    0.00       1/13          zoutwhat [103]
+                0.00    0.00       1/13          mainbody [1]
+                0.00    0.00      10/13          zreadfontinfo [150]
+[155]    0.0    0.00    0.00      13         xfclose [155]
+-----------------------------------------------
+                0.00    0.00      13/13          printmeaning [97]
+[156]    0.0    0.00    0.00      13         zprinthex [156]
+                0.00    0.00      63/855324      println [69]
+                0.00    0.00      50/682830      zprintchar [70]
+-----------------------------------------------
+                0.00    0.00       6/12          createFontFromFile [170]
+                0.00    0.00       6/12          XeTeXFontInst::initialize(char const*, int, int&) [769]
+[157]    0.0    0.00    0.00      12         Fix2D [157]
+-----------------------------------------------
+                0.00    0.00       2/11          zpostlinebreak [212]
+                0.00    0.00       9/11          zpackage [49]
+[158]    0.0    0.00    0.00      11         zhpack [158]
+                0.00    0.00      11/498872      zgetnode [71]
+-----------------------------------------------
+                0.00    0.00      10/10          zreadfontinfo [150]
+[159]    0.0    0.00    0.00      10         checkfortfmfontmapping [159]
+-----------------------------------------------
+                0.00    0.00      10/10          zreadfontinfo [150]
+[160]    0.0    0.00    0.00      10         loadtfmfontmapping [160]
+-----------------------------------------------
+                0.00    0.00      10/10          thetoks <cycle 1> [38]
+[161]    0.0    0.00    0.00      10         zprintspec [161]
+                0.00    0.00      10/27          zprintscaled [135]
+                0.00    0.00      10/11500       zprint [83]
+-----------------------------------------------
+                0.00    0.00       9/9           findnativefont [172]
+[162]    0.0    0.00    0.00       9         setReqEngine [162]
+                0.00    0.00       9/27          XeTeXFontMgr::GetFontManager() [764]
+-----------------------------------------------
+                0.00    0.00       2/9           zpostlinebreak [212]
+                0.00    0.00       7/9           zboxend [137]
+[163]    0.0    0.00    0.00       9         zappendtovlist [163]
+                0.00    0.00       5/498872      zgetnode [71]
+                0.00    0.00       4/79          znewspec [109]
+-----------------------------------------------
+                0.00    0.00       2/8           makefontdef [203]
+                0.00    0.00       6/8           otgetfontmetrics [182]
+[164]    0.0    0.00    0.00       8         getExtendFactor [164]
+-----------------------------------------------
+                0.00    0.00       2/8           otfontget [204]
+                0.00    0.00       6/8           otgetfontmetrics [182]
+[165]    0.0    0.00    0.00       8         getFont [165]
+-----------------------------------------------
+                0.00    0.00       2/8           makefontdef [203]
+                0.00    0.00       6/8           otgetfontmetrics [182]
+[166]    0.0    0.00    0.00       8         getSlantFactor [166]
+-----------------------------------------------
+                0.00    0.00       1/8           zoutwhat [103]
+                0.00    0.00       7/8           convtoks <cycle 1> [29]
+[167]    0.0    0.00    0.00       8         zprintfilename [167]
+                0.00    0.00      36/11500       zprint [83]
+                0.00    0.00      28/855324      println [69]
+                0.00    0.00      28/682830      zprintchar [70]
+-----------------------------------------------
+                0.00    0.00       3/7           hlistout [66]
+                0.00    0.00       4/7           vlistout [58]
+[168]    0.0    0.00    0.00       7         zprunemovements [168]
+-----------------------------------------------
+                0.00    0.00       6/6           otgetfontmetrics [182]
+[169]    0.0    0.00    0.00       6         D2Fix [169]
+-----------------------------------------------
+                0.00    0.00       6/6           findnativefont [172]
+[170]    0.0    0.00    0.00       6         createFontFromFile [170]
+                0.00    0.00       6/12          Fix2D [157]
+                0.00    0.00       6/6           XeTeXFontInst::initialize(char const*, int, int&) [769]
+                0.00    0.00       6/6           XeTeXFontInst::XeTeXFontInst(char const*, int, float, int&) [771]
+-----------------------------------------------
+                0.00    0.00       6/6           loadOTfont [181]
+[171]    0.0    0.00    0.00       6         createLayoutEngine [171]
+                0.00    0.00       6/27          XeTeXFontMgr::GetFontManager() [764]
+-----------------------------------------------
+                0.00    0.00       6/6           zloadnativefont [184]
+[172]    0.0    0.00    0.00       6         findnativefont [172]
+                0.00    0.00      16/344         xmalloc [99]
+                0.00    0.00       9/9           setReqEngine [162]
+                0.00    0.00       6/74          kpse_find_file [110]
+                0.00    0.00       6/6           createFontFromFile [170]
+                0.00    0.00       6/6           XeTeXFontMgr::getDesignSize(XeTeXFont_rec*) [768]
+                0.00    0.00       6/6           getDesignSize [175]
+                0.00    0.00       6/6           loadOTfont [181]
+                0.00    0.00       6/6           gettracingfontsstate [179]
+-----------------------------------------------
+                0.00    0.00       6/6           otgetfontmetrics [182]
+[173]    0.0    0.00    0.00       6         getAscentAndDescent [173]
+-----------------------------------------------
+                0.00    0.00       6/6           otgetfontmetrics [182]
+[174]    0.0    0.00    0.00       6         getCapAndXHeight [174]
+-----------------------------------------------
+                0.00    0.00       6/6           findnativefont [172]
+[175]    0.0    0.00    0.00       6         getDesignSize [175]
+                0.00    0.00       6/27          XeTeXFontMgr::GetFontManager() [764]
+-----------------------------------------------
+                0.00    0.00       6/6           otgetfontmetrics [182]
+[176]    0.0    0.00    0.00       6         getGlyphHeightDepth [176]
+-----------------------------------------------
+                0.00    0.00       6/6           loadOTfont [181]
+[177]    0.0    0.00    0.00       6         getReqEngine [177]
+                0.00    0.00       6/27          XeTeXFontMgr::GetFontManager() [764]
+-----------------------------------------------
+                0.00    0.00       6/6           otgetfontmetrics [182]
+[178]    0.0    0.00    0.00       6         getSlant [178]
+-----------------------------------------------
+                0.00    0.00       6/6           findnativefont [172]
+[179]    0.0    0.00    0.00       6         gettracingfontsstate [179]
+-----------------------------------------------
+                0.00    0.00       6/6           zloadnativefont [184]
+[180]    0.0    0.00    0.00       6         isOpenTypeMathFont [180]
+-----------------------------------------------
+                0.00    0.00       6/6           findnativefont [172]
+[181]    0.0    0.00    0.00       6         loadOTfont [181]
+                0.00    0.00       6/6           getReqEngine [177]
+                0.00    0.00       6/6           xrealloc [183]
+                0.00    0.00       6/6           createLayoutEngine [171]
+                0.00    0.00       4/4           readCommonFeatures [188]
+-----------------------------------------------
+                0.00    0.00       6/6           zloadnativefont [184]
+[182]    0.0    0.00    0.00       6         otgetfontmetrics [182]
+                0.00    0.00       6/6           getAscentAndDescent [173]
+                0.00    0.00       6/8           getFont [165]
+                0.00    0.00       6/6           D2Fix [169]
+                0.00    0.00       6/6           getSlant [178]
+                0.00    0.00       6/8           getExtendFactor [164]
+                0.00    0.00       6/8           getSlantFactor [166]
+                0.00    0.00       6/6           getCapAndXHeight [174]
+                0.00    0.00       6/71          mapCharToGlyph [112]
+                0.00    0.00       6/6           XeTeXFontInst::getGlyphHeightDepth(unsigned short, float*, float*) [770]
+                0.00    0.00       6/6           getGlyphHeightDepth [176]
+-----------------------------------------------
+                0.00    0.00       6/6           loadOTfont [181]
+[183]    0.0    0.00    0.00       6         xrealloc [183]
+-----------------------------------------------
+                0.00    0.00       6/6           zreadfontinfo [150]
+[184]    0.0    0.00    0.00       6         zloadnativefont [184]
+                0.00    0.00      15/46274       zstreqstr [77]
+                0.00    0.00       6/6           findnativefont [172]
+                0.00    0.00       6/6           otgetfontmetrics [182]
+                0.00    0.00       6/6           znewnativecharacter [185]
+                0.00    0.00       6/6           isOpenTypeMathFont [180]
+-----------------------------------------------
+                0.00    0.00       6/6           zloadnativefont [184]
+[185]    0.0    0.00    0.00       6         znewnativecharacter [185]
+                0.00    0.00       6/27          measure_native_node [133]
+                0.00    0.00       6/498872      zgetnode [71]
+                0.00    0.00       6/71          mapCharToGlyph [112]
+                0.00    0.00       6/65          mapchartoglyph [115]
+-----------------------------------------------
+                0.00    0.00       4/4           readCommonFeatures [188]
+[186]    0.0    0.00    0.00       4         load_mapping_file [186]
+                0.00    0.00       4/344         xmalloc [99]
+                0.00    0.00       4/74          kpse_find_file [110]
+                0.00    0.00       4/4           zfontmappingwarning [189]
+-----------------------------------------------
+                0.00    0.00       4/4           zfontmappingwarning [189]
+[187]    0.0    0.00    0.00       4         printutf8str [187]
+                0.00    0.00      48/48          zprintrawchar [120]
+-----------------------------------------------
+                0.00    0.00       4/4           loadOTfont [181]
+[188]    0.0    0.00    0.00       4         readCommonFeatures [188]
+                0.00    0.00       4/4           load_mapping_file [186]
+-----------------------------------------------
+                0.00    0.00       4/4           load_mapping_file [186]
+[189]    0.0    0.00    0.00       4         zfontmappingwarning [189]
+                0.00    0.00      16/11500       zprint [83]
+                0.00    0.00       4/4           printutf8str [187]
+                0.00    0.00       4/855324      println [69]
+-----------------------------------------------
+                0.00    0.00       4/4           zlinebreak [209]
+[190]    0.0    0.00    0.00       4         zfreenode [190]
+-----------------------------------------------
+                0.00    0.00       4/4           buildpage [53]
+[191]    0.0    0.00    0.00       4         zfreezepagespecs [191]
+-----------------------------------------------
+                0.00    0.00       4/4           buildpage [53]
+[192]    0.0    0.00    0.00       4         znewskipparam [192]
+                0.00    0.00       4/79          znewspec [109]
+                0.00    0.00       4/498872      zgetnode [71]
+-----------------------------------------------
+                0.00    0.00       3/3           open_output [195]
+[193]    0.0    0.00    0.00       3         kpse_absolute_p [193]
+-----------------------------------------------
+                0.00    0.00       1/3           itsallover [62]
+                0.00    0.00       2/3           znewgraf [210]
+[194]    0.0    0.00    0.00       3         newnullbox [194]
+                0.00    0.00       3/498872      zgetnode [71]
+-----------------------------------------------
+                0.00    0.00       1/3           openlogfile [229]
+                0.00    0.00       1/3           zoutwhat [103]
+                0.00    0.00       1/3           zshipout [59]
+[195]    0.0    0.00    0.00       3         open_output [195]
+                0.00    0.00       3/3           kpse_absolute_p [193]
+-----------------------------------------------
+                0.00    0.00       3/3           zscansomethinginternal <cycle 1> [60]
+[196]    0.0    0.00    0.00       3         usingOpenType [196]
+-----------------------------------------------
+                0.00    0.00       2/2           zscansomethinginternal <cycle 1> [60]
+[197]    0.0    0.00    0.00       2         countScripts [197]
+-----------------------------------------------
+                0.00    0.00       2/2           makefontdef [203]
+[198]    0.0    0.00    0.00       2         getEmboldenFactor [198]
+-----------------------------------------------
+                0.00    0.00       2/2           makefontdef [203]
+[199]    0.0    0.00    0.00       2         getFontFilename [199]
+-----------------------------------------------
+                0.00    0.00       2/2           makefontdef [203]
+[200]    0.0    0.00    0.00       2         getFontRef [200]
+-----------------------------------------------
+                0.00    0.00       2/2           makefontdef [203]
+[201]    0.0    0.00    0.00       2         getPointSize [201]
+-----------------------------------------------
+                0.00    0.00       2/2           makefontdef [203]
+[202]    0.0    0.00    0.00       2         getRgbValue [202]
+-----------------------------------------------
+                0.00    0.00       2/2           zdvinativefontdef [208]
+[203]    0.0    0.00    0.00       2         makefontdef [203]
+                0.00    0.00       2/2           getFontRef [200]
+                0.00    0.00       2/53          xstrdup [116]
+                0.00    0.00       2/2           getFontFilename [199]
+                0.00    0.00       2/2           getRgbValue [202]
+                0.00    0.00       2/8           getExtendFactor [164]
+                0.00    0.00       2/8           getSlantFactor [166]
+                0.00    0.00       2/2           getEmboldenFactor [198]
+                0.00    0.00       2/2           getPointSize [201]
+                0.00    0.00       1/344         xmalloc [99]
+-----------------------------------------------
+                0.00    0.00       2/2           zscansomethinginternal <cycle 1> [60]
+[204]    0.0    0.00    0.00       2         otfontget [204]
+                0.00    0.00       2/8           getFont [165]
+-----------------------------------------------
+                0.00    0.00       2/2           zlinebreak [209]
+[205]    0.0    0.00    0.00       2         popnest [205]
+-----------------------------------------------
+                0.00    0.00       1/2           closefilesandterminate [217]
+                0.00    0.00       1/2           zshipout [59]
+[206]    0.0    0.00    0.00       2         preparemag [206]
+-----------------------------------------------
+                0.00    0.00       1/2           closefilesandterminate [217]
+                0.00    0.00       1/2           hlistout [66]
+[207]    0.0    0.00    0.00       2         zdvifontdef [207]
+-----------------------------------------------
+                0.00    0.00       1/2           closefilesandterminate [217]
+                0.00    0.00       1/2           hlistout [66]
+[208]    0.0    0.00    0.00       2         zdvinativefontdef [208]
+                0.00    0.00       2/2           makefontdef [203]
+                0.00    0.00       2/28          zdvifour [127]
+-----------------------------------------------
+                0.00    0.00       2/2           endgraf [154]
+[209]    0.0    0.00    0.00       2         zlinebreak [209]
+                0.00    0.00      22/22          ztrybreak [139]
+                0.00    0.00       4/4           zfreenode [190]
+                0.00    0.00       2/2           znewparamglue [211]
+                0.00    0.00       2/2           popnest [205]
+                0.00    0.00       2/498872      zgetnode [71]
+                0.00    0.00       2/2           zpostlinebreak [212]
+                0.00    0.00       2/21          zdeleteglueref [143]
+                0.00    0.00       2/296         zflushnodelist [100]
+-----------------------------------------------
+                0.00    0.00       2/2           maincontrol [2]
+[210]    0.0    0.00    0.00       2         znewgraf [210]
+                0.00    0.00       2/498872      zgetnode [71]
+                0.00    0.00       2/22          pushnest [138]
+                0.00    0.00       2/3           newnullbox [194]
+-----------------------------------------------
+                0.00    0.00       2/2           zlinebreak [209]
+[211]    0.0    0.00    0.00       2         znewparamglue [211]
+                0.00    0.00       2/498872      zgetnode [71]
+-----------------------------------------------
+                0.00    0.00       2/2           zlinebreak [209]
+[212]    0.0    0.00    0.00       2         zpostlinebreak [212]
+                0.00    0.00       2/11          zhpack [158]
+                0.00    0.00       2/9           zappendtovlist [163]
+                0.00    0.00       2/498872      zgetnode [71]
+-----------------------------------------------
+                0.00    0.00       2/2           zvsplit [215]
+[213]    0.0    0.00    0.00       2         zprunepagetop [213]
+                0.00    0.00       2/79          znewspec [109]
+                0.00    0.00       2/498872      zgetnode [71]
+                0.00    0.00       2/296         zflushnodelist [100]
+-----------------------------------------------
+                0.00    0.00       2/2           zvsplit [215]
+[214]    0.0    0.00    0.00       2         zvertbreak [214]
+-----------------------------------------------
+                0.00    0.00       2/2           zbeginbox [43]
+[215]    0.0    0.00    0.00       2         zvsplit [215]
+                0.00    0.00       2/296         zflushnodelist [100]
+                0.00    0.00       2/2           zvertbreak [214]
+                0.00    0.00       2/2           zprunepagetop [213]
+                0.00    0.00       2/15          zvpackage [151]
+-----------------------------------------------
+                0.00    0.00       1/1           maincontrol [2]
+[216]    0.0    0.00    0.00       1         appspace [216]
+                0.00    0.00       1/79          znewspec [109]
+                0.00    0.00       1/498872      zgetnode [71]
+-----------------------------------------------
+                0.00    0.00       1/1           mainbody [1]
+[217]    0.0    0.00    0.00       1         closefilesandterminate [217]
+                0.00    0.00       8/11500       zprint [83]
+                0.00    0.00       7/28          zdvifour [127]
+                0.00    0.00       2/264         zprintnl [102]
+                0.00    0.00       2/152323      zprintint [74]
+                0.00    0.00       2/855324      println [69]
+                0.00    0.00       1/1           XeTeXFontMgr_FC::terminate() [778]
+                0.00    0.00       1/1           XeTeXFontMgr::Terminate() [776]
+                0.00    0.00       1/1           terminatefontmanager [231]
+                0.00    0.00       1/2           preparemag [206]
+                0.00    0.00       1/1           dviclose [218]
+                0.00    0.00       1/2           zdvinativefontdef [208]
+                0.00    0.00       1/2           zdvifontdef [207]
+                0.00    0.00       1/13          xfclose [155]
+                0.00    0.00       1/13          close_file [153]
+-----------------------------------------------
+                0.00    0.00       1/1           closefilesandterminate [217]
+[218]    0.0    0.00    0.00       1         dviclose [218]
+-----------------------------------------------
+                0.00    0.00       1/1           mainbody [1]
+[219]    0.0    0.00    0.00       1         get_date_and_time [219]
+-----------------------------------------------
+                0.00    0.00       1/1           initialize [223]
+[220]    0.0    0.00    0.00       1         get_seconds_and_micros [220]
+-----------------------------------------------
+                0.00    0.00       1/1           startinput <cycle 1> [52]
+[221]    0.0    0.00    0.00       1         getjobname [221]
+-----------------------------------------------
+                0.00    0.00       1/1           unsave [32]
+[222]    0.0    0.00    0.00       1         groupwarning [222]
+-----------------------------------------------
+                0.00    0.00       1/1           mainbody [1]
+[223]    0.0    0.00    0.00       1         initialize [223]
+                0.00    0.00       2/344         xmalloc [99]
+                0.00    0.00       1/1           initstarttime [224]
+                0.00    0.00       1/1           get_seconds_and_micros [220]
+-----------------------------------------------
+                0.00    0.00       1/1           initialize [223]
+[224]    0.0    0.00    0.00       1         initstarttime [224]
+-----------------------------------------------
+                0.00    0.00       1/1           mainbody [1]
+[225]    0.0    0.00    0.00       1         initterminal [225]
+                0.00    0.00       1/1           topenin [232]
+-----------------------------------------------
+                0.00    0.00       1/1           zoutwhat [103]
+[226]    0.0    0.00    0.00       1         kpse_out_name_ok [226]
+-----------------------------------------------
+                0.00    0.00       1/1           zshipout [59]
+[227]    0.0    0.00    0.00       1         open_dvi_output [227]
+-----------------------------------------------
+                0.00    0.00       1/1           mainbody [1]
+[228]    0.0    0.00    0.00       1         openfmtfile [228]
+                0.00    0.00       1/1           zpackbufferedname [234]
+                0.00    0.00       1/50          open_input [119]
+-----------------------------------------------
+                0.00    0.00       1/1           startinput <cycle 1> [52]
+[229]    0.0    0.00    0.00       1         openlogfile [229]
+                0.00    0.00      12/11500       zprint [83]
+                0.00    0.00      10/855324      println [69]
+                0.00    0.00       4/682830      zprintchar [70]
+                0.00    0.00       2/69          zpackfilename [113]
+                0.00    0.00       2/152323      zprintint [74]
+                0.00    0.00       1/1           recorder_change_filename [230]
+                0.00    0.00       1/3           open_output [195]
+                0.00    0.00       1/108         endname [106]
+-----------------------------------------------
+                0.00    0.00       1/1           openlogfile [229]
+[230]    0.0    0.00    0.00       1         recorder_change_filename [230]
+-----------------------------------------------
+                0.00    0.00       1/1           closefilesandterminate [217]
+[231]    0.0    0.00    0.00       1         terminatefontmanager [231]
+-----------------------------------------------
+                0.00    0.00       1/1           initterminal [225]
+[232]    0.0    0.00    0.00       1         topenin [232]
+-----------------------------------------------
+                0.00    0.00       1/1           mainbody [1]
+[233]    0.0    0.00    0.00       1         zinitrandoms [233]
+-----------------------------------------------
+                0.00    0.00       1/1           openfmtfile [228]
+[234]    0.0    0.00    0.00       1         zpackbufferedname [234]
+                0.00    0.00       1/344         xmalloc [99]
+-----------------------------------------------
+                0.00    0.00      71/71          mapCharToGlyph [112]
+[763]    0.0    0.00    0.00      71         XeTeXFontInst::mapCharToGlyph(int) const [763]
+-----------------------------------------------
+                0.00    0.00       6/27          getReqEngine [177]
+                0.00    0.00       6/27          getDesignSize [175]
+                0.00    0.00       6/27          createLayoutEngine [171]
+                0.00    0.00       9/27          setReqEngine [162]
+[764]    0.0    0.00    0.00      27         XeTeXFontMgr::GetFontManager() [764]
+                0.00    0.00       1/1           XeTeXFontMgr_FC::initialize() [777]
+-----------------------------------------------
+                0.00    0.00       6/25          XeTeXFontInst::getGlyphHeightDepth(unsigned short, float*, float*) [770]
+                0.00    0.00      19/25          getGlyphBounds [146]
+[765]    0.0    0.00    0.00      25         _get_glyph(hb_font_t*, void*, unsigned int, unsigned int, unsigned int*, void*) [765]
+-----------------------------------------------
+                0.00    0.00      19/19          getGlyphBounds [146]
+[766]    0.0    0.00    0.00      19         XeTeXFontInst::getGlyphBounds(unsigned short, GlyphBBox*) [766]
+-----------------------------------------------
+                0.00    0.00      19/19          cacheGlyphBBox [145]
+[767]    0.0    0.00    0.00      19         std::_Rb_tree<unsigned int, std::pair<unsigned int const, GlyphBBox>, std::_Select1st<std::pair<unsigned int const, GlyphBBox> >, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, GlyphBBox> > >::_M_get_insert_hint_unique_pos(std::_Rb_tree_const_iterator<std::pair<unsigned int const, GlyphBBox> >, unsigned int const&) [767]
+-----------------------------------------------
+                0.00    0.00       6/6           findnativefont [172]
+[768]    0.0    0.00    0.00       6         XeTeXFontMgr::getDesignSize(XeTeXFont_rec*) [768]
+                0.00    0.00       6/344         xmalloc [99]
+-----------------------------------------------
+                0.00    0.00       6/6           createFontFromFile [170]
+[769]    0.0    0.00    0.00       6         XeTeXFontInst::initialize(char const*, int, int&) [769]
+                0.00    0.00       6/53          xstrdup [116]
+                0.00    0.00       6/12          Fix2D [157]
+-----------------------------------------------
+                0.00    0.00       6/6           otgetfontmetrics [182]
+[770]    0.0    0.00    0.00       6         XeTeXFontInst::getGlyphHeightDepth(unsigned short, float*, float*) [770]
+                0.00    0.00       6/25          _get_glyph(hb_font_t*, void*, unsigned int, unsigned int, unsigned int*, void*) [765]
+-----------------------------------------------
+                0.00    0.00       6/6           createFontFromFile [170]
+[771]    0.0    0.00    0.00       6         XeTeXFontInst::XeTeXFontInst(char const*, int, float, int&) [771]
+-----------------------------------------------
+                                  16             std::_Rb_tree<unsigned int, std::pair<unsigned int const, GlyphBBox>, std::_Select1st<std::pair<unsigned int const, GlyphBBox> >, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, GlyphBBox> > >::_M_erase(std::_Rb_tree_node<std::pair<unsigned int const, GlyphBBox> >*) [772]
+                0.00    0.00       3/3           std::map<unsigned int, GlyphBBox, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, GlyphBBox> > >::~map() [1765]
+[772]    0.0    0.00    0.00       3+16      std::_Rb_tree<unsigned int, std::pair<unsigned int const, GlyphBBox>, std::_Select1st<std::pair<unsigned int const, GlyphBBox> >, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, GlyphBBox> > >::_M_erase(std::_Rb_tree_node<std::pair<unsigned int const, GlyphBBox> >*) [772]
+                                  16             std::_Rb_tree<unsigned int, std::pair<unsigned int const, GlyphBBox>, std::_Select1st<std::pair<unsigned int const, GlyphBBox> >, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, GlyphBBox> > >::_M_erase(std::_Rb_tree_node<std::pair<unsigned int const, GlyphBBox> >*) [772]
+-----------------------------------------------
+                0.00    0.00       2/2           zscansomethinginternal <cycle 1> [60]
+[773]    0.0    0.00    0.00       2         getLargerScriptListTable(XeTeXFont_rec*, unsigned int**) [773]
+                0.00    0.00       4/144         xcalloc [104]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [1791]
+[774]    0.0    0.00    0.00       1         _GLOBAL__sub_I_getCachedGlyphBBox [774]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [1791]
+[775]    0.0    0.00    0.00       1         _GLOBAL__sub_I_leftProt [775]
+-----------------------------------------------
+                0.00    0.00       1/1           closefilesandterminate [217]
+[776]    0.0    0.00    0.00       1         XeTeXFontMgr::Terminate() [776]
+-----------------------------------------------
+                0.00    0.00       1/1           XeTeXFontMgr::GetFontManager() [764]
+[777]    0.0    0.00    0.00       1         XeTeXFontMgr_FC::initialize() [777]
+-----------------------------------------------
+                0.00    0.00       1/1           closefilesandterminate [217]
+[778]    0.0    0.00    0.00       1         XeTeXFontMgr_FC::terminate() [778]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+ [169] D2Fix                  [54] handlerightbrace       [43] zbeginbox
+ [157] Fix2D                  [66] hlistout               [20] zbegintokenlist
+ [774] _GLOBAL__sub_I_getCachedGlyphBBox (XeTeXLayoutInterface.cpp) [223] initialize [137] zboxend
+ [775] _GLOBAL__sub_I_leftProt (hz.cpp) [224] initstarttime [143] zdeleteglueref
+ [765] _get_glyph(hb_font_t*, void*, unsigned int, unsigned int, unsigned int*, void*) (XeTeXFontInst.cpp) [225] initterminal [144] zdolocalelinebreaks
+ [773] getLargerScriptListTable(XeTeXFont_rec*, unsigned int**) (XeTeXLayoutInterface.cpp) [22] input_line [26] zdoregistercommand
+ [768] XeTeXFontMgr::getDesignSize(XeTeXFont_rec*) [180] isOpenTypeMathFont [207] zdvifontdef
+ [764] XeTeXFontMgr::GetFontManager() [62] itsallover    [127] zdvifour
+ [776] XeTeXFontMgr::Terminate() [193] kpse_absolute_p   [208] zdvinativefontdef
+ [769] XeTeXFontInst::initialize(char const*, int, int&) [117] kpse_fetch_from_network (kpseemu-c.c) [15] zeqdefine
+ [766] XeTeXFontInst::getGlyphBounds(unsigned short, GlyphBBox*) [110] kpse_find_file [14] zeqdestroy
+ [770] XeTeXFontInst::getGlyphHeightDepth(unsigned short, float*, float*) [122] kpse_in_name_ok [90] zeqsave
+ [771] XeTeXFontInst::XeTeXFontInst(char const*, int, float, int&) [226] kpse_out_name_ok [86] zeqworddefine
+ [777] XeTeXFontMgr_FC::initialize() [132] layoutChars    [30] zfindfontdimen
+ [778] XeTeXFontMgr_FC::terminate() [181] loadOTfont (XeTeX_ext.c) [63] zfireup
+ [763] XeTeXFontInst::mapCharToGlyph(int) const [186] load_mapping_file (XeTeX_ext.c) [100] zflushnodelist
+ [767] std::_Rb_tree<unsigned int, std::pair<unsigned int const, GlyphBBox>, std::_Select1st<std::pair<unsigned int const, GlyphBBox> >, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, GlyphBBox> > >::_M_get_insert_hint_unique_pos(std::_Rb_tree_const_iterator<std::pair<unsigned int const, GlyphBBox> >, unsigned int const&) [8] loadfmtfile [189] zfontmappingwarning
+ [772] std::_Rb_tree<unsigned int, std::pair<unsigned int const, GlyphBBox>, std::_Select1st<std::pair<unsigned int const, GlyphBBox> >, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, GlyphBBox> > >::_M_erase(std::_Rb_tree_node<std::pair<unsigned int const, GlyphBBox> >*) [160] loadtfmfontmapping [190] zfreenode
+  [56] alterboxdimen           [4] macrocall             [191] zfreezepagespecs
+  [55] alterinteger            [2] maincontrol            [84] zgeqdefine
+  [50] appendglue            [141] makeXDVGlyphArrayData [111] zgeqworddefine
+ [216] appspace              [203] makefontdef            [71] zgetnode
+  [24] backinput             [152] makefullnamestring    [158] zhpack
+  [80] beginfilereading      [149] makestring             [18] zidlookup
+  [53] buildpage             [118] makeutf16name         [233] zinitrandoms
+ [145] cacheGlyphBBox        [112] mapCharToGlyph        [209] zlinebreak
+ [159] checkfortfmfontmapping [115] mapchartoglyph       [184] zloadnativefont
+ [101] checkoutervalidity    [133] measure_native_node    [64] zmakeleftright
+ [153] close_file            [194] newnullbox             [93] zmorename
+ [217] closefilesandterminate [142] normalparagraph      [134] zmovement
+  [85] comparestrings        [227] open_dvi_output        [41] znewfont
+   [9] conditional           [119] open_input            [147] znewglue
+  [29] convtoks              [195] open_output           [210] znewgraf
+ [197] countScripts          [228] openfmtfile           [185] znewnativecharacter
+ [170] createFontFromFile    [229] openlogfile           [211] znewparamglue
+ [171] createLayoutEngine     [40] openorclosein          [91] znewsavelevel
+ [140] debugloc              [204] otfontget             [192] znewskipparam
+  [82] do_undump             [182] otgetfontmetrics      [109] znewspec
+  [33] doextension           [205] popnest                [37] znewwritewhatsit
+ [218] dviclose                [7] prefixedcommand       [103] zoutwhat
+  [81] endfilereading        [206] preparemag             [49] zpackage
+ [154] endgraf                [69] println               [234] zpackbufferedname
+ [106] endname                [97] printmeaning          [113] zpackfilename
+  [13] endtokenlist          [187] printutf8str          [212] zpostlinebreak
+   [6] expand                [138] pushnest               [83] zprint
+  [21] fillcsinfo            [188] readCommonFeatures     [70] zprintchar
+  [65] finalcleanup          [230] recorder_change_filename [98] zprintcmdchr
+ [172] findnativefont         [27] scanexpr               [89] zprintcs
+  [79] firmuptheline          [47] scanfifteenbitint      [94] zprintesc
+ [173] getAscentAndDescent    [44] scanfilename          [167] zprintfilename
+ [114] getCachedGlyphBBox     [46] scanfontident         [156] zprinthex
+ [174] getCapAndXHeight       [76] scanfourbitintor18     [74] zprintint
+ [128] getDefaultDirection    [12] scangeneraltext       [102] zprintnl
+ [175] getDesignSize          [10] scanint               [148] zprintparam
+ [198] getEmboldenFactor      [11] scanleftbrace         [120] zprintrawchar
+ [164] getExtendFactor        [34] scanoptionalequals     [72] zprintromanint
+ [165] getFont                [96] scanregisternum       [135] zprintscaled
+ [199] getFontFilename        [42] scanrulespec          [161] zprintspec
+ [200] getFontRef             [88] scanusvnum            [168] zprunemovements
+ [129] getGlyphAdvances      [162] setReqEngine          [213] zprunepagetop
+ [146] getGlyphBounds        [124] setinputfileencoding  [150] zreadfontinfo
+ [176] getGlyphHeightDepth   [136] setupboundvariable     [17] zreadtoks
+ [130] getGlyphPositions      [35] shiftcase              [61] zscanbox
+ [131] getGlyphs             [107] slowmakestring         [92] zscandimen
+ [201] getPointSize           [52] startinput             [57] zscanglue
+ [177] getReqEngine          [231] terminatefontmanager   [31] zscankeyword
+ [202] getRgbValue            [38] thetoks                [60] zscansomethinginternal
+ [178] getSlant              [232] topenin                [45] zscanspec
+ [166] getSlantFactor        [108] trapzeroglue           [16] zscantoks
+ [219] get_date_and_time     [125] u_close_inout         [105] zsearchstring
+ [220] get_seconds_and_micros [123] u_open_in             [59] zshipout
+  [67] get_uni_c              [51] unpackage              [78] zshowtokenlist
+  [19] getavail               [32] unsave                 [87] zsprintcs
+  [68] getcharsigslot        [196] usingOpenType          [73] zstreqbuf
+  [75] getinputnormalizationstate [58] vlistout           [77] zstreqstr
+ [221] getjobname            [104] xcalloc                [48] zstrtokscat
+   [5] getnext               [155] xfclose               [139] ztrybreak
+  [28] getrtoken             [121] xfopen                [214] zvertbreak
+ [126] gettexstring           [99] xmalloc               [151] zvpackage
+  [23] gettoken              [183] xrealloc              [215] zvsplit
+ [179] gettracingfontsstate  [116] xstrdup                [36] zwriteout
+  [25] getxtoken              [95] zappendstr             [39] zxetexscandimen
+ [222] groupwarning          [163] zappendtovlist          [3] <cycle 1>

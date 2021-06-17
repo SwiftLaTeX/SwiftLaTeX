@@ -1,0 +1,290 @@
+XeTeX 0.999992 (January 2020)
+
+* Merged various minor fixes from TeX Live svn sources
+  - includes new \filedump primitive
+
+==============================================================
+XeTeX 0.999991 (January 2019)
+
+* Merged various minor fixes from TeX Live svn sources
+* Merged new features implemented by Joseph Wright, see:
+  - https://sourceforge.net/p/xetex/code/merge-requests/1/
+    Reorder lines (internal rearrangement, no functional change)
+  - https://sourceforge.net/p/xetex/code/merge-requests/2/
+    Round out pdfTeX-derived utilities: adds pdfTeX-based primitives
+    for RNG, timer, file data, \filedump
+  - https://sourceforge.net/p/xetex/code/merge-requests/3/
+    Add \expanded to XeTeX
+  - https://sourceforge.net/p/xetex/code/merge-requests/4/
+    Extend \Ucharcat to produce \active chars
+* Fix \lastnodetype initialization bug (patch from Hironobu Yamashita)
+* Fix logic typo in discretionary-skipping (reported by Peter Williams)
+  https://sourceforge.net/p/xetex/bugs/149/
+
+==============================================================
+XeTeX 0.99999 (February 2018, for TeX Live 2018)
+
+* Fix bug that could cause text after a \discretionary{...}{...}{...}
+  line-break to be dropped.
+* Avoid risk of generating broken UTF-8 in error context messages.
+* Interpret optical size info in OpenType 'size' feature as "big
+  points" units, rather than TeX points.
+* Set a non-zero exit code if the pipe to the output driver returns
+  an error.
+* Correction for longstanding input_ln bug (stripping trailing tabs).
+  (Karl Berry)
+* Guard against out-of-range result from UTF-8 decoding, and return
+  U+FFFD Replacement Character instead. (Akira Kakuto)
+* Fix bugs involving \strcmp and \mdfivesum primitives. (Hironobu
+  Yamashita)
+* Fixes issue where \primitive\vrule\q incorrectly swallows the \q
+  instead of giving an error. (Hironori Kitagawa)
+* Properly close input pipes used in \input or \openin. (Hironobu
+  Yamashita)
+* Make \uchyph work with native fonts. (Hironobu Yamashita)
+* Fixed bug in \ifprimitive. (Hironori Kitagawa)
+* Support /Rotate in PDF image inclusion. (Akira Kakuto)
+* If DPI info is missing in JPEG files, assume 72.0 to avoid
+  division by zero. (Akira Kakuto)
+
+==============================================================
+XeTeX 0.99998 (April 22, 2016)
+
+* Fixed long-standing bug that made \ifcat\span...\fi (and similar
+  constructions with \cr, \crcr) behave incorrectly.
+* Also fixed initialization of \delcode values for supplementary-
+  plane characters.
+
+==============================================================
+XeTeX 0.99997 (March 2016, for TeX Live 2017)
+
+* Unicode/OpenType math implementation now based on HarfBuzz's MATH
+  table support, for easier ongoing maintenance.
+* Minor bug fixes (revision history available at xetex.sf.net).
+
+==============================================================
+XeTeX 0.99996 (March 2016, for TeX Live 2016)
+
+* Added \XeTeXhyphenatablelength primitive that sets the maximum
+  length of word that XeTeX will attempt to hyphenate (default: 63).
+
+==============================================================
+XeTeX 0.99995 (targeting TeX Live 2016)
+
+* Added \XeTeXgenerateactualtext primitive to record original Unicode
+  text in /ActualText annotations.
+* Bumped the DVI id byte to 7, as this uses a new opcode that requires
+  support in the driver.
+
+==============================================================
+XeTeX 0.99994 (unreleased experimental version)
+
+* Increased character class limit to 4096.
+* Added \XeTeXinterwordspaceshaping primitive, for contextual
+  measurement (when set to 1) or full glyph shaping (when set to 2) of
+  interword space with smart-enough fonts.
+
+==============================================================
+XeTeX 0.99993 (July 2015)
+
+* Added \mdfivesum primitive
+* Removed -q from the default xdvipdfmx output-driver command line
+  (reverted 20160209, r39630 in TeX Live).
+
+==============================================================
+XeTeX 0.99992 was released 20150507 (in TeX Live 2015)
+
+* New \Uchar and \Ucharcat primitives
+* Fix various issues with UTF-16 and characters >= U+10000.
+* Various image handling fixes by Akira Kakuto.
+* Fix off-by-one error in display of \every... token registers, thanks to Bruno
+  Le Floch.
+* The XDV opcodes have been simplified slightly. The DVI id have been bumped to
+  6 to reflect this.
+* XeTeX now looks for the xdvipdfmx binary installed next to it and no longer
+  requires that it is installed in the system PATH (this was previously done
+  only on Windows).
+
+==============================================================
+XeTeX 0.99991 was released 20140614
+
+* Drop build date from “--version” output.
+* Drop Mac-specific image loading code, as it makes little sense after we
+  dropped xdv2pdf. Supported image formats are the same on all platforms now.
+* Fix OpenType math cut-ins support which was not always working properly.
+* Avoid Unicode compatibility decomposition fallback for characters not
+  supported by the font as it often result in loss of essential characteristics
+  (like using regular Latin characters in place of missing math fraktur ones).
+  Non compatibility decomposition and composition fallback is still supported.
+* For hybrid OpenType/Graphite fonts, we now prefer using OpenType for
+  compatibility with pre-0.9999 XeTeX.
+* Fix many memory leaks when using AAT fonts on Mac.
+* The “language” font option when loading Graphite fonts in now treated as a
+  BCP 47 language tag not and OpenType one.
+* Various Unicode fixes for Windows console (thanks to TANAKA Takuji).
+* Respect vertical glyph positioning with AAT fonts (fixes, for example,
+  rendering of the new Arabic fonts in Mac OS X 10.9).
+
+==============================================================
+XeTeX 0.9999.3 was released 20130528
+
+* Fix bug with extensible accents resulting in invalid glyph id some times.
+* Fix alternate index in multiple alternates features to be start from zero
+  like pre-0.9999 XeTeX.
+* Document multiple alternates syntax in the reference documentation.
+
+==============================================================
+XeTeX 0.9999.2 was released 20130406
+
+* Fix regression in \XeTeXOT* primitives with fonts where the number of
+  languages in a given script is not the same in both GSUB and GPOS tables.
+
+* Add a workaround for a bug in clang headers to allow building with it on Mac.
+
+* Fix regression in loading PNG files on Mac.
+
+* Fix multiple regression with vertical text layout.
+
+* Update to HarfBuzz 0.9.15 fixing a couple of regressions with Arabic non
+  spacing marks and Hangul jamo.
+
+* Various build fixes for third party libraries.
+
+* XeTeX reference is now included in the release tarball.
+
+xdvipdfmx:
+* Speed up inclusion of eps figures by Tsuchimura Nobuyuki.
+
+==============================================================
+XeTeX 0.9999.1 was released 20130322
+
+* Fix loading font files on PPC Mac OS 10.5 (and potentially other versions of
+  Mac).
+
+* Fix handling of ‘script’ and ‘language’ font options to be treated again as
+  OpenType not ISO tags, so that passing version 2 Indic script tags works
+  (though this is generally not needed as HarfBuzz will always use version 2
+  shaping if the font has it, regardless of the tag used).
+
+* Fix loading JPEG images that do not specify a resolution.
+
+* When printing multi-byte characters to log or terminal avoid inserting new
+  lines in the middle of the characters, and count the characters not the bytes
+  when calculating line length.
+
+* Update to HarfBuzz 0.9.14, a couple of Indic and Hangul shaping bugs.
+
+xdvipdfmx:
+* Speed up calculating glyph widths in native font.
+
+* Don’t crash when /tmp is full.
+
+==============================================================
+XeTeX 0.9999.0 was released 20130311
+
+* Port OpenType layout from ICU LayoutEngine to HarfBuzz.
+  HarfBuzz is actively maintained and generally have much wider support for
+  OpenType spec, the switch fixes a number of OpenType bugs:
+  - Support version 2 OpenType Indic specs.
+  - Many other Indic OpenType bugs, and support for the latest additions to
+    OpenType spec.
+  - Incorrect application of contextual features.
+  - Incorrect kerning in fonts that has both old “kern” table and new GPOS
+    “kern” feature.
+  - Allow suppressing Latin ligatures with ZWNJ.
+  - Support for variation selectors.
+  - Support for user-specified features with complex scripts.
+
+* Port Graphite layout to from SilGraphite to HarfBuzz and Graphite2. Which
+  provides a more robust Graphite support and also fixes a number of Graphite
+  bugs.
+
+* Port AAT font layout and font searching on Mac from the deprecated ATS/ATSUI
+  to Core Text, and image support on Mac from QuickTime to ImageIO framework.
+  XeTeX can be finally built on 64-bit Mac! Work contributed by Jiang Jiang.
+
+* Add “/OT” font variant, similar to “/ICU” which is now deprecated.
+
+* Add a “shaper” font option to specify HarfBuzz shapers (for testing).
+
+* Guess script from input string if no one is given in the font definition,
+  instead of defaulting to Latin.
+
+* Support 4-letter tags for Graphite features.
+
+* Fix applying negative delta glyph advance to the last glyph in the run, fixes
+  issues with “halt” and “vhal” features.
+
+* Use \U prefix for extended math primitives, allowing XeTeX and LuaTeX to use
+  the same names for Unicode math primitives supported by both engines. The old
+  \XeTeX* primitives have been deprecated and will be removed in the future.
+
+* Support OpenType math cut ins.
+
+* Fix “\show” and “\meaning” of “\Umathchar” to a print a form that is legal
+  input.
+
+* Fix italic correction to not depend on space factor being zero for OpenType
+  fonts.
+
+* Fix sporadic shifting of extensible accents.
+
+* Fix typesetting XeTeX’s WEB code, in addition to various slight improvements.
+
+* Prefer TrueType/OpenType over Type1 fonts with the same font name.
+
+* Support input pipes, in line with other engines.
+
+* Drop support for using “()” as font names quotes since it was causing file
+  names with parenthesis not to be found.
+
+* Fix “\show” with characters outside BMP.
+
+* Print the actual character instead of hex code for characters outside BMP
+  with “\show”, “\meaning”, “\showlists” and missing char log messages.
+
+* Fix letterspacing if zero width glyphs.
+
+* Try to get cap and x height from OS/2 table first.
+
+* Reject bitmap only fonts.
+
+* Include build date in “--version” output.
+
+==============================================================
+XeTeX 0.9998 was released 20120708
+
+* Fix mismatch between fonts loaded by XeTeX and xdvipdfmx when multiple
+  versions of the font exist.
+
+* Fix “\the\textfont” with families > 15
+
+* Extend “\fam” to accept family number up to 255.
+
+* Fix build on Mac OS 10.7
+
+OpenType math:
+
+* Fix displacement of big operator's limits when “DisplayOperatorMinHeight” is
+  higher than the size of the big operator.
+
+* Fix too wide accents over accentees that has sub/superscript.
+
+* Support extensible accents for “\overbrace” etc.
+
+* Always take math constants from current font, fixes multiple math discrepancies.
+
+* Honor relevant math constants when positioning sub/superscripts.
+
+* Honor “AccentBaseHeight” when placing accents.
+
+* Support “fixed” and “bottom” keywords in “\XeTeXmathaccent” for non growing
+  and bottom accents, respectively.
+
+* Fix horizontal placement of of accents over single letters to honor their top
+  accent position value.
+
+* Fix vertical placement of sub/superscripts of single letters to not be
+  treated as non-single letters.
+
+* Support proper positioning of nested accents.
