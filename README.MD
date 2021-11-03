@@ -1,3 +1,5 @@
+# This project is not actively maintained due to my work commitment. Looking for maintainers. 
+
 # SwiftLaTeX
 
 ## Introduction for SwiftLaTeX
