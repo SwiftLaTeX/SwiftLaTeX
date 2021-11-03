@@ -16,8 +16,6 @@ SwiftLaTeX, a WYSIWYG WebAssembly client-side LaTeX Editor. All computation is d
 
 ## Installation Guide
 
-No installation needed, just try it in https://www.swiftlatex.com
-
 #### Compile by yourself
 If you do not have node and yarn yet, try the following commands first.
 ```
