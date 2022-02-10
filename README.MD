@@ -1,4 +1,4 @@
-# This project is not actively maintained due to my work commitment. Looking for maintainers. 
+# Demo Website https://www.swiftlatex.com
 
 # SwiftLaTeX
 
