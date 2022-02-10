@@ -1,1 +1,0 @@
-!function(e,t,n,a,c,o,s){e.SwiftLaTeXAnalyticsObject=c,e[c]=e[c]||function(){(e[c].q=e[c].q||[]).push(arguments)},e[c].l=1*new Date,o=t.createElement(n),s=t.getElementsByTagName(n)[0],o.async=1,o.src="watchcat.js",s.parentNode.insertBefore(o,s)}(window,document,"script",0,"meow"),meow("create","UA-82644344-1","auto"),meow("send","pageview");

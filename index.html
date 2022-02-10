@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Basic Page Needs
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>SwiftLaTeX: WYSIWYG LaTeX Editor for Browsers</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Mobile Specific Metas
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- FONT
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+
+    <!-- CSS
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/skeleton.css">
+    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="css/nprogress.css">
+
+    <style type="text/css" media="screen">
+        #editor {
+            width: 100%;
+            height: 300px;
+        }
+    </style>
+
+    <!-- Favicon
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="icon" type="image/png" href="favicon.png">
+</head>
+<body class="code-snippets-visible">
+
+<!-- Primary Page Layout
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<section class="container">
+    <section class="header">
+        <h2 class="title">LaTeX.wasm: LaTeX Engines in Browsers</h2>
+    </section>
+
+
+    <nav class="navbar">
+        <div class="container">
+            <ul class="navbar-list">
+                <li class="navbar-item"><a class="navbar-link" href="#intro">Intro</a></li>
+                <li class="navbar-item"><a class="navbar-link" href="#demo">Demo</a></li>
+                <li class="navbar-item"><a class="navbar-link" href="#install">Installation</a></li>
+                <li class="navbar-item"><a class="navbar-link" href="#doc">APIs</a></li>
+                <li class="navbar-item"><a class="navbar-link" href="#doc">XeTeX</a></li>
+                <li class="navbar-item"><a class="navbar-link" href="#doc">WYSIWYG Editor</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="intro">
+        <div class="value-props row">
+            <div class="four columns value-prop">
+                <h2>100% Browser</h2>
+                Written in 100% Javascript/WebAssembly and run in browsers.
+            </div>
+            <div class="four columns value-prop">
+                <h2>Compatibility</h2>
+                Produce exact same output you would get from TexLive or MikTeX.
+            </div>
+            <div class="four columns value-prop">
+                <h2>Library Support</h2>
+                Simply include a script tag and use PdfTeX or XeTeX in your own webpage.
+            </div>
+        </div>
+
+        <div class="value-props row">
+            <div class="four columns value-prop">
+                <h2>WYSIWYG</h2>
+                Support WYSIWYG editing on LaTeX documents using XeTeX engine.
+            </div>
+            <div class="four columns value-prop">
+                <h2>Speed</h2>
+                Run merely 2X slower than native binaries.
+            </div>
+            <div class="four columns value-prop">
+                <h2>Open Source</h2>
+                Completely Open Source. You can find the code on GitHub.
+            </div>
+
+        </div>
+
+
+    </section>
+
+    <div class="docs-section" id="demo">
+        <h6 class="docs-header">Demo</h6>
+        <div id="editor">\documentclass{IEEEconf}
+\usepackage{graphicx}
+
+\begin{document}
+
+\title{Introduction to \LaTeX{}}
+\author{Author's Name}
+
+\maketitle
+
+\begin{abstract}
+The abstract text goes here.
+\end{abstract}
+
+\section{Introduction}
+Here is the text of your introduction.
+
+\begin{equation}
+\label{simple_equation}
+\alpha = \sqrt{ \beta }
+\end{equation}
+
+\subsection{Subsection Heading Here}
+Write your subsection text here.
+
+
+\section{Conclusion}
+Write your conclusion here.
+
+\end{document}
+        </div>
+
+        <div id="pdfbox">
+        </div>
+
+        <pre><code id="console">Console Output:
+</code></pre>
+        
+        <a class="button button-primary" id="compilebtn"
+               onclick="compile()">Compile</a>
+
+    </div>
+
+    <div class="docs-section" id="install">
+        <h6 class="docs-header">Installation</h6>
+        <div class="row">Step 1: Download latest release from <a
+                href="https://github.com/SwiftLaTeX/SwiftLaTeX/releases">Github</a>. Extract the files and put them into
+            your webpage directory.
+        </div>
+        <div class="row">Step 2: Include the src tag in your page.
+            <pre><code>&lt;script src="PdfTeXEngine.js"&gt;&lt;/script&gt;</code></pre>
+        </div>
+        <div class="row">Step 3: Initial the engine.
+            <pre><code>const engine = new LaTeXEngine();
+await engine.loadEngine();
+</code></pre>
+        </div>
+        <div class="row">Step 4: Load the tex files/pictures/fonts to engines.
+            <pre><code>const engine = new LaTeXEngine();
+engine.writeMemFSFile("main.tex", "\documentclass{...");
+</code></pre>
+        </div>
+        <div class="row">Step 5: Set the main file and fire the compilation.
+            <pre><code>engine.setEngineMainFile("main.tex");
+let r = await engine.compileLaTeX(); // r contains PDF binray and compilation log.
+</code></pre>
+        </div>
+    </div>
+
+
+    <div class="docs-section" id="doc">
+        <h6 class="docs-header">APIs</h6>
+        <div class="row">
+            <ul>
+                <li>async loadEngine(): Promise&lt;void&gt.
+                    <ul>Load the webassembly engine.</ul>
+                </li>
+                <li>isReady(): boolean.
+                    <ul>Check whether the engine is ready to compile documents.</ul>
+                </li>
+                <li>writeMemFSFile(filename: string, srccode: string | Uint8Array).
+                    <ul>Upload source codes / assets to the engine.</ul>
+                </li>
+                <li>makeMemFSFolder(folder: string).
+                    <ul>Create a directory.</ul>
+                </li>
+                <li>setEngineMainFile(filename: string).
+                    <ul>Tell the engine which latex file is the entry file.</ul>
+                </li>
+                <li>compilePDF():Promise&lt;CompileResult&gt;.
+                    <ul>Start compiling LaTeX documents and return CompileResult.</ul>
+                </li>
+                <li>flushCache().
+                    <ul>Purge all the files uploaded.</ul>
+                </li>
+                <li>closeWorker().
+                    <ul>Shutdown the engine.</ul>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+    <iframe src="https://ghbtns.com/github-btn.html?user=swiftlatex&repo=swiftlatex&type=watch&count=true"
+            allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+    <iframe src="https://ghbtns.com/github-btn.html?user=swiftlatex&repo=swiftlatex&type=fork&count=true"
+            allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+
+</div>
+
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="PdfTeXEngine.js"></script>
+<script>
+
+    const editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/latex");
+    const globalEn = new LaTeXEngine();
+    globalEn.loadEngine();
+
+    async function compile() {
+        if(!globalEn.isReady()) {
+            console.log("Engine not ready yet");
+            return;
+        }
+        document.getElementById("pdfbox").innerHTML = "";
+        document.getElementById("compilebtn").innerHTML = "Compiling...";
+        globalEn.flushCache();
+        globalEn.writeMemFSFile("main.tex", editor.getValue());
+        globalEn.setEngineMainFile("main.tex");
+        let r = await globalEn.compilePDF();
+        document.getElementById("console").innerHTML = r.log;
+        document.getElementById("compilebtn").innerHTML = "Compile";
+        if (r.status === 0) {
+            const pdfblob = new Blob([r.pdf], {type : 'application/pdf'});
+            const objectURL = URL.createObjectURL(pdfblob);
+            setTimeout(()=>{
+                URL.revokeObjectURL(objectURL);
+            }, 30000);
+            console.log(objectURL);
+            document.getElementById("pdfbox").innerHTML = `<embed src="${objectURL}" width="100%" height="375" type="application/pdf">`;
+        }
+    }
+
+</script>
+</html>
