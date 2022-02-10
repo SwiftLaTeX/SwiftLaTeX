@@ -117,6 +117,8 @@ Here is the text of your introduction.
 \alpha = \sqrt{ \beta }
 \end{equation}
 
+\includegraphics[width=0.5\textwidth]{troll.jpg}
+
 \subsection{Subsection Heading Here}
 Write your subsection text here.
 
@@ -132,7 +134,7 @@ Write your conclusion here.
 
         <pre><code id="console">Console Output:
 </code></pre>
-        
+
         <a class="button button-primary" id="compilebtn"
                onclick="compile()">Compile</a>
 
@@ -226,7 +228,11 @@ let r = await engine.compileLaTeX(); // r contains PDF binray and compilation lo
         document.getElementById("pdfbox").innerHTML = "";
         document.getElementById("compilebtn").innerHTML = "Compiling...";
         globalEn.flushCache();
+
+        let downloadReq = await fetch('images/troll.jpg');
+        let imageBlob = await downloadReq.arrayBuffer();
         globalEn.writeMemFSFile("main.tex", editor.getValue());
+        globalEn.writeMemFSFile("troll.jpg", new Uint8Array(imageBlob));
         globalEn.setEngineMainFile("main.tex");
         let r = await globalEn.compilePDF();
         document.getElementById("console").innerHTML = r.log;
