@@ -14,10 +14,12 @@ SwiftLaTeX, LaTeX Engines in Browsers with optional WYSIWYG support. We are a bi
 3. __Compatibility__. Produce exact same output you would get from TexLive or MikTeX.
 4. __WYSIWYG__. SwiftLaTeX provides an optional WYSIWYG editor, allowing users to editing PDF output directly (WIP).
 
-## Installation Guide
+## Quick Installation Guide
 1. Download latest release from Github. Extract the files and put them into your webpage directory.
 2. Include the src tag in your page.
-```<script src="PdfTeXEngine.js"></script>```
+```
+<script src="PdfTeXEngine.js"></script>
+```
 3. Initialize the engine.
 ```const engine = new LaTeXEngine();
 await engine.loadEngine();
@@ -33,24 +35,29 @@ let r = await engine.compileLaTeX(); // r contains PDF binray and compilation lo
 ```
 
 ## APIs
-1. async loadEngine(): Promise<void>.
+1. async loadEngine(): Promise<void>. \
 Load the webassembly engine.
-2. isReady(): boolean.
+2. isReady(): boolean. \
 Check whether the engine is ready to compile documents.
-3. writeMemFSFile(filename: string, srccode: string | Uint8Array).
+3. writeMemFSFile(filename: string, srccode: string | Uint8Array). \
 Upload source codes / assets to the engine.
-4. makeMemFSFolder(folder: string).
+4. makeMemFSFolder(folder: string). \
 Create a directory.
-5. setEngineMainFile(filename: string).
+5. setEngineMainFile(filename: string). \
 Tell the engine which latex file is the entry file.
-6. compilePDF():Promise<CompileResult>.
+6. compilePDF():Promise<CompileResult>. \
 Start compiling LaTeX documents and return CompileResult.
-7. flushCache().
+7. flushCache(). \
 Purge all the files uploaded.
-8. closeWorker().
+8. closeWorker(). \
 Shutdown the engine.
+9. setTexliveEndpoint(url: string). \
+If you host your own texlive server, you can ask the engine to fetch files from the server.
 
-## Compile by yourself
+## Compile Engines by yourself
+SwiftLaTeX compiles XeTeX and PdfTeX engines into WebAssembly. We recommend the XeTeX engine as it supports UTF-8 and Opentype fonts out of box.
+The engine is almost 100% identical to XeTeX except SwiftLaTeX does not include a full ICU dataset. As a result, the locale linebreaking may not function as expected. This issue is easy to fix: we just need to initialize the ICU library with the correct dataset.  If you just need to handle English, the PdfTeX is also a nice option. It is less compilcated, thus faster and less buggy.
+
 1. Get the emsdk repo
 ```
 git clone https://github.com/emscripten-core/emsdk.git
@@ -74,14 +81,15 @@ git pull
 6. Activate PATH and other environment variables in the current terminal
 ```
 source ./emsdk_env.sh
-cd pdftex.wasm
+```
+7. Compile XeTeX or PdfTeX
+```
+cd pdftex.wasm or xetex.wasm
 make
 ```
 
-## Engines
-SwiftLaTeX compiles XeTeX and PdfTeX engines into WebAssembly. We recommend the XeTeX engine as it supports UTF-8 and Opentype fonts out of box.
-The engine is almost 100% identical to XeTeX except SwiftLaTeX does not include a full ICU dataset. As a result, the locale linebreaking may not function as expected. This issue is easy to fix: we just need to initialize the ICU library with the correct dataset.  
-If you just need to handle English, the PdfTeX is also a nice option. It is less compilcated, thus faster and less buggy.
+
+
 
 
 ## CTAN files
