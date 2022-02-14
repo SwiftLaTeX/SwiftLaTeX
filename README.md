@@ -1,5 +1,4 @@
 
-
 # SwiftLaTeX
 
 Demo Website https://www.swiftlatex.com
