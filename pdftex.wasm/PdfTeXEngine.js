@@ -238,7 +238,7 @@ var LaTeXEngine = /** @class */ (function () {
     };
     LaTeXEngine.prototype.setTexliveEndpoint = function (url) {
         if (this.latexWorker !== undefined) {
-            this.latexWorker.postMessage({ 'cmd': 'settexlive', 'url': url });
+            this.latexWorker.postMessage({ 'cmd': 'settexliveurl', 'url': url });
             this.latexWorker = undefined;
         }
     };

@@ -4,7 +4,7 @@ var Module = {};
 self.memlog = "";
 self.initmem = undefined;
 self.mainfile = "main.tex";
-
+self.texlive_endpoint = "https://texlive.swiftlatex.com/";
 Module['print'] = function(a) {
     self.memlog += (a + "\n");
 };
@@ -221,6 +221,15 @@ function writeFileRoutine(filename, content) {
     }
 }
 
+function setTexliveEndpoint(url) {
+    if(url) {
+        if (!url.endsWith("/")) {
+            url += '/';
+        }
+        self.texlive_endpoint = url;
+    }
+}
+
 self['onmessage'] = function(ev) {
     let data = ev['data'];
     let cmd = data['cmd'];
@@ -228,6 +237,8 @@ self['onmessage'] = function(ev) {
     	compileLaTeXRoutine();
     } else if (cmd === 'compileformat') {
         compileFormatRoutine();
+    } else if (cmd === "settexliveurl") {
+        setTexliveEndpoint(data['url']);
     } else if (cmd === "mkdir") {
         mkdirRoutine(data['url']);
     } else if (cmd === "writefile") {
@@ -274,8 +285,8 @@ function kpse_fetch_from_network_impl(nameptr, format) {
     }
 
     //self.postMessage({'result':'ok', 'type':'status', 'cmd':'texlivefetch', 'data':reqname});
-    const remote_endpoint = "https://texlive.swiftlatex.com/xetex/";
-    const remote_url = remote_endpoint + cacheKey;
+    
+    const remote_url = self.texlive_endpoint + 'xetex/' + cacheKey;
     let xhr = new XMLHttpRequest();
     xhr.open("GET", remote_url, false);
     xhr.timeout = 150000;
@@ -322,8 +333,7 @@ function fontconfig_search_font_impl(fontnamePtr, varStringPtr) {
         return 0;
     }
 
-    const remote_endpoint = "https://texlive.swiftlatex.com/fontconfig/";
-    const remote_url = remote_endpoint + cacheKey;
+    const remote_url = self.texlive_endpoint + 'fontconfig/' + cacheKey;
     let xhr = new XMLHttpRequest();
     xhr.open("GET", remote_url, false);
     xhr.timeout = 150000;

@@ -1,20 +1,16 @@
 
-<script src='latexEngine.js'></script>
+<script src='DvipdfmxEngine.js'></script>
 <script>
 
-var globalEn = new LaTeXEngine();
+var globalEn = new DvipdfmxEngine();
 globalEn.loadEngine();
 
-async function testFormat() {
-	await globalEn.compileFormat();
-}
-
 async function testTeX() {
-	let texR = await fetch('test.tex');
-	let tex = await texR.text();
-	globalEn.writeMemFSFile("main.tex", tex);
-	globalEn.setEngineMainFile("main.tex");
+	let texR = await fetch('test.xdv');
+	let tex = await texR.arrayBuffer();
+	globalEn.writeMemFSFile("main.xdv", tex);
+	globalEn.setEngineMainFile("main.xdv");
 	let r = await globalEn.compileLaTeX();
-	console.log(r);
+	
 } 	
 </script>

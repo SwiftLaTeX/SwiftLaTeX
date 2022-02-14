@@ -2,7 +2,7 @@
 #define MIN_XETEX_TEXMFMEM
 typedef union {
   struct {
-    int32_t LH, RH; long long ME;
+    int32_t LH, RH;
   } v;
   struct {
     short B1, B0;
@@ -35,7 +35,6 @@ typedef union {
 #define b1 u.B1
 #define b2 u.B2
 #define b3 u.B3
-#define me v.ME
 #define rh v.RH
 #define lhfield v.LH
 

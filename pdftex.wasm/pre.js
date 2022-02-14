@@ -4,7 +4,7 @@ var Module = {};
 self.memlog = "";
 self.initmem = undefined;
 self.mainfile = "main.tex";
-self.texlive_endpoint = "https://texlive.swiftlatex.com/pdftex/";
+self.texlive_endpoint = "https://texlive.swiftlatex.com/";
 Module['print'] = function(a) {
     self.memlog += (a + "\n");
 };
@@ -220,6 +220,15 @@ function writeFileRoutine(filename, content) {
     }
 }
 
+function setTexliveEndpoint(url) {
+    if(url) {
+        if (!url.endsWith("/")) {
+            url += '/';
+        }
+        self.texlive_endpoint = url;
+    }
+}
+
 self['onmessage'] = function(ev) {
     let data = ev['data'];
     let cmd = data['cmd'];
@@ -228,7 +237,7 @@ self['onmessage'] = function(ev) {
     } else if (cmd === 'compileformat') {
         compileFormatRoutine();
     } else if (cmd === "settexliveurl") {
-        self.texlive_endpoint = data['url'];
+        setTexliveEndpoint(data['url']);
     } else if (cmd === "mkdir") {
         mkdirRoutine(data['url']);
     } else if (cmd === "writefile") {
@@ -267,7 +276,7 @@ function kpse_fetch_from_network_impl(nameptr, format) {
     }
 
     
-    const remote_url = self.texlive_endpoint + cacheKey;
+    const remote_url = self.texlive_endpoint + 'pdftex/' + cacheKey;
     let xhr = new XMLHttpRequest();
     xhr.open("GET", remote_url, false);
     xhr.timeout = 150000;

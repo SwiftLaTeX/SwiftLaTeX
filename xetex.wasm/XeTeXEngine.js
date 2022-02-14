@@ -236,6 +236,12 @@ var LaTeXEngine = /** @class */ (function () {
             this.latexWorker = undefined;
         }
     };
+    LaTeXEngine.prototype.setTexliveEndpoint = function (url) {
+        if (this.latexWorker !== undefined) {
+            this.latexWorker.postMessage({ 'cmd': 'settexliveurl', 'url': url });
+            this.latexWorker = undefined;
+        }
+    };
     return LaTeXEngine;
 }());
 exports.LaTeXEngine = LaTeXEngine;
