@@ -33,7 +33,7 @@ engine.setEngineMainFile("main.tex");
 let r = await engine.compileLaTeX(); // r contains PDF binray and compilation log.
 ```
 
-#### Compile by yourself
+## Compile by yourself
 1. Get the emsdk repo
 ```
 git clone https://github.com/emscripten-core/emsdk.git
@@ -60,13 +60,14 @@ source ./emsdk_env.sh
 cd pdftex.wasm
 make
 ```
-## SwiftLaTeX Technical Details
 
-### XeTeX Engine
-SwiftLaTeX compiles the XeTeX engine into WebAssembly. XeTeX supports UTF-8 and Opentype fonts out of box.
+## Engines
+SwiftLaTeX compiles XeTeX and PdfTeX engines into WebAssembly. We recommend the XeTeX engine as it supports UTF-8 and Opentype fonts out of box.
 The engine is almost 100% identical to XeTeX except SwiftLaTeX does not include a full ICU dataset. As a result, the locale linebreaking may not function as expected. This issue is easy to fix: we just need to initialize the ICU library with the correct dataset.  
+If you just need to handle English, the PdfTeX is also a nice option. It is less compilcated, thus faster and less buggy.
 
-### CTAN files
+
+## CTAN files
 LaTeX is not a stand-alone typesetting program in itself, but document preparation software that runs on top of Donald E. Knuth's TeX typesetting system. TeX distributions usually bundle together all the parts needed for a working TeX system and they generally add to this both configuration and maintenance utilities. Nowadays LaTeX, and many of the packages built on it, form an important component of any major TeX distribution. 
 In SwiftLaTeX, all required files are fetched from CTAN (Comprehensive TeX Archive Network), https://www.ctan.org, or our mirror server https://texlive.swiftlatex.com. 
 You can checkout the repo https://github.com/SwiftLaTeX/Texlive-Ondemand and host your own server. 
