@@ -72,6 +72,9 @@ LaTeX is not a stand-alone typesetting program in itself, but document preparati
 In SwiftLaTeX, all required files are fetched from CTAN (Comprehensive TeX Archive Network), https://www.ctan.org, or our mirror server https://texlive.swiftlatex.com. 
 You can checkout the repo https://github.com/SwiftLaTeX/Texlive-Ondemand and host your own server. 
 
+## WYSIWYG Editor
+We are also working hard to bring back our WYSIWYG latex editor. The editor is pretty similar to overleaf, except users are allowed to edit pdf output directly. 
+
 ## License
 The code in this repository is released under the GNU AFFERO GENERAL PUBLIC LICENSE, version 3. A copy can be found in the LICENSE file.
 Copyright (c) SwiftLab, 2018-2022.
