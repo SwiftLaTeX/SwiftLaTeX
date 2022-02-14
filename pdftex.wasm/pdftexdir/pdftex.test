@@ -1,0 +1,11 @@
+#! /bin/sh -vx
+# $Id$
+# Copyright 2017-2018 Karl Berry <tex-live@tug.org>
+# Copyright 2010 Peter Breitenlohner <tex-live@tug.org>
+# You may freely use, modify and/or distribute this file.
+
+# Make sure the program executes.
+
+./pdftex --version || exit 1
+./pdftex --help || exit 1
+exit 0

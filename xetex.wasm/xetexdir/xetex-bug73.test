@@ -1,0 +1,25 @@
+#! /bin/sh -vx
+# Copyright 2017-2018 Karl Berry <tex-live@tug.org>
+# Copyright 2014-2015 Peter Breitenlohner <tex-live@tug.org>
+# You may freely use, modify and/or distribute this file.
+
+LC_ALL=C; export LC_ALL;  LANGUAGE=C; export LANGUAGE
+
+TEXMFCNF=$srcdir/../kpathsea;export TEXMFCNF
+TEXINPUTS=.:$srcdir/tests; export TEXINPUTS
+TEXFORMATS=.; export TEXFORMATS
+
+# get same filename in log
+rm -f bug73.tex
+$LN_S $srcdir/xetexdir/tests/bug73.tex .
+
+#exit 77
+
+./xetex -ini bug73 || exit 1
+
+./xetex -fmt=bug73 bug73 || exit 1
+
+sed 1d bug73.log >bug73.out
+
+diff $srcdir/xetexdir/tests/bug73.log bug73.out || exit 1
+

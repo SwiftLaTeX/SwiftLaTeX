@@ -1,0 +1,19 @@
+#! /bin/sh -vx
+# $Id$
+# Public domain
+# David Carlisle: version for \expanded based on existing test scripts
+# by Peter Breitenlohner and Karl Berry.
+
+LC_ALL=C; export LC_ALL;  LANGUAGE=C; export LANGUAGE
+
+TEXMFCNF=$srcdir/../kpathsea; export TEXMFCNF
+TEXINPUTS=$srcdir/pdftexdir/tests:.; export TEXINPUTS
+
+./pdftex -ini -etex --interaction batchmode expanded.tex 
+sed -n -e 's/[\\]pdf/\\/g' -e '/START/,/END/p' expanded.log \
+  >expanded_pdftex.log || exit 1
+
+diff "$srcdir/pdftexdir/tests/expanded.txt" expanded_pdftex.log || exit 1
+
+exit 0
+

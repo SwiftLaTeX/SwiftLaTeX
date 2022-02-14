@@ -1,0 +1,23 @@
+#! /bin/sh -vx
+# $Id: cnfline.test 51834 2019-08-07 03:54:14Z kakuto $
+# Public domain. Originally written by Karl Berry
+# Basic check that --cnf-line does something.
+
+LC_ALL=C; export LC_ALL;  LANGUAGE=C; export LANGUAGE
+
+TEXMFCNF=$srcdir/../kpathsea; export TEXMFCNF
+TEXINPUTS=$srcdir/pdftexdir/tests; export TEXINPUTS
+
+./pdftex -ini --interaction=batchmode \
+  --cnf-line=max_print_line=500 cnfline.tex || exit $?
+
+if grep 'those hyphens are' cnfline.log >/dev/null; then
+  : # ok, all ended up on one line
+else
+  echo "log message got broken despite max_print_line" >&2
+  cat cnfline.log >&2
+  exit 1
+fi
+
+exit 0
+

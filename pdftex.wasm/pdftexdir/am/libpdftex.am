@@ -1,0 +1,65 @@
+## texk/web2c/pdftexdir/am/libpdftex.am: Makefile fragment for libpdftex.
+##
+## Copyright (C) 2009-2015 Peter Breitenlohner <tex-live@tug.org>
+## You may freely use, modify and/or distribute this file.
+
+## libpdftex
+##
+EXTRA_LIBRARIES += libpdftex.a
+
+libpdftex_a_CPPFLAGS = $(REGEX_INCLUDES) $(pdftex_cppflags)
+libpdftex_a_CXXFLAGS = $(WARNING_CXXFLAGS)
+
+libpdftex_a_SOURCES = \
+	pdftexdir/avl.c \
+	pdftexdir/avl.h \
+	pdftexdir/avlstuff.c \
+	pdftexdir/avlstuff.h \
+	pdftexdir/epdf.c \
+	pdftexdir/image.h \
+	pdftexdir/mapfile.c \
+	pdftexdir/pdftex.h \
+	pdftexdir/pdftex-common.h \
+	pdftexdir/pdftoepdf.cc \
+	pdftexdir/pkin.c \
+	pdftexdir/ptexlib.h \
+	pdftexdir/ptexmac.h \
+	pdftexdir/subfont.c \
+	pdftexdir/tounicode.c \
+	pdftexdir/utils.c \
+	pdftexdir/vfpacket.c \
+	pdftexdir/writeenc.c \
+	pdftexdir/writefont.c \
+	pdftexdir/writeimg.c \
+	pdftexdir/writejbig2.c \
+	pdftexdir/writejpg.c \
+	pdftexdir/writepng.c \
+	pdftexdir/writet1.c \
+	pdftexdir/writet3.c \
+	pdftexdir/writettf.c \
+	pdftexdir/writettf.h \
+	pdftexdir/writezip.c
+
+if MINGW32
+REGEX_INCLUDES = -I$(srcdir)/pdftexdir/regex
+libpdftex_a_SOURCES += \
+	pdftexdir/regex/regex.c \
+	pdftexdir/regex/regex.h
+endif MINGW32
+
+# We must create pdftexd.h (and xpdf...) before building the libpdftex_a_OBJECTS.
+$(libpdftex_a_OBJECTS): pdftexd.h $(XPDF_DEPEND) $(ZLIB_DEPEND) $(LIBPNG_DEPEND)
+
+## included by pdftexdir/writettf.c
+EXTRA_libpdftex_a_SOURCES = pdftexdir/macnames.c
+
+## included by pdftexdir/regex/regex.c
+EXTRA_libpdftex_a_SOURCES += \
+	pdftexdir/regex/regcomp.c \
+	pdftexdir/regex/regex_internal.c \
+	pdftexdir/regex/regex_internal.h \
+	pdftexdir/regex/regexec.c
+
+EXTRA_DIST += \
+	pdftexdir/regex/COPYING.LIB \
+	pdftexdir/regex/README

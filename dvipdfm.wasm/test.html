@@ -1,0 +1,20 @@
+
+<script src='latexEngine.js'></script>
+<script>
+
+var globalEn = new LaTeXEngine();
+globalEn.loadEngine();
+
+async function testFormat() {
+	await globalEn.compileFormat();
+}
+
+async function testTeX() {
+	let texR = await fetch('test.tex');
+	let tex = await texR.text();
+	globalEn.writeMemFSFile("main.tex", tex);
+	globalEn.setEngineMainFile("main.tex");
+	let r = await globalEn.compileLaTeX();
+	console.log(r);
+} 	
+</script>

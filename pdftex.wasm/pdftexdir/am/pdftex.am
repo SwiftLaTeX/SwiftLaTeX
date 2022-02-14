@@ -1,0 +1,125 @@
+## texk/web2c/pdftexdir/am/pdftex.am: Makefile fragment for pdfTeX.
+##
+## Copyright 2016-2019 Karl Berry <tex-live@tug.org>
+## Copyright 2009-2015 Peter Breitenlohner <tex-live@tug.org>
+## You may freely use, modify and/or distribute this file.
+
+pdftex_cppflags = $(AM_CPPFLAGS) $(ZLIB_INCLUDES) $(LIBPNG_INCLUDES) $(XPDF_INCLUDES)
+pdftex_cppflags += -I$(srcdir)/libmd5 -I$(srcdir)/pdftexdir
+
+# used for both pdftex and pdftosrc.
+pdftex_ldadd = $(LIBPNG_LIBS) $(ZLIB_LIBS) $(XPDF_LIBS) libmd5.a
+
+pdftex_dependencies = $(proglib) $(KPATHSEA_DEPEND)
+pdftex_dependencies += $(LIBPNG_DEPEND) $(ZLIB_DEPEND) $(XPDF_DEPEND) libmd5.a
+
+## pdfTeX
+##
+if PDFTEX
+bin_PROGRAMS += pdftex
+endif PDFTEX
+EXTRA_PROGRAMS += pdftex
+
+# Force Automake to use CXXLD for linking
+nodist_EXTRA_pdftex_SOURCES = dummy.cxx
+
+pdf_tangle = WEBINPUTS=.:$(srcdir)/pdftexdir AM_V_P=$(AM_V_P) $(SHELL) ./tangle-sh $@ $(TANGLE)
+
+pdftex_CPPFLAGS = $(pdftex_cppflags)
+pdftex_CXXFLAGS = $(WARNING_CXXFLAGS)
+
+# With --enable-ipc, pdfTeX may need to link with -lsocket.
+pdftex_LDADD = libpdftex.a $(pdftex_ldadd) $(LDADD) $(ipc_socketlibs)
+
+pdftex_DEPENDENCIES = $(pdftex_dependencies) libpdftex.a
+
+# We must create libpdftex.a etc before building the pdftex_OBJECTS.
+pdftex_prereq = libpdftex.a pdftexdir/etex_version.h pdftexdir/pdftex_version.h
+$(pdftex_OBJECTS): $(pdftex_prereq)
+
+pdftex_c_h = pdftexini.c pdftex0.c pdftexcoerce.h pdftexd.h
+nodist_pdftex_SOURCES = $(pdftex_c_h) pdftex-pool.c
+dist_pdftex_SOURCES = pdftexdir/pdftexextra.c pdftexdir/pdftexextra.h \
+	pdftexdir/pdftex_version.h pdftexdir/etex_version.h
+$(pdftex_c_h): pdftex-web2c
+	@$(web2c) pdftex
+pdftex-web2c: pdftex.p $(web2c_texmf) pdftexdir/pdftex.defines
+	@$(web2c) pdftex
+pdftex.p pdftex.pool: pdftex-tangle
+	@$(pdf_tangle) pdftex pdftex
+pdftex-tangle: tangle$(EXEEXT) pdftexdir/pdftex.web pdftex.ch tangle-sh
+	@$(pdf_tangle) pdftex pdftex
+pdftex-pool.c: pdftex.pool pdftexd.h $(makecpool_stamp)
+	$(makecpool) pdftex >$@ || rm -f $@
+
+# Extract pdftex version
+$(srcdir)/pdftexdir/pdftex_version.h: @MAINTAINER_MODE_TRUE@ pdftexdir/pdftex.web
+	$(AM_V_GEN)grep '^@d pdftex_version_string==' $(srcdir)/pdftexdir/pdftex.web \
+	  | sed "s/^.*'-/#define PDFTEX_VERSION \"/;s/'.*$$/\"/" >$@
+
+# Extract etex version
+$(srcdir)/pdftexdir/etex_version.h: @MAINTAINER_MODE_TRUE@ pdftexdir/pdftex.web
+	$(AM_V_GEN)grep '^@d eTeX_version_string==' $(srcdir)/pdftexdir/pdftex.web \
+	  | sed "s/^.*'-/#define ETEX_VERSION \"/;s/'.*$$/\"/" >$@
+
+# Generate pdftex.ch
+pdftex.ch: tie$(EXEEXT) $(pdftex_ch_srcs)
+	$(tie_c) $(pdftex_ch_srcs)
+pdftex_ch_srcs = \
+	pdftexdir/pdftex.web \
+	pdftexdir/tex.ch0 \
+	tex.ch \
+	enctex.ch \
+	pdftexdir/pdftex.ch \
+	tex-binpool.ch
+
+# Convenience target for making the typeset output; not invoked automatically
+pdftex.pdf: pdftex.tex
+	env MKTEXFMT=0 pdftex '\nonstopmode\input pdftex.tex'
+pdftex.tex: $(srcdir)/pdftexdir/pdftex.web
+	weave $(srcdir)/pdftexdir/pdftex.web
+
+##
+EXTRA_DIST += $(pdftex_ch_srcs) pdftexdir/pdftex.defines
+
+DISTCLEANFILES += $(nodist_pdftex_SOURCES) pdftex.ch pdftex-web2c \
+	pdftex.p pdftex.pool pdftex-tangle
+
+EXTRA_DIST += \
+	pdftexdir/ChangeLog \
+	pdftexdir/NEWS \
+	pdftexdir/README \
+	pdftexdir/change-files.txt
+
+# pdfTeX tests
+#
+pdftex_tests = pdftexdir/wprob.test pdftexdir/pdftex.test \
+  pdftexdir/pdfimage.test pdftexdir/expanded.test \
+  pdftexdir/tests/cnfline.test
+
+pdftexdir/wprob.log pdftexdir/pdftex.log \
+  pdftexdir/pdfimage.log pdftexdir/expanded.log \
+  pdftexdir/cnfline.log: pdftex$(EXEEXT)
+
+EXTRA_DIST += $(pdftex_tests)
+
+if PDFTEX
+TESTS += $(pdftex_tests)
+endif PDFTEX
+
+## wprob.test
+EXTRA_DIST += tests/wprob.tex
+DISTCLEANFILES += pwprob.log pwprob.tex
+
+## pdfimage.test
+EXTRA_DIST += pdftexdir/tests/pdfimage.tex \
+	tests/1-4.jpg tests/B.pdf tests/basic.tex tests/lily-ledger-broken.png
+DISTCLEANFILES += pdfimage.fmt pdfimage.log pdfimage.pdf
+
+## expanded.test
+EXTRA_DIST += tests/expanded.tex tests/expanded.txt
+DISTCLEANFILES += expanded.log
+
+## cnfline.test
+EXTRA_DIST += tests/cnfline.tex
+DISTCLEANFILES += cnfline.log

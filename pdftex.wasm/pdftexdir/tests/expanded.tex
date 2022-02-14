@@ -1,0 +1,46 @@
+% $Id$
+% Public domain.
+% Originally written 2018 by David Carlisle, Bruno Le Floch.
+
+\catcode`\{=1 \catcode`\}=2 \catcode`\#=6
+\def\typ#1{\immediate\write-1 {#1}}
+\def\space{ }
+\let\bgroup{ \let\egroup}
+
+\typ{START}
+\typ{EXPANDED TEST 1}
+% Check the primitive exists
+\show\expanded
+
+\typ{EXPANDED TEST 2}
+% Simple expansion test
+\def\aaa{x}
+\def\bbb{\aaa\aaa}
+\expandafter\def\expandafter\ccc\expandafter{\expanded{\bbb,\aaa}}
+\show\ccc
+
+\typ{EXPANDED TEST 3: the}
+% Expanding \the
+\typ{\expanded{\bbb,\the\numexpr100+20+3\relax}}
+
+\typ{EXPANDED TEST 4: macro param}
+% Constructed #1 is still #1
+\expandafter\def\expandafter\ddd\expandafter#\expanded{1{#\number--1}}
+\show\ddd
+
+\typ{EXPANDED TEST 5: torture}
+% Torture test from Bruno Le Floch testing various tricky interactions
+\expanded\relax\space\ifincsname \BOOM\fi{\ifincsname \BOOM\fi}
+\showtokens\expandafter{\expanded{#,\noexpand\aaa,\unexpanded{\aaa}}}
+\showtokens\expandafter{\expanded{#,\unexpanded{#}}}
+\showtokens\expandafter{\expanded\expandafter{\noexpand\aaa}}
+\showtokens\expandafter{\expanded\expandafter{\unexpanded{\aaa}}}
+\showtokens\expanded{{\expanded{\aaa\noexpand\aaa\noexpand\noexpand\noexpand\aaa}}}
+\toks0{\aaa}
+\showtokens\expanded{{\the\toks0}}
+\expanded\bgroup\show\egroup}
+\edef\foo{\expanded{##}}
+\show\foo
+
+\typ{END}
+\end

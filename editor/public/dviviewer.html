@@ -1,0 +1,82 @@
+<html>
+
+<head>
+    <title>SwiftLaTeX Viewer</title>
+</head>
+<style>
+
+
+    #toolbar-input {
+        width: 10%;
+        line-height: 1.00;
+        margin-left: 4px;
+        margin-right: 4px;
+        text-align: center;
+    }
+
+    button {
+        background-color: #555555; /* Green */
+        border: none;
+        color: white;
+        padding: 7px 7px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 10px;
+    }
+
+    #toolbar {
+        position: fixed;
+        z-index: 2;
+        margin: auto;
+        justify-content: center;
+    }
+
+    #viewer {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        transform-origin: 0 0;
+    }
+
+    #placeHolder {
+        flex: 1;
+        flex-direction: column;
+        justify-content: center;
+        padding-bottom: 35%;
+        background-color: #ecf0f1;
+        padding-top: 35%;
+    }
+
+    .exampleParagraph {
+        margin: 24px;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+</style>
+
+<body>
+<div id='toolbar'>
+    <button id='toolbar-previous'>Prev</button>
+    <input type='text' id='toolbar-input' placeholder="1/1">
+    <button id='toolbar-next'>Next</button>
+    <button id='toolbar-zoomin'>Zoomin</button>
+    <button id='toolbar-zoomout'>Zoomout</button>
+</div>
+<div id="fontLoader">
+</div>
+<div id="viewer">
+    <div id="placeHolder">
+        <p class="exampleParagraph">
+            Change code in the editor and watch it change on this window!
+        </p>
+    </div>
+</div>
+</body>
+
+<script src="meow.js"></script>
+<script src="dist/dviviewer.bundle.js"></script>
+
+</html>

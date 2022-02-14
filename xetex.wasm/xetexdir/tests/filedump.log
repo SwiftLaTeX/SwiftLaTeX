@@ -1,0 +1,5 @@
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**filedump
+(./filedump.tex 25C2AA0A5C636174636F6465605C7B3D310A5C63 )
+No pages of output.

@@ -1,0 +1,187 @@
+{
+/****************************************************************************\
+ Part of the XeTeX typesetting system
+ Copyright (c) 2009-2019 by Jonathan Kew
+ Copyright (c) 1994-2008 by SIL International
+
+ SIL Author(s): Jonathan Kew
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE COPYRIGHT HOLDERS BE LIABLE
+FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Except as contained in this notice, the name of the copyright holders
+shall not be used in advertising or otherwise to promote the sale,
+use or other dealings in this Software without prior written
+authorization from the copyright holders.
+\****************************************************************************/
+}
+
+{ xetex.defines: additions for xetex }
+
+@define @field ptr;
+@define const nullptr;
+@define type voidpointer;
+@define function getnativechar();
+@define function getnativeusv();
+@define procedure setnativechar();
+@define function getnativeglyph();
+@define procedure setnativemetrics();
+@define procedure setjustifiednativeglyphs();
+@define procedure setnativeglyphmetrics();
+@define function findnativefont();
+@define procedure releasefontengine();
+@define function sizeof();
+@define function makefontdef();
+@define function makexdvglypharraydata();
+@define function xdvbufferbyte();
+@define procedure fprintf();
+@define type unicodefile;
+@define function uopenin();
+@define function uopenout();
+@define procedure uclose();
+@define function dviopenout();
+@define function dviclose();
+@define function delcode1();
+@define procedure setdelcode1();
+@define function readcint1();
+@define procedure setcint1();
+@define procedure printutf8str();
+@define procedure setinputfileencoding();
+@define procedure terminatefontmanager;
+@define procedure checkfortfmfontmapping;
+@define function loadtfmfontmapping;
+@define function applytfmfontmapping();
+
+@define procedure initGraphiteBreaking();
+@define function findNextGraphiteBreak();
+@define function usingOpenType();
+@define function usingGraphite();
+@define procedure grprintfontname();
+@define function grfontgetnamed();
+@define function grfontgetnamed1();
+@define function isOpenTypeMathFont();
+
+@define function strerror();
+@define procedure memcpy();
+@define function glyphinfobyte();
+@define function casttoushort();
+
+@define function aatfontget();
+@define function aatfontget1();
+@define function aatfontget2();
+@define function aatfontgetnamed();
+@define function aatfontgetnamed1();
+@define procedure aatprintfontname();
+@define function otfontget();
+@define function otfontget1();
+@define function otfontget2();
+@define function otfontget3();
+@define function mapchartoglyph();
+@define function mapglyphtoindex();
+@define function getglyphbounds();
+@define procedure getnativecharheightdepth();
+@define procedure getnativecharsidebearings();
+@define function getnativeitaliccorrection();
+@define function getnativeglyphitaliccorrection();
+@define procedure printglyphname();
+@define function getfontcharrange();
+
+@define function getnativecharwd();
+@define function getnativecharht();
+@define function getnativechardp();
+@define function getnativecharic();
+
+@define function getnativemathsyparam();
+@define function getnativemathexparam();
+@define function getotmathconstant();
+@define function getotmathvariant();
+@define function getotassemblyptr();
+@define procedure freeotassembly();
+@define function getotmathitalcorr();
+@define function getotmathaccentpos();
+@define function getotmathkern();
+
+@define function otpartcount();
+@define function otpartglyph();
+@define function otpartstartconnector();
+@define function otpartendconnector();
+@define function otpartfulladvance();
+@define function otpartisextender();
+@define function otminconnectoroverlap();
+
+@define function setfamilyfield();
+@define function setclassfield();
+@define function mathfamfield();
+@define function mathclassfield();
+@define function mathcharfield();
+
+@define procedure aatgetfontmetrics();
+@define procedure otgetfontmetrics();
+
+@define function getencodingmodeandinfo();
+
+@define procedure linebreakstart();
+@define function linebreaknext;
+
+{ extra stuff used in picfile code }
+@define type realpoint;
+@define type realrect;
+@define type transform;
+
+@define function deref();
+
+@define function D2Fix();
+@define function Fix2D();
+
+@define function findpicfile();
+@define function picpathbyte();
+@define function countpdffilepages;
+
+@define procedure makeidentity();
+@define procedure makescale();
+@define procedure maketranslation();
+@define procedure makerotation();
+@define procedure transformpoint();
+@define procedure transformconcat();
+
+@define procedure setPoint();
+
+@define function xCoord();
+@define function yCoord();
+@define function aField();
+@define function bField();
+@define function cField();
+@define function dField();
+@define function xField();
+@define function yField();
+@define function wdField();
+@define function htField();
+@define function applymapping();
+
+@define procedure setcpcode();
+@define function getcpcode();
+@define function getnativewordcp();
+
+@define procedure initstarttime;
+@define procedure getcreationdate;
+@define procedure getfilemoddate();
+@define procedure getfilesize();
+@define procedure getfiledump();
+@define procedure getmd5sum();
+@define type gzFile;

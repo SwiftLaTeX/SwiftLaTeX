@@ -1,0 +1,42 @@
+## texk/web2c/pdftexdir/am/pdftosrc.am: Makefile fragment for pdftosrc.
+##
+## Copyright (C) 2009-2015 Peter Breitenlohner <tex-live@tug.org>
+## You may freely use, modify and/or distribute this file.
+
+## pdftosrc
+##
+if PDFTEX
+bin_PROGRAMS += pdftosrc
+endif PDFTEX
+EXTRA_PROGRAMS += pdftosrc
+
+# Force Automake to use CXXLD for linking
+nodist_EXTRA_pdftosrc_SOURCES = dummy.cxx
+
+pdftosrc_CPPFLAGS = $(pdftex_cppflags)
+pdftosrc_CXXFLAGS = $(WARNING_CXXFLAGS)
+
+pdftosrc_SOURCES = pdftexdir/pdftosrc.cc
+
+pdftosrc_LDADD = $(pdftex_ldadd) $(LDADD)
+
+pdftosrc_DEPENDENCIES = $(pdftex_dependencies)
+
+$(pdftosrc_OBJECTS): $(ZLIB_DEPEND) $(LIBPNG_DEPEND) $(XPDF_DEPEND)
+
+## Tests
+##
+pdftosrc_tests = pdftexdir/pdftosrc.test
+pdftexdir/pdftosrc.log: pdftosrc$(EXEEXT)
+
+EXTRA_DIST += $(pdftosrc_tests)
+
+## pdftexdir/pdftosrc.test
+EXTRA_DIST += pdftexdir/tests/test-13.pdf pdftexdir/tests/test-13.xref \
+	pdftexdir/tests/test-15.pdf pdftexdir/tests/test-15.xref
+DISTCLEANFILES += test-13.pdf test-13.xref test-15.pdf test-15.xref
+
+if PDFTEX
+TESTS += $(pdftosrc_tests)
+endif PDFTEX
+

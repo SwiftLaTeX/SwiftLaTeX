@@ -1,0 +1,60 @@
+pdfTeX is an extended version of eTeX that can create PDF directly from
+TeX source files and enhance the result of TeX typesetting with the help
+of PDF. When PDF output is not selected, pdfTeX produces normal DVI
+output, otherwise it produces PDF output that looks essentially
+identical to the DVI output
+
+An important aspect of this project was to investigate alternative
+justification algorithms, resulting in the "microtypography" features of
+margin kerning and font expansion.  This was inspired by Peter Karow's
+and Hermann Zapf's work.
+
+pdfTeX is integrated with the original e-TeX sources and Web2c.  It is
+actively maintained, but stability is paramount now; only bug fixes and
+small enhancements are expected.  Releases are made through TeX Live.
+
+See the file NEWS for changes to the program.
+Documentation about pdfTeX can be found at http://www.pdftex.org.
+Mailing lists:
+http://lists.tug.org/pdftex - help requests, general user discussion
+http://www.ntg.nl/mailman/listinfo/ntg-pdftex - bug reports, development
+
+
+LEGAL ISSUES
+============
+
+pdfTeX is free software; you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later
+version.
+
+pdfTeX is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along
+with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+pdfTeX uses code from TeX; for these parts the original copyright by Don
+Knuth applies. See the source files for details.
+
+pdfeTeX uses code from eTeX; for these parts the original copyright by
+Peter Breitenlohner applies. See the source files for details.
+
+CONTRIBUTORS
+============
+
+Karl Berry, Peter Breitenlohner, Ricardo Sanchez Carmenes, Otfried
+Cheong, Thomas Esser, Hans Hagen, Hartmut Henkel, Taco Hoekwater, Pawel
+Jackowski, Pavel Janik, Tom Kacvinsky, Akira Kakuto, Reinhard Kotucha,
+Derek B. Noonburg, Heiko Oberdiek, Jiri Osoba, Fabrice Popineau,
+Sebastian Rahtz, Bernd Raichle, Tomas Rokicki, Leonard Rosenthol, Martin
+Schröder, Petr Sojka, Ralf Utermann, Olaf Weber, Jiri Zlatuska.
+
+Some companies have supported the developement of pdfTeX: Adobe Systems
+Inc., ArtCom GmbH, Pragma ADE, QuinScape GmbH.
+
+pdfTeX is built on top of TeX, written by Donald Knuth cum suis (Frank
+Liang et al.), and e-TeX, written by Peter Breitenlohner cum suis; 
+the advanced paragraph optimization is inspired by the work of Hermann Zapf.

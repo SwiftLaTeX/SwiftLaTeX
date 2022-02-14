@@ -1,0 +1,220 @@
+## $Id: xetex.am 51510 2019-06-30 13:42:49Z hironobu $
+## texk/web2c/xetexdir/am/xetex.am: Makefile fragment for XeTeX.
+##
+## Copyright 2017 Karl Berry <tex-live@tug.org>
+## Copyright 2009-2015 Peter Breitenlohner <tex-live@tug.org>
+## You may freely use, modify and/or distribute this file.
+
+## XeTeX
+##
+if XETEX
+bin_PROGRAMS += xetex
+endif XETEX
+EXTRA_PROGRAMS += xetex
+
+# Force Automake to use CXXLD for linking
+nodist_EXTRA_xetex_SOURCES = dummy.cxx
+
+xe_tangle = WEBINPUTS=.:$(srcdir)/xetexdir AM_V_P=$(AM_V_P) $(SHELL) ./tangle-sh $@ $(OTANGLE)
+
+libxetex = libxetex.a
+
+xetex_cppflags = $(AM_CPPFLAGS) -I$(srcdir)/xetexdir
+## Must add icu first to avoid an installed version.
+xetex_cppflags += $(ICU_INCLUDES)
+## Must add freetype2 includes early to avoid
+## freetype1/freetype2 confusion -- what a mess.
+xetex_cppflags += $(FREETYPE2_INCLUDES)
+xetex_cppflags += $(TECKIT_INCLUDES)
+xetex_cppflags += $(HARFBUZZ_INCLUDES)
+xetex_cppflags += $(GRAPHITE2_INCLUDES)
+xetex_cppflags += $(POPPLER_INCLUDES)
+xetex_cppflags += $(LIBPNG_INCLUDES)
+xetex_cppflags += $(ZLIB_INCLUDES)
+xetex_cppflags += -I$(srcdir)/libmd5
+xetex_ldadd = $(libxetex)
+xetex_ldadd += $(HARFBUZZ_LIBS)
+xetex_ldadd += $(GRAPHITE2_LIBS)
+xetex_ldadd += $(ICU_LIBS) $(ICU_LIBS_EXTRA)
+xetex_ldadd += $(TECKIT_LIBS)
+xetex_ldadd += $(POPPLER_LIBS)
+xetex_ldadd += $(LIBPNG_LIBS)
+xetex_ldadd += $(FREETYPE2_LIBS)
+xetex_ldadd += $(ZLIB_LIBS)
+xetex_ldadd += libmd5.a
+xetex_dependencies = $(proglib)
+xetex_dependencies += $(KPATHSEA_DEPEND)
+xetex_dependencies += $(ICU_DEPEND)
+xetex_dependencies += $(TECKIT_DEPEND)
+xetex_dependencies += $(HARFBUZZ_DEPEND)
+xetex_dependencies += $(GRAPHITE2_DEPEND)
+xetex_dependencies += $(POPPLER_DEPEND)
+xetex_dependencies += $(LIBPNG_DEPEND)
+xetex_dependencies += $(FREETYPE2_DEPEND)
+xetex_dependencies += $(ZLIB_DEPEND)
+xetex_dependencies += libmd5.a
+
+if XETEX_MACOSX
+
+xetex_cppflags += -DXETEX_MAC
+xetex_LDFLAGS = -framework ApplicationServices -framework Cocoa
+OBJCXXFLAGS += -std=c++11
+
+else !XETEX_MACOSX
+
+xetex_cppflags += $(FONTCONFIG_INCLUDES)
+xetex_ldadd += $(FONTCONFIG_LIBS)
+
+endif !XETEX_MACOSX
+
+
+xetex_CPPFLAGS = $(xetex_cppflags)
+xetex_CFLAGS = $(WARNING_CFLAGS)
+xetex_CXXFLAGS = # $(WARNING_CXXFLAGS)
+
+## With --enable-ipc, XeTeX may need to link with -lsocket.
+xetex_LDADD = $(xetex_ldadd) $(LDADD) $(ipc_socketlibs)
+
+# We must create libxetex.a etc before building the xetex_OBJECTS
+xetex_prereq = $(libxetex) xetexdir/etex_version.h xetexdir/xetex_version.h
+$(xetex_OBJECTS): $(xetex_prereq)
+
+## XeTeX C sources
+xetex_c_h = xetexini.c xetex0.c xetexcoerce.h xetexd.h
+nodist_xetex_SOURCES = $(xetex_c_h) xetex-pool.c
+dist_xetex_SOURCES = xetexdir/xetexextra.c xetexdir/xetexextra.h \
+	xetexdir/etex_version.h xetexdir/xetex_version.h
+
+$(xetex_c_h): xetex-web2c
+	@$(web2c) xetex
+xetex-web2c: xetex.p $(web2c_texmf) xetexdir/xetex.defines
+	@$(web2c) xetex
+
+xetex-pool.c: xetex.pool xetexd.h $(makecpool_stamp)
+	$(makecpool) xetex >$@ || rm -f $@
+
+## Tangling XeTeX
+xetex.p xetex.pool: xetex-tangle
+	@$(xe_tangle) xetex xetex
+xetex-tangle: otangle$(EXEEXT) xetexdir/xetex.web xetex.ch tangle-sh
+	@$(xe_tangle) xetex xetex
+
+# Extract etex version
+$(srcdir)/xetexdir/etex_version.h: @MAINTAINER_MODE_TRUE@ xetexdir/xetex.web
+	$(AM_V_GEN)grep '^@d eTeX_version_string==' $(srcdir)/xetexdir/xetex.web \
+	  | sed "s/^.*'-/#define ETEX_VERSION \"/;s/'.*$$/\"/" >$@
+
+## Extract xetex version
+$(srcdir)/xetexdir/xetex_version.h: @MAINTAINER_MODE_TRUE@ xetexdir/xetex.web
+	$(AM_V_GEN)grep '^@d XeTeX_version_string==' $(srcdir)/xetexdir/xetex.web \
+	  | sed "s/^.*'-/#define XETEX_VERSION \"/;s/'.*$$/\"/" >$@
+
+## Generate xetex.ch
+xetex.ch: tie$(EXEEXT) $(xetex_ch_srcs)
+	$(tie_c) $(xetex_ch_srcs)
+xetex_ch_srcs = \
+	xetexdir/xetex.web \
+	xetexdir/tex.ch0 \
+	tex.ch \
+	$(xetex_ch_synctex) \
+	xetexdir/xetex.ch \
+	$(xetex_post_ch_synctex) \
+	tex-binpool.ch
+
+##
+EXTRA_DIST += $(xetex_web_srcs) $(xetex_ch_srcs) xetexdir/xetex.defines
+
+DISTCLEANFILES += $(nodist_xetex_SOURCES) xetex.web xetex.ch xetex-web2c \
+	xetex.p xetex.pool xetex-tangle
+
+
+## libxetex
+##
+EXTRA_LIBRARIES += libxetex.a
+
+libxetex_a_CPPFLAGS = $(xetex_cppflags)
+libxetex_a_CFLAGS = $(WARNING_CFLAGS)
+libxetex_a_CXXFLAGS = # $(WARNING_CXXFLAGS)
+libxetex_a_OBJCXXFLAGS = # $(WARNING_OBJCXXFLAGS)
+
+libxetex_a_SOURCES = \
+	xetexdir/XeTeXFontInst.cpp \
+	xetexdir/XeTeXFontInst.h \
+	xetexdir/XeTeXFontMgr.cpp \
+	xetexdir/XeTeXFontMgr.h \
+	xetexdir/XeTeXLayoutInterface.cpp \
+	xetexdir/XeTeXLayoutInterface.h \
+	xetexdir/XeTeXOTMath.cpp \
+	xetexdir/XeTeXOTMath.h \
+	xetexdir/XeTeX_ext.c \
+	xetexdir/XeTeX_ext.h \
+	xetexdir/XeTeX_pic.c \
+	xetexdir/XeTeX_web.h \
+	xetexdir/XeTeXswap.h \
+	xetexdir/trans.c \
+	xetexdir/trans.h \
+	xetexdir/hz.cpp \
+	xetexdir/xetex.h \
+	xetexdir/pdfimage.cpp \
+	xetexdir/pdfimage.h \
+	xetexdir/image/bmpimage.c \
+	xetexdir/image/bmpimage.h \
+	xetexdir/image/jpegimage.c \
+	xetexdir/image/jpegimage.h \
+	xetexdir/image/mfileio.c \
+	xetexdir/image/mfileio.h \
+	xetexdir/image/numbers.c \
+	xetexdir/image/numbers.h \
+	xetexdir/image/pngimage.c \
+	xetexdir/image/pngimage.h
+
+if XETEX_MACOSX
+
+libxetex_a_SOURCES += \
+	xetexdir/XeTeXFontInst_Mac.cpp \
+	xetexdir/XeTeXFontInst_Mac.h \
+	xetexdir/XeTeXFontMgr_Mac.mm \
+	xetexdir/XeTeXFontMgr_Mac.h \
+	xetexdir/XeTeX_mac.c
+
+else !XETEX_MACOSX
+
+libxetex_a_SOURCES += \
+	xetexdir/XeTeXFontMgr_FC.cpp \
+	xetexdir/XeTeXFontMgr_FC.h
+
+endif !XETEX_MACOSX
+
+# We must create xetexd.h etc. before building the libxetex_a_OBJECTS.
+libxetex_prereq = xetexd.h $(xetex_dependencies)
+$(libxetex_a_OBJECTS): $(libxetex_prereq)
+
+EXTRA_DIST += \
+	xetexdir/ChangeLog \
+	xetexdir/COPYING \
+	xetexdir/NEWS \
+	xetexdir/image/README \
+	xetexdir/unicode-char-prep.pl \
+	xetexdir/xewebmac.tex
+
+# XeTeX Tests
+#
+xetex_tests = \
+	xetexdir/xetex-filedump.test \
+	xetexdir/xetex-bug73.test \
+	xetexdir/xetex.test
+xetexdir/xetex-filedump.log xetexdir/xetex-bug73.log xetexdir/xetex.log: xetex$(EXEEXT)
+
+EXTRA_DIST += $(xetex_tests)
+
+if XETEX
+TESTS += $(xetex_tests)
+endif XETEX
+
+## xetex-bug73.test
+EXTRA_DIST += xetexdir/tests/bug73.log xetexdir/tests/bug73.tex
+DISTCLEANFILES += bug73.fmt bug73.log bug73.out bug73.tex
+
+## xetex-filedump.test
+EXTRA_DIST += xetexdir/tests/filedump.log xetexdir/tests/filedump.tex
+DISTCLEANFILES += filedump.log filedump.out filedump.tex

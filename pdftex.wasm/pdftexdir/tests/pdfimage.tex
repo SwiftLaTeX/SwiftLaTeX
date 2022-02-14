@@ -1,0 +1,27 @@
+% Copyright (C) 2013 Peter Breitenlohner <tex-live@tug.org>
+% You may freely use, modify and/or distribute this file.
+%
+\ifx\fmtname\undefined
+  \input basic
+  \def\fmtname{basic}
+  \expandafter\dump
+\fi
+%==================
+\pdfoutput=1
+\pdfcompresslevel=0
+
+\topskip0pt
+
+\pdfximage width \hsize height \vsize {1-4.jpg}
+\hbox{\pdfrefximage\pdflastximage}
+\eject
+
+\pdfximage width \hsize height \vsize {B.pdf}
+\hbox{\pdfrefximage\pdflastximage}
+\eject
+
+\pdfximage width \hsize height \vsize {lily-ledger-broken.png}
+\hbox{\pdfrefximage\pdflastximage}
+\eject
+
+\bye

@@ -1,0 +1,35 @@
+How change files are applied for pdftex/pdfetex?
+
+============================= pdftex =============================
+
+2) pdftex.ch is generated from
+    ./tie -c pdftex.ch pdftex.web \
+    $(srcdir)/pdftexdir/tex.ch0 \
+    $(srcdir)/tex.ch \
+    $(srcdir)/pdftexdir/tex.ch1 \
+    $(srcdir)/pdftexdir/tex.pch
+
+Input:
+    pdftex.web:
+        pdftex without system-dependent changes
+
+    pdftexdir/tex.ch0:
+        % Change file to assist in creating the web2c-specific change file.
+        % This one comes first, resolves inconsistencies between the
+        % generated pdftex.web and tex.ch
+
+        change the pdftex banner to tex banner, so tex.ch can be applied
+
+    tex.ch:
+        the main web2c-specific (or other system-dependent) change file
+
+    pdftexdir/pdftex.ch:
+
+        % Change file to assist in creating the web2c-specific change file.
+        % This one resolves inconsistencies between tex.ch and tex.pch.
+
+        change the tex banner to pdftex banner (reverse tex.ch0)
+
+Output:
+    pdftex.ch (not pdftexdir/pdftex.ch):
+        additional & system-dependent changes

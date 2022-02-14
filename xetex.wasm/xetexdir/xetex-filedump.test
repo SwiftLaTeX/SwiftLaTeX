@@ -1,0 +1,22 @@
+#! /bin/sh -vx
+# Copyright 2019 Karl Berry <tex-live@tug.org>
+# You may freely use, modify and/or distribute this file.
+
+LC_ALL=C; export LC_ALL;  LANGUAGE=C; export LANGUAGE
+
+TEXMFCNF=$srcdir/../kpathsea;export TEXMFCNF
+TEXINPUTS=.:$srcdir/tests; export TEXINPUTS
+TEXFORMATS=.; export TEXFORMATS
+
+# get same filename in log
+rm -f filedump.tex
+$LN_S $srcdir/xetexdir/tests/filedump.tex .
+
+#exit 77
+
+./xetex -ini filedump || exit 1
+
+sed 1d filedump.log >filedump.out
+
+diff $srcdir/xetexdir/tests/filedump.log filedump.out || exit 1
+

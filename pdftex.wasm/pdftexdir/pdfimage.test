@@ -1,0 +1,15 @@
+#! /bin/sh -vx
+# $Id$
+# Copyright 2017-2018 Karl Berry <tex-live@tug.org>#
+# Copyright 2013 Peter Breitenlohner <tex-live@tug.org>
+# You may freely use, modify and/or distribute this file.
+
+TEXMFCNF=$srcdir/../kpathsea; export TEXMFCNF
+TEXINPUTS=$srcdir/pdftexdir/tests:$srcdir/tests; export TEXINPUTS
+TEXFORMATS=.; export TEXFORMATS
+
+./pdftex -ini -interaction=batchmode pdfimage </dev/null || exit 1
+
+./pdftex -fmt=pdfimage -interaction=batchmode pdfimage </dev/null || exit 1
+
+exit 0

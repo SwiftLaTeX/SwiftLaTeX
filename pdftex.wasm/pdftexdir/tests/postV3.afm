@@ -1,0 +1,69 @@
+StartFontMetrics 2.0
+FontName FonetikaDaniaIwonaeRegular
+FullName Fonetika Dania Iwonae Regular
+FamilyName FonetikaDaniaIwonae
+Weight Normal
+ItalicAngle 0
+IsFixedPitch false
+FontBBox -63 -250 733 750
+UnderlinePosition -100
+UnderlineThickness 50
+Version Version 001.000 
+Notice Created by Palle J¿rgensen, with FontForge 1.0 (http://fontforge.sf.net)\nThe license is GUST Font Nosource License.
+EncodingScheme FontSpecific
+Ascender 750
+Descender -250
+StartCharMetrics 51
+C -1 ; WX 432 ; N .notdef ; B 33 0 366 666 ;
+C -1 ; WX 0 ; N .null ; B 108 471 286 700 ;
+C -1 ; WX 333 ; N CR ; B 108 471 286 700 ;
+C -1 ; WX 222 ; N quoteright ; B 108 471 286 700 ;
+C -1 ; WX 278 ; N comma ; B 108 -229 170 121 ;
+C -1 ; WX 278 ; N period ; B 90 362 188 460 ;
+C -1 ; WX 295 ; N zero ; B 19 -158 261 162 ;
+C -1 ; WX 491 ; N A ; B 62 -10 541 460 ;
+C -1 ; WX 591 ; N B ; B 62 -10 733 649 ;
+C -1 ; WX 442 ; N C ; B 71 -10 467 655 ;
+C -1 ; WX 460 ; N D ; B 54 -10 540 700 ;
+C -1 ; WX 438 ; N E ; B 62 -10 434 460 ;
+C -1 ; WX 249 ; N I ; B 13 -240 278 661 ;
+C -1 ; WX 455 ; N N ; B 43 -163 447 460 ;
+C -1 ; WX 307 ; N R ; B -15 0 307 457 ;
+C -1 ; WX 382 ; N S ; B 13 -240 394 460 ;
+C -1 ; WX 222 ; N bracketleft ; B 34 -250 188 750 ;
+C -1 ; WX 222 ; N bracketright ; B 34 -250 188 750 ;
+C -1 ; WX 462 ; N a ; B 57 -10 472 460 ;
+C -1 ; WX 462 ; N b ; B 43 -10 458 700 ;
+C -1 ; WX 442 ; N c ; B 71 -10 431 460 ;
+C -1 ; WX 462 ; N d ; B 57 -10 526 700 ;
+C -1 ; WX 438 ; N e ; B 62 -10 434 460 ;
+C -1 ; WX 243 ; N f ; B 51 0 399 710 ;
+C -1 ; WX 462 ; N g ; B 51 -240 472 460 ;
+C -1 ; WX 455 ; N h ; B 43 0 447 700 ;
+C -1 ; WX 249 ; N i ; B 58 -10 274 661 ;
+C -1 ; WX 224 ; N j ; B -63 -240 279 661 ;
+C -1 ; WX 426 ; N k ; B 43 0 483 700 ;
+C -1 ; WX 253 ; N l ; B 62 -10 288 700 ;
+C -1 ; WX 612 ; N m ; B 43 0 605 460 ;
+C -1 ; WX 455 ; N n ; B 43 0 447 460 ;
+C -1 ; WX 442 ; N o ; B 60 -10 436 460 ;
+C -1 ; WX 458 ; N p ; B -10 -230 454 460 ;
+C -1 ; WX 307 ; N r ; B 43 0 365 457 ;
+C -1 ; WX 382 ; N s ; B 13 -10 394 460 ;
+C -1 ; WX 271 ; N t ; B 86 -10 321 600 ;
+C -1 ; WX 455 ; N u ; B 61 -10 465 450 ;
+C -1 ; WX 370 ; N v ; B 82 0 436 450 ;
+C -1 ; WX 568 ; N w ; B 90 0 627 450 ;
+C -1 ; WX 455 ; N y ; B 61 -240 465 450 ;
+C -1 ; WX 278 ; N bar ; B 108 400 170 750 ;
+C -1 ; WX 455 ; N eng ; B 43 -163 447 460 ;
+C -1 ; WX 462 ; N Aring ; B 47 -10 442 685 ;
+C -1 ; WX 462 ; N AE ; B 57 -10 472 661 ;
+C -1 ; WX 442 ; N Oslash ; B 60 -10 467 655 ;
+C -1 ; WX 462 ; N aring ; B 57 -10 472 685 ;
+C -1 ; WX 690 ; N ae ; B 49 -10 686 460 ;
+C -1 ; WX 460 ; N eth ; B 54 -10 540 700 ;
+C -1 ; WX 442 ; N odieresis ; B 60 -10 467 655 ;
+C -1 ; WX 442 ; N oslash ; B 13 -47 482 497 ;
+EndCharMetrics
+EndFontMetrics

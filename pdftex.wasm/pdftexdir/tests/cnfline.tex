@@ -1,0 +1,13 @@
+% $Id: cnfline.tex 51830 2019-08-06 23:33:17Z karl $
+% Public domain. Test file for --cnf-line.
+% Originally written 2019 by Karl Berry.
+
+\catcode`\{=1 \catcode`\}=2 % can run under -ini
+
+\write-1{the idea is to write a message longer than the default
+         max-print-line (those hyphens are really underscores).} 
+\end
+
+% with the default max_print_line, we get:
+%   the idea is to write a message longer than the default max-print-line (those hy
+%   phens are really underscores).

@@ -1,0 +1,7 @@
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**bug73
+(./bug73.tex
+\everyvbox->\relax 
+ )
+No pages of output.

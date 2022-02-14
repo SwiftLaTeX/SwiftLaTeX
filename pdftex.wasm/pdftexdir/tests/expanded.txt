@@ -1,0 +1,61 @@
+START
+EXPANDED TEST 1
+> \expanded=\expanded.
+l.13 \show\expanded
+                   
+
+EXPANDED TEST 2
+> \ccc=macro:
+->xx,x.
+l.20 \show\ccc
+              
+
+EXPANDED TEST 3: the
+xx,123
+EXPANDED TEST 4: macro param
+> \ddd=macro:
+#1->#1.
+l.29 \show\ddd
+              
+
+EXPANDED TEST 5: torture
+> ##,\aaa ,\aaa .
+l.34 ...panded{#,\noexpand\aaa,\unexpanded{\aaa}}}
+                                                  
+
+> ##,##.
+l.35 ...s\expandafter{\expanded{#,\unexpanded{#}}}
+                                                  
+
+> \aaa .
+l.36 ...fter{\expanded\expandafter{\noexpand\aaa}}
+                                                  
+
+> x.
+l.37 ...{\expanded\expandafter{\unexpanded{\aaa}}}
+                                                  
+
+> xx\aaa .
+<inserted text> {xx\aaa }
+                         
+l.38 ...pand\aaa\noexpand\noexpand\noexpand\aaa}}}
+                                                  
+
+> \aaa .
+<inserted text> {\aaa }
+                       
+l.40 \showtokens\expanded{{\the\toks0}}
+                                       
+
+> \egroup=end-group character }.
+<inserted text> \show \egroup 
+                              
+l.41 \expanded\bgroup\show\egroup}
+                                  
+
+> \foo=macro:
+->##.
+l.43 \show\foo
+              
+
+END

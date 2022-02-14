@@ -1,0 +1,182 @@
+{
+  "document": {
+    "command": "document"
+  },
+  "table": {
+    "command": "table"
+  },
+  "description": {
+    "command": "description",
+    "snippet": "\n\t\\item[$1] $0"
+  },
+  "enumerate": {
+    "command": "enumerate",
+    "snippet": "\n\t\\item $0"
+  },
+  "itemize": {
+    "command": "itemize",
+    "snippet": "\n\t\\item $0"
+  },
+  "math": {
+    "command": "math"
+  },
+  "displaymath": {
+    "command": "displaymath"
+  },
+  "split": {
+    "command": "split"
+  },
+  "array{}": {
+    "command": "array",
+    "detail": "array{cols}",
+    "snippet": "{${1:cols}}"
+  },
+  "subarray{}": {
+    "command": "subarray",
+    "detail": "subarray{align}",
+    "snippet": "{${1:align}}"
+  },
+  "eqnarray": {
+    "command": "eqnarray"
+  },
+  "equation": {
+    "command": "equation"
+  },
+  "equation*": {
+    "command": "equation*"
+  },
+  "subequations": {
+    "command": "subequations"
+  },
+  "subequations*": {
+    "command": "subequations*"
+  },
+  "multline": {
+    "command": "multline"
+  },
+  "multline*": {
+    "command": "multline*"
+  },
+  "gather": {
+    "command": "gather"
+  },
+  "gather*": {
+    "command": "gather*"
+  },
+  "gathered": {
+    "command": "gathered"
+  },
+  "align": {
+    "command": "align"
+  },
+  "align*": {
+    "command": "align*"
+  },
+  "aligned": {
+    "command": "aligned"
+  },
+  "alignedat": {
+    "command": "alignedat"
+  },
+  "flalign": {
+    "command": "flalign"
+  },
+  "flalign*": {
+    "command": "flalign*"
+  },
+  "xalignat": {
+    "command": "xalignat"
+  },
+  "xalignat*": {
+    "command": "xalignat*"
+  },
+  "matrix": {
+    "command": "matrix"
+  },
+  "bmatrix": {
+    "command": "bmatrix"
+  },
+  "Bmatrix": {
+    "command": "Bmatrix"
+  },
+  "pmatrix": {
+    "command": "pmatrix"
+  },
+  "vmatrix": {
+    "command": "vmatrix"
+  },
+  "Vmatrix": {
+    "command": "Vmatrix"
+  },
+  "smallmatrix": {
+    "command": "smallmatrix"
+  },
+  "definition": {
+    "command": "definition"
+  },
+  "example": {
+    "command": "example"
+  },
+  "remark": {
+    "command": "remark"
+  },
+  "lemma": {
+    "command": "lemma"
+  },
+  "theorem": {
+    "command": "theorem"
+  },
+  "corollary": {
+    "command": "corollary"
+  },
+  "proposition": {
+    "command": "proposition"
+  },
+  "proof": {
+    "command": "proof"
+  },
+  "cases": {
+    "command": "cases"
+  },
+  "center": {
+    "command": "center"
+  },
+  "flushleft": {
+    "command": "flushleft"
+  },
+  "flushright": {
+    "command": "flushright"
+  },
+  "minipage": {
+    "command": "minipage"
+  },
+  "quotation": {
+    "command": "quotation"
+  },
+  "quote": {
+    "command": "quote"
+  },
+  "verbatim": {
+    "command": "verbatim"
+  },
+  "verse": {
+    "command": "verse"
+  },
+  "picture": {
+    "command": "picture"
+  },
+  "tabbing": {
+    "command": "tabbing"
+  },
+  "tabular{}": {
+    "command": "tabular",
+    "detail": "tabular{cols}",
+    "snippet": "{${1:cols}}"
+  },
+  "thebibliography": {
+    "command": "thebibliography"
+  },
+  "titlepage": {
+    "command": "titlepage"
+  }
+}

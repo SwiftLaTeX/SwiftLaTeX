@@ -1,0 +1,35 @@
+#! /bin/sh -vx
+# $Id$
+# Copyright 2017-2018 Karl Berry <tex-live@tug.org>#
+# Copyright 2013 Peter Breitenlohner <tex-live@tug.org>
+# You may freely use, modify and/or distribute this file.
+
+LC_ALL=C; export LC_ALL;  LANGUAGE=C; export LANGUAGE
+
+TEXMFCNF=$srcdir/../kpathsea; export TEXMFCNF
+TEXINPUTS=$srcdir/pdftexdir/tests:$srcdir/tests; export TEXINPUTS;
+TEXFONTS=$srcdir/pdftexdir/tests; export TEXFONTS
+
+testsrc=$srcdir/pdftexdir/tests
+
+failed=
+
+echo "*** ttf2afm postV3.ttf" \
+	&& ./ttf2afm postV3.ttf \
+	| sed '/Converted at/d' >postV3.afm \
+	&& diff $testsrc/postV3.afm postV3.afm \
+	&& echo && echo "postV3 tests OK" && echo \
+	|| failed="$failed postV3"
+
+echo "*** ttf2afm postV7.ttf" \
+	&& ./ttf2afm postV7.ttf \
+	| sed '/Converted at/d' >postV7.afm \
+	&& diff $testsrc/postV7.afm postV7.afm \
+	&& echo && echo "postV7 tests OK" && echo \
+	|| failed="$failed postV7"
+
+test -z "$failed" && exit 0
+echo
+echo "failed tests:$failed"
+exit 1
+

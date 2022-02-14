@@ -1,0 +1,12 @@
+/dist/
+/build/
+# No longer generated
+/web-snack-libraries.tar.gz
+node_modules/
+.env
+win32/
+public/upload/
+sync.sh
+analytics_db
+sharelink_db
+.idea/

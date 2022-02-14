@@ -1,0 +1,153 @@
+{ pdftex.defines: Web2C pseudo-Pascal identifiers for pdfTeX.
+Copyright 1996-2018 Han The Thanh, <thanh@pdftex.org>
+
+This file is part of pdfTeX.
+
+pdfTeX is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+pdfTeX is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+}
+
+{ pdftex.defines: additions for pdfTeX }
+@define type longword;
+@define procedure fillcsinfo();
+@define function getcharsigslot();
+@define procedure outputfileinfo;
+@define procedure outputloc();
+
+{ macros from pdftex.h }
+@define function pdfcharmarked();
+@define function getlpcode();
+@define function getrpcode();
+@define function getefcode();
+@define function getknbscode();
+@define function getstbscode();
+@define function getshbscode();
+@define function getknbccode();
+@define function getknaccode();
+@define function texbopenin();
+@define function vfbopenin ();
+@define procedure pdfmarkchar();
+@define procedure writepdf();
+@define procedure pdfassert();
+
+{ functions from mapfile.c }
+@define function hasfmentry();
+@define function isscalable();
+@define procedure checkextfm();
+@define procedure pdfmapfile();
+@define procedure pdfmapline();
+@define procedure pdfinitmapfile();
+
+{ functions from utils.c }
+@define procedure escapehex();
+@define procedure escapename();
+@define procedure escapestring();
+@define function extxnoverd();
+@define procedure getcreationdate;
+@define procedure getfiledump();
+@define procedure getfilemoddate();
+@define procedure getfilesize();
+@define procedure getmatch();
+@define procedure getmd5sum();
+@define function getresnameprefix;
+@define procedure initstarttime;
+@define function isquotebad;
+@define function makecstring();
+@define procedure matchstrings();
+@define procedure libpdffinish;
+@define procedure makepdftexbanner;
+@define procedure printcreationdate;
+@define procedure printmoddate;
+@define procedure printID();
+@define procedure printIDalt();
+@define procedure setjobid();
+@define procedure unescapehex();
+@define procedure writestreamlength();
+@define procedure removepdffile;
+@define procedure garbagewarning;
+@define function newcolorstack();
+@define function colorstackset();
+@define function colorstackpush();
+@define function colorstackpop();
+@define function colorstackcurrent();
+@define function colorstackused;
+@define function colorstackskippagestart();
+@define procedure checkpdfsave();
+@define procedure checkpdfrestore();
+@define procedure pdfshipoutbegin();
+@define procedure pdfshipoutend();
+@define function pdfsetmatrix();
+@define procedure matrixtransformpoint();
+@define procedure matrixtransformrect();
+@define function matrixused;
+@define procedure matrixrecalculate();
+@define function getllx;
+@define function getlly;
+@define function geturx;
+@define function getury;
+@define procedure allocvffnts;
+
+{ functions from vfpacket.c }
+@define function newvfpacket();
+@define function packetbyte;
+@define procedure startpacket();
+@define procedure storepacket();
+
+{ functions from writefont.c }
+@define procedure dopdffont();
+@define procedure writefontstuff;
+
+{ functions from writeimg.c }
+@define function checkimageb();
+@define function checkimagec();
+@define function checkimagei();
+@define function epdforigx();
+@define function epdforigy();
+@define function imageheight();
+@define function imagerotate();
+@define function imagepages();
+@define function imagecolordepth();
+@define function getimagegroupref();
+@define procedure setimagegroupref();
+@define function imagewidth();
+@define function imagexres();
+@define function imageyres();
+@define function ispdfimage();
+@define function ispngimage();
+@define function readimage();
+@define procedure deleteimage();
+@define procedure updateimageprocset();
+@define procedure writeimage();
+
+@define procedure dumpimagemeta;
+@define procedure undumpimagemeta();
+
+{ functions from writet3.c }
+@define function getpkcharwidth();
+
+{ functions from writezip.c }
+@define procedure writezip();
+
+{ functions from avlstuff.c }
+@define procedure avlputobj();
+@define function avlfindobj();
+
+{ functions from tounicode.c }
+@define procedure deftounicode();
+
+{ functions from pdftex.web (thanks Taco for the trick) }
+@define function autoexpandvf();
+
+{ end of pdftex.defines }
+{ vim: set syntax=web : }

@@ -1,0 +1,19 @@
+#! /bin/sh -vx
+# $Id$
+# Copyright 2017-2018 Karl Berry <tex-live@tug.org>
+# Copyright 2011-2013 Peter Breitenlohner <tex-live@tug.org>
+# You may freely use, modify and/or distribute this file.
+
+rm -rf pwprob.*
+cp "$srcdir/tests/wprob.tex" ./pwprob.tex || exit 1
+
+TEXMFCNF=$srcdir/../kpathsea; export TEXMFCNF
+
+# this command is expected to fail.
+./pdftex --ini --etex --file-line-error --interaction=nonstopmode pwprob.tex \
+&& exit 1
+
+grep '^\./pwprob\.tex:12: Could not open file NoSuchFile\.eps\.$' \
+  pwprob.log || exit 1
+
+exit 0
