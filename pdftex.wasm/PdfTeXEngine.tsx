@@ -30,7 +30,7 @@ export class CompileResult {
 	log: string = 'No log';
 }
 
-export class LaTeXEngine {
+export class PdfTeXEngine {
 	private latexWorker: Worker | undefined = undefined;
 	public latexWorkerStatus: EngineStatus = EngineStatus.Init;
 	constructor() {

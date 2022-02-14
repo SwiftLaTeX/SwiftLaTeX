@@ -32,6 +32,24 @@ engine.setEngineMainFile("main.tex");
 let r = await engine.compileLaTeX(); // r contains PDF binray and compilation log.
 ```
 
+## APIs
+1. async loadEngine(): Promise<void>.
+Load the webassembly engine.
+2. isReady(): boolean.
+Check whether the engine is ready to compile documents.
+3. writeMemFSFile(filename: string, srccode: string | Uint8Array).
+Upload source codes / assets to the engine.
+4. makeMemFSFolder(folder: string).
+Create a directory.
+5. setEngineMainFile(filename: string).
+Tell the engine which latex file is the entry file.
+6. compilePDF():Promise<CompileResult>.
+Start compiling LaTeX documents and return CompileResult.
+7. flushCache().
+Purge all the files uploaded.
+8. closeWorker().
+Shutdown the engine.
+
 ## Compile by yourself
 1. Get the emsdk repo
 ```
