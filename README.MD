@@ -1,22 +1,37 @@
-# Demo Website https://www.swiftlatex.com
+
 
 # SwiftLaTeX
 
+Demo Website https://www.swiftlatex.com
+
 ## Introduction for SwiftLaTeX
 
-SwiftLaTeX, a WYSIWYG WebAssembly client-side LaTeX Editor. All computation is done locally and files are stored in user-provided cloud storage. 
+SwiftLaTeX, LaTeX Engines in Browsers with optional WYSIWYG support. We are a big fan of WebAssembly and all computation is done locally.
 
 ## Main Features
 
-1. __Speed__. SwiftLaTeX engines run in browsers, all computation is done strictly locally. It makes SwiftLaTeX more responsive (i.e., faster compilation) and scalable.
-
-2. __WYSIWYG__. SwiftLaTeX provides a WYSIWYG viewer, allowing users to editing PDF output directly.
-
-3. __Flexible Storage Backend__. SwiftLaTeX stores files in user-provided cloud storage or potentially self-hosting S3/Minio. 
-
-4. __Realtime collaboration__. Send a secret link to your friend to start real-time collaboration.
+1. __Speed__. SwiftLaTeX engines run in browsers, all computation is done strictly locally.
+2. __Library Support__. Simply include a script tag and use PdfTeX or XeTeX in your own webpage.
+3. __Compatibility__. Produce exact same output you would get from TexLive or MikTeX.
+4. __WYSIWYG__. SwiftLaTeX provides an optional WYSIWYG editor, allowing users to editing PDF output directly (WIP).
 
 ## Installation Guide
+1. Download latest release from Github. Extract the files and put them into your webpage directory.
+2. Include the src tag in your page.
+```<script src="PdfTeXEngine.js"></script>```
+3. Initialize the engine.
+```const engine = new LaTeXEngine();
+await engine.loadEngine();
+```
+4. Load the tex files/pictures/fonts to engines.
+```const engine = new LaTeXEngine();
+engine.writeMemFSFile("main.tex", "\documentclass{...");
+```
+5. Set the main file and fire the engine.
+```
+engine.setEngineMainFile("main.tex");
+let r = await engine.compileLaTeX(); // r contains PDF binray and compilation log.
+```
 
 #### Compile by yourself
 If you do not have node and yarn yet, try the following commands first.
