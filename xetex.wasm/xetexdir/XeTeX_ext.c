@@ -1316,17 +1316,16 @@ findnativefont(unsigned char* uname, integer scaled_size)
             if (font != NULL) {
                 loadedfontdesignsize = D2Fix(getDesignSize(font));
 
-                /* This is duplicated in XeTeXFontMgr::findFont! */
-                setReqEngine(0);
-                if (varString) {
-                    if (strncmp(varString, "/AAT", 4) == 0)
-                        setReqEngine('A');
-                    else if ((strncmp(varString, "/OT", 3) == 0) || (strncmp(varString, "/ICU", 4) == 0))
-                        setReqEngine('O');
-                    else if (strncmp(varString, "/GR", 3) == 0)
-                        setReqEngine('G');
-                }
-
+                // /* This is duplicated in XeTeXFontMgr::findFont! */
+                // setReqEngine(0);
+                // if (varString) {
+                //     if (strncmp(varString, "/AAT", 4) == 0)
+                //         setReqEngine('A');
+                //     else if ((strncmp(varString, "/OT", 3) == 0) || (strncmp(varString, "/ICU", 4) == 0))
+                //         setReqEngine('O');
+                //     else if (strncmp(varString, "/GR", 3) == 0)
+                //         setReqEngine('G');
+                // }
 
                 rval = loadOTfont(0, font, scaled_size, featString);
                 if (rval == NULL)
