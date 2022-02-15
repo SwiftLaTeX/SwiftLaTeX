@@ -5,3 +5,4 @@ swiftlatexpdftex.wasm
 swiftlatexpdftex.js
 swiftlatexdvipdfm.js
 swiftlatexdvipdfm.wasm
+*.Identifier
