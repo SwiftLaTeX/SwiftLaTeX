@@ -28,6 +28,11 @@
             width: 100%;
             border: 0;
         }
+        #demoselector {
+            color: red;
+            border-color: red;
+            display: inline;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css" />
     <!-- Favicon
@@ -92,8 +97,8 @@
     </section>
 
     <div class="docs-section" id="demo">
-        <h6 class="docs-header">Select a demo (may require about 5MB bandwidth):</h6>
-        <select class="u-full-width" id="demoselector" onchange="selectDemo(this)">
+        <h6 class="docs-header">Select a demo:
+        <select id="demoselector" onchange="selectDemo(this)">
             <option value="pdftex_basic.html" selected="selected">PdfTeX basic demo (IEEEConf)</option>
             <option value="xetex_basic.html">XeTeX basic demo (acmart)</option>
             <option value="xetex_cjk.html">XeTeX Chinese/Japanese demo</option>
@@ -103,7 +108,8 @@
             <option value="pdftex_utf8.html">PdfTeX UTF8 demo</option>
             <option value="pdftex_tikz.html">PdfTeX Tikz demo</option>
             <option value="pdftex_cv.html">PdfTeX CV demo</option>
-        </select>
+        </select></h6>
+        <h6>It may take a few minutes to download template files for the first time. Please be patient</h6>
         <iframe src="pdftex_basic.html" id="demoframe" scrolling="no"></iframe>
     </div>
 
