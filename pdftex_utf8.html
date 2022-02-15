@@ -4,7 +4,7 @@
     <!-- Basic Page Needs
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <meta charset="utf-8">
-    <title>PdfTeX basic example</title>
+    <title>PdfTeX UTF8 example</title>
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -94,10 +94,7 @@ ttfamily: zażółć gęsią jaźń \\
         compileBtn.disabled = true;
         compileBtn.innerHTML = "Compiling...";
 
-        let downloadReq = await fetch('images/troll.jpg');
-        let imageBlob = await downloadReq.arrayBuffer();
         globalEn.writeMemFSFile("main.tex", editor.getValue());
-        globalEn.writeMemFSFile("troll.jpg", new Uint8Array(imageBlob));
         globalEn.setEngineMainFile("main.tex");
         let r = await globalEn.compileLaTeX();
         consoleOutput.innerHTML = r.log;

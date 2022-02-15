@@ -329,7 +329,7 @@ IEEE conference templates contain guidance text for composing and formatting con
 
 		<button type="button" onclick="compile()" id="compilebtn" disabled>Initializing</button>
 
-		<h5>Due to the way Bibtex works, you may need to compile twice to see correct reference numbers in the PDF.</h5>
+		<h5>Due to the way Bibtex works, you may need to compile at least three times to see correct reference numbers in the PDF.</h5>
     </div>
 
 </div>
@@ -368,7 +368,7 @@ IEEE conference templates contain guidance text for composing and formatting con
         compileBtn.disabled = true;
         compileBtn.innerHTML = "Compiling...";
 
-        let downloadReq = await fetch('images/troll.jpg');
+        let downloadReq = await fetch('assets/troll.jpg');
         let imageBlob = await downloadReq.arrayBuffer();
         globalEn.writeMemFSFile("main.tex", editor.getValue());
         globalEn.writeMemFSFile("troll.jpg", new Uint8Array(imageBlob));

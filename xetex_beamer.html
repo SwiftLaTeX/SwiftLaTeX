@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Basic Page Needs
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>XeTeX basic example</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Mobile Specific Metas
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style type="text/css" media="screen">
+        #editor {
+            width: 100%;
+            height: 400px;
+        }
+        pre {
+    		white-space: pre-wrap;
+    		max-height: 400px;
+    		overflow-y: scroll;
+		}
+    </style>
+</head>
+<body class="code-snippets-visible">
+
+    <div class="docs-section" id="demo">
+        <div id="editor">% This text is proprietary.
+% It's a part of presentation made by myself.
+% It may not used commercial.
+% The noncommercial use such as private and study is free
+% May 2007
+% Author: Sascha Frank 
+% University Freiburg 
+% www.informatik.uni-freiburg.de/~frank/
+%
+% 
+\documentclass{beamer}
+\usepackage{beamerthemeshadow}
+\begin{document}
+\title{Beamer Class well nice}  
+\author{Sascha Frank}
+\date{\today} 
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}\frametitle{Table of contents}\tableofcontents
+\end{frame} 
+
+
+\section{Section no.1} 
+\begin{frame}\frametitle{Title} 
+Each frame should have a title.
+\end{frame}
+\subsection{Subsection no.1.1  }
+\begin{frame} 
+Without title somethink is missing. 
+\end{frame}
+
+
+\section{Section no. 2} 
+\subsection{Lists I}
+\begin{frame}\frametitle{unnumbered lists}
+\begin{itemize}
+\item Introduction to  \LaTeX  
+\item Course 2 
+\item Termpapers and presentations with \LaTeX 
+\item Beamer class
+\end{itemize} 
+\end{frame}
+
+\begin{frame}\frametitle{lists with pause}
+\begin{itemize}
+\item Introduction to  \LaTeX \pause 
+\item Course 2 \pause 
+\item Termpapers and presentations with \LaTeX \pause 
+\item Beamer class
+\end{itemize} 
+\end{frame}
+
+\subsection{Lists II}
+\begin{frame}\frametitle{numbered lists}
+\begin{enumerate}
+\item Introduction to  \LaTeX  
+\item Course 2 
+\item Termpapers and presentations with \LaTeX 
+\item Beamer class
+\end{enumerate}
+\end{frame}
+
+\begin{frame}\frametitle{numbered lists with pause}
+\begin{enumerate}
+\item Introduction to  \LaTeX \pause 
+\item Course 2 \pause 
+\item Termpapers and presentations with \LaTeX \pause 
+\item Beamer class
+\end{enumerate}
+\end{frame}
+
+\section{Section no.3} 
+\subsection{Tables}
+\begin{frame}\frametitle{Tables}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Date} & \textbf{Instructor} & \textbf{Title} \\
+\hline
+WS 04/05 & Sascha Frank & First steps with  \LaTeX  \\
+\hline
+SS 05 & Sascha Frank & \LaTeX \ Course serial \\
+\hline
+\end{tabular}
+\end{frame}
+
+
+\begin{frame}\frametitle{Tables with pause}
+\begin{tabular}{c c c}
+A & B & C \\ 
+\pause 
+1 & 2 & 3 \\  
+\pause 
+A & B & C \\ 
+\end{tabular} 
+\end{frame}
+
+
+\section{Section no. 4}
+\subsection{blocs}
+\begin{frame}\frametitle{blocs}
+
+\begin{block}{title of the bloc}
+bloc text
+\end{block}
+
+\begin{exampleblock}{title of the bloc}
+bloc text
+\end{exampleblock}
+
+
+\begin{alertblock}{title of the bloc}
+bloc text
+\end{alertblock}
+\end{frame}
+
+\section{Section no. 5}
+\subsection{split screen}
+
+\begin{frame}\frametitle{splitting screen}
+\begin{columns}
+\begin{column}{5cm}
+\begin{itemize}
+\item Beamer 
+\item Beamer Class 
+\item Beamer Class Latex 
+\end{itemize}
+\end{column}
+\begin{column}{5cm}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Instructor} & \textbf{Title} \\
+\hline
+Sascha Frank &  \LaTeX \ Course 1 \\
+\hline
+Sascha Frank &  Course serial  \\
+\hline
+\end{tabular}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+\end{document}
+
+
+
+        </div>
+
+        <div id="pdfbox">
+        </div>
+
+        <h4>Console Output:</h4>
+        <pre id="console">
+		</pre>
+
+		<button type="button" onclick="compile()" id="compilebtn" disabled>Initializing</button>
+
+		<h5>Due to the way beamer works, you may need to compile at least twice to see correct content tables in the PDF.</h5>
+    </div>
+
+</div>
+
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="XeTeXEngine.js"></script>
+<script src="DvipdfmxEngine.js"></script>
+<script>
+
+    const compileBtn = document.getElementById("compilebtn");
+    const consoleOutput = document.getElementById("console");
+    const pdfbox = document.getElementById("pdfbox");
+
+    const editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/latex");
+    editor.session.setUseWrapMode(true);
+    editor.setFontSize(18);
+    
+    const globalEn = new XeTeXEngine();
+    const dvipdfmxEn= new DvipdfmxEngine();
+
+    async function init() {
+      await globalEn.loadEngine();
+      await dvipdfmxEn.loadEngine();
+      compileBtn.innerHTML = "Compile";
+      compileBtn.disabled = false;
+    }
+
+    async function compile() {
+        if(!globalEn.isReady() || !dvipdfmxEn.isReady()) {
+            console.log("Engine not ready yet");
+            return;
+        }
+        compileBtn.disabled = true;
+        compileBtn.innerHTML = "Compiling...";
+
+        globalEn.writeMemFSFile("main.tex", editor.getValue());
+        globalEn.setEngineMainFile("main.tex");
+        let r = await globalEn.compileLaTeX();
+        consoleOutput.innerHTML = r.log;
+        compileBtn.innerHTML = "Compile";
+        compileBtn.disabled = false;
+        if (r.status === 0) {
+            dvipdfmxEn.writeMemFSFile("main.xdv", r.pdf);
+            dvipdfmxEn.setEngineMainFile("main.xdv");
+            let r1 = await dvipdfmxEn.compilePDF();
+            const pdfblob = new Blob([r1.pdf], {type : 'application/pdf'});
+            const objectURL = URL.createObjectURL(pdfblob);
+            setTimeout(()=>{
+                URL.revokeObjectURL(objectURL);
+            }, 30000);
+            console.log(objectURL);
+            pdfbox.innerHTML = `<embed src="${objectURL}" width="100%" height="400px" type="application/pdf">`;
+        }
+    }
+
+    init();
+
+</script>
+</html>

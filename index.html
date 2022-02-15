@@ -92,9 +92,14 @@
     </section>
 
     <div class="docs-section" id="demo">
-        <h6 class="docs-header">Select a demo:</h6>
+        <h6 class="docs-header">Select a demo (may require about 5MB bandwidth):</h6>
         <select class="u-full-width" id="demoselector" onchange="selectDemo(this)">
             <option value="pdftex_basic.html" selected="selected">PdfTeX basic demo (IEEEConf)</option>
+            <option value="xetex_basic.html">XeTeX basic demo (acmart)</option>
+            <option value="xetex_cjk.html">XeTeX Chinese/Japanese demo</option>
+            <option value="xetex_tikz.html">XeTeX Tikz demo</option>
+            <option value="xetex_beamer.html">XeTeX Beamer demo</option>
+            <option value="pdftex_beamer.html">PdfTeX Beamer demo</option>
             <option value="pdftex_utf8.html">PdfTeX UTF8 demo</option>
             <option value="pdftex_tikz.html">PdfTeX Tikz demo</option>
         </select>
@@ -176,7 +181,7 @@ let r = await engine.compileLaTeX(); // r contains PDF binray and compilation lo
 
     function selectDemo(selectObject) {
         const value = selectObject.value;
-        iframeobj.src=value;
+        iframeobj.src = value;
     }
 
     function resizeIframe(obj){

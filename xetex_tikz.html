@@ -4,7 +4,7 @@
     <!-- Basic Page Needs
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <meta charset="utf-8">
-    <title>PdfTeX Tikz example</title>
+    <title>XeTeX basic example</title>
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -215,6 +215,7 @@ An isometric view of a random city.
 \end{document}
 
 
+
         </div>
 
         <div id="pdfbox">
@@ -226,7 +227,7 @@ An isometric view of a random city.
 
 		<button type="button" onclick="compile()" id="compilebtn" disabled>Initializing</button>
 
-		<h5>This example is very compute intensive. Please be patient.</h5>
+		<h5>Due to the way Bibtex works, you may need to compile at least three times to see correct reference numbers in the PDF.</h5>
     </div>
 
 </div>
@@ -236,7 +237,8 @@ An isometric view of a random city.
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js" type="text/javascript" charset="utf-8"></script>
-<script src="PdfTeXEngine.js"></script>
+<script src="XeTeXEngine.js"></script>
+<script src="DvipdfmxEngine.js"></script>
 <script>
 
     const compileBtn = document.getElementById("compilebtn");
@@ -249,16 +251,18 @@ An isometric view of a random city.
     editor.session.setUseWrapMode(true);
     editor.setFontSize(18);
     
-    const globalEn = new PdfTeXEngine();
+    const globalEn = new XeTeXEngine();
+    const dvipdfmxEn= new DvipdfmxEngine();
 
     async function init() {
       await globalEn.loadEngine();
+      await dvipdfmxEn.loadEngine();
       compileBtn.innerHTML = "Compile";
       compileBtn.disabled = false;
     }
 
     async function compile() {
-        if(!globalEn.isReady()) {
+        if(!globalEn.isReady() || !dvipdfmxEn.isReady()) {
             console.log("Engine not ready yet");
             return;
         }
@@ -272,7 +276,10 @@ An isometric view of a random city.
         compileBtn.innerHTML = "Compile";
         compileBtn.disabled = false;
         if (r.status === 0) {
-            const pdfblob = new Blob([r.pdf], {type : 'application/pdf'});
+            dvipdfmxEn.writeMemFSFile("main.xdv", r.pdf);
+            dvipdfmxEn.setEngineMainFile("main.xdv");
+            let r1 = await dvipdfmxEn.compilePDF();
+            const pdfblob = new Blob([r1.pdf], {type : 'application/pdf'});
             const objectURL = URL.createObjectURL(pdfblob);
             setTimeout(()=>{
                 URL.revokeObjectURL(objectURL);
