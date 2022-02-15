@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Basic Page Needs
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>PdfTeX basic example</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Mobile Specific Metas
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style type="text/css" media="screen">
+        #editor {
+            width: 100%;
+            height: 400px;
+        }
+        pre {
+    		white-space: pre-wrap;
+    		max-height: 400px;
+    		overflow-y: scroll;
+		}
+    </style>
+</head>
+<body class="code-snippets-visible">
+
+    <div class="docs-section" id="demo">
+        <div id="editor">% Random city
+% Author: Pascal Seppecher
+\documentclass[tikz,border=10pt]{standalone}
+%%%<
+\usepackage{verbatim}
+%%%>
+\begin{comment}
+:Title: Random city
+:Tags: Background;Coordinate calculations;Scopes;3D;Random;Architecture
+:Author: Pascal Seppecher
+:Slug: city
+
+An isometric view of a random city.
+\end{comment}
+\usetikzlibrary{backgrounds}
+\usepackage{ifthen}
+% The blue print color
+\definecolor{blueprintcolor}{RGB}{20,20,100}
+
+% The shadow color
+\colorlet{shadow}{blueprintcolor!50!white}
+
+% The light color
+\colorlet{light}{white!90!blueprintcolor}
+
+% The background color
+\colorlet{background}{blueprintcolor}
+
+% The basic size of a block
+\newcommand\defaultside{0.6}
+
+% The height of a storey
+\newcommand\floorheight{0.08}
+
+% The minimum number of stories
+\newcommand\storeymin{20}
+
+% The maximum number of stories
+\newcommand\storeymax{40}
+
+% The width of a window
+\newcommand\window{0.05}
+
+% The angles of x,y-axes
+\newcommand\xaxis{210}
+\newcommand\yaxis{-30}
+
+% Facade style random list
+\pgfmathdeclarerandomlist{facade}{{\hlines}{\vlines}{\grid}{\grid}{\grid}}
+
+% Vertical thickness
+\newcommand\vthickness{thin}
+
+% Horizontal thickness
+\newcommand\hthickness{thin}
+
+% Selects at random the thickness of the horizontal lines
+\newcommand\setvthickness{
+  \pgfmathrandominteger{\alea}{0}{3}
+  \ifthenelse{\alea=0}{\renewcommand\vthickness{thick}}{}
+  \ifthenelse{\alea=1}{\renewcommand\vthickness{thin}}{}
+  \ifthenelse{\alea=2}{\renewcommand\vthickness{very thin}}{}
+  \ifthenelse{\alea=3}{\renewcommand\vthickness{ultra thin}}{}
+}
+
+% Selects at random the thickness of the vertical lines
+\newcommand\seththickness{
+  \pgfmathrandominteger{\alea}{0}{3}
+  \ifthenelse{\alea=0}{\renewcommand\hthickness{thick}}{}
+  \ifthenelse{\alea=1}{\renewcommand\hthickness{thin}}{}
+  \ifthenelse{\alea=2}{\renewcommand\hthickness{very thin}}{}
+  \ifthenelse{\alea=3}{\renewcommand\hthickness{ultra thin}}{}
+}
+
+% Draws vertical lines on each side of the block
+\newcommand\vlines[2]{
+  \pgfmathsetmacro\size{#1 * \floorheight}
+  \pgfmathsetmacro\max{#2/\window}
+  \foreach \col in {1,...,\max}
+  {
+    \pgfmathsetmacro\xx{-\col * \window}    
+    \draw[\vthickness,draw=shadow, shift={(\yaxis:\xx)}] (0,0)--(0,\size);
+    \draw[\vthickness,draw=light, shift={(\xaxis:\xx)}] (0,0)--(0,\size);
+  }  
+}
+
+% Draws horizontal lines on each side of the block
+\newcommand\hlines[2]{
+  \foreach \floor in {0,...,#1}
+  {
+    \pgfmathsetmacro\z{\floor * \floorheight}    
+    \draw[\hthickness,draw=shadow, shift={(90:\z)}] (150:#2)--(0,0);
+    \draw[\hthickness,draw=light, shift={(90:\z)}] (0,0) -- (30:#2);
+  }
+}
+
+% Draws horizontal and vertical lines on each side of the block
+\newcommand\grid[2]{
+  \vlines{#1}{#2}
+  \hlines{#1}  {#2}
+}
+
+% Draws a block at the specified position
+\newcommand\block[2]{
+  % Computes the height of the block
+  \pgfmathsetmacro\height{#2 * \floorheight}
+    
+  % Erases the background
+  \fill[fill=background]
+    (0,0) -- (150:#1) -- ++(0,\height) -- (0,\height) -- (0,0);
+  \fill[fill=background]
+    (0,0) -- (30:#1) -- ++(0,\height) -- (0,\height) -- (0,0);
+  
+  % Draws the facades
+  \facade{\stories}{#1}
+  
+  % Frames the facades
+  \draw[draw=shadow] (0,0) -- (150:#1) -- ++(0,\height) -- (0,\height) -- (0,0);
+  \draw[draw=light] (0,0) -- (30:#1) -- ++(0,\height) -- (0,\height) -- (0,0);
+  
+  % Draws the terrace
+  \fill[fill=background, draw=light,shift={(90:\height)}]
+    (0,0) -- (30:#1) -- (0,#1) --(150:#1)--(0,0);
+
+  %
+  \pgfmathrandominteger{\alea}{0}{3}
+  \ifthenelse{\alea=0}{
+  % Sometimes, adds more stores (= skyscraper)
+    \begin{scope}[shift={(0,\height)},shift={(0,0.05)}]
+      \pgfmathsetmacro\pside{#1-0.1}
+      \pgfmathrandominteger{\stories}{2}{\storeymax}
+      \block{\pside}{\stories}
+    \end{scope}  
+  }{}
+  
+  \ifthenelse{\alea=1}{
+  % Sometimes, draws a pyramid roof
+  \pyramid{\height}{#1}  
+  }{}
+}
+
+% Draws a basic block
+\newcommand\basicblock[3]{
+  % Selects a random facade style
+  \pgfmathrandomitem{\facade}{facade}
+  \setvthickness{}
+  \seththickness{}
+  
+  % Selects a random number of stores
+  \pgfmathrandominteger{\stories}{\storeymin}{\storeymax}
+  
+  \begin{scope}[shift={(\xaxis:#1)},shift={(\yaxis:#2)}]
+  \block{#3}{\stories}
+  \end{scope}
+}
+
+% Draws a pyramid roof
+\newcommand\pyramid[2]{
+  % Computes the side of the pyramid
+  \pgfmathsetmacro\pside{#2-0.1}
+
+  % Selects the height of the pyramid at random
+  \pgfmathparse{random()}
+  \pgfmathsetmacro\top{0.5+\pgfmathresult/3}
+
+  % Draws the pyramid
+  \begin{scope}[fill=background, draw=light,shift={(90:#1)},shift={(90:0.05)}]
+    \fill[draw=light] (0,0) -- (30:\pside) -- (0,\top) -- (150:\pside)--(0,0);
+    \draw (0,0) -- (0,\top);
+  \end{scope}
+}
+
+% Draws a random city of the specified dimensions
+\newcommand\city[2]{
+  \foreach \x in {1,...,#1}
+    \foreach \y in {1,...,#2}
+      {\basicblock{\x}{\y}{\defaultside}}
+}
+
+\begin{document} 
+% Draws a hundred blocks random city
+\begin{tikzpicture}[show background rectangle,
+  background rectangle/.style={fill=background}]
+    \city{5}{5}
+\end{tikzpicture}
+\end{document}
+
+
+        </div>
+
+        <div id="pdfbox">
+        </div>
+
+        <h4>Console Output:</h4>
+        <pre id="console">
+		</pre>
+
+		<button type="button" onclick="compile()" id="compilebtn" disabled>Initializing</button>
+
+		<h5>This example is very compute intensive. Please be patient.</h5>
+    </div>
+
+</div>
+
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="PdfTeXEngine.js"></script>
+<script>
+
+    const compileBtn = document.getElementById("compilebtn");
+    const consoleOutput = document.getElementById("console");
+    const pdfbox = document.getElementById("pdfbox");
+
+    const editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/latex");
+    editor.session.setUseWrapMode(true);
+    editor.setFontSize(18);
+    
+    const globalEn = new PdfTeXEngine();
+
+    async function init() {
+      await globalEn.loadEngine();
+      compileBtn.innerHTML = "Compile";
+      compileBtn.disabled = false;
+    }
+
+    async function compile() {
+        if(!globalEn.isReady()) {
+            console.log("Engine not ready yet");
+            return;
+        }
+        compileBtn.disabled = true;
+        compileBtn.innerHTML = "Compiling...";
+
+        let downloadReq = await fetch('images/troll.jpg');
+        let imageBlob = await downloadReq.arrayBuffer();
+        globalEn.writeMemFSFile("main.tex", editor.getValue());
+        globalEn.writeMemFSFile("troll.jpg", new Uint8Array(imageBlob));
+        globalEn.setEngineMainFile("main.tex");
+        let r = await globalEn.compileLaTeX();
+        consoleOutput.innerHTML = r.log;
+        compileBtn.innerHTML = "Compile";
+        compileBtn.disabled = false;
+        if (r.status === 0) {
+            const pdfblob = new Blob([r.pdf], {type : 'application/pdf'});
+            const objectURL = URL.createObjectURL(pdfblob);
+            setTimeout(()=>{
+                URL.revokeObjectURL(objectURL);
+            }, 30000);
+            console.log(objectURL);
+            pdfbox.innerHTML = `<embed src="${objectURL}" width="100%" height="400px" type="application/pdf">`;
+        }
+    }
+
+    init();
+
+</script>
+</html>

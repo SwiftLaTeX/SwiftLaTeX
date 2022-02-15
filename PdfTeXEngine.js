@@ -1,5 +1,4 @@
 "use strict";
-var exports = {};
 /********************************************************************************
  * Copyright (C) 2019 Elliott Wen.
  *
@@ -15,6 +14,7 @@ var exports = {};
  *
  * SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
  ********************************************************************************/
+var exports = {};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -52,6 +52,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+exports.PdfTeXEngine = exports.CompileResult = exports.EngineStatus = void 0;
 var EngineStatus;
 (function (EngineStatus) {
     EngineStatus[EngineStatus["Init"] = 1] = "Init";
@@ -69,12 +70,12 @@ var CompileResult = /** @class */ (function () {
     return CompileResult;
 }());
 exports.CompileResult = CompileResult;
-var LaTeXEngine = /** @class */ (function () {
-    function LaTeXEngine() {
+var PdfTeXEngine = /** @class */ (function () {
+    function PdfTeXEngine() {
         this.latexWorker = undefined;
         this.latexWorkerStatus = EngineStatus.Init;
     }
-    LaTeXEngine.prototype.loadEngine = function () {
+    PdfTeXEngine.prototype.loadEngine = function () {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
@@ -110,15 +111,15 @@ var LaTeXEngine = /** @class */ (function () {
             });
         });
     };
-    LaTeXEngine.prototype.isReady = function () {
+    PdfTeXEngine.prototype.isReady = function () {
         return this.latexWorkerStatus === EngineStatus.Ready;
     };
-    LaTeXEngine.prototype.checkEngineStatus = function () {
+    PdfTeXEngine.prototype.checkEngineStatus = function () {
         if (!this.isReady()) {
             throw Error('Engine is still spinning or not ready yet!');
         }
     };
-    LaTeXEngine.prototype.compilePDF = function () {
+    PdfTeXEngine.prototype.compileLaTeX = function () {
         return __awaiter(this, void 0, void 0, function () {
             var start_compile_time, res;
             var _this = this;
@@ -161,7 +162,7 @@ var LaTeXEngine = /** @class */ (function () {
         });
     };
     /* Internal Use */
-    LaTeXEngine.prototype.compileFormat = function () {
+    PdfTeXEngine.prototype.compileFormat = function () {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
@@ -202,19 +203,19 @@ var LaTeXEngine = /** @class */ (function () {
             });
         });
     };
-    LaTeXEngine.prototype.setEngineMainFile = function (filename) {
+    PdfTeXEngine.prototype.setEngineMainFile = function (filename) {
         this.checkEngineStatus();
         if (this.latexWorker !== undefined) {
             this.latexWorker.postMessage({ 'cmd': 'setmainfile', 'url': filename });
         }
     };
-    LaTeXEngine.prototype.writeMemFSFile = function (filename, srccode) {
+    PdfTeXEngine.prototype.writeMemFSFile = function (filename, srccode) {
         this.checkEngineStatus();
         if (this.latexWorker !== undefined) {
             this.latexWorker.postMessage({ 'cmd': 'writefile', 'url': filename, 'src': srccode });
         }
     };
-    LaTeXEngine.prototype.makeMemFSFolder = function (folder) {
+    PdfTeXEngine.prototype.makeMemFSFolder = function (folder) {
         this.checkEngineStatus();
         if (this.latexWorker !== undefined) {
             if (folder === '' || folder === '/') {
@@ -223,25 +224,25 @@ var LaTeXEngine = /** @class */ (function () {
             this.latexWorker.postMessage({ 'cmd': 'mkdir', 'url': folder });
         }
     };
-    LaTeXEngine.prototype.flushCache = function () {
+    PdfTeXEngine.prototype.flushCache = function () {
         this.checkEngineStatus();
         if (this.latexWorker !== undefined) {
             // console.warn('Flushing');
             this.latexWorker.postMessage({ 'cmd': 'flushcache' });
         }
     };
-    LaTeXEngine.prototype.closeWorker = function () {
+    PdfTeXEngine.prototype.setTexliveEndpoint = function (url) {
+        if (this.latexWorker !== undefined) {
+            this.latexWorker.postMessage({ 'cmd': 'settexliveurl', 'url': url });
+            this.latexWorker = undefined;
+        }
+    };
+    PdfTeXEngine.prototype.closeWorker = function () {
         if (this.latexWorker !== undefined) {
             this.latexWorker.postMessage({ 'cmd': 'grace' });
             this.latexWorker = undefined;
         }
     };
-    LaTeXEngine.prototype.setTexliveEndpoint = function (url) {
-        if (this.latexWorker !== undefined) {
-            this.latexWorker.postMessage({ 'cmd': 'settexlive', 'url': url });
-            this.latexWorker = undefined;
-        }
-    };
-    return LaTeXEngine;
+    return PdfTeXEngine;
 }());
-exports.LaTeXEngine = LaTeXEngine;
+exports.PdfTeXEngine = PdfTeXEngine;

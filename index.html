@@ -23,11 +23,10 @@
     <link rel="stylesheet" href="css/skeleton.css">
     <link rel="stylesheet" href="css/custom.css">
     <link rel="stylesheet" href="css/nprogress.css">
-
     <style type="text/css" media="screen">
-        #editor {
+        #demoframe {
             width: 100%;
-            height: 300px;
+            border: 0;
         }
     </style>
 
@@ -52,8 +51,7 @@
                 <li class="navbar-item"><a class="navbar-link" href="#demo">Demo</a></li>
                 <li class="navbar-item"><a class="navbar-link" href="#install">Installation</a></li>
                 <li class="navbar-item"><a class="navbar-link" href="#doc">APIs</a></li>
-                <li class="navbar-item"><a class="navbar-link" href="#doc">XeTeX</a></li>
-                <li class="navbar-item"><a class="navbar-link" href="#doc">WYSIWYG Editor</a></li>
+                <!-- <li class="navbar-item"><a class="navbar-link" href="#doc">WYSIWYG Editor</a></li> -->
             </ul>
         </div>
     </nav>
@@ -85,7 +83,7 @@
             </div>
             <div class="four columns value-prop">
                 <h2>Open Source</h2>
-                Completely Open Source. You can find the code on GitHub.
+                Completely Open Source. You can find the code on <a href="https://github.com/SwiftLaTeX/SwiftLaTeX/">GitHub</a>.
             </div>
 
         </div>
@@ -94,50 +92,13 @@
     </section>
 
     <div class="docs-section" id="demo">
-        <h6 class="docs-header">Demo</h6>
-        <div id="editor">\documentclass{IEEEconf}
-\usepackage{graphicx}
-
-\begin{document}
-
-\title{Introduction to \LaTeX{}}
-\author{Author's Name}
-
-\maketitle
-
-\begin{abstract}
-The abstract text goes here.
-\end{abstract}
-
-\section{Introduction}
-Here is the text of your introduction.
-
-\begin{equation}
-\label{simple_equation}
-\alpha = \sqrt{ \beta }
-\end{equation}
-
-\includegraphics[width=0.5\textwidth]{troll.jpg}
-
-\subsection{Subsection Heading Here}
-Write your subsection text here.
-
-
-\section{Conclusion}
-Write your conclusion here.
-
-\end{document}
-        </div>
-
-        <div id="pdfbox">
-        </div>
-
-        <pre><code id="console">Console Output:
-</code></pre>
-
-        <a class="button button-primary" id="compilebtn"
-               onclick="compile()">Compile</a>
-
+        <h6 class="docs-header">Select a demo:</h6>
+        <select class="u-full-width" id="demoselector" onchange="selectDemo(this)">
+            <option value="pdftex_basic.html" selected="selected">PdfTeX basic demo (IEEEConf)</option>
+            <option value="pdftex_utf8.html">PdfTeX UTF8 demo</option>
+            <option value="pdftex_tikz.html">PdfTeX Tikz demo</option>
+        </select>
+        <iframe src="pdftex_basic.html" id="demoframe" scrolling="no"></iframe>
     </div>
 
     <div class="docs-section" id="install">
@@ -186,7 +147,7 @@ let r = await engine.compileLaTeX(); // r contains PDF binray and compilation lo
                 <li>setEngineMainFile(filename: string).
                     <ul>Tell the engine which latex file is the entry file.</ul>
                 </li>
-                <li>compilePDF():Promise&lt;CompileResult&gt;.
+                <li>compileLaTeX():Promise&lt;CompileResult&gt;.
                     <ul>Start compiling LaTeX documents and return CompileResult.</ul>
                 </li>
                 <li>flushCache().
@@ -210,43 +171,17 @@ let r = await engine.compileLaTeX(); // r contains PDF binray and compilation lo
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js" type="text/javascript" charset="utf-8"></script>
-<script src="PdfTeXEngine.js"></script>
 <script>
+    const iframeobj = document.getElementById("demoframe");
 
-    const editor = ace.edit("editor");
-    editor.setTheme("ace/theme/monokai");
-    editor.session.setMode("ace/mode/latex");
-    const globalEn = new LaTeXEngine();
-    globalEn.loadEngine();
-
-    async function compile() {
-        if(!globalEn.isReady()) {
-            console.log("Engine not ready yet");
-            return;
-        }
-        document.getElementById("pdfbox").innerHTML = "";
-        document.getElementById("compilebtn").innerHTML = "Compiling...";
-        globalEn.flushCache();
-
-        let downloadReq = await fetch('images/troll.jpg');
-        let imageBlob = await downloadReq.arrayBuffer();
-        globalEn.writeMemFSFile("main.tex", editor.getValue());
-        globalEn.writeMemFSFile("troll.jpg", new Uint8Array(imageBlob));
-        globalEn.setEngineMainFile("main.tex");
-        let r = await globalEn.compilePDF();
-        document.getElementById("console").innerHTML = r.log;
-        document.getElementById("compilebtn").innerHTML = "Compile";
-        if (r.status === 0) {
-            const pdfblob = new Blob([r.pdf], {type : 'application/pdf'});
-            const objectURL = URL.createObjectURL(pdfblob);
-            setTimeout(()=>{
-                URL.revokeObjectURL(objectURL);
-            }, 30000);
-            console.log(objectURL);
-            document.getElementById("pdfbox").innerHTML = `<embed src="${objectURL}" width="100%" height="375" type="application/pdf">`;
-        }
+    function selectDemo(selectObject) {
+        const value = selectObject.value;
+        iframeobj.src=value;
     }
 
+    function resizeIframe(obj){
+     obj.style.height = (obj.contentWindow.document.body.scrollHeight + 25) + 'px';
+    }
+    setInterval(()=>{resizeIframe(iframeobj)}, 500);
 </script>
 </html>
