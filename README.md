@@ -22,12 +22,11 @@ SwiftLaTeX, LaTeX Engines in Browsers with optional WYSIWYG support. We are a bi
 ```
 3. Initialize the engine.
 ```
-const engine = new LaTeXEngine();
+const engine = new PdfTeXEngine();
 await engine.loadEngine();
 ```
 4. Load the tex files/pictures/fonts to engines.
 ```
-const engine = new LaTeXEngine();
 engine.writeMemFSFile("main.tex", "\documentclass{...");
 ```
 5. Set the main file and fire the engine.
