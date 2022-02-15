@@ -219,8 +219,8 @@ void removelastspace (void);
 void zpdfprintoctal (integer n);
 #define pdfprintoctal(n) zpdfprintoctal((integer) (n))
 #define pdfprintoctal_regmem
-void zpdfprintchar (internalfontnumber f,integer c,halfword p);
-#define pdfprintchar(f, c, p) zpdfprintchar((internalfontnumber) (f), (integer) (c), (halfword) (p))
+void zpdfprintchar (internalfontnumber f,integer c);
+#define pdfprintchar(f, c) zpdfprintchar((internalfontnumber) (f), (integer) (c))
 #define pdfprintchar_regmem
 void zpdfprint (strnumber s);
 #define pdfprint(s) zpdfprint((strnumber) (s))
@@ -635,8 +635,8 @@ strnumber zamakenamestring (alphafile f);
 strnumber zbmakenamestring (bytefile f);
 #define bmakenamestring(f) zbmakenamestring((bytefile) (f))
 #define bmakenamestring_regmem
-strnumber zwmakenamestring (wordfile f);
-#define wmakenamestring(f) zwmakenamestring((wordfile) (f))
+strnumber zzwmakenamestring (wordfile * f);
+#define wmakenamestring(f) zzwmakenamestring((wordfile *) &(f))
 #define wmakenamestring_regmem
 void scanfilename (void);
 #define scanfilename_regmem
@@ -978,8 +978,8 @@ integer zpacketreadunsigned (integer k);
 scaled zpacketscaled (integer k,scaled fs);
 #define packetscaled(k, fs) zpacketscaled((integer) (k), (scaled) (fs))
 #define packetscaled_regmem
-void zdovfpacket (internalfontnumber vff,eightbits c,halfword p);
-#define dovfpacket(vff, c, p) zdovfpacket((internalfontnumber) (vff), (eightbits) (c), (halfword) (p))
+void zdovfpacket (internalfontnumber vff,eightbits c);
+#define dovfpacket(vff, c) zdovfpacket((internalfontnumber) (vff), (eightbits) (c))
 #define dovfpacket_regmem
 void zpdfoutliteral (halfword p);
 #define pdfoutliteral(p) zpdfoutliteral((halfword) (p))

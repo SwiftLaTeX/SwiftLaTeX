@@ -1938,8 +1938,6 @@ getavail ( void )
     } 
   } 
   mem [p ].hh .v.RH = -268435455L ;
-  if ( curchrsig != 0 ) 
-  mem [p ].hh .me = curchrsig ;
 	;
 #ifdef STAT
   incr ( dynused ) ;
@@ -1957,7 +1955,6 @@ zflushlist ( halfword p )
     r = p ;
     do {
 	q = r ;
-      mem [r ].hh .me = 0 ;
       r = mem [r ].hh .v.RH ;
 	;
 #ifdef STAT
@@ -2579,10 +2576,9 @@ zpdfprintoctal ( integer n )
   } 
 } 
 void 
-zpdfprintchar ( internalfontnumber f , integer c , halfword p ) 
+zpdfprintchar ( internalfontnumber f , integer c ) 
 {
   pdfprintchar_regmem 
-  outputloc ( p , 1 ) ;
   pdfmarkchar ( f , c ) ;
   if ( ( c <= 32 ) || ( c == 92 ) || ( c == 40 ) || ( c == 41 ) || ( c > 127 ) 
   ) 
@@ -2979,8 +2975,6 @@ zpdfbeginobj ( integer i , integer pdfoslevel )
 {
   pdfbeginobj_regmem 
   checkpdfversion () ;
-  eqtb [29340 ].cint = 0 ;
-  eqtb [29360 ].cint = 0 ;
   pdfosprepareobj ( i , pdfoslevel ) ;
   if ( ! pdfosmode ) 
   {
@@ -3066,8 +3060,6 @@ zpdfbegindict ( integer i , integer pdfoslevel )
 {
   pdfbegindict_regmem 
   checkpdfversion () ;
-  eqtb [29340 ].cint = 0 ;
-  eqtb [29360 ].cint = 0 ;
   pdfosprepareobj ( i , pdfoslevel ) ;
   if ( ! pdfosmode ) 
   {
@@ -3355,7 +3347,6 @@ zappendptr ( halfword p , integer i )
 	
       avail = mem [q ].hh .v.RH ;
       mem [q ].hh .v.RH = -268435455L ;
-      mem [q ].hh .me = curchrsig ;
 	;
 #ifdef STAT
       incr ( dynused ) ;
@@ -3415,7 +3406,7 @@ zpdfcheckobj ( integer t , integer n )
   k = headtab [t ];
   while ( ( k != 0 ) && ( k != n ) ) k = objtab [k ].int1 ;
   if ( k == 0 ) 
-  pdferror ( 1781 , 1807 ) ;
+  pdferror ( 1779 , 1805 ) ;
 } 
 integer 
 zfindobj ( integer t , integer i , boolean byname ) 
@@ -3893,7 +3884,7 @@ zshownodelist ( integer p )
 	  if ( ( eTeXmode == 1 ) ) {
 	      
 	    if ( ( mem [p ].hh.b0 == 0 ) && ( ( mem [p ].hh.b1 ) == 2 ) ) 
-	    print ( 2031 ) ;
+	    print ( 2027 ) ;
 	  } 
 	} 
 	{
@@ -3979,7 +3970,7 @@ zshownodelist ( integer p )
 	{
 	  printesc ( 1738 ) ;
 	  printint ( mem [p + 1 ].hh .v.RH ) ;
-	  print ( 1890 ) ;
+	  print ( 1886 ) ;
 	  printint ( mem [p + 1 ].hh.b0 ) ;
 	  printchar ( 44 ) ;
 	  printint ( mem [p + 1 ].hh.b1 ) ;
@@ -3997,10 +3988,10 @@ zshownodelist ( integer p )
 	    print ( 1001 ) ;
 	    break ;
 	  case 2 : 
-	    print ( 1891 ) ;
+	    print ( 1887 ) ;
 	    break ;
 	    default: 
-	    confusion ( 1892 ) ;
+	    confusion ( 1888 ) ;
 	    break ;
 	  } 
 	  printmark ( mem [p + 1 ].hh .v.RH ) ;
@@ -4008,20 +3999,20 @@ zshownodelist ( integer p )
 	break ;
       case 38 : 
 	{
-	  printesc ( 1893 ) ;
+	  printesc ( 1889 ) ;
 	  printint ( mem [p + 1 ].hh .v.RH ) ;
 	  switch ( mem [p + 1 ].hh .v.LH ) 
 	  {case 0 : 
-	    print ( 1894 ) ;
+	    print ( 1890 ) ;
 	    break ;
 	  case 1 : 
-	    print ( 1895 ) ;
+	    print ( 1891 ) ;
 	    break ;
 	  case 2 : 
-	    print ( 1896 ) ;
+	    print ( 1892 ) ;
 	    break ;
 	  case 3 : 
-	    print ( 1897 ) ;
+	    print ( 1893 ) ;
 	    break ;
 	    default: 
 	    confusion ( 1138 ) ;
@@ -4055,14 +4046,14 @@ zshownodelist ( integer p )
 	    if ( pdfmem [objtab [mem [p + 1 ].hh .v.LH ].int4 + 2 ]!= 
 	    -268435455L ) 
 	    {
-	      print ( 1898 ) ;
+	      print ( 1894 ) ;
 	      printmark ( pdfmem [objtab [mem [p + 1 ].hh .v.LH ].int4 + 
 	      2 ]) ;
 	    } 
-	    print ( 1899 ) ;
+	    print ( 1895 ) ;
 	  } 
 	  if ( pdfmem [objtab [mem [p + 1 ].hh .v.LH ].int4 + 3 ]> 0 ) 
-	  print ( 1900 ) ;
+	  print ( 1896 ) ;
 	  printmark ( pdfmem [objtab [mem [p + 1 ].hh .v.LH ].int4 + 0 ]
 	  ) ;
 	} 
@@ -4118,13 +4109,13 @@ zshownodelist ( integer p )
 	  printruledimen ( mem [p + 1 ].cint ) ;
 	  if ( mem [p + 5 ].hh .v.LH != -268435455L ) 
 	  {
-	    print ( 1898 ) ;
+	    print ( 1894 ) ;
 	    printmark ( mem [p + 5 ].hh .v.LH ) ;
 	  } 
-	  print ( 1901 ) ;
+	  print ( 1897 ) ;
 	  if ( mem [mem [p + 5 ].hh .v.RH ].hh.b0 == 3 ) 
 	  {
-	    print ( 1902 ) ;
+	    print ( 1898 ) ;
 	    printmark ( mem [mem [p + 5 ].hh .v.RH + 2 ].hh .v.LH ) ;
 	  } 
 	  else {
@@ -4132,7 +4123,7 @@ zshownodelist ( integer p )
 	    if ( mem [mem [p + 5 ].hh .v.RH + 1 ].hh .v.LH != -268435455L 
 	    ) 
 	    {
-	      print ( 1900 ) ;
+	      print ( 1896 ) ;
 	      printmark ( mem [mem [p + 5 ].hh .v.RH + 1 ].hh .v.LH ) ;
 	    } 
 	    switch ( mem [mem [p + 5 ].hh .v.RH ].hh.b0 ) 
@@ -4140,12 +4131,12 @@ zshownodelist ( integer p )
 	      {
 		if ( mem [mem [p + 5 ].hh .v.RH ].hh.b1 > 0 ) 
 		{
-		  print ( 1903 ) ;
+		  print ( 1899 ) ;
 		  printmark ( mem [mem [p + 5 ].hh .v.RH ].hh .v.RH ) ;
 		} 
 		else {
 		    
-		  print ( 1904 ) ;
+		  print ( 1900 ) ;
 		  printint ( mem [mem [p + 5 ].hh .v.RH ].hh .v.RH ) ;
 		} 
 	      } 
@@ -4161,18 +4152,18 @@ zshownodelist ( integer p )
 	      {
 		if ( mem [mem [p + 5 ].hh .v.RH ].hh.b1 > 0 ) 
 		{
-		  print ( 1905 ) ;
+		  print ( 1901 ) ;
 		  printmark ( mem [mem [p + 5 ].hh .v.RH ].hh .v.RH ) ;
 		} 
 		else {
 		    
-		  print ( 1906 ) ;
+		  print ( 1902 ) ;
 		  printint ( mem [mem [p + 5 ].hh .v.RH ].hh .v.RH ) ;
 		} 
 	      } 
 	      break ;
 	      default: 
-	      pdferror ( 1907 , 1908 ) ;
+	      pdferror ( 1903 , 1904 ) ;
 	      break ;
 	    } 
 	  } 
@@ -4186,44 +4177,44 @@ zshownodelist ( integer p )
 	  printesc ( 1753 ) ;
 	  if ( mem [p + 5 ].hh.b1 > 0 ) 
 	  {
-	    print ( 1909 ) ;
+	    print ( 1905 ) ;
 	    printmark ( mem [p + 5 ].hh .v.RH ) ;
 	  } 
 	  else {
 	      
-	    print ( 1910 ) ;
+	    print ( 1906 ) ;
 	    printint ( mem [p + 5 ].hh .v.RH ) ;
 	  } 
 	  print ( 32 ) ;
 	  switch ( mem [p + 5 ].hh.b0 ) 
 	  {case 0 : 
 	    {
-	      print ( 1851 ) ;
+	      print ( 1849 ) ;
 	      if ( mem [p + 6 ].hh .v.LH != -268435455L ) 
 	      {
-		print ( 1911 ) ;
+		print ( 1907 ) ;
 		printint ( mem [p + 6 ].hh .v.LH ) ;
 	      } 
 	    } 
 	    break ;
 	  case 5 : 
-	    print ( 1853 ) ;
+	    print ( 1851 ) ;
 	    break ;
 	  case 6 : 
-	    print ( 1854 ) ;
+	    print ( 1852 ) ;
 	    break ;
 	  case 4 : 
-	    print ( 1855 ) ;
+	    print ( 1853 ) ;
 	    break ;
 	  case 2 : 
-	    print ( 1856 ) ;
+	    print ( 1854 ) ;
 	    break ;
 	  case 3 : 
-	    print ( 1857 ) ;
+	    print ( 1855 ) ;
 	    break ;
 	  case 7 : 
 	    {
-	      print ( 1858 ) ;
+	      print ( 1856 ) ;
 	      print ( 40 ) ;
 	      printruledimen ( mem [p + 2 ].cint ) ;
 	      printchar ( 43 ) ;
@@ -4233,10 +4224,10 @@ zshownodelist ( integer p )
 	    } 
 	    break ;
 	  case 1 : 
-	    print ( 1859 ) ;
+	    print ( 1857 ) ;
 	    break ;
 	    default: 
-	    print ( 1912 ) ;
+	    print ( 1908 ) ;
 	    break ;
 	  } 
 	} 
@@ -4255,17 +4246,17 @@ zshownodelist ( integer p )
 	  printruledimen ( mem [p + 1 ].cint ) ;
 	  if ( mem [p + 6 ].hh .v.LH != -268435455L ) 
 	  {
-	    print ( 1898 ) ;
+	    print ( 1894 ) ;
 	    printmark ( mem [p + 6 ].hh .v.LH ) ;
 	  } 
 	  if ( mem [p + 5 ].hh.b1 > 0 ) 
 	  {
-	    print ( 1909 ) ;
+	    print ( 1905 ) ;
 	    printmark ( mem [p + 5 ].hh .v.RH ) ;
 	  } 
 	  else {
 	      
-	    print ( 1910 ) ;
+	    print ( 1906 ) ;
 	    printint ( mem [p + 5 ].hh .v.RH ) ;
 	  } 
 	} 
@@ -4304,14 +4295,8 @@ zshownodelist ( integer p )
       case 45 : 
 	printesc ( 1777 ) ;
 	break ;
-      case 46 : 
-	printesc ( 1778 ) ;
-	break ;
-      case 47 : 
-	printesc ( 1779 ) ;
-	break ;
 	default: 
-	print ( 1913 ) ;
+	print ( 1909 ) ;
 	break ;
       } 
       break ;
@@ -4673,7 +4658,6 @@ zflushnodelist ( halfword p )
     {
       mem [p ].hh .v.RH = avail ;
       avail = p ;
-      mem [p ].hh .me = 0 ;
 	;
 #ifdef STAT
       decr ( dynused ) ;
@@ -4848,14 +4832,8 @@ zflushnodelist ( halfword p )
 	  case 45 : 
 	    freenode ( p , 2 ) ;
 	    break ;
-	  case 46 : 
-	    freenode ( p , 2 ) ;
-	    break ;
-	  case 47 : 
-	    freenode ( p , 2 ) ;
-	    break ;
 	    default: 
-	    confusion ( 1915 ) ;
+	    confusion ( 1911 ) ;
 	    break ;
 	  } 
 	  goto lab30 ;
@@ -4882,7 +4860,6 @@ zflushnodelist ( halfword p )
 	  {
 	    mem [mem [p + 2 ].hh .v.LH ].hh .v.RH = avail ;
 	    avail = mem [p + 2 ].hh .v.LH ;
-	    mem [mem [p + 2 ].hh .v.LH ].hh .me = 0 ;
 	;
 #ifdef STAT
 	    decr ( dynused ) ;
@@ -5171,14 +5148,8 @@ zcopynodelist ( halfword p )
       case 45 : 
 	r = getnode ( 2 ) ;
 	break ;
-      case 46 : 
-	r = getnode ( 2 ) ;
-	break ;
-      case 47 : 
-	r = getnode ( 2 ) ;
-	break ;
 	default: 
-	confusion ( 1914 ) ;
+	confusion ( 1910 ) ;
 	break ;
       } 
       break ;
@@ -5209,7 +5180,6 @@ zcopynodelist ( halfword p )
 	      
 	    avail = mem [mem [r + 2 ].hh .v.LH ].hh .v.RH ;
 	    mem [mem [r + 2 ].hh .v.LH ].hh .v.RH = -268435455L ;
-	    mem [mem [r + 2 ].hh .v.LH ].hh .me = curchrsig ;
 	;
 #ifdef STAT
 	    incr ( dynused ) ;
@@ -5268,7 +5238,6 @@ zcopynodelist ( halfword p )
   {
     mem [h ].hh .v.RH = avail ;
     avail = h ;
-    mem [h ].hh .me = 0 ;
 	;
 #ifdef STAT
     decr ( dynused ) ;
@@ -5362,7 +5331,6 @@ popnest ( void )
   {
     mem [curlist .headfield ].hh .v.RH = avail ;
     avail = curlist .headfield ;
-    mem [curlist .headfield ].hh .me = 0 ;
 	;
 #ifdef STAT
     decr ( dynused ) ;
@@ -5792,34 +5760,34 @@ zprintparam ( integer n )
     printesc ( 536 ) ;
     break ;
   case 96 : 
-    printesc ( 1978 ) ;
+    printesc ( 1974 ) ;
     break ;
   case 97 : 
-    printesc ( 1979 ) ;
+    printesc ( 1975 ) ;
     break ;
   case 98 : 
-    printesc ( 1980 ) ;
+    printesc ( 1976 ) ;
     break ;
   case 99 : 
-    printesc ( 1981 ) ;
+    printesc ( 1977 ) ;
     break ;
   case 100 : 
-    printesc ( 1982 ) ;
+    printesc ( 1978 ) ;
     break ;
   case 101 : 
-    printesc ( 1983 ) ;
+    printesc ( 1979 ) ;
     break ;
   case 102 : 
-    printesc ( 1984 ) ;
+    printesc ( 1980 ) ;
     break ;
   case 103 : 
-    printesc ( 1985 ) ;
+    printesc ( 1981 ) ;
     break ;
   case 104 : 
-    printesc ( 1986 ) ;
+    printesc ( 1982 ) ;
     break ;
   case 105 : 
-    printesc ( 2026 ) ;
+    printesc ( 2022 ) ;
     break ;
     default: 
     print ( 537 ) ;
@@ -6069,7 +6037,7 @@ zprintcmdchr ( quarterword cmd , halfword chrcode )
       printesc ( 422 ) ;
       break ;
     case 27172 : 
-      printesc ( 1977 ) ;
+      printesc ( 1973 ) ;
       break ;
     case 27168 : 
       printesc ( 424 ) ;
@@ -6223,7 +6191,7 @@ zprintcmdchr ( quarterword cmd , halfword chrcode )
   case 96 : 
     if ( chrcode == 0 ) 
     printesc ( 616 ) ;
-    else printesc ( 2041 ) ;
+    else printesc ( 2037 ) ;
     break ;
   case 0 : 
     printesc ( 617 ) ;
@@ -6240,16 +6208,16 @@ zprintcmdchr ( quarterword cmd , halfword chrcode )
       printesc ( 612 ) ;
       break ;
     case 27429 : 
-      printesc ( 2077 ) ;
+      printesc ( 2073 ) ;
       break ;
     case 27430 : 
-      printesc ( 2078 ) ;
+      printesc ( 2074 ) ;
       break ;
     case 27431 : 
-      printesc ( 2079 ) ;
+      printesc ( 2075 ) ;
       break ;
     case 27432 : 
-      printesc ( 2080 ) ;
+      printesc ( 2076 ) ;
       break ;
     } 
     break ;
@@ -6257,8 +6225,8 @@ zprintcmdchr ( quarterword cmd , halfword chrcode )
     if ( chrcode == 0 ) 
     printesc ( 619 ) ;
     else if ( chrcode == 1 ) 
-    printesc ( 2016 ) ;
-    else printesc ( 2017 ) ;
+    printesc ( 2012 ) ;
+    else printesc ( 2013 ) ;
     break ;
   case 71 : 
     {
@@ -6275,16 +6243,16 @@ zprintcmdchr ( quarterword cmd , halfword chrcode )
     printesc ( 620 ) ;
     else switch ( chrcode ) 
     {case 6 : 
-      printesc ( 2027 ) ;
+      printesc ( 2023 ) ;
       break ;
     case 7 : 
-      printesc ( 2028 ) ;
+      printesc ( 2024 ) ;
       break ;
     case 10 : 
-      printesc ( 2029 ) ;
+      printesc ( 2025 ) ;
       break ;
       default: 
-      printesc ( 2030 ) ;
+      printesc ( 2026 ) ;
       break ;
     } 
     break ;
@@ -6301,7 +6269,7 @@ zprintcmdchr ( quarterword cmd , halfword chrcode )
     if ( chrcode == 0 ) 
     printesc ( 718 ) ;
     else if ( chrcode == 2 ) 
-    printesc ( 2039 ) ;
+    printesc ( 2035 ) ;
     else printesc ( 719 ) ;
     break ;
   case 112 : 
@@ -6356,7 +6324,7 @@ zprintcmdchr ( quarterword cmd , halfword chrcode )
     if ( chrcode == 0 ) 
     printesc ( 759 ) ;
     else if ( chrcode == 2 ) 
-    printesc ( 2022 ) ;
+    printesc ( 2018 ) ;
     else printesc ( 760 ) ;
     break ;
   case 83 : 
@@ -6381,76 +6349,76 @@ zprintcmdchr ( quarterword cmd , halfword chrcode )
       printesc ( 767 ) ;
       break ;
     case 3 : 
-      printesc ( 1974 ) ;
+      printesc ( 1970 ) ;
       break ;
     case 20 : 
-      printesc ( 1975 ) ;
+      printesc ( 1971 ) ;
       break ;
     case 21 : 
-      printesc ( 2001 ) ;
+      printesc ( 1997 ) ;
       break ;
     case 22 : 
-      printesc ( 2002 ) ;
+      printesc ( 1998 ) ;
       break ;
     case 23 : 
-      printesc ( 2003 ) ;
+      printesc ( 1999 ) ;
       break ;
     case 24 : 
-      printesc ( 2004 ) ;
+      printesc ( 2000 ) ;
       break ;
     case 25 : 
-      printesc ( 2005 ) ;
+      printesc ( 2001 ) ;
       break ;
     case 28 : 
-      printesc ( 2006 ) ;
+      printesc ( 2002 ) ;
       break ;
     case 29 : 
-      printesc ( 2007 ) ;
+      printesc ( 2003 ) ;
       break ;
     case 30 : 
-      printesc ( 2008 ) ;
+      printesc ( 2004 ) ;
       break ;
     case 31 : 
-      printesc ( 2009 ) ;
+      printesc ( 2005 ) ;
       break ;
     case 32 : 
-      printesc ( 2010 ) ;
+      printesc ( 2006 ) ;
       break ;
     case 33 : 
-      printesc ( 2011 ) ;
+      printesc ( 2007 ) ;
       break ;
     case 34 : 
-      printesc ( 2012 ) ;
+      printesc ( 2008 ) ;
       break ;
     case 39 : 
-      printesc ( 2053 ) ;
+      printesc ( 2049 ) ;
       break ;
     case 40 : 
-      printesc ( 2054 ) ;
+      printesc ( 2050 ) ;
       break ;
     case 41 : 
-      printesc ( 2055 ) ;
+      printesc ( 2051 ) ;
       break ;
     case 42 : 
-      printesc ( 2056 ) ;
+      printesc ( 2052 ) ;
       break ;
     case 26 : 
-      printesc ( 2060 ) ;
+      printesc ( 2056 ) ;
       break ;
     case 27 : 
-      printesc ( 2061 ) ;
+      printesc ( 2057 ) ;
       break ;
     case 35 : 
-      printesc ( 2062 ) ;
+      printesc ( 2058 ) ;
       break ;
     case 36 : 
-      printesc ( 2063 ) ;
+      printesc ( 2059 ) ;
       break ;
     case 37 : 
-      printesc ( 2064 ) ;
+      printesc ( 2060 ) ;
       break ;
     case 38 : 
-      printesc ( 2065 ) ;
+      printesc ( 2061 ) ;
       break ;
     case 6 : 
       printesc ( 769 ) ;
@@ -6662,22 +6630,22 @@ zprintcmdchr ( quarterword cmd , halfword chrcode )
 	printesc ( 929 ) ;
 	break ;
       case 17 : 
-	printesc ( 2042 ) ;
+	printesc ( 2038 ) ;
 	break ;
       case 18 : 
-	printesc ( 2043 ) ;
+	printesc ( 2039 ) ;
 	break ;
       case 19 : 
-	printesc ( 2044 ) ;
+	printesc ( 2040 ) ;
 	break ;
       case 20 : 
-	printesc ( 2045 ) ;
+	printesc ( 2041 ) ;
 	break ;
       case 22 : 
-	printesc ( 2046 ) ;
+	printesc ( 2042 ) ;
 	break ;
       case 23 : 
-	printesc ( 2047 ) ;
+	printesc ( 2043 ) ;
 	break ;
 	default: 
 	printesc ( 912 ) ;
@@ -6853,9 +6821,9 @@ zprintcmdchr ( quarterword cmd , halfword chrcode )
     if ( chrcode == 1 ) 
     printesc ( 1514 ) ;
     else if ( chrcode == 2 ) 
-    printesc ( 2075 ) ;
+    printesc ( 2071 ) ;
     else if ( chrcode == 3 ) 
-    printesc ( 2076 ) ;
+    printesc ( 2072 ) ;
     else printesc ( 1513 ) ;
     break ;
   case 47 : 
@@ -7132,13 +7100,13 @@ zprintcmdchr ( quarterword cmd , halfword chrcode )
       printesc ( 1687 ) ;
       break ;
     case 4 : 
-      printesc ( 2013 ) ;
+      printesc ( 2009 ) ;
       break ;
     case 5 : 
-      printesc ( 2015 ) ;
+      printesc ( 2011 ) ;
       break ;
     case 6 : 
-      printesc ( 2018 ) ;
+      printesc ( 2014 ) ;
       break ;
       default: 
       printesc ( 1684 ) ;
@@ -7310,14 +7278,8 @@ zprintcmdchr ( quarterword cmd , halfword chrcode )
     case 45 : 
       printesc ( 1777 ) ;
       break ;
-    case 46 : 
-      printesc ( 1778 ) ;
-      break ;
-    case 47 : 
-      printesc ( 1779 ) ;
-      break ;
       default: 
-      print ( 1780 ) ;
+      print ( 1778 ) ;
       break ;
     } 
     break ;
@@ -7683,7 +7645,7 @@ zprintgroup ( boolean e )
   switch ( curgroup ) 
   {case 0 : 
     {
-      print ( 1987 ) ;
+      print ( 1983 ) ;
       return ;
     } 
     break ;
@@ -7691,15 +7653,15 @@ zprintgroup ( boolean e )
   case 14 : 
     {
       if ( curgroup == 14 ) 
-      print ( 1988 ) ;
-      print ( 1989 ) ;
+      print ( 1984 ) ;
+      print ( 1985 ) ;
     } 
     break ;
   case 2 : 
   case 3 : 
     {
       if ( curgroup == 3 ) 
-      print ( 1990 ) ;
+      print ( 1986 ) ;
       print ( 1476 ) ;
     } 
     break ;
@@ -7713,15 +7675,15 @@ zprintgroup ( boolean e )
   case 7 : 
     {
       if ( curgroup == 7 ) 
-      print ( 1991 ) ;
-      print ( 1992 ) ;
+      print ( 1987 ) ;
+      print ( 1988 ) ;
     } 
     break ;
   case 8 : 
     print ( 415 ) ;
     break ;
   case 10 : 
-    print ( 1993 ) ;
+    print ( 1989 ) ;
     break ;
   case 11 : 
     print ( 337 ) ;
@@ -7736,22 +7698,22 @@ zprintgroup ( boolean e )
     {
       print ( 352 ) ;
       if ( curgroup == 13 ) 
-      print ( 1994 ) ;
+      print ( 1990 ) ;
       else if ( curgroup == 15 ) 
-      print ( 1995 ) ;
+      print ( 1991 ) ;
       else if ( curgroup == 16 ) 
-      print ( 1996 ) ;
+      print ( 1992 ) ;
     } 
     break ;
   } 
-  print ( 1997 ) ;
+  print ( 1993 ) ;
   printint ( curlevel ) ;
   printchar ( 41 ) ;
   if ( savestack [saveptr - 1 ].cint != 0 ) 
   {
     if ( e ) 
     print ( 381 ) ;
-    else print ( 1998 ) ;
+    else print ( 1994 ) ;
     printint ( savestack [saveptr - 1 ].cint ) ;
   } 
 } 
@@ -7763,8 +7725,8 @@ zgrouptrace ( boolean e )
   begindiagnostic () ;
   printchar ( 123 ) ;
   if ( e ) 
-  print ( 1999 ) ;
-  else print ( 2000 ) ;
+  print ( 1995 ) ;
+  else print ( 1996 ) ;
   printgroup ( e ) ;
   printchar ( 125 ) ;
   enddiagnostic ( false ) ;
@@ -7823,7 +7785,6 @@ pseudoclose ( void )
   {
     mem [pseudofiles ].hh .v.RH = avail ;
     avail = pseudofiles ;
-    mem [pseudofiles ].hh .me = 0 ;
 	;
 #ifdef STAT
     decr ( dynused ) ;
@@ -7861,9 +7822,9 @@ groupwarning ( void )
   } 
   if ( w ) 
   {
-    printnl ( 2049 ) ;
+    printnl ( 2045 ) ;
     printgroup ( true ) ;
-    print ( 2050 ) ;
+    print ( 2046 ) ;
     println () ;
     if ( eqtb [29377 ].cint > 1 ) 
     showcontext () ;
@@ -7895,14 +7856,14 @@ ifwarning ( void )
   } 
   if ( w ) 
   {
-    printnl ( 2049 ) ;
+    printnl ( 2045 ) ;
     printcmdchr ( 107 , curif ) ;
     if ( ifline != 0 ) 
     {
-      print ( 2019 ) ;
+      print ( 2015 ) ;
       printint ( ifline ) ;
     } 
-    print ( 2050 ) ;
+    print ( 2046 ) ;
     println () ;
     if ( eqtb [29377 ].cint > 1 ) 
     showcontext () ;
@@ -7925,9 +7886,9 @@ filewarning ( void )
   while ( grpstack [inopen ]!= saveptr ) {
       
     decr ( curlevel ) ;
-    printnl ( 2051 ) ;
+    printnl ( 2047 ) ;
     printgroup ( true ) ;
-    print ( 2052 ) ;
+    print ( 2048 ) ;
     curgroup = savestack [saveptr ].hh.b1 ;
     saveptr = savestack [saveptr ].hh .v.RH ;
   } 
@@ -7940,16 +7901,16 @@ filewarning ( void )
   i = ifline ;
   while ( ifstack [inopen ]!= condptr ) {
       
-    printnl ( 2051 ) ;
+    printnl ( 2047 ) ;
     printcmdchr ( 107 , curif ) ;
     if ( iflimit == 2 ) 
     printesc ( 933 ) ;
     if ( ifline != 0 ) 
     {
-      print ( 2019 ) ;
+      print ( 2015 ) ;
       printint ( ifline ) ;
     } 
-    print ( 2052 ) ;
+    print ( 2048 ) ;
     ifline = mem [condptr + 1 ].cint ;
     curif = mem [condptr ].hh.b1 ;
     iflimit = mem [condptr ].hh.b0 ;
@@ -8491,7 +8452,6 @@ zsaveforafter ( halfword t )
     savestack [saveptr ].hh.b0 = 2 ;
     savestack [saveptr ].hh.b1 = 0 ;
     savestack [saveptr ].hh .v.RH = t ;
-    savestack [saveptr ].hh .me = curchrsig ;
     incr ( saveptr ) ;
   } 
 } 
@@ -8724,7 +8684,7 @@ showcurcmdchr ( void )
 	printchar ( 41 ) ;
 	if ( l != 0 ) 
 	{
-	  print ( 2019 ) ;
+	  print ( 2015 ) ;
 	  printint ( l ) ;
 	} 
       } 
@@ -9241,7 +9201,6 @@ zdisposemunode ( halfword p )
   {
     mem [p ].hh .v.RH = avail ;
     avail = p ;
-    mem [p ].hh .me = 0 ;
 	;
 #ifdef STAT
     decr ( dynused ) ;
@@ -9255,7 +9214,6 @@ zdisposemunode ( halfword p )
       {
 	mem [p ].hh .v.RH = avail ;
 	avail = p ;
-	mem [p ].hh .me = 0 ;
 	;
 #ifdef STAT
 	decr ( dynused ) ;
@@ -9267,7 +9225,6 @@ zdisposemunode ( halfword p )
     {
       mem [p ].hh .v.RH = avail ;
       avail = p ;
-      mem [p ].hh .me = 0 ;
 	;
 #ifdef STAT
       decr ( dynused ) ;
@@ -9281,7 +9238,6 @@ zdisposemunode ( halfword p )
       {
 	mem [p ].hh .v.RH = avail ;
 	avail = p ;
-	mem [p ].hh .me = 0 ;
 	;
 #ifdef STAT
 	decr ( dynused ) ;
@@ -9307,7 +9263,6 @@ zdisposemutableout ( halfword cs )
     {
       mem [mem [p ].hh .v.RH ].hh .v.RH = avail ;
       avail = mem [p ].hh .v.RH ;
-      mem [mem [p ].hh .v.RH ].hh .me = 0 ;
 	;
 #ifdef STAT
       decr ( dynused ) ;
@@ -9316,7 +9271,6 @@ zdisposemutableout ( halfword cs )
     {
       mem [p ].hh .v.RH = avail ;
       avail = p ;
-      mem [p ].hh .me = 0 ;
 	;
 #ifdef STAT
       decr ( dynused ) ;
@@ -9461,7 +9415,6 @@ getnext ( void )
   ASCIIcode c, cc  ;
   unsigned char d  ;
   lab20: curcs = 0 ;
-  curchrsig = 0 ;
   if ( curinput .statefield != 0 ) 
   {
     lab25: if ( curinput .locfield <= curinput .limitfield ) 
@@ -9833,8 +9786,6 @@ getnext ( void )
 	;
 	break ;
       } 
-      curchrsig = getcharsigslot ( curinput .indexfield , line , curinput 
-      .locfield - curinput .startfield , curchr , curcs ) ;
     } 
     else {
 	
@@ -9948,7 +9899,6 @@ getnext ( void )
   else if ( curinput .locfield != -268435455L ) 
   {
     t = mem [curinput .locfield ].hh .v.LH ;
-    curchrsig = mem [curinput .locfield ].hh .me ;
     curinput .locfield = mem [curinput .locfield ].hh .v.RH ;
     if ( t >= 4095 ) 
     {
@@ -10100,7 +10050,6 @@ macrocall ( void )
   refcount = curchr ;
   r = mem [refcount ].hh .v.RH ;
   n = 0 ;
-  fillcsinfo ( mem [r ].hh .v.RH ) ;
   if ( eqtb [29307 ].cint > 0 ) 
   {
     begindiagnostic () ;
@@ -10177,7 +10126,6 @@ macrocall ( void )
 	      mem [q ].hh .v.LH = mem [t ].hh .v.LH ;
 	      p = q ;
 	    } 
-	    mem [p ].hh .me = mem [t ].hh .me ;
 	    incr ( m ) ;
 	    u = mem [t ].hh .v.RH ;
 	    v = s ;
@@ -10253,7 +10201,6 @@ macrocall ( void )
 		    
 		  avail = mem [q ].hh .v.RH ;
 		  mem [q ].hh .v.RH = -268435455L ;
-		  mem [q ].hh .me = curchrsig ;
 	;
 #ifdef STAT
 		  incr ( dynused ) ;
@@ -10379,7 +10326,6 @@ macrocall ( void )
 	  {
 	    mem [p ].hh .v.RH = avail ;
 	    avail = p ;
-	    mem [p ].hh .me = 0 ;
 	;
 #ifdef STAT
 	    decr ( dynused ) ;
@@ -10390,7 +10336,6 @@ macrocall ( void )
 	  {
 	    mem [p ].hh .v.RH = avail ;
 	    avail = p ;
-	    mem [p ].hh .me = 0 ;
 	;
 #ifdef STAT
 	    decr ( dynused ) ;
@@ -10662,7 +10607,7 @@ expand ( void )
 	  print ( 788 ) ;
 	} 
 	printesc ( 930 ) ;
-	print ( 2048 ) ;
+	print ( 2044 ) ;
 	printcmdchr ( curcmd , curchr ) ;
 	printchar ( 39 ) ;
 	{
@@ -11253,7 +11198,7 @@ zeffectivechar ( boolean errp , internalfontnumber f , quarterword c )
   {
     begindiagnostic () ;
     printnl ( 985 ) ;
-    print ( 2081 ) ;
+    print ( 2077 ) ;
     print ( c ) ;
     print ( 986 ) ;
     slowprint ( fontname [f ]) ;
@@ -12444,7 +12389,6 @@ zscandimen ( boolean mu , boolean inf , boolean shortcut )
 	    {
 	      mem [q ].hh .v.RH = avail ;
 	      avail = q ;
-	      mem [q ].hh .me = 0 ;
 	;
 #ifdef STAT
 	      decr ( dynused ) ;
@@ -12976,11 +12920,11 @@ scanexpr ( void )
 	if ( filelineerrorstylep ) 
 	printfileline () ;
 	else printnl ( 264 ) ;
-	print ( 2058 ) ;
+	print ( 2054 ) ;
       } 
       {
 	helpptr = 1 ;
-	helpline [0 ]= 2059 ;
+	helpline [0 ]= 2055 ;
       } 
       backerror () ;
     } 
@@ -13142,7 +13086,7 @@ scanexpr ( void )
     } 
     {
       helpptr = 2 ;
-      helpline [1 ]= 2057 ;
+      helpline [1 ]= 2053 ;
       helpline [0 ]= 1645 ;
     } 
     error () ;
@@ -13249,7 +13193,6 @@ scangeneraltext ( void )
   {
     mem [defref ].hh .v.RH = avail ;
     avail = defref ;
-    mem [defref ].hh .me = 0 ;
 	;
 #ifdef STAT
     decr ( dynused ) ;
@@ -13351,7 +13294,7 @@ pseudostart ( void )
     else if ( ( termoffset > 0 ) || ( fileoffset > 0 ) ) 
     printchar ( 32 ) ;
     curinput .namefield = 19 ;
-    print ( 2040 ) ;
+    print ( 2036 ) ;
     incr ( openparens ) ;
     fflush ( stdout ) ;
   } 
@@ -13387,7 +13330,6 @@ zstrtoks ( poolpointer b )
 	    
 	  avail = mem [q ].hh .v.RH ;
 	  mem [q ].hh .v.RH = -268435455L ;
-	  mem [q ].hh .me = curchrsig ;
 	;
 #ifdef STAT
 	  incr ( dynused ) ;
@@ -13459,7 +13401,6 @@ thetoks ( void )
 		
 	      avail = mem [q ].hh .v.RH ;
 	      mem [q ].hh .v.RH = -268435455L ;
-	      mem [q ].hh .me = curchrsig ;
 	;
 #ifdef STAT
 	      incr ( dynused ) ;
@@ -13470,7 +13411,6 @@ thetoks ( void )
 	  mem [q ].hh .v.LH = mem [r ].hh .v.LH ;
 	  p = q ;
 	} 
-	mem [p ].hh .me = mem [r ].hh .me ;
 	r = mem [r ].hh .v.RH ;
       } 
     } 
@@ -15421,7 +15361,7 @@ zbmakenamestring ( bytefile f )
   return Result ;
 } 
 strnumber 
-zwmakenamestring ( wordfile f ) 
+zzwmakenamestring ( wordfile * f ) 
 {
   register strnumber Result; wmakenamestring_regmem 
   Result = makenamestring () ;
@@ -16992,11 +16932,11 @@ zwriteout ( halfword p )
       if ( filelineerrorstylep ) 
       printfileline () ;
       else printnl ( 264 ) ;
-      print ( 1925 ) ;
+      print ( 1921 ) ;
     } 
     {
       helpptr = 2 ;
-      helpline [1 ]= 1926 ;
+      helpline [1 ]= 1922 ;
       helpline [0 ]= 1429 ;
     } 
     error () ;
@@ -17040,14 +16980,14 @@ zwriteout ( halfword p )
     else selector = 19 ;
     if ( ! logopened ) 
     selector = 17 ;
-    printnl ( 1917 ) ;
+    printnl ( 1913 ) ;
     {register integer for_end; d = 0 ;for_end = ( poolptr - strstart [
     strptr ]) - 1 ; if ( d <= for_end) do 
       {
 	print ( strpool [strstart [strptr ]+ d ]) ;
       } 
     while ( d++ < for_end ) ;} 
-    print ( 1918 ) ;
+    print ( 1914 ) ;
     if ( shellenabledp ) 
     {
       {
@@ -17070,24 +17010,24 @@ zwriteout ( halfword p )
 	} 
       while ( d++ < for_end ) ;} 
       if ( clobbered ) 
-      print ( 1919 ) ;
+      print ( 1915 ) ;
       else {
 	  
 	runsystemret = runsystem ( conststringcast ( addressof ( strpool [
 	strstart [strptr ]]) ) ) ;
 	if ( runsystemret == -1 ) 
-	print ( 1920 ) ;
+	print ( 1916 ) ;
 	else if ( runsystemret == 0 ) 
-	print ( 1921 ) ;
+	print ( 1917 ) ;
 	else if ( runsystemret == 1 ) 
-	print ( 1922 ) ;
+	print ( 1918 ) ;
 	else if ( runsystemret == 2 ) 
-	print ( 1923 ) ;
+	print ( 1919 ) ;
       } 
     } 
     else {
 	
-      print ( 1924 ) ;
+      print ( 1920 ) ;
     } 
     printchar ( 46 ) ;
     printnl ( 345 ) ;
@@ -17129,7 +17069,7 @@ zoutwhat ( halfword p )
 	  curext = 946 ;
 	  packfilename ( curname , curarea , curext ) ;
 	  while ( ! kpseoutnameok ( stringcast ( nameoffile + 1 ) ) || ! 
-	  aopenout ( writefile [j ]) ) promptfilename ( 1928 , 946 ) ;
+	  aopenout ( writefile [j ]) ) promptfilename ( 1924 , 946 ) ;
 	  writeopen [j ]= true ;
 	  if ( logopened && texmfyesno ( "log_openout" ) ) 
 	  {
@@ -17137,9 +17077,9 @@ zoutwhat ( halfword p )
 	    if ( ( eqtb [29306 ].cint <= 0 ) ) 
 	    selector = 18 ;
 	    else selector = 19 ;
-	    printnl ( 1929 ) ;
+	    printnl ( 1925 ) ;
 	    printint ( j ) ;
-	    print ( 1930 ) ;
+	    print ( 1926 ) ;
 	    printfilename ( curname , curarea , curext ) ;
 	    print ( 945 ) ;
 	    printnl ( 345 ) ;
@@ -17164,9 +17104,9 @@ zoutwhat ( halfword p )
     break ;
     default: 
     {
-      if ( ( 6 <= mem [p ].hh.b1 ) && ( mem [p ].hh.b1 <= 47 ) ) 
-      pdferror ( 1861 , 1927 ) ;
-      else confusion ( 1861 ) ;
+      if ( ( 6 <= mem [p ].hh.b1 ) && ( mem [p ].hh.b1 <= 45 ) ) 
+      pdferror ( 1859 , 1923 ) ;
+      else confusion ( 1859 ) ;
     } 
     break ;
   } 
@@ -17311,7 +17251,6 @@ zzreverse ( halfword thisbox , halfword t , scaled * curg , real * curglue )
 		{
 		  mem [tempptr ].hh .v.RH = avail ;
 		  avail = tempptr ;
-		  mem [tempptr ].hh .me = 0 ;
 	;
 #ifdef STAT
 		  decr ( dynused ) ;
@@ -17363,7 +17302,7 @@ zzreverse ( halfword thisbox , halfword t , scaled * curg , real * curglue )
 	} 
 	break ;
       case 14 : 
-	confusion ( 2036 ) ;
+	confusion ( 2032 ) ;
 	break ;
 	default: 
 	goto lab15 ;
@@ -17587,7 +17526,7 @@ hlistout ( void )
 		} 
 	      } 
 	      begindiagnostic () ;
-	      printnl ( 2082 ) ;
+	      printnl ( 2078 ) ;
 	      print ( c ) ;
 	      print ( 1632 ) ;
 	      print ( accentc ) ;
@@ -17603,7 +17542,7 @@ hlistout ( void )
 	} 
 	begindiagnostic () ;
 	printnl ( 985 ) ;
-	print ( 2081 ) ;
+	print ( 2077 ) ;
 	print ( c ) ;
 	print ( 986 ) ;
 	slowprint ( fontname [f ]) ;
@@ -17613,7 +17552,7 @@ hlistout ( void )
 	lab40: if ( eqtb [29312 ].cint > 99 ) 
 	{
 	  begindiagnostic () ;
-	  printnl ( 2083 ) ;
+	  printnl ( 2079 ) ;
 	  print ( c ) ;
 	  print ( 1632 ) ;
 	  print ( accentc ) ;
@@ -17907,7 +17846,6 @@ hlistout ( void )
 	      {
 		mem [tempptr ].hh .v.RH = avail ;
 		avail = tempptr ;
-		mem [tempptr ].hh .me = 0 ;
 	;
 #ifdef STAT
 		decr ( dynused ) ;
@@ -17956,7 +17894,6 @@ hlistout ( void )
       {
 	mem [memtop - 12 ]= mem [p + 1 ];
 	mem [memtop - 12 ].hh .v.RH = mem [p ].hh .v.RH ;
-	mem [memtop - 12 ].hh .me = mem [p ].hh .me ;
 	p = memtop - 12 ;
 	goto lab21 ;
       } 
@@ -18019,7 +17956,6 @@ hlistout ( void )
 	  {
 	    mem [tempptr ].hh .v.RH = avail ;
 	    avail = tempptr ;
-	    mem [tempptr ].hh .me = 0 ;
 	;
 #ifdef STAT
 	    decr ( dynused ) ;
@@ -18033,7 +17969,6 @@ hlistout ( void )
 	{
 	  mem [tempptr ].hh .v.RH = avail ;
 	  avail = tempptr ;
-	  mem [tempptr ].hh .me = 0 ;
 	;
 #ifdef STAT
 	  decr ( dynused ) ;
@@ -18502,18 +18437,18 @@ zdvishipout ( halfword p )
     {
       {
 	println () ;
-	printnl ( 2033 ) ;
+	printnl ( 2029 ) ;
 	printint ( LRproblems / 10000 ) ;
-	print ( 2034 ) ;
+	print ( 2030 ) ;
 	printint ( LRproblems % 10000 ) ;
-	print ( 2035 ) ;
+	print ( 2031 ) ;
 	LRproblems = 0 ;
       } 
       printchar ( 41 ) ;
       println () ;
     } 
     if ( ( LRptr != -268435455L ) || ( curdir != 0 ) ) 
-    confusion ( 2037 ) ;
+    confusion ( 2033 ) ;
   } 
   if ( eqtb [29311 ].cint <= 0 ) 
   printchar ( 93 ) ;
@@ -19054,8 +18989,6 @@ pdfbeginstream ( void )
   pdfstreamlengthoffset = ( pdfgone + pdfptr ) - 11 ;
   pdfstreamlength = 0 ;
   pdflastbyte = 0 ;
-  eqtb [29340 ].cint = 0 ;
-  eqtb [29360 ].cint = 0 ;
   if ( eqtb [29340 ].cint > 0 ) 
   {
     {
@@ -21815,7 +21748,7 @@ zpacketscaled ( integer k , scaled fs )
   return Result ;
 } 
 void 
-zdovfpacket ( internalfontnumber vff , eightbits c , halfword p ) 
+zdovfpacket ( internalfontnumber vff , eightbits c ) 
 {
   /* 70 22 */ dovfpacket_regmem 
   internalfontnumber f, k, n  ;
@@ -22018,11 +21951,11 @@ zdovfpacket ( internalfontnumber vff , eightbits c , halfword p )
       if ( pdffonttype [f ]== 0 ) 
       dovf ( f ) ;
       if ( pdffonttype [f ]== 1 ) 
-      dovfpacket ( f , c , p ) ;
+      dovfpacket ( f , c ) ;
       else {
 	  
 	pdfbeginstring ( f ) ;
-	pdfprintchar ( f , c , p ) ;
+	pdfprintchar ( f , c ) ;
 	advcharwidth ( f , c ) ;
       } 
     } 
@@ -22443,10 +22376,10 @@ zwarndestdup ( integer id , smallnumber byname , strnumber s1 , strnumber s2 )
   warndestdup_regmem 
   if ( eqtb [29367 ].cint > 0 ) 
   return ;
-  pdfwarning ( s1 , 1848 , false , false ) ;
+  pdfwarning ( s1 , 1846 , false , false ) ;
   if ( byname > 0 ) 
   {
-    print ( 1834 ) ;
+    print ( 1832 ) ;
     printmark ( id ) ;
   } 
   else {
@@ -22454,7 +22387,7 @@ zwarndestdup ( integer id , smallnumber byname , strnumber s1 , strnumber s2 )
     print ( 1200 ) ;
     printint ( id ) ;
   } 
-  print ( 1849 ) ;
+  print ( 1847 ) ;
   print ( s2 ) ;
   println () ;
   showcontext () ;
@@ -22473,7 +22406,7 @@ zwriteaction ( halfword p )
   pdfprint ( 1243 ) ;
   if ( mem [p + 1 ].hh .v.LH != -268435455L ) 
   {
-    pdfprint ( 1932 ) ;
+    pdfprint ( 1928 ) ;
     s = tokenstostring ( mem [p + 1 ].hh .v.LH ) ;
     if ( ( strpool [strstart [s ]]== 40 ) && ( strpool [strstart [s ]+ 
     ( strstart [s + 1 ]- strstart [s ]) - 1 ]== 41 ) ) 
@@ -22486,10 +22419,10 @@ zwriteaction ( halfword p )
     pdfprint ( 32 ) ;
     if ( mem [p + 1 ].hh .v.RH > 0 ) 
     {
-      pdfprint ( 1933 ) ;
+      pdfprint ( 1929 ) ;
       if ( mem [p + 1 ].hh .v.RH == 1 ) 
-      pdfprint ( 1934 ) ;
-      else pdfprint ( 1935 ) ;
+      pdfprint ( 1930 ) ;
+      else pdfprint ( 1931 ) ;
     } 
   } 
   switch ( mem [p ].hh.b0 ) 
@@ -22497,13 +22430,13 @@ zwriteaction ( halfword p )
     {
       if ( mem [p + 1 ].hh .v.LH == -268435455L ) 
       {
-	pdfprint ( 1936 ) ;
+	pdfprint ( 1932 ) ;
 	pdfprintint ( getobj ( 1 , mem [p ].hh .v.RH , false ) ) ;
 	pdfprint ( 1082 ) ;
       } 
       else {
 	  
-	pdfprint ( 1937 ) ;
+	pdfprint ( 1933 ) ;
 	pdfprintint ( mem [p ].hh .v.RH - 1 ) ;
       } 
       {
@@ -22542,10 +22475,10 @@ zwriteaction ( halfword p )
     {
       if ( mem [p + 1 ].hh .v.LH == -268435455L ) 
       {
-	pdfprint ( 1938 ) ;
+	pdfprint ( 1934 ) ;
 	d = getobj ( 5 , mem [p ].hh .v.RH , mem [p ].hh.b1 ) ;
       } 
-      else pdfprint ( 1939 ) ;
+      else pdfprint ( 1935 ) ;
       if ( mem [p ].hh.b1 > 0 ) 
       {
 	pdfstrentry ( 68 , tokenstostring ( mem [p ].hh .v.RH ) ) ;
@@ -22553,12 +22486,12 @@ zwriteaction ( halfword p )
       } 
       else if ( mem [p + 1 ].hh .v.LH == -268435455L ) 
       pdfindirect ( 68 , d ) ;
-      else pdferror ( 1861 , 1835 ) ;
+      else pdferror ( 1859 , 1833 ) ;
     } 
     break ;
   case 2 : 
     {
-      pdfprint ( 1940 ) ;
+      pdfprint ( 1936 ) ;
       if ( mem [p + 1 ].hh .v.LH == -268435455L ) 
       d = getobj ( 9 , mem [p ].hh .v.RH , mem [p ].hh.b1 ) ;
       if ( mem [p ].hh.b1 > 0 ) 
@@ -22624,7 +22557,7 @@ zdoannot ( halfword p , halfword parentbox , scaled x , scaled y )
 {
   doannot_regmem 
   if ( ! isshippingpage ) 
-  pdferror ( 1861 , 1941 ) ;
+  pdferror ( 1859 , 1937 ) ;
   if ( doingleaders ) 
   return ;
   if ( ( objtab [mem [p + 6 ].cint ].int2 > -2 ) ) 
@@ -22644,7 +22577,7 @@ zpushlinklevel ( halfword p )
 {
   pushlinklevel_regmem 
   if ( pdflinkstackptr >= pdfmaxlinklevel ) 
-  overflow ( 1942 , pdfmaxlinklevel ) ;
+  overflow ( 1938 , pdfmaxlinklevel ) ;
   pdfassert ( ( mem [p ].hh.b0 == 8 ) && ( mem [p ].hh.b1 == 14 ) ) ;
   incr ( pdflinkstackptr ) ;
   pdflinkstack [pdflinkstackptr ].nestinglevel = curs ;
@@ -22664,7 +22597,7 @@ zdolink ( halfword p , halfword parentbox , scaled x , scaled y )
 {
   dolink_regmem 
   if ( ! isshippingpage ) 
-  pdferror ( 1861 , 1943 ) ;
+  pdferror ( 1859 , 1939 ) ;
   pdfassert ( mem [parentbox ].hh.b0 == 0 ) ;
   if ( ( objtab [mem [p + 6 ].cint ].int2 > -2 ) ) 
   mem [p + 6 ].cint = pdfnewobjnum () ;
@@ -22685,9 +22618,9 @@ endlink ( void )
   endlink_regmem 
   halfword p  ;
   if ( pdflinkstackptr < 1 ) 
-  pdferror ( 1861 , 1944 ) ;
+  pdferror ( 1859 , 1940 ) ;
   if ( pdflinkstack [pdflinkstackptr ].nestinglevel != curs ) 
-  pdfwarning ( 0 , 1945 , true , true ) ;
+  pdferror ( 1859 , 1941 ) ;
   if ( ( mem [pdflinkstack [pdflinkstackptr ].linknode + 1 ].cint == 
   -1073741824L ) ) 
   {
@@ -22729,7 +22662,7 @@ zappendbead ( halfword p )
   appendbead_regmem 
   integer a, b, c, t  ;
   if ( ! isshippingpage ) 
-  pdferror ( 1861 , 1946 ) ;
+  pdferror ( 1859 , 1942 ) ;
   t = getobj ( 9 , mem [p + 5 ].hh .v.RH , mem [p + 5 ].hh.b1 ) ;
   b = pdfnewobjnum () ;
   objtab [b ].int4 = pdfgetmem ( 5 ) ;
@@ -22810,7 +22743,7 @@ endthread ( void )
 {
   endthread_regmem 
   if ( pdfthreadlevel != curs ) 
-  pdferror ( 1861 , 1947 ) ;
+  pdferror ( 1859 , 1943 ) ;
   if ( ( pdfthreaddp == -1073741824L ) && ( lastthread != -268435455L ) ) 
   mem [lastthread + 4 ].cint = curv + eqtb [29922 ].cint ;
   if ( pdflastthreadnamedid ) 
@@ -22851,13 +22784,13 @@ zdodest ( halfword p , halfword parentbox , scaled x , scaled y )
   dodest_regmem 
   integer k  ;
   if ( ! isshippingpage ) 
-  pdferror ( 1861 , 1948 ) ;
+  pdferror ( 1859 , 1944 ) ;
   if ( doingleaders ) 
   return ;
   k = getobj ( 5 , mem [p + 5 ].hh .v.RH , mem [p + 5 ].hh.b1 ) ;
   if ( objtab [k ].int4 != -268435455L ) 
   {
-    warndestdup ( mem [p + 5 ].hh .v.RH , mem [p + 5 ].hh.b1 , 1861 , 1862 
+    warndestdup ( mem [p + 5 ].hh .v.RH , mem [p + 5 ].hh.b1 , 1859 , 1860 
     ) ;
     return ;
   } 
@@ -22969,7 +22902,7 @@ zoutform ( halfword p )
   if ( pdfresnameprefix != 0 ) 
   pdfprint ( pdfresnameprefix ) ;
   {
-    pdfprint ( 1949 ) ;
+    pdfprint ( 1945 ) ;
     {
       {
 	if ( pdfosmode && ( 1 + pdfptr > pdfbufsize ) ) 
@@ -23160,7 +23093,7 @@ zoutimage ( halfword p )
   if ( pdfresnameprefix != 0 ) 
   pdfprint ( pdfresnameprefix ) ;
   {
-    pdfprint ( 1949 ) ;
+    pdfprint ( 1945 ) ;
     {
       {
 	if ( pdfosmode && ( 1 + pdfptr > pdfbufsize ) ) 
@@ -23210,7 +23143,7 @@ zgapamount ( halfword p , scaled curpos )
   if ( mem [p ].hh.b1 == 35 ) 
   lastpos = pdfsnapyrefpos + snapunit * ( ( curpos - pdfsnapyrefpos ) / 
   snapunit ) ;
-  else pdferror ( 1950 , 1951 ) ;
+  else pdferror ( 1946 , 1947 ) ;
   nextpos = lastpos + snapunit ;
   g = 1073741823L ;
   g2 = 1073741823L ;
@@ -23246,7 +23179,7 @@ zgetvpos ( halfword p , halfword q , halfword b )
   while ( ( p != q ) && ( p != -268435455L ) ) {
       
     if ( ( p >= himemmin ) ) 
-    confusion ( 1960 ) ;
+    confusion ( 1956 ) ;
     else {
 	
       switch ( mem [p ].hh.b0 ) 
@@ -23316,7 +23249,7 @@ zdosnapycomp ( halfword p , halfword b )
   scaled tmpv, g, g2  ;
   if ( ! ( ! ( p >= himemmin ) && ( mem [p ].hh.b0 == 8 ) && ( mem [p ]
   .hh.b1 == 36 ) ) ) 
-  pdferror ( 1950 , 1961 ) ;
+  pdferror ( 1946 , 1957 ) ;
   q = p ;
   while ( ( q != -268435455L ) ) {
       
@@ -23411,7 +23344,7 @@ pdfhlistout ( void )
     {
       pdfassert ( ( mem [pdflinkstack [i ].linknode + 1 ].cint == 
       -1073741824L ) ) ;
-      if ( ( pdflinkstack [i ].nestinglevel == curs ) && genrunninglink ) 
+      if ( ( pdflinkstack [i ].nestinglevel == curs ) ) 
       appendlink ( thisbox , leftedge , baseline , i ) ;
     } 
   while ( i++ < for_end ) ;} 
@@ -23427,11 +23360,11 @@ pdfhlistout ( void )
 	  if ( pdffonttype [f ]== 0 ) 
 	  dovf ( f ) ;
 	  if ( pdffonttype [f ]== 1 ) 
-	  dovfpacket ( f , c , p ) ;
+	  dovfpacket ( f , c ) ;
 	  else {
 	      
 	    pdfbeginstring ( f ) ;
-	    pdfprintchar ( f , c , p ) ;
+	    pdfprintchar ( f , c ) ;
 	    advcharwidth ( f , c ) ;
 	  } 
 	} 
@@ -23471,7 +23404,7 @@ pdfhlistout ( void )
 		} 
 	      } 
 	      begindiagnostic () ;
-	      printnl ( 2082 ) ;
+	      printnl ( 2078 ) ;
 	      print ( c ) ;
 	      print ( 1632 ) ;
 	      print ( accentc ) ;
@@ -23487,7 +23420,7 @@ pdfhlistout ( void )
 	} 
 	begindiagnostic () ;
 	printnl ( 985 ) ;
-	print ( 2081 ) ;
+	print ( 2077 ) ;
 	print ( c ) ;
 	print ( 986 ) ;
 	slowprint ( fontname [f ]) ;
@@ -23497,7 +23430,7 @@ pdfhlistout ( void )
 	lab40: if ( eqtb [29312 ].cint > 99 ) 
 	{
 	  begindiagnostic () ;
-	  printnl ( 2083 ) ;
+	  printnl ( 2079 ) ;
 	  print ( c ) ;
 	  print ( 1632 ) ;
 	  print ( accentc ) ;
@@ -23527,11 +23460,11 @@ pdfhlistout ( void )
 	    if ( pdffonttype [f ]== 0 ) 
 	    dovf ( f ) ;
 	    if ( pdffonttype [f ]== 1 ) 
-	    dovfpacket ( f , accentc , p ) ;
+	    dovfpacket ( f , accentc ) ;
 	    else {
 		
 	      pdfbeginstring ( f ) ;
-	      pdfprintchar ( f , accentc , p ) ;
+	      pdfprintchar ( f , accentc ) ;
 	      advcharwidth ( f , accentc ) ;
 	    } 
 	  } 
@@ -23543,11 +23476,11 @@ pdfhlistout ( void )
 	    if ( pdffonttype [f ]== 0 ) 
 	    dovf ( f ) ;
 	    if ( pdffonttype [f ]== 1 ) 
-	    dovfpacket ( f , accentc , p ) ;
+	    dovfpacket ( f , accentc ) ;
 	    else {
 		
 	      pdfbeginstring ( f ) ;
-	      pdfprintchar ( f , accentc , p ) ;
+	      pdfprintchar ( f , accentc ) ;
 	      advcharwidth ( f , accentc ) ;
 	    } 
 	  } 
@@ -23558,11 +23491,11 @@ pdfhlistout ( void )
 	  if ( pdffonttype [f ]== 0 ) 
 	  dovf ( f ) ;
 	  if ( pdffonttype [f ]== 1 ) 
-	  dovfpacket ( f , basec , p ) ;
+	  dovfpacket ( f , basec ) ;
 	  else {
 	      
 	    pdfbeginstring ( f ) ;
-	    pdfprintchar ( f , basec , p ) ;
+	    pdfprintchar ( f , basec ) ;
 	    advcharwidth ( f , basec ) ;
 	  } 
 	} 
@@ -23658,10 +23591,10 @@ pdfhlistout ( void )
 	dothread ( p , thisbox , leftedge , baseline ) ;
 	break ;
       case 19 : 
-	pdferror ( 1861 , 1972 ) ;
+	pdferror ( 1859 , 1968 ) ;
 	break ;
       case 20 : 
-	pdferror ( 1861 , 1973 ) ;
+	pdferror ( 1859 , 1969 ) ;
 	break ;
       case 21 : 
 	{
@@ -23692,12 +23625,6 @@ pdfhlistout ( void )
 	break ;
       case 45 : 
 	pdfinsertfakespace () ;
-	break ;
-      case 46 : 
-	genrunninglink = false ;
-	break ;
-      case 47 : 
-	genrunninglink = true ;
 	break ;
 	default: 
 	outwhat ( p ) ;
@@ -23842,7 +23769,6 @@ pdfhlistout ( void )
 	      {
 		mem [tempptr ].hh .v.RH = avail ;
 		avail = tempptr ;
-		mem [tempptr ].hh .me = 0 ;
 	;
 #ifdef STAT
 		decr ( dynused ) ;
@@ -23891,7 +23817,6 @@ pdfhlistout ( void )
       {
 	mem [memtop - 12 ]= mem [p + 1 ];
 	mem [memtop - 12 ].hh .v.RH = mem [p ].hh .v.RH ;
-	mem [memtop - 12 ].hh .me = mem [p ].hh .me ;
 	p = memtop - 12 ;
 	goto lab21 ;
       } 
@@ -23936,7 +23861,6 @@ pdfhlistout ( void )
 	  {
 	    mem [tempptr ].hh .v.RH = avail ;
 	    avail = tempptr ;
-	    mem [tempptr ].hh .me = 0 ;
 	;
 #ifdef STAT
 	    decr ( dynused ) ;
@@ -23950,7 +23874,6 @@ pdfhlistout ( void )
 	{
 	  mem [tempptr ].hh .v.RH = avail ;
 	  avail = tempptr ;
-	  mem [tempptr ].hh .me = 0 ;
 	;
 #ifdef STAT
 	  decr ( dynused ) ;
@@ -24077,10 +24000,10 @@ pdfvlistout ( void )
 	  .cint ) ;
 	  break ;
 	case 14 : 
-	  pdferror ( 1861 , 1970 ) ;
+	  pdferror ( 1859 , 1966 ) ;
 	  break ;
 	case 15 : 
-	  pdferror ( 1861 , 1971 ) ;
+	  pdferror ( 1859 , 1967 ) ;
 	  break ;
 	case 17 : 
 	  dodest ( p , thisbox , leftedge , topedge + mem [thisbox + 3 ]
@@ -24125,12 +24048,6 @@ pdfvlistout ( void )
 	  break ;
 	case 45 : 
 	  pdfinsertfakespace () ;
-	  break ;
-	case 46 : 
-	  genrunninglink = false ;
-	  break ;
-	case 47 : 
-	  genrunninglink = true ;
 	  break ;
 	  default: 
 	  outwhat ( p ) ;
@@ -25320,18 +25237,18 @@ zpdfshipout ( halfword p , boolean shippingpage )
     {
       {
 	println () ;
-	printnl ( 2033 ) ;
+	printnl ( 2029 ) ;
 	printint ( LRproblems / 10000 ) ;
-	print ( 2034 ) ;
+	print ( 2030 ) ;
 	printint ( LRproblems % 10000 ) ;
-	print ( 2035 ) ;
+	print ( 2031 ) ;
 	LRproblems = 0 ;
       } 
       printchar ( 41 ) ;
       println () ;
     } 
     if ( ( LRptr != -268435455L ) || ( curdir != 0 ) ) 
-    confusion ( 2037 ) ;
+    confusion ( 2033 ) ;
   } 
   if ( ( eqtb [29311 ].cint <= 0 ) && shippingpage ) 
   printchar ( 93 ) ;
@@ -25714,7 +25631,6 @@ pdfprintinfo ( void )
   {
     pdfstrentryln ( 1228 , pdftexbanner ) ;
   } 
-  outputfileinfo () ;
   pdfenddict () ;
 } 
 void 
@@ -26032,7 +25948,6 @@ znewmarginkern ( scaled w , halfword p , smallnumber side )
 	
       avail = mem [mem [k + 2 ].hh .v.LH ].hh .v.RH ;
       mem [mem [k + 2 ].hh .v.LH ].hh .v.RH = -268435455L ;
-      mem [mem [k + 2 ].hh .v.LH ].hh .me = curchrsig ;
 	;
 #ifdef STAT
       incr ( dynused ) ;
@@ -26281,7 +26196,6 @@ zhpack ( halfword p , scaled w , smallnumber m )
 		{
 		  mem [tempptr ].hh .v.RH = avail ;
 		  avail = tempptr ;
-		  mem [tempptr ].hh .me = 0 ;
 	;
 #ifdef STAT
 		  decr ( dynused ) ;
@@ -26313,7 +26227,6 @@ zhpack ( halfword p , scaled w , smallnumber m )
 	  {
 	    mem [memtop - 12 ]= mem [p + 1 ];
 	    mem [memtop - 12 ].hh .v.RH = mem [p ].hh .v.RH ;
-	    mem [memtop - 12 ].hh .me = mem [p ].hh .me ;
 	    p = memtop - 12 ;
 	    goto lab21 ;
 	  } 
@@ -26489,7 +26402,6 @@ zhpack ( halfword p , scaled w , smallnumber m )
 	  {
 	    mem [tempptr ].hh .v.RH = avail ;
 	    avail = tempptr ;
-	    mem [tempptr ].hh .me = 0 ;
 	;
 #ifdef STAT
 	    decr ( dynused ) ;
@@ -26502,11 +26414,11 @@ zhpack ( halfword p , scaled w , smallnumber m )
     {
       {
 	println () ;
-	printnl ( 2033 ) ;
+	printnl ( 2029 ) ;
 	printint ( LRproblems / 10000 ) ;
-	print ( 2034 ) ;
+	print ( 2030 ) ;
 	printint ( LRproblems % 10000 ) ;
-	print ( 2035 ) ;
+	print ( 2031 ) ;
 	LRproblems = 0 ;
       } 
       goto lab50 ;
@@ -26517,7 +26429,6 @@ zhpack ( halfword p , scaled w , smallnumber m )
       {
 	mem [tempptr ].hh .v.RH = avail ;
 	avail = tempptr ;
-	mem [tempptr ].hh .me = 0 ;
 	;
 #ifdef STAT
 	decr ( dynused ) ;
@@ -26525,7 +26436,7 @@ zhpack ( halfword p , scaled w , smallnumber m )
       } 
     } 
     if ( LRptr != -268435455L ) 
-    confusion ( 2032 ) ;
+    confusion ( 2028 ) ;
   } 
   if ( ( m == 2 ) && ( fontexpandratio != 0 ) ) 
   {
@@ -27128,7 +27039,6 @@ zcleanbox ( halfword p , smallnumber s )
     {
       curmlist = newnoad () ;
       mem [curmlist + 1 ]= mem [p ];
-      mem [curmlist ].hh .me = mem [p ].hh .me ;
     } 
     break ;
   case 2 : 
@@ -27385,7 +27295,6 @@ zmakemathaccent ( halfword q )
       {
 	flushnodelist ( x ) ;
 	x = newnoad () ;
-	mem [x ].hh .me = mem [q ].hh .me ;
 	mem [x + 1 ]= mem [q + 1 ];
 	mem [x + 2 ]= mem [q + 2 ];
 	mem [x + 3 ]= mem [q + 3 ];
@@ -28076,7 +27985,6 @@ mlisttohlist ( void )
 	{
 	  delta = fontinfo [italicbase [curf ]+ ( curi .b2 ) / 4 ].cint ;
 	  p = newcharacter ( curf , curc ) ;
-	  mem [p ].hh .me = mem [q ].hh .me ;
 	  if ( ( mem [q + 1 ].hh .v.RH == 4 ) && ( fontinfo [2 + parambase 
 	  [curf ]].cint != 0 ) ) 
 	  delta = 0 ;
@@ -28340,7 +28248,6 @@ popalignment ( void )
   {
     mem [curhead ].hh .v.RH = avail ;
     avail = curhead ;
-    mem [curhead ].hh .me = 0 ;
 	;
 #ifdef STAT
     decr ( dynused ) ;
@@ -28349,7 +28256,6 @@ popalignment ( void )
   {
     mem [curprehead ].hh .v.RH = avail ;
     avail = curprehead ;
-    mem [curprehead ].hh .me = 0 ;
 	;
 #ifdef STAT
     decr ( dynused ) ;
@@ -29714,10 +29620,10 @@ ztrybreak ( integer pi , smallnumber breaktype )
 		  printint ( mem [q + 2 ].cint ) ;
 		  if ( dolastlinefit ) 
 		  {
-		    print ( 2073 ) ;
+		    print ( 2069 ) ;
 		    printscaled ( mem [q + 3 ].cint ) ;
 		    if ( curp == -268435455L ) 
-		    print ( 2074 ) ;
+		    print ( 2070 ) ;
 		    else print ( 1413 ) ;
 		    printscaled ( mem [q + 4 ].cint ) ;
 		  } 
@@ -29794,7 +29700,6 @@ ztrybreak ( integer pi , smallnumber breaktype )
 		
 	      avail = mem [cp ].hh .v.RH ;
 	      mem [cp ].hh .v.RH = -268435455L ;
-	      mem [cp ].hh .me = curchrsig ;
 	;
 #ifdef STAT
 	      incr ( dynused ) ;
@@ -29832,7 +29737,6 @@ ztrybreak ( integer pi , smallnumber breaktype )
 	  {
 	    mem [cp ].hh .v.RH = avail ;
 	    avail = cp ;
-	    mem [cp ].hh .me = 0 ;
 	;
 #ifdef STAT
 	    decr ( dynused ) ;
@@ -30258,7 +30162,6 @@ zpostlinebreak ( boolean d )
 		  {
 		    mem [tempptr ].hh .v.RH = avail ;
 		    avail = tempptr ;
-		    mem [tempptr ].hh .me = 0 ;
 	;
 #ifdef STAT
 		    decr ( dynused ) ;
@@ -30357,7 +30260,6 @@ zpostlinebreak ( boolean d )
 		  {
 		    mem [tempptr ].hh .v.RH = avail ;
 		    avail = tempptr ;
-		    mem [tempptr ].hh .me = 0 ;
 	;
 #ifdef STAT
 		    decr ( dynused ) ;
@@ -30585,7 +30487,6 @@ zpostlinebreak ( boolean d )
 		    {
 		      mem [tempptr ].hh .v.RH = avail ;
 		      avail = tempptr ;
-		      mem [tempptr ].hh .me = 0 ;
 	;
 #ifdef STAT
 		      decr ( dynused ) ;
@@ -30652,7 +30553,6 @@ hchar )
 	mem [t ].hh.b0 = hf ;
 	mem [t ].hh.b1 = mem [p ].hh.b1 ;
       } 
-      mem [t ].hh .me = mem [p ].hh .me ;
       p = mem [p ].hh .v.RH ;
     } 
   } 
@@ -30663,7 +30563,6 @@ hchar )
     mem [t ].hh.b0 = hf ;
     mem [t ].hh.b1 = curl ;
   } 
-  mem [t ].hh .me = hm [j ];
   ligstack = -268435455L ;
   {
     if ( j < n ) 
@@ -30776,8 +30675,6 @@ hchar )
 		if ( ligaturepresent ) 
 		{
 		  p = newligature ( hf , curl , mem [curq ].hh .v.RH ) ;
-		  if ( mem [curq ].hh .v.RH != -268435455L ) 
-		  mem [p ].hh .me = mem [mem [curq ].hh .v.RH ].hh .me ;
 		  if ( lfthit ) 
 		  {
 		    mem [p ].hh.b1 = 2 ;
@@ -30878,8 +30775,6 @@ hchar )
   if ( ligaturepresent ) 
   {
     p = newligature ( hf , curl , mem [curq ].hh .v.RH ) ;
-    if ( mem [curq ].hh .v.RH != -268435455L ) 
-    mem [p ].hh .me = mem [mem [curq ].hh .v.RH ].hh .me ;
     if ( lfthit ) 
     {
       mem [p ].hh.b1 = 2 ;
@@ -31136,7 +31031,6 @@ hyphenate ( void )
 	{
 	  mem [hyfnode ].hh .v.RH = avail ;
 	  avail = hyfnode ;
-	  mem [hyfnode ].hh .me = 0 ;
 	;
 #ifdef STAT
 	  decr ( dynused ) ;
@@ -31238,7 +31132,7 @@ zeTeXenabled ( boolean b , quarterword j , halfword k )
     printcmdchr ( j , k ) ;
     {
       helpptr = 1 ;
-      helpline [0 ]= 1976 ;
+      helpline [0 ]= 1972 ;
     } 
     error () ;
   } 
@@ -31310,7 +31204,7 @@ showsavegroups ( void )
       else {
 	  
 	if ( a == 1 ) 
-	print ( 2014 ) ;
+	print ( 2010 ) ;
 	else printesc ( 1311 ) ;
 	if ( p >= a ) 
 	p = p - a ;
@@ -32559,7 +32453,6 @@ appspace ( void )
     mem [mainp + 3 ].cint = xnoverd ( mem [mainp + 3 ].cint , 1000 , 
     curlist .auxfield .hh .v.LH ) ;
     q = newglue ( mainp ) ;
-    mem [q ].hh .me = curchrsig ;
     mem [mainp ].hh .v.RH = -268435455L ;
   } 
   mem [curlist .tailfield ].hh .v.RH = q ;
@@ -33590,7 +33483,6 @@ unpackage ( void )
       {
 	mem [mem [r + 2 ].hh .v.LH ].hh .v.RH = avail ;
 	avail = mem [r + 2 ].hh .v.LH ;
-	mem [mem [r + 2 ].hh .v.LH ].hh .me = 0 ;
 	;
 #ifdef STAT
 	decr ( dynused ) ;
@@ -34041,7 +33933,6 @@ zjustcopy ( halfword p , halfword h , halfword t )
       {
 	r = getavail () ;
 	mem [r ]= mem [p + 1 ];
-	mem [r ].hh .me = mem [p + 1 ].hh .me ;
 	goto lab40 ;
       } 
       break ;
@@ -34213,14 +34104,8 @@ zjustcopy ( halfword p , halfword h , halfword t )
       case 45 : 
 	r = getnode ( 2 ) ;
 	break ;
-      case 46 : 
-	r = getnode ( 2 ) ;
-	break ;
-      case 47 : 
-	r = getnode ( 2 ) ;
-	break ;
 	default: 
-	confusion ( 1914 ) ;
+	confusion ( 1910 ) ;
 	break ;
       } 
       break ;
@@ -34291,7 +34176,6 @@ zjustreverse ( halfword p )
 	    {
 	      mem [tempptr ].hh .v.RH = avail ;
 	      avail = tempptr ;
-	      mem [tempptr ].hh .me = 0 ;
 	;
 #ifdef STAT
 	      decr ( dynused ) ;
@@ -34440,7 +34324,6 @@ initmath ( void )
 	  {
 	    mem [memtop - 12 ]= mem [p + 1 ];
 	    mem [memtop - 12 ].hh .v.RH = mem [p ].hh .v.RH ;
-	    mem [memtop - 12 ].hh .me = mem [p ].hh .me ;
 	    p = memtop - 12 ;
 	    goto lab21 ;
 	  } 
@@ -34466,7 +34349,6 @@ initmath ( void )
 		  {
 		    mem [tempptr ].hh .v.RH = avail ;
 		    avail = tempptr ;
-		    mem [tempptr ].hh .me = 0 ;
 	;
 #ifdef STAT
 		    decr ( dynused ) ;
@@ -34561,7 +34443,6 @@ initmath ( void )
 	  {
 	    mem [tempptr ].hh .v.RH = avail ;
 	    avail = tempptr ;
-	    mem [tempptr ].hh .me = 0 ;
 	;
 #ifdef STAT
 	    decr ( dynused ) ;
@@ -34708,7 +34589,6 @@ zscanmath ( halfword p )
   } 
   mem [p ].hh .v.RH = 1 ;
   mem [p ].hh.b1 = c % 256 ;
-  mem [p ].hh .me = curchrsig ;
   if ( ( c >= 28672 ) && ( ( eqtb [29321 ].cint >= 0 ) && ( eqtb [29321 ]
   .cint < 16 ) ) ) 
   mem [p ].hh.b0 = eqtb [29321 ].cint ;
@@ -34733,7 +34613,6 @@ zsetmathchar ( integer c )
     mem [p + 1 ].hh .v.RH = 1 ;
     mem [p + 1 ].hh.b1 = c % 256 ;
     mem [p + 1 ].hh.b0 = ( c / 256 ) % 16 ;
-    mem [p ].hh .me = curchrsig ;
     if ( c >= 28672 ) 
     {
       if ( ( ( eqtb [29321 ].cint >= 0 ) && ( eqtb [29321 ].cint < 16 ) ) 
@@ -35198,7 +35077,7 @@ zappdisplay ( halfword j , halfword b , scaled d )
       r = mem [p + 5 ].hh .v.RH ;
       freenode ( p , 7 ) ;
       if ( r == -268435455L ) 
-      confusion ( 2038 ) ;
+      confusion ( 2034 ) ;
       if ( x > 0 ) 
       {
 	p = r ;
@@ -36002,12 +35881,12 @@ alterinteger ( void )
 	if ( filelineerrorstylep ) 
 	printfileline () ;
 	else printnl ( 264 ) ;
-	print ( 2023 ) ;
+	print ( 2019 ) ;
       } 
       {
 	helpptr = 2 ;
-	helpline [1 ]= 2024 ;
-	helpline [0 ]= 2025 ;
+	helpline [1 ]= 2020 ;
+	helpline [0 ]= 2021 ;
       } 
       interror ( curval ) ;
     } 
@@ -36308,7 +36187,6 @@ shiftcase ( void )
   {
     mem [defref ].hh .v.RH = avail ;
     avail = defref ;
-    mem [defref ].hh .me = 0 ;
 	;
 #ifdef STAT
     decr ( dynused ) ;
@@ -36381,7 +36259,7 @@ showwhatever ( void )
       if ( condptr == -268435455L ) 
       {
 	printnl ( 380 ) ;
-	print ( 2020 ) ;
+	print ( 2016 ) ;
       } 
       else {
 	  
@@ -36396,7 +36274,7 @@ showwhatever ( void )
 	l = ifline ;
 	m = iflimit ;
 	do {
-	    printnl ( 2021 ) ;
+	    printnl ( 2017 ) ;
 	  printint ( n ) ;
 	  print ( 653 ) ;
 	  printcmdchr ( 107 , t ) ;
@@ -36404,7 +36282,7 @@ showwhatever ( void )
 	  printesc ( 933 ) ;
 	  if ( l != 0 ) 
 	  {
-	    print ( 2019 ) ;
+	    print ( 2015 ) ;
 	    printint ( l ) ;
 	  } 
 	  decr ( n ) ;
@@ -36513,8 +36391,8 @@ zcheckpdfoutput ( strnumber s , boolean iserror )
   if ( eqtb [29339 ].cint <= 0 ) 
   {
     if ( iserror ) 
-    pdferror ( s , 1782 ) ;
-    else pdfwarning ( s , 1783 , true , true ) ;
+    pdferror ( s , 1780 ) ;
+    else pdfwarning ( s , 1781 , true , true ) ;
   } 
 } 
 void 
@@ -36602,10 +36480,10 @@ zscaleimage ( integer n )
   {
     xr = 0 ;
     yr = 0 ;
-    pdfwarning ( 1781 , 1813 , true , true ) ;
+    pdfwarning ( 1779 , 1811 , true , true ) ;
   } 
   if ( ( x <= 0 ) || ( y <= 0 ) || ( xr < 0 ) || ( yr < 0 ) ) 
-  pdferror ( 1781 , 1814 ) ;
+  pdferror ( 1779 , 1812 ) ;
   if ( ispdfimage ( image ) ) 
   {
     w = x ;
@@ -36688,15 +36566,15 @@ scanpdfboxspec ( void )
 {
   register integer Result; scanpdfboxspec_regmem 
   Result = 0 ;
-  if ( scankeyword ( 1815 ) ) 
+  if ( scankeyword ( 1813 ) ) 
   Result = pdfboxspecmedia ;
-  else if ( scankeyword ( 1816 ) ) 
+  else if ( scankeyword ( 1814 ) ) 
   Result = pdfboxspeccrop ;
-  else if ( scankeyword ( 1817 ) ) 
+  else if ( scankeyword ( 1815 ) ) 
   Result = pdfboxspecbleed ;
-  else if ( scankeyword ( 1818 ) ) 
+  else if ( scankeyword ( 1816 ) ) 
   Result = pdfboxspectrim ;
-  else if ( scankeyword ( 1819 ) ) 
+  else if ( scankeyword ( 1817 ) ) 
   Result = pdfboxspecart ;
   return Result ;
 } 
@@ -36744,14 +36622,14 @@ scanimage ( void )
   pdfmem [objtab [k ].int4 + 0 ]= mem [altrule + 1 ].cint ;
   pdfmem [objtab [k ].int4 + 1 ]= mem [altrule + 3 ].cint ;
   pdfmem [objtab [k ].int4 + 2 ]= mem [altrule + 2 ].cint ;
-  if ( scankeyword ( 1806 ) ) 
+  if ( scankeyword ( 1804 ) ) 
   {
     scanpdfexttoks () ;
     pdfmem [objtab [k ].int4 + 3 ]= defref ;
   } 
   else pdfmem [objtab [k ].int4 + 3 ]= -268435455L ;
   named = 0 ;
-  if ( scankeyword ( 1820 ) ) 
+  if ( scankeyword ( 1818 ) ) 
   {
     scanpdfexttoks () ;
     named = tokenstostring ( defref ) ;
@@ -36763,7 +36641,7 @@ scanimage ( void )
     page = curval ;
   } 
   else page = 1 ;
-  if ( scankeyword ( 1821 ) ) 
+  if ( scankeyword ( 1819 ) ) 
   {
     scanint () ;
     colorspace = curval ;
@@ -36777,14 +36655,14 @@ scanimage ( void )
   deletetokenref ( defref ) ;
   if ( eqtb [29346 ].cint != 0 ) 
   {
-    pdfwarning ( 1822 , 1823 , true , true ) ;
+    pdfwarning ( 1820 , 1821 , true , true ) ;
     eqtb [29350 ].cint = eqtb [29346 ].cint ;
     eqtb [29346 ].cint = 0 ;
     warnpdfpagebox = false ;
   } 
   if ( eqtb [29347 ].cint != 0 ) 
   {
-    pdfwarning ( 1822 , 1824 , true , true ) ;
+    pdfwarning ( 1820 , 1822 , true , true ) ;
     eqtb [29352 ].cint = eqtb [29347 ].cint ;
     eqtb [29347 ].cint = 0 ;
   } 
@@ -36792,7 +36670,7 @@ scanimage ( void )
   {
     if ( warnpdfpagebox ) 
     {
-      pdfwarning ( 1822 , 1825 , true , true ) ;
+      pdfwarning ( 1820 , 1823 , true , true ) ;
       warnpdfpagebox = false ;
     } 
     pagebox = eqtb [29350 ].cint ;
@@ -36820,13 +36698,13 @@ scanaction ( void )
   Result = p ;
   mem [p + 1 ].hh .v.LH = -268435455L ;
   mem [p + 2 ].hh .v.RH = -268435455L ;
-  if ( scankeyword ( 1828 ) ) 
+  if ( scankeyword ( 1826 ) ) 
   mem [p ].hh.b0 = 3 ;
-  else if ( scankeyword ( 1829 ) ) 
+  else if ( scankeyword ( 1827 ) ) 
   mem [p ].hh.b0 = 1 ;
-  else if ( scankeyword ( 1830 ) ) 
+  else if ( scankeyword ( 1828 ) ) 
   mem [p ].hh.b0 = 2 ;
-  else pdferror ( 1781 , 1831 ) ;
+  else pdferror ( 1779 , 1829 ) ;
   if ( mem [p ].hh.b0 == 3 ) 
   {
     scanpdfexttoks () ;
@@ -36841,17 +36719,17 @@ scanaction ( void )
   if ( scankeyword ( 891 ) ) 
   {
     if ( mem [p ].hh.b0 != 1 ) 
-    pdferror ( 1781 , 1832 ) ;
+    pdferror ( 1779 , 1830 ) ;
     mem [p ].hh.b0 = 0 ;
     scanint () ;
     if ( curval <= 0 ) 
-    pdferror ( 1781 , 1833 ) ;
+    pdferror ( 1779 , 1831 ) ;
     mem [p ].hh .v.RH = curval ;
     mem [p ].hh.b1 = 0 ;
     scanpdfexttoks () ;
     mem [p + 2 ].hh .v.LH = defref ;
   } 
-  else if ( scankeyword ( 1834 ) ) 
+  else if ( scankeyword ( 1832 ) ) 
   {
     scanpdfexttoks () ;
     mem [p ].hh.b1 = 1 ;
@@ -36861,15 +36739,15 @@ scanaction ( void )
   {
     if ( ( mem [p ].hh.b0 == 1 ) && ( mem [p + 1 ].hh .v.LH != -268435455L 
     ) ) 
-    pdferror ( 1781 , 1835 ) ;
+    pdferror ( 1779 , 1833 ) ;
     scanint () ;
     if ( curval <= 0 ) 
-    pdferror ( 1781 , 1836 ) ;
+    pdferror ( 1779 , 1834 ) ;
     mem [p ].hh.b1 = 0 ;
     mem [p ].hh .v.RH = curval ;
   } 
-  else pdferror ( 1781 , 1837 ) ;
-  if ( scankeyword ( 1838 ) ) 
+  else pdferror ( 1779 , 1835 ) ;
+  if ( scankeyword ( 1836 ) ) 
   {
     mem [p + 1 ].hh .v.RH = 1 ;
     {
@@ -36878,7 +36756,7 @@ scanaction ( void )
       backinput () ;
     } 
   } 
-  else if ( scankeyword ( 1839 ) ) 
+  else if ( scankeyword ( 1837 ) ) 
   {
     mem [p + 1 ].hh .v.RH = 2 ;
     {
@@ -36890,7 +36768,7 @@ scanaction ( void )
   else mem [p + 1 ].hh .v.RH = 0 ;
   if ( ( mem [p + 1 ].hh .v.RH > 0 ) && ( ( ( mem [p ].hh.b0 != 1 ) && ( 
   mem [p ].hh.b0 != 0 ) ) || ( mem [p + 1 ].hh .v.LH == -268435455L ) ) ) 
-  pdferror ( 1781 , 1840 ) ;
+  pdferror ( 1779 , 1838 ) ;
   return Result ;
 } 
 void 
@@ -36904,7 +36782,7 @@ znewannotwhatsit ( smallnumber w , smallnumber s )
   mem [curlist .tailfield + 3 ].cint = mem [altrule + 2 ].cint ;
   if ( ( w == 14 ) ) 
   {
-    if ( scankeyword ( 1806 ) ) 
+    if ( scankeyword ( 1804 ) ) 
     {
       scanpdfexttoks () ;
       mem [curlist .tailfield + 5 ].hh .v.LH = defref ;
@@ -36913,7 +36791,7 @@ znewannotwhatsit ( smallnumber w , smallnumber s )
   } 
   if ( ( w == 18 ) || ( w == 19 ) ) 
   {
-    if ( scankeyword ( 1806 ) ) 
+    if ( scankeyword ( 1804 ) ) 
     {
       scanpdfexttoks () ;
       mem [curlist .tailfield + 6 ].hh .v.LH = defref ;
@@ -36943,19 +36821,19 @@ scanthreadid ( void )
   {
     scanint () ;
     if ( curval <= 0 ) 
-    pdferror ( 1781 , 1836 ) ;
+    pdferror ( 1779 , 1834 ) ;
     if ( curval > 268435455L ) 
-    pdferror ( 1781 , 1033 ) ;
+    pdferror ( 1779 , 1033 ) ;
     mem [curlist .tailfield + 5 ].hh .v.RH = curval ;
     mem [curlist .tailfield + 5 ].hh.b1 = 0 ;
   } 
-  else if ( scankeyword ( 1834 ) ) 
+  else if ( scankeyword ( 1832 ) ) 
   {
     scanpdfexttoks () ;
     mem [curlist .tailfield + 5 ].hh .v.RH = defref ;
     mem [curlist .tailfield + 5 ].hh.b1 = 1 ;
   } 
-  else pdferror ( 1781 , 1837 ) ;
+  else pdferror ( 1779 , 1835 ) ;
 } 
 halfword 
 znewsnapnode ( smallnumber s ) 
@@ -36964,7 +36842,7 @@ znewsnapnode ( smallnumber s )
   halfword p  ;
   scanglue ( 2 ) ;
   if ( mem [curval + 1 ].cint < 0 ) 
-  pdferror ( 1781 , 1867 ) ;
+  pdferror ( 1779 , 1865 ) ;
   p = getnode ( 3 ) ;
   mem [p ].hh.b0 = 8 ;
   mem [p ].hh.b1 = s ;
@@ -36990,7 +36868,6 @@ zconcattokens ( halfword q , halfword r )
   {
     mem [r ].hh .v.RH = avail ;
     avail = r ;
-    mem [r ].hh .me = 0 ;
 	;
 #ifdef STAT
     decr ( dynused ) ;
@@ -37043,7 +36920,7 @@ void
 zthreadtitle ( integer thread ) 
 {
   threadtitle_regmem 
-  pdfprint ( 1886 ) ;
+  pdfprint ( 1882 ) ;
   if ( objtab [thread ].int0 < 0 ) 
   pdfprint ( - (integer) objtab [thread ].int0 ) ;
   else pdfprintint ( objtab [thread ].int0 ) ;
@@ -37070,7 +36947,7 @@ zpdffixthread ( integer thread )
 {
   pdffixthread_regmem 
   halfword a  ;
-  pdfwarning ( 1830 , 1887 , false , false ) ;
+  pdfwarning ( 1828 , 1883 , false , false ) ;
   if ( objtab [thread ].int0 < 0 ) 
   {
     print ( 1199 ) ;
@@ -37091,7 +36968,7 @@ zpdffixthread ( integer thread )
   pdfindirectln ( 86 , a ) ;
   pdfindirectln ( 78 , a ) ;
   pdfindirectln ( 80 , headtab [1 ]) ;
-  pdfprint ( 1888 ) ;
+  pdfprint ( 1884 ) ;
   pdfprintbp ( eqtb [29918 ].cint ) ;
   {
     {
@@ -37128,7 +37005,7 @@ zpdffixthread ( integer thread )
   pdfenddict () ;
   pdfbegindict ( thread , 1 ) ;
   {
-    pdfprint ( 1889 ) ;
+    pdfprint ( 1885 ) ;
     {
       {
 	if ( pdfosmode && ( 1 + pdfptr > pdfbufsize ) ) 
@@ -37206,7 +37083,7 @@ zoutthread ( integer thread )
   else {
       
     {
-      pdfprint ( 1889 ) ;
+      pdfprint ( 1885 ) ;
       {
 	{
 	  if ( pdfosmode && ( 1 + pdfptr > pdfbufsize ) ) 
@@ -37330,7 +37207,7 @@ doextension ( void )
 	  {
 	    doextension () ;
 	    if ( objtab [pdflastobj ].int4 == 0 ) 
-	    pdferror ( 1781 , 1931 ) ;
+	    pdferror ( 1779 , 1927 ) ;
 	    pdfwriteobj ( pdflastobj ) ;
 	  } 
 	  break ;
@@ -37377,8 +37254,8 @@ doextension ( void )
     break ;
   case 13 : 
     {
-      checkpdfoutput ( 1841 , true ) ;
-      if ( scankeyword ( 1803 ) ) 
+      checkpdfoutput ( 1839 , true ) ;
+      if ( scankeyword ( 1801 ) ) 
       {
 	pdflastannot = pdfnewobjnum () ;
 	{
@@ -37389,12 +37266,12 @@ doextension ( void )
       } 
       else {
 	  
-	if ( scankeyword ( 1804 ) ) 
+	if ( scankeyword ( 1802 ) ) 
 	{
 	  scanint () ;
 	  k = curval ;
 	  if ( ( k <= 0 ) || ( k > objptr ) || ( objtab [k ].int4 != 0 ) ) 
-	  pdferror ( 1781 , 1842 ) ;
+	  pdferror ( 1779 , 1840 ) ;
 	} 
 	else k = pdfnewobjnum () ;
 	newannotwhatsit ( 13 , 7 ) ;
@@ -37407,14 +37284,14 @@ doextension ( void )
     break ;
   case 23 : 
     {
-      checkpdfoutput ( 1871 , false ) ;
+      checkpdfoutput ( 1869 , false ) ;
       scanpdfexttoks () ;
       if ( eqtb [29339 ].cint > 0 ) 
       pdfcatalogtoks = concattokens ( pdfcatalogtoks , defref ) ;
-      if ( scankeyword ( 1872 ) ) 
+      if ( scankeyword ( 1870 ) ) 
       {
 	if ( pdfcatalogopenaction != 0 ) 
-	pdferror ( 1781 , 1873 ) ;
+	pdferror ( 1779 , 1871 ) ;
 	else {
 	    
 	  p = scanaction () ;
@@ -37447,53 +37324,53 @@ doextension ( void )
     break ;
   case 17 : 
     {
-      checkpdfoutput ( 1850 , true ) ;
+      checkpdfoutput ( 1848 , true ) ;
       q = curlist .tailfield ;
       newwhatsit ( 17 , 7 ) ;
       if ( scankeyword ( 1200 ) ) 
       {
 	scanint () ;
 	if ( curval <= 0 ) 
-	pdferror ( 1781 , 1836 ) ;
+	pdferror ( 1779 , 1834 ) ;
 	if ( curval > 268435455L ) 
-	pdferror ( 1781 , 1033 ) ;
+	pdferror ( 1779 , 1033 ) ;
 	mem [curlist .tailfield + 5 ].hh .v.RH = curval ;
 	mem [curlist .tailfield + 5 ].hh.b1 = 0 ;
       } 
-      else if ( scankeyword ( 1834 ) ) 
+      else if ( scankeyword ( 1832 ) ) 
       {
 	scanpdfexttoks () ;
 	mem [curlist .tailfield + 5 ].hh .v.RH = defref ;
 	mem [curlist .tailfield + 5 ].hh.b1 = 1 ;
       } 
-      else pdferror ( 1781 , 1837 ) ;
-      if ( scankeyword ( 1851 ) ) 
+      else pdferror ( 1779 , 1835 ) ;
+      if ( scankeyword ( 1849 ) ) 
       {
 	mem [curlist .tailfield + 5 ].hh.b0 = 0 ;
-	if ( scankeyword ( 1852 ) ) 
+	if ( scankeyword ( 1850 ) ) 
 	{
 	  scanint () ;
 	  if ( curval > 268435455L ) 
-	  pdferror ( 1781 , 1033 ) ;
+	  pdferror ( 1779 , 1033 ) ;
 	  mem [curlist .tailfield + 6 ].hh .v.LH = curval ;
 	} 
 	else mem [curlist .tailfield + 6 ].hh .v.LH = -268435455L ;
       } 
-      else if ( scankeyword ( 1853 ) ) 
+      else if ( scankeyword ( 1851 ) ) 
       mem [curlist .tailfield + 5 ].hh.b0 = 5 ;
-      else if ( scankeyword ( 1854 ) ) 
+      else if ( scankeyword ( 1852 ) ) 
       mem [curlist .tailfield + 5 ].hh.b0 = 6 ;
-      else if ( scankeyword ( 1855 ) ) 
+      else if ( scankeyword ( 1853 ) ) 
       mem [curlist .tailfield + 5 ].hh.b0 = 4 ;
-      else if ( scankeyword ( 1856 ) ) 
+      else if ( scankeyword ( 1854 ) ) 
       mem [curlist .tailfield + 5 ].hh.b0 = 2 ;
-      else if ( scankeyword ( 1857 ) ) 
+      else if ( scankeyword ( 1855 ) ) 
       mem [curlist .tailfield + 5 ].hh.b0 = 3 ;
-      else if ( scankeyword ( 1858 ) ) 
+      else if ( scankeyword ( 1856 ) ) 
       mem [curlist .tailfield + 5 ].hh.b0 = 7 ;
-      else if ( scankeyword ( 1859 ) ) 
+      else if ( scankeyword ( 1857 ) ) 
       mem [curlist .tailfield + 5 ].hh.b0 = 1 ;
-      else pdferror ( 1781 , 1860 ) ;
+      else pdferror ( 1779 , 1858 ) ;
       {
 	getxtoken () ;
 	if ( curcmd != 10 ) 
@@ -37517,7 +37394,7 @@ doextension ( void )
       if ( ( k != 0 ) && ( objtab [k ].int4 != -268435455L ) ) 
       {
 	warndestdup ( mem [curlist .tailfield + 5 ].hh .v.RH , mem [curlist 
-	.tailfield + 5 ].hh.b1 , 1861 , 1862 ) ;
+	.tailfield + 5 ].hh.b1 , 1859 , 1860 ) ;
 	flushnodelist ( curlist .tailfield ) ;
 	curlist .tailfield = q ;
 	mem [q ].hh .v.RH = -268435455L ;
@@ -37526,15 +37403,15 @@ doextension ( void )
     break ;
   case 15 : 
     {
-      checkpdfoutput ( 1845 , true ) ;
+      checkpdfoutput ( 1843 , true ) ;
       if ( abs ( curlist .modefield ) == 1 ) 
-      pdferror ( 1781 , 1846 ) ;
+      pdferror ( 1779 , 1844 ) ;
       newwhatsit ( 15 , 2 ) ;
     } 
     break ;
   case 20 : 
     {
-      checkpdfoutput ( 1865 , true ) ;
+      checkpdfoutput ( 1863 , true ) ;
       newwhatsit ( 20 , 2 ) ;
     } 
     break ;
@@ -37554,13 +37431,13 @@ doextension ( void )
     break ;
   case 26 : 
     {
-      checkpdfoutput ( 1877 , true ) ;
+      checkpdfoutput ( 1875 , true ) ;
       pdfincludechars () ;
     } 
     break ;
   case 22 : 
     {
-      checkpdfoutput ( 1870 , false ) ;
+      checkpdfoutput ( 1868 , false ) ;
       scanpdfexttoks () ;
       if ( eqtb [29339 ].cint > 0 ) 
       pdfinfotoks = concattokens ( pdfinfotoks , defref ) ;
@@ -37568,7 +37445,7 @@ doextension ( void )
     break ;
   case 6 : 
     {
-      checkpdfoutput ( 1784 , true ) ;
+      checkpdfoutput ( 1782 , true ) ;
       newwhatsit ( 6 , 2 ) ;
       if ( scankeyword ( 892 ) ) 
       mem [curlist .tailfield + 1 ].hh .v.LH = 2 ;
@@ -37581,7 +37458,7 @@ doextension ( void )
     break ;
   case 38 : 
     {
-      checkpdfoutput ( 1785 , true ) ;
+      checkpdfoutput ( 1783 , true ) ;
       scanint () ;
       if ( curval >= colorstackused () ) 
       {
@@ -37591,14 +37468,14 @@ doextension ( void )
 	  if ( filelineerrorstylep ) 
 	  printfileline () ;
 	  else printnl ( 264 ) ;
-	  print ( 1786 ) ;
+	  print ( 1784 ) ;
 	} 
 	printint ( curval ) ;
 	{
 	  helpptr = 3 ;
-	  helpline [2 ]= 1787 ;
-	  helpline [1 ]= 1788 ;
-	  helpline [0 ]= 1789 ;
+	  helpline [2 ]= 1785 ;
+	  helpline [1 ]= 1786 ;
+	  helpline [0 ]= 1787 ;
 	} 
 	error () ;
 	curval = 0 ;
@@ -37611,32 +37488,32 @@ doextension ( void )
 	  if ( filelineerrorstylep ) 
 	  printfileline () ;
 	  else printnl ( 264 ) ;
-	  print ( 1790 ) ;
+	  print ( 1788 ) ;
 	} 
 	{
 	  helpptr = 2 ;
-	  helpline [1 ]= 1788 ;
-	  helpline [0 ]= 1791 ;
+	  helpline [1 ]= 1786 ;
+	  helpline [0 ]= 1789 ;
 	} 
 	error () ;
 	curval = 0 ;
       } 
-      if ( scankeyword ( 1792 ) ) 
+      if ( scankeyword ( 1790 ) ) 
       {
 	i = 0 ;
 	j = 3 ;
       } 
-      else if ( scankeyword ( 1793 ) ) 
+      else if ( scankeyword ( 1791 ) ) 
       {
 	i = 1 ;
 	j = 3 ;
       } 
-      else if ( scankeyword ( 1794 ) ) 
+      else if ( scankeyword ( 1792 ) ) 
       {
 	i = 2 ;
 	j = 2 ;
       } 
-      else if ( scankeyword ( 1795 ) ) 
+      else if ( scankeyword ( 1793 ) ) 
       {
 	i = 3 ;
 	j = 2 ;
@@ -37664,13 +37541,13 @@ doextension ( void )
 	  if ( filelineerrorstylep ) 
 	  printfileline () ;
 	  else printnl ( 264 ) ;
-	  print ( 1796 ) ;
+	  print ( 1794 ) ;
 	} 
 	{
 	  helpptr = 3 ;
-	  helpline [2 ]= 1797 ;
-	  helpline [1 ]= 1798 ;
-	  helpline [0 ]= 1799 ;
+	  helpline [2 ]= 1795 ;
+	  helpline [1 ]= 1796 ;
+	  helpline [0 ]= 1797 ;
 	} 
 	error () ;
       } 
@@ -37686,19 +37563,19 @@ doextension ( void )
     break ;
   case 40 : 
     {
-      checkpdfoutput ( 1800 , true ) ;
+      checkpdfoutput ( 1798 , true ) ;
       newwhatsit ( 40 , 2 ) ;
     } 
     break ;
   case 41 : 
     {
-      checkpdfoutput ( 1801 , true ) ;
+      checkpdfoutput ( 1799 , true ) ;
       newwhatsit ( 41 , 2 ) ;
     } 
     break ;
   case 27 : 
     {
-      checkpdfoutput ( 1878 , true ) ;
+      checkpdfoutput ( 1876 , true ) ;
       scanpdfexttoks () ;
       pdfmapfile ( defref ) ;
       deletetokenref ( defref ) ;
@@ -37706,7 +37583,7 @@ doextension ( void )
     break ;
   case 28 : 
     {
-      checkpdfoutput ( 1879 , true ) ;
+      checkpdfoutput ( 1877 , true ) ;
       scanpdfexttoks () ;
       pdfmapline ( defref ) ;
       deletetokenref ( defref ) ;
@@ -37714,15 +37591,15 @@ doextension ( void )
     break ;
   case 24 : 
     {
-      checkpdfoutput ( 1874 , true ) ;
+      checkpdfoutput ( 1872 , true ) ;
       scanpdfexttoks () ;
       pdfnamestoks = concattokens ( pdfnamestoks , defref ) ;
     } 
     break ;
   case 7 : 
     {
-      checkpdfoutput ( 1802 , true ) ;
-      if ( scankeyword ( 1803 ) ) 
+      checkpdfoutput ( 1800 , true ) ;
+      if ( scankeyword ( 1801 ) ) 
       {
 	{
 	  getxtoken () ;
@@ -37736,13 +37613,13 @@ doextension ( void )
       else {
 	  
 	k = -1 ;
-	if ( scankeyword ( 1804 ) ) 
+	if ( scankeyword ( 1802 ) ) 
 	{
 	  scanint () ;
 	  k = curval ;
 	  if ( ( k <= 0 ) || ( k > objptr ) || ( objtab [k ].int4 != 0 ) ) 
 	  {
-	    pdfwarning ( 1802 , 1805 , true , true ) ;
+	    pdfwarning ( 1800 , 1803 , true , true ) ;
 	    pdfretval = -1 ;
 	    k = -1 ;
 	  } 
@@ -37757,7 +37634,7 @@ doextension ( void )
 	if ( scankeyword ( 1024 ) ) 
 	{
 	  pdfmem [objtab [k ].int4 + 1 ]= 1 ;
-	  if ( scankeyword ( 1806 ) ) 
+	  if ( scankeyword ( 1804 ) ) 
 	  {
 	    scanpdfexttoks () ;
 	    pdfmem [objtab [k ].int4 + 2 ]= defref ;
@@ -37776,8 +37653,8 @@ doextension ( void )
     break ;
   case 16 : 
     {
-      checkpdfoutput ( 1847 , true ) ;
-      if ( scankeyword ( 1806 ) ) 
+      checkpdfoutput ( 1845 , true ) ;
+      if ( scankeyword ( 1804 ) ) 
       {
 	scanpdfexttoks () ;
 	r = defref ;
@@ -37871,7 +37748,7 @@ doextension ( void )
     break ;
   case 8 : 
     {
-      checkpdfoutput ( 1808 , true ) ;
+      checkpdfoutput ( 1806 , true ) ;
       scanint () ;
       pdfcheckobj ( 6 , curval ) ;
       newwhatsit ( 8 , 2 ) ;
@@ -37880,7 +37757,7 @@ doextension ( void )
     break ;
   case 10 : 
     {
-      checkpdfoutput ( 1812 , true ) ;
+      checkpdfoutput ( 1810 , true ) ;
       scanint () ;
       pdfcheckobj ( 7 , curval ) ;
       newwhatsit ( 10 , 5 ) ;
@@ -37895,7 +37772,7 @@ doextension ( void )
     break ;
   case 12 : 
     {
-      checkpdfoutput ( 1827 , true ) ;
+      checkpdfoutput ( 1825 , true ) ;
       scanint () ;
       pdfcheckobj ( 8 , curval ) ;
       newwhatsit ( 12 , 5 ) ;
@@ -37915,13 +37792,13 @@ doextension ( void )
     break ;
   case 34 : 
     {
-      checkpdfoutput ( 1866 , true ) ;
+      checkpdfoutput ( 1864 , true ) ;
       newwhatsit ( 34 , 2 ) ;
     } 
     break ;
   case 36 : 
     {
-      checkpdfoutput ( 1869 , true ) ;
+      checkpdfoutput ( 1867 , true ) ;
       newwhatsit ( 36 , 2 ) ;
       scanint () ;
       mem [curlist .tailfield + 1 ].cint = fixint ( curval , 0 , 1000 ) ;
@@ -37929,7 +37806,7 @@ doextension ( void )
     break ;
   case 35 : 
     {
-      checkpdfoutput ( 1868 , true ) ;
+      checkpdfoutput ( 1866 , true ) ;
       {
 	mem [curlist .tailfield ].hh .v.RH = newsnapnode ( 35 ) ;
 	curlist .tailfield = mem [curlist .tailfield ].hh .v.RH ;
@@ -37938,9 +37815,9 @@ doextension ( void )
     break ;
   case 14 : 
     {
-      checkpdfoutput ( 1843 , true ) ;
+      checkpdfoutput ( 1841 , true ) ;
       if ( abs ( curlist .modefield ) == 1 ) 
-      pdferror ( 1781 , 1844 ) ;
+      pdferror ( 1779 , 1842 ) ;
       k = pdfnewobjnum () ;
       newannotwhatsit ( 14 , 7 ) ;
       mem [curlist .tailfield + 5 ].hh .v.RH = scanaction () ;
@@ -37950,21 +37827,21 @@ doextension ( void )
     break ;
   case 19 : 
     {
-      checkpdfoutput ( 1864 , true ) ;
+      checkpdfoutput ( 1862 , true ) ;
       newannotwhatsit ( 19 , 7 ) ;
       scanthreadid () ;
     } 
     break ;
   case 18 : 
     {
-      checkpdfoutput ( 1863 , true ) ;
+      checkpdfoutput ( 1861 , true ) ;
       newannotwhatsit ( 18 , 7 ) ;
       scanthreadid () ;
     } 
     break ;
   case 29 : 
     {
-      checkpdfoutput ( 1875 , false ) ;
+      checkpdfoutput ( 1873 , false ) ;
       scanpdfexttoks () ;
       if ( eqtb [29339 ].cint > 0 ) 
       pdftrailertoks = concattokens ( pdftrailertoks , defref ) ;
@@ -37972,7 +37849,7 @@ doextension ( void )
     break ;
   case 30 : 
     {
-      checkpdfoutput ( 1876 , false ) ;
+      checkpdfoutput ( 1874 , false ) ;
       scanpdfexttoks () ;
       if ( eqtb [29339 ].cint > 0 ) 
       pdftraileridtoks = concattokens ( pdftraileridtoks , defref ) ;
@@ -37980,18 +37857,18 @@ doextension ( void )
     break ;
   case 9 : 
     {
-      checkpdfoutput ( 1809 , true ) ;
+      checkpdfoutput ( 1807 , true ) ;
       incr ( pdfxformcount ) ;
       pdfcreateobj ( 7 , pdfxformcount ) ;
       k = objptr ;
       objtab [k ].int4 = pdfgetmem ( 6 ) ;
-      if ( scankeyword ( 1806 ) ) 
+      if ( scankeyword ( 1804 ) ) 
       {
 	scanpdfexttoks () ;
 	pdfmem [objtab [k ].int4 + 4 ]= defref ;
       } 
       else pdfmem [objtab [k ].int4 + 4 ]= -268435455L ;
-      if ( scankeyword ( 1810 ) ) 
+      if ( scankeyword ( 1808 ) ) 
       {
 	scanpdfexttoks () ;
 	pdfmem [objtab [k ].int4 + 5 ]= defref ;
@@ -38008,7 +37885,7 @@ doextension ( void )
 	else p = mem [curptr + 1 ].hh .v.RH ;
       } 
       if ( p == -268435455L ) 
-      pdferror ( 1781 , 1811 ) ;
+      pdferror ( 1779 , 1809 ) ;
       pdfmem [objtab [k ].int4 + 0 ]= mem [p + 1 ].cint ;
       pdfmem [objtab [k ].int4 + 1 ]= mem [p + 3 ].cint ;
       pdfmem [objtab [k ].int4 + 2 ]= mem [p + 2 ].cint ;
@@ -38030,7 +37907,7 @@ doextension ( void )
     break ;
   case 11 : 
     {
-      checkpdfoutput ( 1826 , true ) ;
+      checkpdfoutput ( 1824 , true ) ;
       checkpdfversion () ;
       scanimage () ;
     } 
@@ -38056,7 +37933,7 @@ doextension ( void )
     break ;
   case 42 : 
     {
-      checkpdfoutput ( 1880 , true ) ;
+      checkpdfoutput ( 1878 , true ) ;
       scanfontident () ;
       k = curval ;
       if ( k == 0 ) 
@@ -38066,36 +37943,24 @@ doextension ( void )
     break ;
   case 43 : 
     {
-      checkpdfoutput ( 1881 , true ) ;
+      checkpdfoutput ( 1879 , true ) ;
       newwhatsit ( 43 , 2 ) ;
     } 
     break ;
   case 44 : 
     {
-      checkpdfoutput ( 1882 , true ) ;
+      checkpdfoutput ( 1880 , true ) ;
       newwhatsit ( 44 , 2 ) ;
     } 
     break ;
   case 45 : 
     {
-      checkpdfoutput ( 1883 , true ) ;
+      checkpdfoutput ( 1881 , true ) ;
       newwhatsit ( 45 , 2 ) ;
     } 
     break ;
-  case 46 : 
-    {
-      checkpdfoutput ( 1884 , true ) ;
-      newwhatsit ( 46 , 2 ) ;
-    } 
-    break ;
-  case 47 : 
-    {
-      checkpdfoutput ( 1885 , true ) ;
-      newwhatsit ( 47 , 2 ) ;
-    } 
-    break ;
     default: 
-    confusion ( 1781 ) ;
+    confusion ( 1779 ) ;
     break ;
   } 
 } 
@@ -38385,8 +38250,6 @@ handlerightbrace ( void )
       mem [savestack [saveptr + 0 ].cint ].hh .v.RH = 3 ;
       p = finmlist ( -268435455L ) ;
       mem [savestack [saveptr + 0 ].cint ].hh .v.LH = p ;
-      if ( p != -268435455L ) 
-      mem [savestack [saveptr + 0 ].cint ].hh .me = mem [p ].hh .me ;
       if ( p != -268435455L ) {
 	  
 	if ( mem [p ].hh .v.RH == -268435455L ) {
@@ -38399,8 +38262,6 @@ handlerightbrace ( void )
 	      {
 		mem [savestack [saveptr + 0 ].cint ].hh = mem [p + 1 ]
 		.hh ;
-		mem [savestack [saveptr + 0 ].cint ].hh .me = mem [p ]
-		.hh .me ;
 		freenode ( p , 4 ) ;
 	      } 
 	    } 
@@ -39088,7 +38949,6 @@ maincontrol ( void )
 	
       avail = mem [ligstack ].hh .v.RH ;
       mem [ligstack ].hh .v.RH = -268435455L ;
-      mem [ligstack ].hh .me = curchrsig ;
 	;
 #ifdef STAT
       incr ( dynused ) ;
@@ -39112,8 +38972,6 @@ maincontrol ( void )
       if ( ligaturepresent ) 
       {
 	mainp = newligature ( mainf , curl , mem [curq ].hh .v.RH ) ;
-	if ( mem [curq ].hh .v.RH != -268435455L ) 
-	mem [mainp ].hh .me = mem [mem [curq ].hh .v.RH ].hh .me ;
 	if ( lfthit ) 
 	{
 	  mem [mainp ].hh.b1 = 2 ;
@@ -39182,8 +39040,6 @@ maincontrol ( void )
     if ( ligaturepresent ) 
     {
       mainp = newligature ( mainf , curl , mem [curq ].hh .v.RH ) ;
-      if ( mem [curq ].hh .v.RH != -268435455L ) 
-      mem [mainp ].hh .me = mem [mem [curq ].hh .v.RH ].hh .me ;
       if ( lfthit ) 
       {
 	mem [mainp ].hh.b1 = 2 ;
@@ -39237,7 +39093,6 @@ maincontrol ( void )
     {
       mem [ligstack ].hh .v.RH = avail ;
       avail = ligstack ;
-      mem [ligstack ].hh .me = 0 ;
 	;
 #ifdef STAT
       decr ( dynused ) ;
@@ -39252,7 +39107,6 @@ maincontrol ( void )
     {
       mem [ligstack ].hh .v.RH = avail ;
       avail = ligstack ;
-      mem [ligstack ].hh .me = 0 ;
 	;
 #ifdef STAT
       decr ( dynused ) ;
@@ -39306,7 +39160,6 @@ maincontrol ( void )
 	
       avail = mem [ligstack ].hh .v.RH ;
       mem [ligstack ].hh .v.RH = -268435455L ;
-      mem [ligstack ].hh .me = curchrsig ;
 	;
 #ifdef STAT
       incr ( dynused ) ;
@@ -39331,8 +39184,6 @@ maincontrol ( void )
       if ( ligaturepresent ) 
       {
 	mainp = newligature ( mainf , curl , mem [curq ].hh .v.RH ) ;
-	if ( mem [curq ].hh .v.RH != -268435455L ) 
-	mem [mainp ].hh .me = mem [mem [curq ].hh .v.RH ].hh .me ;
 	if ( lfthit ) 
 	{
 	  mem [mainp ].hh.b1 = 2 ;
@@ -39407,8 +39258,6 @@ maincontrol ( void )
 	  if ( ligaturepresent ) 
 	  {
 	    mainp = newligature ( mainf , curl , mem [curq ].hh .v.RH ) ;
-	    if ( mem [curq ].hh .v.RH != -268435455L ) 
-	    mem [mainp ].hh .me = mem [mem [curq ].hh .v.RH ].hh .me ;
 	    if ( lfthit ) 
 	    {
 	      mem [mainp ].hh.b1 = 2 ;
@@ -39513,8 +39362,6 @@ maincontrol ( void )
 	    if ( ligaturepresent ) 
 	    {
 	      mainp = newligature ( mainf , curl , mem [curq ].hh .v.RH ) ;
-	      if ( mem [curq ].hh .v.RH != -268435455L ) 
-	      mem [mainp ].hh .me = mem [mem [curq ].hh .v.RH ].hh .me ;
 	      if ( lfthit ) 
 	      {
 		mem [mainp ].hh.b1 = 2 ;
@@ -39633,7 +39480,6 @@ maincontrol ( void )
   adjustinterwordglue ( curlist .tailfield , tempptr ) ;
   mem [curlist .tailfield ].hh .v.RH = tempptr ;
   curlist .tailfield = tempptr ;
-  mem [tempptr ].hh .me = curchrsig ;
   goto lab60 ;
 } 
 void 

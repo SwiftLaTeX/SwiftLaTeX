@@ -55,6 +55,8 @@ Purge all the files uploaded.
 Shutdown the engine.
 9. setTexliveEndpoint(url: string). \
 If you host your own texlive server, you can ask the engine to fetch files from the server.
+10. compileFormat(). \
+If you host your own texlive server, you may wanna generate the tex engine format file via this function.
 
 ## Compile Engines by yourself
 SwiftLaTeX compiles XeTeX and PdfTeX engines into WebAssembly. We recommend the XeTeX engine as it supports UTF-8 and Opentype fonts out of box.

@@ -354,7 +354,6 @@ initialize ( void )
   pdftrailertoks = -268435455L ;
   pdftraileridtoks = -268435455L ;
   genfakedinterwordspace = false ;
-  genrunninglink = true ;
   pdflinkstackptr = 0 ;
   LRptr = -268435455L ;
   LRproblems = 0 ;
@@ -534,7 +533,7 @@ initialize ( void )
     hash [15525 ].v.RH = 579 ;
     eqtb [29916 ].cint = ( onehundredinch + 50 ) / 100 ;
     eqtb [29917 ].cint = ( onehundredinch + 50 ) / 100 ;
-    eqtb [29340 ].cint = 0 ;
+    eqtb [29340 ].cint = 9 ;
     eqtb [29360 ].cint = 0 ;
     eqtb [29341 ].cint = 3 ;
     eqtb [29343 ].cint = 72 ;
@@ -564,7 +563,7 @@ initialize ( void )
     hash [15514 ].v.RH = 1613 ;
     if ( iniversion ) 
     formatident = 1700 ;
-    hash [15522 ].v.RH = 1916 ;
+    hash [15522 ].v.RH = 1912 ;
     eqtb [15522 ].hh.b1 = 1 ;
     eqtb [15522 ].hh.b0 = 115 ;
     eqtb [15522 ].hh .v.RH = -268435455L ;
@@ -1612,7 +1611,6 @@ zlinebreak ( boolean d )
 		  hu [hn ]= c ;
 		  hc [hn ]= hc [0 ];
 		  hyfbchar = 256 ;
-		  hm [hn ]= mem [s ].hh .me ;
 		} 
 		else if ( mem [s ].hh.b0 == 6 ) 
 		{
@@ -1637,7 +1635,6 @@ zlinebreak ( boolean d )
 		    incr ( j ) ;
 		    hu [j ]= c ;
 		    hc [j ]= hc [0 ];
-		    hm [j ]= mem [q ].hh .me ;
 		    q = mem [q ].hh .v.RH ;
 		  } 
 		  hb = s ;
@@ -2858,7 +2855,6 @@ prefixedcommand ( void )
 	{
 	  mem [defref ].hh .v.RH = avail ;
 	  avail = defref ;
-	  mem [defref ].hh .me = 0 ;
 	;
 #ifdef STAT
 	  decr ( dynused ) ;
@@ -3290,7 +3286,7 @@ storefmtfile ( void )
   dumpint ( x ) ;
   dumpthings ( formatengine [0 ], x ) ;
   libcfree ( formatengine ) ;
-  dumpint ( 398441742L ) ;
+  dumpint ( 181119140L ) ;
   dumpthings ( xord [0 ], 256 ) ;
   dumpthings ( xchr [0 ], 256 ) ;
   dumpthings ( xprn [0 ], 256 ) ;
@@ -3644,7 +3640,7 @@ loadfmtfile ( void )
     fprintf ( stderr , "%s%s",  "fmtdebug:" , "string pool checksum" ) ;
     fprintf ( stderr , "%s%ld\n",  " = " , (long)x ) ;
   } 
-  if ( x != 398441742L ) 
+  if ( x != 181119140L ) 
   {
     ;
     fprintf ( stdout , "%s%s%s\n",  "---! " , stringcast ( nameoffile + 1 ) ,     " made by different executable version" ) ;
@@ -3710,7 +3706,7 @@ loadfmtfile ( void )
   if ( ( eTeXmode == 1 ) ) 
   {
     maxregnum = 32767 ;
-    maxreghelpline = 2072 ;
+    maxreghelpline = 2068 ;
   } 
   else {
       
@@ -4937,8 +4933,6 @@ initprim ( void )
   primitive ( 1775 , 59 , 43 ) ;
   primitive ( 1776 , 59 , 44 ) ;
   primitive ( 1777 , 59 , 45 ) ;
-  primitive ( 1778 , 59 , 46 ) ;
-  primitive ( 1779 , 59 , 47 ) ;
   nonewcontrolsequence = true ;
 } 
 #endif /* INITEX */
@@ -5386,80 +5380,80 @@ mainbody ( void )
     == 1700 ) ) 
     {
       nonewcontrolsequence = false ;
-      primitive ( 1974 , 70 , 3 ) ;
-      primitive ( 1975 , 70 , 20 ) ;
+      primitive ( 1970 , 70 , 3 ) ;
+      primitive ( 1971 , 70 , 20 ) ;
       primitive ( 874 , 110 , 5 ) ;
-      primitive ( 1977 , 72 , 27172 ) ;
-      primitive ( 1978 , 73 , 29373 ) ;
-      primitive ( 1979 , 73 , 29374 ) ;
-      primitive ( 1980 , 73 , 29375 ) ;
-      primitive ( 1981 , 73 , 29376 ) ;
-      primitive ( 1982 , 73 , 29377 ) ;
-      primitive ( 1983 , 73 , 29378 ) ;
-      primitive ( 1984 , 73 , 29379 ) ;
-      primitive ( 1985 , 73 , 29380 ) ;
-      primitive ( 1986 , 73 , 29381 ) ;
-      primitive ( 2001 , 70 , 21 ) ;
-      primitive ( 2002 , 70 , 22 ) ;
-      primitive ( 2003 , 70 , 23 ) ;
-      primitive ( 2004 , 70 , 24 ) ;
-      primitive ( 2005 , 70 , 25 ) ;
-      primitive ( 2006 , 70 , 28 ) ;
-      primitive ( 2007 , 70 , 29 ) ;
-      primitive ( 2008 , 70 , 30 ) ;
-      primitive ( 2009 , 70 , 31 ) ;
-      primitive ( 2010 , 70 , 32 ) ;
-      primitive ( 2011 , 70 , 33 ) ;
-      primitive ( 2012 , 70 , 34 ) ;
-      primitive ( 2013 , 19 , 4 ) ;
-      primitive ( 2015 , 19 , 5 ) ;
-      primitive ( 2016 , 111 , 1 ) ;
-      primitive ( 2017 , 111 , 5 ) ;
-      primitive ( 2018 , 19 , 6 ) ;
-      primitive ( 2022 , 82 , 2 ) ;
+      primitive ( 1973 , 72 , 27172 ) ;
+      primitive ( 1974 , 73 , 29373 ) ;
+      primitive ( 1975 , 73 , 29374 ) ;
+      primitive ( 1976 , 73 , 29375 ) ;
+      primitive ( 1977 , 73 , 29376 ) ;
+      primitive ( 1978 , 73 , 29377 ) ;
+      primitive ( 1979 , 73 , 29378 ) ;
+      primitive ( 1980 , 73 , 29379 ) ;
+      primitive ( 1981 , 73 , 29380 ) ;
+      primitive ( 1982 , 73 , 29381 ) ;
+      primitive ( 1997 , 70 , 21 ) ;
+      primitive ( 1998 , 70 , 22 ) ;
+      primitive ( 1999 , 70 , 23 ) ;
+      primitive ( 2000 , 70 , 24 ) ;
+      primitive ( 2001 , 70 , 25 ) ;
+      primitive ( 2002 , 70 , 28 ) ;
+      primitive ( 2003 , 70 , 29 ) ;
+      primitive ( 2004 , 70 , 30 ) ;
+      primitive ( 2005 , 70 , 31 ) ;
+      primitive ( 2006 , 70 , 32 ) ;
+      primitive ( 2007 , 70 , 33 ) ;
+      primitive ( 2008 , 70 , 34 ) ;
+      primitive ( 2009 , 19 , 4 ) ;
+      primitive ( 2011 , 19 , 5 ) ;
+      primitive ( 2012 , 111 , 1 ) ;
+      primitive ( 2013 , 111 , 5 ) ;
+      primitive ( 2014 , 19 , 6 ) ;
+      primitive ( 2018 , 82 , 2 ) ;
       primitive ( 1289 , 49 , 1 ) ;
-      primitive ( 2026 , 73 , 29382 ) ;
-      primitive ( 2027 , 33 , 6 ) ;
-      primitive ( 2028 , 33 , 7 ) ;
-      primitive ( 2029 , 33 , 10 ) ;
-      primitive ( 2030 , 33 , 11 ) ;
-      primitive ( 2039 , 106 , 2 ) ;
-      primitive ( 2041 , 96 , 1 ) ;
+      primitive ( 2022 , 73 , 29382 ) ;
+      primitive ( 2023 , 33 , 6 ) ;
+      primitive ( 2024 , 33 , 7 ) ;
+      primitive ( 2025 , 33 , 10 ) ;
+      primitive ( 2026 , 33 , 11 ) ;
+      primitive ( 2035 , 106 , 2 ) ;
+      primitive ( 2037 , 96 , 1 ) ;
       primitive ( 930 , 104 , 1 ) ;
-      primitive ( 2042 , 107 , 17 ) ;
-      primitive ( 2043 , 107 , 18 ) ;
-      primitive ( 2044 , 107 , 19 ) ;
-      primitive ( 2045 , 107 , 20 ) ;
-      primitive ( 2046 , 107 , 22 ) ;
-      primitive ( 2047 , 107 , 23 ) ;
+      primitive ( 2038 , 107 , 17 ) ;
+      primitive ( 2039 , 107 , 18 ) ;
+      primitive ( 2040 , 107 , 19 ) ;
+      primitive ( 2041 , 107 , 20 ) ;
+      primitive ( 2042 , 107 , 22 ) ;
+      primitive ( 2043 , 107 , 23 ) ;
       primitive ( 1605 , 93 , 8 ) ;
-      primitive ( 2053 , 70 , 39 ) ;
-      primitive ( 2054 , 70 , 40 ) ;
-      primitive ( 2055 , 70 , 41 ) ;
-      primitive ( 2056 , 70 , 42 ) ;
-      primitive ( 2060 , 70 , 26 ) ;
-      primitive ( 2061 , 70 , 27 ) ;
-      primitive ( 2062 , 70 , 35 ) ;
-      primitive ( 2063 , 70 , 36 ) ;
-      primitive ( 2064 , 70 , 37 ) ;
-      primitive ( 2065 , 70 , 38 ) ;
-      primitive ( 2066 , 18 , 5 ) ;
-      primitive ( 2067 , 112 , 5 ) ;
-      primitive ( 2068 , 112 , 6 ) ;
-      primitive ( 2069 , 112 , 7 ) ;
-      primitive ( 2070 , 112 , 8 ) ;
-      primitive ( 2071 , 112 , 9 ) ;
-      primitive ( 2075 , 24 , 2 ) ;
-      primitive ( 2076 , 24 , 3 ) ;
-      primitive ( 2077 , 84 , 27429 ) ;
-      primitive ( 2078 , 84 , 27430 ) ;
-      primitive ( 2079 , 84 , 27431 ) ;
-      primitive ( 2080 , 84 , 27432 ) ;
+      primitive ( 2049 , 70 , 39 ) ;
+      primitive ( 2050 , 70 , 40 ) ;
+      primitive ( 2051 , 70 , 41 ) ;
+      primitive ( 2052 , 70 , 42 ) ;
+      primitive ( 2056 , 70 , 26 ) ;
+      primitive ( 2057 , 70 , 27 ) ;
+      primitive ( 2058 , 70 , 35 ) ;
+      primitive ( 2059 , 70 , 36 ) ;
+      primitive ( 2060 , 70 , 37 ) ;
+      primitive ( 2061 , 70 , 38 ) ;
+      primitive ( 2062 , 18 , 5 ) ;
+      primitive ( 2063 , 112 , 5 ) ;
+      primitive ( 2064 , 112 , 6 ) ;
+      primitive ( 2065 , 112 , 7 ) ;
+      primitive ( 2066 , 112 , 8 ) ;
+      primitive ( 2067 , 112 , 9 ) ;
+      primitive ( 2071 , 24 , 2 ) ;
+      primitive ( 2072 , 24 , 3 ) ;
+      primitive ( 2073 , 84 , 27429 ) ;
+      primitive ( 2074 , 84 , 27430 ) ;
+      primitive ( 2075 , 84 , 27431 ) ;
+      primitive ( 2076 , 84 , 27432 ) ;
       if ( ( buffer [curinput .locfield ]== 42 ) ) 
       incr ( curinput .locfield ) ;
       eTeXmode = 1 ;
       maxregnum = 32767 ;
-      maxreghelpline = 2072 ;
+      maxreghelpline = 2068 ;
     } 
 #endif /* INITEX */
     if ( ! nonewcontrolsequence ) 
