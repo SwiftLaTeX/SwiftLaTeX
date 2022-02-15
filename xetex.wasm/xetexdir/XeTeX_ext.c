@@ -1242,6 +1242,7 @@ findnativefont(unsigned char* uname, integer scaled_size)
                     zenddiagnostic(0);
                 }
             }
+            free(path);
         }
     } else {
 #ifndef WEBASSEMBLY_BUILD
@@ -1316,7 +1317,16 @@ findnativefont(unsigned char* uname, integer scaled_size)
                 loadedfontdesignsize = D2Fix(getDesignSize(font));
 
                 /* This is duplicated in XeTeXFontMgr::findFont! */
-                setReqEngine('O');
+                setReqEngine(0);
+                if (varString) {
+                    if (strncmp(varString, "/AAT", 4) == 0)
+                        setReqEngine('A');
+                    else if ((strncmp(varString, "/OT", 3) == 0) || (strncmp(varString, "/ICU", 4) == 0))
+                        setReqEngine('O');
+                    else if (strncmp(varString, "/GR", 3) == 0)
+                        setReqEngine('G');
+                }
+
 
                 rval = loadOTfont(0, font, scaled_size, featString);
                 if (rval == NULL)
