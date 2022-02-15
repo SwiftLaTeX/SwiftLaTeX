@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Basic Page Needs
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>PdfTeX Tikz example</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Mobile Specific Metas
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style type="text/css" media="screen">
+        #editor {
+            width: 100%;
+            height: 400px;
+        }
+        pre {
+    		white-space: pre-wrap;
+    		max-height: 400px;
+    		overflow-y: scroll;
+		}
+    </style>
+</head>
+<body class="code-snippets-visible">
+
+    <div class="docs-section" id="demo">
+        <div id="editor">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Stylish Curriculum Vitae
+% LaTeX Template
+% Version 1.1 (September 10, 2021)
+%
+% This template originates from:
+% https://www.LaTeXTemplates.com
+%
+% Authors:
+% Stefano (https://www.kindoblue.nl)
+% Vel (vel@LaTeXTemplates.com)
+%
+% License:
+% CC BY-NC-SA 4.0 (https://creativecommons.org/licenses/by-nc-sa/4.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[a4paper, oneside, final]{scrartcl} % Paper options using the scrartcl class
+
+\usepackage{scrlayer-scrpage} % Provides headers and footers configuration
+\usepackage{titlesec} % Allows creating custom \section's
+\usepackage{marvosym} % Allows the use of symbols
+\usepackage{tabularx,colortbl} % Advanced table configurations
+\usepackage{ebgaramond} % Use the EB Garamond font
+\usepackage{microtype} % To enable letterspacing
+
+\titleformat{\section}{\large\scshape\raggedright}{}{0em}{}[\titlerule] % Section formatting
+
+\pagestyle{scrheadings} % Print the headers and footers on all pages
+
+\addtolength{\voffset}{-0.5in} % Adjust the vertical offset - less whitespace at the top of the page
+\addtolength{\textheight}{3cm} % Adjust the text height - less whitespace at the bottom of the page
+
+\newcommand{\gray}{\rowcolor[gray]{.90}} % Custom highlighting for the work experience and education sections
+
+%----------------------------------------------------------------------------------------
+%   FOOTER SECTION
+%----------------------------------------------------------------------------------------
+
+\renewcommand{\headfont}{\normalfont\rmfamily\scshape} % Font settings for footer
+
+\cofoot{
+\fontsize{12.5}{17}\selectfont % Letter spacing and font size
+
+\textls[150]{123 Broadway {\large\textperiodcentered} City {\large\textperiodcentered} Country 12345}\\ % Your mailing address
+{\Large\Letter} \textls[150]{john@smith.com \ {\Large\Telefon} (000) 111-1111} % Your email address and phone number
+}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\begin{center} % Center everything in the document
+
+%----------------------------------------------------------------------------------------
+%   HEADER SECTION
+%----------------------------------------------------------------------------------------
+
+{\fontsize{36}{36}\selectfont\scshape\textls[200]{John Smith}} % Your name at the top
+
+\vspace{1.5cm} % Extra whitespace after the large name at the top
+
+%----------------------------------------------------------------------------------------
+%   OBJECTIVE
+%----------------------------------------------------------------------------------------
+
+\section{Objective}
+
+A position in the field of computers with special interests in business applications \\ programming, information processing, and management systems.
+
+%----------------------------------------------------------------------------------------
+%   WORK EXPERIENCE
+%----------------------------------------------------------------------------------------
+
+\section{Work Experience}
+
+\begin{tabularx}{0.97\linewidth}{>{\raggedleft\scshape}p{2cm}X}
+\gray Period & \textbf{March 2012 --- Present}\\
+\gray Employer & \textbf{Layer BV} \hfill Amsterdam, The Netherlands\\
+\gray Job Title & \textbf{J2EE Analyst programmer}\\
+\gray Languages & \textbf{J2EE}\\
+       & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec et auctor neque. Nullam ultricies sem sit amet magna tristique imperdiet. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Phasellus eget mollis nunc.
+\end{tabularx}
+
+\vspace{12pt}
+
+\begin{tabularx}{0.97\linewidth}{>{\raggedleft\scshape}p{2cm}X}
+\gray Period & \textbf{March 2009 --- August 2010 (Part Time)}\\
+\gray Employer & \textbf{Buy More} \hfill New York, USA\\
+\gray Job Title & \textbf{Supermarket Clerk}\\
+       & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec et auctor neque. Nullam ultricies sem sit amet magna tristique imperdiet.
+\end{tabularx}
+
+%----------------------------------------------------------------------------------------
+%   EDUCATION
+%----------------------------------------------------------------------------------------
+
+\section{Education}
+
+\begin{tabularx}{0.97\linewidth}{>{\raggedleft\scshape}p{2cm}X}
+\gray Period & \textbf{January 2011 --- February 2012}\\
+\gray Degree & \textbf{Master of Science in Computer Science}\\
+\gray Rank & \textbf{First Class Honours}\\
+\gray University & \textbf{The University of California} \hfill Los Angeles, USA\\
+%& Extra information about degree
+\end{tabularx}
+
+\vspace{12pt}
+
+\begin{tabularx}{0.97\linewidth}{>{\raggedleft\scshape}p{2cm}X}
+\gray Period & \textbf{August 2008 --- September 2010}\\
+\gray Degree & \textbf{Bachelor of Science in Computer Science}\\
+\gray Rank & \textbf{With Distinction}\\
+\gray University & \textbf{New York University} \hfill New York, USA\\
+%& Extra information about degree
+\end{tabularx}
+
+%----------------------------------------------------------------------------------------
+%   SKILLS
+%----------------------------------------------------------------------------------------
+
+\section{Skills}
+
+\begin{tabular}{ @{} >{\bfseries}l @{\hspace{6ex}} l }
+Computer Languages & Prolog, Haskell, AWK, Erlang, Scheme, ML \\
+Protocols \& APIs & XML, JSON, SOAP, REST \\
+Databases & MySQL, PostgreSQL, Microsoft SQL \\
+Tools & SVN, Vim, Emacs
+\end{tabular}
+
+%----------------------------------------------------------------------------------------
+
+\end{center}
+
+\end{document}
+
+        </div>
+
+        <div id="pdfbox">
+        </div>
+
+        <h4>Console Output:</h4>
+        <pre id="console">
+		</pre>
+
+		<button type="button" onclick="compile()" id="compilebtn" disabled>Initializing</button>
+
+		<h5>Due to the way beamer works, you may need to compile twice to see the correct content tables.</h5>
+    </div>
+
+</div>
+
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="PdfTeXEngine.js"></script>
+<script>
+
+    const compileBtn = document.getElementById("compilebtn");
+    const consoleOutput = document.getElementById("console");
+    const pdfbox = document.getElementById("pdfbox");
+
+    const editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/latex");
+    editor.session.setUseWrapMode(true);
+    editor.setFontSize(18);
+    
+    const globalEn = new PdfTeXEngine();
+
+    async function init() {
+      await globalEn.loadEngine();
+      compileBtn.innerHTML = "Compile";
+      compileBtn.disabled = false;
+    }
+
+    async function compile() {
+        if(!globalEn.isReady()) {
+            console.log("Engine not ready yet");
+            return;
+        }
+        compileBtn.disabled = true;
+        compileBtn.innerHTML = "Compiling...";
+
+        let downloadReq = await fetch('assets/troll.jpg');
+        let imageBlob = await downloadReq.arrayBuffer();
+        globalEn.writeMemFSFile("main.tex", editor.getValue());
+        globalEn.writeMemFSFile("troll.jpg", new Uint8Array(imageBlob));
+        globalEn.setEngineMainFile("main.tex");
+        let r = await globalEn.compileLaTeX();
+        consoleOutput.innerHTML = r.log;
+        compileBtn.innerHTML = "Compile";
+        compileBtn.disabled = false;
+        if (r.status === 0) {
+            const pdfblob = new Blob([r.pdf], {type : 'application/pdf'});
+            const objectURL = URL.createObjectURL(pdfblob);
+            setTimeout(()=>{
+                URL.revokeObjectURL(objectURL);
+            }, 30000);
+            console.log(objectURL);
+            pdfbox.innerHTML = `<embed src="${objectURL}" width="100%" height="400px" type="application/pdf">`;
+        }
+    }
+
+    init();
+
+</script>
+</html>
