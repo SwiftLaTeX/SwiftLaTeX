@@ -47,7 +47,7 @@ Upload source codes / assets to the engine.
 Create a directory.
 5. setEngineMainFile(filename: string). \
 Tell the engine which latex file is the entry file.
-6. compilePDF():Promise<CompileResult>. \
+6. compileLaTeX():Promise<CompileResult>. \
 Start compiling LaTeX documents and return CompileResult.
 7. flushCache(). \
 Purge all the files uploaded.
