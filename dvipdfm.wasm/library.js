@@ -1,6 +1,6 @@
 mergeInto(LibraryManager.library, {
-  kpse_fetch_from_network: function(nameptr, format) {
-    return kpse_fetch_from_network_impl(nameptr, format);
+  kpse_find_file_js: function(nameptr, format) {
+    return kpse_find_file_impl(nameptr, format);
   }
 });
 

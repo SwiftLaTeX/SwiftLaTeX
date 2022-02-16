@@ -3,7 +3,7 @@ const WORKROOT = "/work";
 var Module = {};
 self.memlog = "";
 self.mainfile = "main.tex";
-self.texlive_endpoint = "https://texlive.swiftlatex.com/";
+self.texlive_endpoint = "http://localhost:5000/";
 Module['print'] = function(a) {
     self.memlog += (a + "\n");
     console.log(a);
@@ -188,34 +188,34 @@ self['onmessage'] = function(ev) {
 
 let texlive404_cache = {};
 let texlive200_cache = {};
-// const formatFilters = [".ai", ".jp2", ".jpf", ".ps", ".eps", "mps", ".pz", ".z", ".gz",
-//  ".log", ".aux", ".toc", ".bbl", ".jpg", ".pdf", ".bmp", ".bb", ".png", ".jpeg"];
 
-function kpse_fetch_from_network_impl(nameptr, format) {
+function kpse_find_file_impl(nameptr, format, _mustexist) {
 
-    const reqname = UTF8ToString(nameptr);
+    let reqname = UTF8ToString(nameptr);
+
+    // It is a hack , since webassembly version latex engine stores 
+    // all templates file inside /tex/, therefore, we have to fetch it again
+    if (reqname.startsWith("/tex/")) {
+        reqname = reqname.substr(5);
+    }
 
     if (reqname.includes("/")) {
-        return -1;
-    }
-
-    // for (let i = 0; i < formatFilters.length; i++) {
-    //     if (reqname.toLowerCase().endsWith(formatFilters[i])) {
-    //         return -1;
-    //     }
-    // }
-
-    const cacheKey = reqname;
-    if (cacheKey in texlive200_cache) {
         return 0;
     }
+
+    const cacheKey = format + "/" + reqname ;
+
     if (cacheKey in texlive404_cache) {
-        return -1;
+        return 0;
     }
 
-    //self.postMessage({'result':'ok', 'type':'status', 'cmd':'texlivefetch', 'data':reqname});
+    if (cacheKey in texlive200_cache) {
+        const savepath = texlive200_cache[cacheKey];
+        return allocate(intArrayFromString(savepath), 'i8', ALLOC_NORMAL);
+    }
+
     
-    const remote_url = self.texlive_endpoint + "xetex/" + cacheKey;
+    const remote_url = self.texlive_endpoint + 'xetex/' + cacheKey;
     let xhr = new XMLHttpRequest();
     xhr.open("GET", remote_url, false);
     xhr.timeout = 150000;
@@ -225,20 +225,21 @@ function kpse_fetch_from_network_impl(nameptr, format) {
         xhr.send();
     } catch (err) {
         console.log("TexLive Download Failed " + remote_url);
-        return -1;
+        return 0;
     }
 
     if (xhr.status === 200) {
         let arraybuffer = xhr.response;
-        //console.log(arraybuffer);
-        FS.writeFile(TEXCACHEROOT + "/" + cacheKey, new Uint8Array(arraybuffer));
-        texlive200_cache[cacheKey] = 1;
-        return 0;
-    } else if (xhr.status === 301 || xhr.status === 404) {
+        const fileid = xhr.getResponseHeader('fileid');
+        const savepath = TEXCACHEROOT + "/" + fileid;
+        FS.writeFile(savepath, new Uint8Array(arraybuffer));
+        texlive200_cache[cacheKey] = savepath;
+        return allocate(intArrayFromString(savepath), 'i8', ALLOC_NORMAL);
+
+    } else if (xhr.status === 301) {
         console.log("TexLive File not exists " + remote_url);
         texlive404_cache[cacheKey] = 1;
-        return -1;
-    }
-    return -1;
+        return 0;
+    } 
+    return 0;
 }
-

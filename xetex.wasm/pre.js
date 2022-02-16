@@ -4,7 +4,7 @@ var Module = {};
 self.memlog = "";
 self.initmem = undefined;
 self.mainfile = "main.tex";
-self.texlive_endpoint = "https://texlive.swiftlatex.com/";
+self.texlive_endpoint = "http://localhost:5000/";
 Module['print'] = function(a) {
     self.memlog += (a + "\n");
 };
@@ -257,34 +257,26 @@ self['onmessage'] = function(ev) {
 
 let texlive404_cache = {};
 let texlive200_cache = {};
-// const formatFilters = [".ai", ".jp2", ".jpf", ".ps", ".eps", "mps", ".pz", ".z", ".gz",
-//  ".log", ".aux", ".toc", ".bbl", ".jpg", ".pdf", ".bmp", ".bb", ".png"];
 
-function kpse_fetch_from_network_impl(nameptr, format) {
+function kpse_find_file_impl(nameptr, format, _mustexist) {
 
     const reqname = UTF8ToString(nameptr);
 
     if (reqname.includes("/")) {
-        return -1;
-    }
-
-    // for (let i = 0; i < formatFilters.length; i++) {
-    //     if (reqname.toLowerCase().endsWith(formatFilters[i])) {
-    //         return -1;
-    //     }
-    // }
-
-    const cacheKey = reqname;
-
-    if (cacheKey in texlive200_cache) {
         return 0;
     }
-    
+
+    const cacheKey = format + "/" + reqname ;
+
     if (cacheKey in texlive404_cache) {
-        return -1;
+        return 0;
     }
 
-    //self.postMessage({'result':'ok', 'type':'status', 'cmd':'texlivefetch', 'data':reqname});
+    if (cacheKey in texlive200_cache) {
+        const savepath = texlive200_cache[cacheKey];
+        return allocate(intArrayFromString(savepath), 'i8', ALLOC_NORMAL);
+    }
+
     
     const remote_url = self.texlive_endpoint + 'xetex/' + cacheKey;
     let xhr = new XMLHttpRequest();
@@ -296,24 +288,27 @@ function kpse_fetch_from_network_impl(nameptr, format) {
         xhr.send();
     } catch (err) {
         console.log("TexLive Download Failed " + remote_url);
-        return -1;
+        return 0;
     }
 
     if (xhr.status === 200) {
         let arraybuffer = xhr.response;
-        //console.log(arraybuffer);
-        FS.writeFile(TEXCACHEROOT + "/" + cacheKey, new Uint8Array(arraybuffer));
-        texlive200_cache[cacheKey] = 1;
-        return 0;
-    } else if (xhr.status === 301 || xhr.status === 404) {
+        const fileid = xhr.getResponseHeader('fileid');
+        const savepath = TEXCACHEROOT + "/" + fileid;
+        FS.writeFile(savepath, new Uint8Array(arraybuffer));
+        texlive200_cache[cacheKey] = savepath;
+        return allocate(intArrayFromString(savepath), 'i8', ALLOC_NORMAL);
+
+    } else if (xhr.status === 301) {
         console.log("TexLive File not exists " + remote_url);
         texlive404_cache[cacheKey] = 1;
-        return -1;
-    }
-    return -1;
+        return 0;
+    } 
+    return 0;
 }
 
-
+let font200_cache = {};
+let font404_cache = {};
 function fontconfig_search_font_impl(fontnamePtr, varStringPtr) {
     const fontname = UTF8ToString(fontnamePtr);
     let variant = UTF8ToString(varStringPtr);
@@ -324,12 +319,12 @@ function fontconfig_search_font_impl(fontnamePtr, varStringPtr) {
 
     const cacheKey = variant + '/' + fontname;
     
-    if (cacheKey in texlive200_cache) {
-        const savepath = texlive200_cache[cacheKey];
+    if (cacheKey in font200_cache) {
+        const savepath = font200_cache[cacheKey];
         return allocate(intArrayFromString(savepath), 'i8', ALLOC_NORMAL);
     }
     
-    if (cacheKey in texlive404_cache) {
+    if (cacheKey in font404_cache) {
         return 0;
     }
 
@@ -338,11 +333,11 @@ function fontconfig_search_font_impl(fontnamePtr, varStringPtr) {
     xhr.open("GET", remote_url, false);
     xhr.timeout = 150000;
     xhr.responseType = "arraybuffer";
-    console.log("Start downloading texlive file " + remote_url);
+    console.log("Start downloading font file " + remote_url);
     try {
         xhr.send();
     } catch (err) {
-        console.log("TexLive Download Failed " + remote_url);
+        console.log("Font Download Failed " + remote_url);
         return 0;
     }
     if (xhr.status === 200) {
@@ -351,12 +346,12 @@ function fontconfig_search_font_impl(fontnamePtr, varStringPtr) {
         const savepath = TEXCACHEROOT + "/" + fontID;
 
         FS.writeFile(savepath, new Uint8Array(arraybuffer));
-        texlive200_cache[cacheKey] = savepath;
+        font200_cache[cacheKey] = savepath;
         return allocate(intArrayFromString(savepath), 'i8', ALLOC_NORMAL);
 
     } else if (xhr.status === 301 || xhr.status === 404) {
-        console.log("TexLive File not exists " + remote_url);
-        texlive404_cache[cacheKey] = 1;
+        console.log("Font File not exists " + remote_url);
+        font404_cache[cacheKey] = 1;
         return 0;
     }
     

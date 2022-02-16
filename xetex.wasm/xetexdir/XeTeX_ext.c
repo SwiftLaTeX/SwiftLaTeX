@@ -82,7 +82,7 @@ authorization from the copyright holders.
 #endif
 
 #ifdef WEBASSEMBLY_BUILD
-extern char* fontconfig_search_font(const char *nameString, const char *varString);
+extern char* fontconfig_search_font_js(const char *nameString, const char *varString);
 #endif 
 
 #include <math.h> /* for fabs() */
@@ -1292,7 +1292,7 @@ findnativefont(unsigned char* uname, integer scaled_size)
             namelength = strlen((char*)nameoffile + 1);
         }
 #else  //No WebAssembly BUILD
-        char *fullName = fontconfig_search_font(nameString, varString);
+        char *fullName = fontconfig_search_font_js(nameString, varString);
         if (fullName) {
             namelength = strlen(fullName);
             free(nameoffile);
