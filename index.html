@@ -194,6 +194,16 @@ let r = await engine.compileLaTeX(); // r contains PDF binray and compilation lo
     function resizeIframe(obj){
      obj.style.height = (obj.contentWindow.document.body.scrollHeight + 25) + 'px';
     }
+
+    async function checkTexlive() {
+      const ran = Math.random();
+      const req = await fetch(`https://texlive.swiftlatex.com/texlive_version?v=${ran}`);
+      if (req.status == 200) {
+        await req.text();
+      }
+    }
+
     setInterval(()=>{resizeIframe(iframeobj)}, 500);
+    setInterval(()=>{checkTexlive()}, 5000);
 </script>
 </html>
