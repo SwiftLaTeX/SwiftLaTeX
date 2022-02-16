@@ -3,6 +3,8 @@
 
 Demo Website https://www.swiftlatex.com
 
+[![Building Assets](https://github.com/SwiftLaTeX/SwiftLaTeX/actions/workflows/github-actions-build.yml/badge.svg?branch=master)](https://github.com/SwiftLaTeX/SwiftLaTeX/actions/workflows/github-actions-build.yml)
+
 ## Introduction for SwiftLaTeX
 
 SwiftLaTeX, LaTeX Engines in Browsers with optional WYSIWYG support. We are a big fan of WebAssembly and all computation is done locally.

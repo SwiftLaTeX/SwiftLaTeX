@@ -1,4 +1,4 @@
-name: Building Assets
+name: Building Release
 on:
   push:
     branches:  
@@ -9,7 +9,7 @@ env:
   EM_CACHE_FOLDER: 'emsdk-cache'
 
 jobs:
-  Explore-GitHub-Actions:
+  Build-Releases-Actions:
     runs-on: ubuntu-latest
     steps:
       - run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
