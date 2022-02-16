@@ -30,5 +30,4 @@ jobs:
       - name: Start the building process
         run: |
           make
-      - name: 
       - run: echo "This job's status is ${{ job.status }}."
