@@ -1,0 +1,34 @@
+name: Building Assets
+on:
+  push:
+    branches:  
+      - master
+
+env:
+  EM_VERSION: 3.1.4
+  EM_CACHE_FOLDER: 'emsdk-cache'
+
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Setup cache
+        id: cache-system-libraries
+        uses: actions/cache@v2
+        with:
+          path: ${{env.EM_CACHE_FOLDER}}
+          key: ${{env.EM_VERSION}}-${{ runner.os }}
+      - uses: mymindstorm/setup-emsdk@v11
+        with:
+          version: ${{env.EM_VERSION}}
+          actions-cache-folder: ${{env.EM_CACHE_FOLDER}}
+      - name: Verify Emscripten
+        run: emcc -v
+      - name: Start the building process
+        run: |
+          make
+      - name: 
+      - run: echo "This job's status is ${{ job.status }}."
