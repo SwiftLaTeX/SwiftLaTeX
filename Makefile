@@ -1,4 +1,4 @@
-SUBDIRS := pdftex.wasm xetex.wasm
+SUBDIRS := pdftex.wasm xetex.wasm dvipdfm.wasm
 
 all: $(SUBDIRS)
 $(SUBDIRS):
