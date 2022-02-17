@@ -1,8 +1,8 @@
 mergeInto(LibraryManager.library, {
-  kpse_fetch_from_network: function(nameptr, format) {
-    return kpse_fetch_from_network_impl(nameptr, format);
+  kpse_find_file_js: function(nameptr, format, mustexist) {
+    return kpse_find_file_impl(nameptr, format, mustexist);
   },
-  fontconfig_search_font: function(nameptr, varptr) {
+  fontconfig_search_font_js: function(nameptr, varptr) {
     return fontconfig_search_font_impl(nameptr, varptr);
   }
 });

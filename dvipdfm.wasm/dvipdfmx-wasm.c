@@ -144,6 +144,66 @@ typedef enum {
   kpse_last_format /* one past last index */
 } kpse_file_format_type;
 
+
+int _formatConvert(int format) {
+    switch (format) {
+    case TTIF_TFM:
+        return kpse_tfm_format;
+    case TTIF_AFM:
+        return kpse_afm_format;
+    case TTIF_BIB:
+        return kpse_bib_format;
+    case TTIF_BST:
+        return kpse_bst_format;
+    case TTIF_CNF:
+        return kpse_cnf_format;
+    case TTIF_FORMAT:
+        return kpse_fmt_format;
+    case TTIF_FONTMAP:
+        return kpse_fontmap_format;
+    case TTIF_OFM:
+        return kpse_ofm_format;
+    case TTIF_OVF:
+        return kpse_ovf_format;
+    case TTIF_TEX:
+        return kpse_tex_format;
+    case TTIF_TYPE1:
+        return kpse_type1_format;
+    case TTIF_VF:
+        return kpse_vf_format;
+    case TTIF_TRUETYPE:
+        return kpse_truetype_format;
+    case TTIF_ENC:
+        return kpse_enc_format;
+    case TTIF_CMAP:
+        return kpse_cmap_format;
+    case TTIF_SFD:
+        return kpse_sfd_format;
+    case TTIF_OPENTYPE:
+        return kpse_opentype_format;
+    default:
+        // fprintf(stderr, "Unknown format %d\n", format);
+        return kpse_tex_format;
+    }
+}
+
+static char* concat3(const char* s1, const char* s2, const char* s3) {
+  int s2l = s2 ? strlen(s2) : 0;
+  int s3l = s3 ? strlen(s3) : 0;
+  char* answer = (char*)xmalloc(strlen(s1) + s2l + s3l + 1);
+  strcpy(answer, s1);
+  if (s2)
+    strcat(answer, s2);
+  if (s3)
+    strcat(answer, s3);
+
+  return answer;
+}
+
+
+extern char* kpse_find_file_js(const char* name, kpse_file_format_type format,
+                     int must_exist);
+
 static void fix_extension(char *local_name, int format) {
 #define SUFFIX(suf) strcat(local_name, suf);
 
@@ -250,11 +310,13 @@ static void fix_extension(char *local_name, int format) {
     SUFFIX(".otf");
     break;
   case kpse_pdftex_config_format:
+    SUFFIX(".cfg");
     break;
   case kpse_lig_format:
     SUFFIX(".lig");
     break;
   case kpse_texmfscripts_format:
+    // Todo
     break;
   case kpse_fea_format:
     SUFFIX(".fea");
@@ -284,109 +346,44 @@ static void fix_extension(char *local_name, int format) {
 #undef SUFFIX
 }
 
-int _formatConvert(int format) {
-    switch (format) {
-    case TTIF_TFM:
-        return kpse_tfm_format;
-    case TTIF_AFM:
-        return kpse_afm_format;
-    case TTIF_BIB:
-        return kpse_bib_format;
-    case TTIF_BST:
-        return kpse_bst_format;
-    case TTIF_CNF:
-        return kpse_cnf_format;
-    case TTIF_FORMAT:
-        return kpse_fmt_format;
-    case TTIF_FONTMAP:
-        return kpse_fontmap_format;
-    case TTIF_OFM:
-        return kpse_ofm_format;
-    case TTIF_OVF:
-        return kpse_ovf_format;
-    case TTIF_TEX:
-        return kpse_tex_format;
-    case TTIF_TYPE1:
-        return kpse_type1_format;
-    case TTIF_VF:
-        return kpse_vf_format;
-    case TTIF_TRUETYPE:
-        return kpse_truetype_format;
-    case TTIF_ENC:
-        return kpse_enc_format;
-    case TTIF_CMAP:
-        return kpse_cmap_format;
-    case TTIF_SFD:
-        return kpse_sfd_format;
-    case TTIF_OPENTYPE:
-        return kpse_opentype_format;
-    default:
-        // fprintf(stderr, "Unknown format %d\n", format);
-        return kpse_tex_format;
-    }
-}
+#define MAX_PATH_LEN 256
 
-static char* concat3(const char* s1, const char* s2, const char* s3) {
-  int s2l = s2 ? strlen(s2) : 0;
-  int s3l = s3 ? strlen(s3) : 0;
-  char* answer = (char*)xmalloc(strlen(s1) + s2l + s3l + 1);
-  strcpy(answer, s1);
-  if (s2)
-    strcat(answer, s2);
-  if (s3)
-    strcat(answer, s3);
-
-  return answer;
-}
-
-char *kpse_find_file(const char *name, tt_input_format_type tt_format) {
+char *kpse_find_file(char *name, tt_input_format_type tt_format) {
 
   
   int format = _formatConvert(tt_format);
-
-  if (name == NULL || strlen(name) > MAXFILENAMESIZE / 2) {
+  if (name == NULL) {
     return NULL;
   }
 
-  if (strncmp(name, "/dev", 4) == 0) {
+  if (strlen(name) > MAX_PATH_LEN) {
     return NULL;
   }
 
-  if (strncmp(name, "/tex/", 5) == 0) {
-     name += 5; /* Skip, Pretty much a hack ? */
+  char* local_name = xmalloc(MAX_PATH_LEN + 32);
+  strcpy(local_name, name);
+  
+  // Search local directory
+  if (access(local_name, F_OK) != -1) {
+    return local_name;
   }
 
-
-  char local_name[MAXFILENAMESIZE] = {0};
-  strncpy(local_name, name, MAXFILENAMESIZE / 2);
+  // Append extension and search again
   const char *basePath = basename(local_name);
   if (strstr(basePath, ".") == NULL) {
-    strncpy(local_name, name, MAXFILENAMESIZE / 2); /* Basename may kill last copy */ 
+    strcpy(local_name, name); // Basename may modify the argument, recopy
     fix_extension(local_name, format);
-    // printf("fixing extension %s\n", local_name);
-  } else {
-    strncpy(local_name, name, MAXFILENAMESIZE / 2); /* Basename may kill last copy */ 
-  }
-  
-  if (access(local_name, F_OK) != -1) {
-      if (local_name[0] == '/' || (local_name[0] == '.' && local_name[1] == '/')) {
-        return concat3("", local_name, NULL);
-      } else {
-        return concat3("./", local_name, NULL);
-      }
-  } 
-  
-  // It is an absolute path, no need to go forward
-  if (local_name[0] == '/') {
-    return NULL;
+    if (access(local_name, F_OK) != -1) {
+      return local_name;
+    }
   }
 
-  // Download from network, and put it in the cache dir
-  if (kpse_fetch_from_network(local_name, format) == 0) {
-    return concat3(TEXCACHEROOT, local_name, NULL);
-  }
- 
-  return NULL;
+  // End local Search
+  free(local_name);
+
+  // Head to network search
+  return kpse_find_file_js(name, format, 0);
+
 }
 
 void *input_open(void *context, char const *path, tt_input_format_type format,

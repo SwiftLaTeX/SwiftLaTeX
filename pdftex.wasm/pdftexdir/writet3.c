@@ -331,6 +331,9 @@ static boolean writepk(internalfontnumber f)
     }
     xfree(cd.raster);
     cur_file_name = NULL;
+    if (name) {
+        xfree(name);
+    }
     return true;
 }
 
