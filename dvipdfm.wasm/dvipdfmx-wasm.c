@@ -348,7 +348,7 @@ static void fix_extension(char *local_name, int format) {
 
 #define MAX_PATH_LEN 256
 
-char *kpse_find_file(char *name, tt_input_format_type tt_format) {
+char *kpse_find_file(const char *name, tt_input_format_type tt_format) {
 
   
   int format = _formatConvert(tt_format);
