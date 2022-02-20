@@ -110,27 +110,25 @@ terminatefontmanager()
 XeTeXFont
 createFont(PlatformFontRef fontRef, Fixed pointSize)
 {
-#ifndef WEBASSEMBLY_BUILD
     int status = 0;
 #ifdef XETEX_MAC
     XeTeXFontInst* font = new XeTeXFontInst_Mac(fontRef, Fix2D(pointSize), status);
 #else
+#ifndef WEBASSEMBLY_BUILD
     FcChar8* pathname = 0;
     FcPatternGetString(fontRef, FC_FILE, 0, &pathname);
     int index;
     FcPatternGetInteger(fontRef, FC_INDEX, 0, &index);
-    printf("fetch %s %d\n", pathname, index);
     XeTeXFontInst* font = new XeTeXFontInst((const char*)pathname, index, Fix2D(pointSize), status);
-#endif
-    if (status != 0) {
-        delete font;
+#else
+    char *font_url = kpse_find_file(fontRef->path, kpse_truetype_format, 0);
+    if (!font_url) {
         return NULL;
     }
-    return (XeTeXFont)font;
-#else
-    printf("Warning: createFont always fails in WEBASSEMBLY_BUILD\n");
-    return NULL;
+    XeTeXFontInst* font = new XeTeXFontInst((const char*)font_url, fontRef->index, Fix2D(pointSize), status);
 #endif
+#endif
+    return (XeTeXFont)font;
 }
 
 XeTeXFont

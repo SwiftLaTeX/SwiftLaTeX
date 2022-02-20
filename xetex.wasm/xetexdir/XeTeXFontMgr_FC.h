@@ -51,14 +51,16 @@ protected:
 
     virtual void                    getOpSizeRecAndStyleFlags(Font* theFont);
     virtual void                    searchForHostPlatformFonts(const std::string& name);
+    virtual NameCollection*         readNames(PlatformFontRef pat);
 
-    virtual NameCollection*         readNames(FcPattern* pat);
 
     std::string                     getPlatformFontDesc(PlatformFontRef font) const;
 
     void                            cacheFamilyMembers(const std::list<std::string>& familyNames);
 
+#ifndef WEBASSEMBLY_BUILD
     FcFontSet*  allFonts;
+#endif
     bool        cachedAll;
 };
 

@@ -1245,8 +1245,7 @@ findnativefont(unsigned char* uname, integer scaled_size)
             free(path);
         }
     } else {
-#ifndef WEBASSEMBLY_BUILD
-        // printf("Finding %s %s %lf\n", nameString, varString, Fix2D(scaled_size));
+
         fontRef = findFontByName(nameString, varString, Fix2D(scaled_size));
 
         if (fontRef != 0) {
@@ -1291,51 +1290,6 @@ findnativefont(unsigned char* uname, integer scaled_size)
             }
             namelength = strlen((char*)nameoffile + 1);
         }
-#else  //No WebAssembly BUILD
-        char *fullName = fontconfig_search_font_js(nameString, varString);
-        if (fullName) {
-            namelength = strlen(fullName);
-            free(nameoffile);
-            nameoffile = xmalloc(namelength + 8); /* +2 would be correct: initial space, final NUL */
-            nameoffile[0] = ' ';
-            strcpy((char*)nameoffile + 1, fullName);
-
-            if (scaled_size < 0) {
-                font = createFontFromFile(fullName, index, 655360L);
-                if (font != NULL) {
-                    Fixed dsize = D2Fix(getDesignSize(font));
-                    if (scaled_size == -1000)
-                        scaled_size = dsize;
-                    else
-                        scaled_size = zxnoverd(dsize, -scaled_size, 1000);
-                    deleteFont(font);
-                }
-            }
-
-            font = createFontFromFile(fullName, index, scaled_size);
-            if (font != NULL) {
-                loadedfontdesignsize = D2Fix(getDesignSize(font));
-
-                // /* This is duplicated in XeTeXFontMgr::findFont! */
-                // setReqEngine(0);
-                // if (varString) {
-                //     if (strncmp(varString, "/AAT", 4) == 0)
-                //         setReqEngine('A');
-                //     else if ((strncmp(varString, "/OT", 3) == 0) || (strncmp(varString, "/ICU", 4) == 0))
-                //         setReqEngine('O');
-                //     else if (strncmp(varString, "/GR", 3) == 0)
-                //         setReqEngine('G');
-                // }
-
-                rval = loadOTfont(0, font, scaled_size, featString);
-                if (rval == NULL)
-                    deleteFont(font);
-            }
-
-            namelength = strlen((char*)nameoffile + 1);
-            free(fullName);
-        }
-#endif // HAS WebAssembly BUILD
     }
 
     if (varString != NULL)
