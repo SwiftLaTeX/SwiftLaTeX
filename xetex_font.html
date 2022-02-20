@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Basic Page Needs
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>XeTeX basic example</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Mobile Specific Metas
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style type="text/css" media="screen">
+        #editor {
+            width: 100%;
+            height: 400px;
+        }
+        pre {
+    		white-space: pre-wrap;
+    		max-height: 400px;
+    		overflow-y: scroll;
+		}
+    </style>
+</head>
+<body class="code-snippets-visible">
+
+    <div class="docs-section" id="demo">
+        <div id="editor">\documentclass[12pt]{article}
+\usepackage{fontspec}
+ 
+\setmainfont{times.ttf}
+\title{Sample font document}
+\author{Overleaf}
+\date{\today}
+   
+\begin{document}
+\maketitle
+     
+This is an \textit{example} of a document compiled 
+with \textbf{XeLaTeX}. LuaLaTeX should also work too.
+
+\end{document}
+
+        </div>
+
+        <div id="pdfbox">
+        </div>
+
+        <h4>Console Output:</h4>
+        <pre id="console">
+		</pre>
+
+		<button type="button" onclick="compile()" id="compilebtn" disabled>Initializing</button>
+
+		<h5>Check source code to see how to supply your own fonts to our engines.</h5>
+    </div>
+
+</div>
+
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="XeTeXEngine.js"></script>
+<script src="DvipdfmxEngine.js"></script>
+<script>
+
+    const compileBtn = document.getElementById("compilebtn");
+    const consoleOutput = document.getElementById("console");
+    const pdfbox = document.getElementById("pdfbox");
+
+    const editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/latex");
+    editor.session.setUseWrapMode(true);
+    editor.setFontSize(18);
+    
+    const globalEn = new XeTeXEngine();
+    const dvipdfmxEn= new DvipdfmxEngine();
+
+    async function init() {
+      await globalEn.loadEngine();
+      await dvipdfmxEn.loadEngine();
+      compileBtn.innerHTML = "Compile";
+      compileBtn.disabled = false;
+    }
+
+    async function compile() {
+        if(!globalEn.isReady() || !dvipdfmxEn.isReady()) {
+            console.log("Engine not ready yet");
+            return;
+        }
+        compileBtn.disabled = true;
+        compileBtn.innerHTML = "Compiling...";
+        let downloadReq = await fetch('assets/times.ttf');
+        let fontBlob = await downloadReq.arrayBuffer();
+        globalEn.writeMemFSFile("main.tex", editor.getValue());
+        globalEn.writeMemFSFile("times.ttf", new Uint8Array(fontBlob));
+        globalEn.setEngineMainFile("main.tex");
+        let r = await globalEn.compileLaTeX();
+        consoleOutput.innerHTML = r.log;
+        compileBtn.innerHTML = "Compile";
+        compileBtn.disabled = false;
+        if (r.status === 0) {
+            dvipdfmxEn.writeMemFSFile("main.xdv", r.pdf);
+            dvipdfmxEn.writeMemFSFile("times.ttf", new Uint8Array(fontBlob));
+            dvipdfmxEn.setEngineMainFile("main.xdv");
+            let r1 = await dvipdfmxEn.compilePDF();
+            const pdfblob = new Blob([r1.pdf], {type : 'application/pdf'});
+            const objectURL = URL.createObjectURL(pdfblob);
+            setTimeout(()=>{
+                URL.revokeObjectURL(objectURL);
+            }, 30000);
+            console.log(objectURL);
+            pdfbox.innerHTML = `<embed src="${objectURL}" width="100%" height="400px" type="application/pdf">`;
+        }
+    }
+
+    init();
+
+</script>
+</html>
