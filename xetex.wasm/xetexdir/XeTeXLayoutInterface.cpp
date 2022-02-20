@@ -126,6 +126,7 @@ createFont(PlatformFontRef fontRef, Fixed pointSize)
         return NULL;
     }
     XeTeXFontInst* font = new XeTeXFontInst((const char*)font_url, fontRef->index, Fix2D(pointSize), status);
+    free(font_url);
 #endif
 #endif
     return (XeTeXFont)font;
