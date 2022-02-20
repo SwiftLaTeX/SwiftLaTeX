@@ -362,7 +362,8 @@ XeTeXFontMgr_FC::getPlatformFontDesc(PlatformFontRef font) const
 
 #else 
 
-XeTeXFontMgr::NameCollection *XeTeXFontMgr_FC::readNames(FcPattern *pat) {
+#include <fstream>
+XeTeXFontMgr::NameCollection *XeTeXFontMgr_FC::readNames(PlatformFontRef pat) {
     return NULL;
 }
 
@@ -374,10 +375,169 @@ void XeTeXFontMgr_FC::cacheFamilyMembers(
 }
 
 void XeTeXFontMgr_FC::searchForHostPlatformFonts(const std::string &name) {
+    if (cachedAll) // we've already loaded everything on an earlier search
+        return;
+
+    char *fontlist_url = kpse_find_file("xetexfontlist.txt", kpse_tex_format, 0);
+    int count = 0;
+    std::ifstream ifs (fontlist_url, std::ifstream::in);
+    if (ifs.is_open()) {
+        while(true) {
+            NameCollection* c = new NameCollection;
+            uint32_t fontId = 0;
+            if (!(ifs >> fontId)) {
+                return;
+            }
+            ifs.ignore();
+
+            std::string path;
+            if (!std::getline(ifs, path)) {
+                return;
+            }
+            
+            uint32_t fontIndex = 0;
+            if (!(ifs >> fontIndex)) {
+                return;
+            }
+            ifs.ignore();
+
+            uint32_t listLen;
+            if (!(ifs >> listLen)) {
+                return;
+            }
+            ifs.ignore();
+
+            for (int i = 0; i < listLen; i ++) {
+                std::string content;
+                if (!std::getline(ifs, content)) {
+                    return;
+                }
+                c->m_familyNames.push_back(content);
+            }
+
+        
+            if (!(ifs >> listLen)) {
+                return;
+            }
+            ifs.ignore();
+
+            for (int i = 0; i < listLen; i ++) {
+                std::string content;
+                if (!std::getline(ifs, content)) {
+                    return;
+                }
+                c->m_styleNames.push_back(content);
+            }
+
+            
+            if (!(ifs >> listLen)) {
+                return;
+            }
+            ifs.ignore();
+
+            for (int i = 0; i < listLen; i ++) {
+                std::string content;
+                if (!std::getline(ifs, content)) {
+                    return;
+                }
+                c->m_fullNames.push_back(content);
+            }
+
+            if (!std::getline(ifs, c->m_psName)) {
+                return;
+            }
+            
+
+            if (!std::getline(ifs, c->m_subFamily)) {
+                return;
+            }
+            
+
+            if (!(ifs >> c->weight)) {
+                
+                return;
+            }
+            ifs.ignore();
+
+            if (!(ifs >> c->width)) {
+                
+                return;
+            }
+            ifs.ignore();
+
+            if (!(ifs >> c->slant)) {
+                
+                return;
+            }
+            ifs.ignore();
+
+            if (!(ifs >> c->isReg)) {
+                
+                return;
+            }
+            ifs.ignore();
+
+            if (!(ifs >> c->isBold)) {
+                
+                return;
+            }
+            ifs.ignore();
+
+            if (!(ifs >> c->isItalic)) {
+                
+                return;
+            }
+            ifs.ignore();
+
+            if (!(ifs >> c->opSizeInfo.designSize)) {
+                return;
+            }
+            ifs.ignore();
+
+            if (!(ifs >> c->opSizeInfo.minSize)) {
+                return;
+            }
+            ifs.ignore();
+
+            if (!(ifs >> c->opSizeInfo.maxSize)) {
+                return;
+            }
+            ifs.ignore();
+
+            if (!(ifs >> c->opSizeInfo.subFamilyID)) {
+                return;
+            }
+            ifs.ignore();
+
+
+            if (!(ifs >> c->opSizeInfo.subFamilyID)) {
+                return;
+            }
+            ifs.ignore();
+
+            PlatformFontRef ref = new WFcPattern;
+            ref->index = fontIndex;
+            const auto size = path.size();
+            char *buffer = new char[size + 1];   //we need extra char for NUL
+            memcpy(buffer, path.c_str(), size + 1);
+            ref->path = buffer;
+
+            addToMaps(ref, c);
+        }
+        ifs.close();
+    }
+
+    
+    if (fontlist_url) {
+        free(fontlist_url);
+    }
+    
+
+    cachedAll = true;
 }
 
 void XeTeXFontMgr_FC::initialize() {
-
+    cachedAll = false;
 }
 
 void XeTeXFontMgr_FC::terminate() {

@@ -38,10 +38,18 @@ authorization from the copyright holders.
 #include <ApplicationServices/ApplicationServices.h>
 typedef CTFontDescriptorRef PlatformFontRef;
 #else
-#include <fontconfig/fontconfig.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#ifndef WEBASSEMBLY_BUILD
+#include <fontconfig/fontconfig.h>
 typedef FcPattern* PlatformFontRef;
+#else
+struct WFcPattern {
+    const char* path;
+    uint32_t index;
+};
+typedef struct WFcPattern* PlatformFontRef;
+#endif
 #endif
 
 #include "XeTeX_ext.h"
@@ -174,6 +182,15 @@ protected:
         std::list<std::string>  m_fullNames;
         std::string             m_psName;
         std::string             m_subFamily;
+#ifdef WEBASSEMBLY_BUILD
+        OpSizeRec       opSizeInfo;
+        uint16_t        weight;
+        uint16_t        width;
+        int16_t         slant;
+        bool            isReg;
+        bool            isBold;
+        bool            isItalic;
+#endif
     };
 
     std::map<std::string,Font*>                 m_nameToFont;                     // maps full name (as used in TeX source) to font record

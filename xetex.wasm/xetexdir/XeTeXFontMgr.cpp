@@ -447,6 +447,7 @@ XeTeXFontMgr::bestMatchFromFamily(const Family* fam, int wt, int wd, int slant) 
     return bestMatch;
 }
 
+
 const XeTeXFontMgr::OpSizeRec*
 XeTeXFontMgr::getOpSize(XeTeXFont font)
 {
@@ -488,6 +489,7 @@ XeTeXFontMgr::getDesignSize(XeTeXFont font)
         return 10.0;
 }
 
+#ifndef WEBASSEMBLY_BUILD
 void
 XeTeXFontMgr::getOpSizeRecAndStyleFlags(Font* theFont)
 {
@@ -536,6 +538,7 @@ XeTeXFontMgr::getOpSizeRecAndStyleFlags(Font* theFont)
     }
 }
 
+
 // append a name but only if it's not already in the list
 void
 XeTeXFontMgr::appendToList(std::list<std::string>* list, const char* str)
@@ -557,6 +560,7 @@ XeTeXFontMgr::prependToList(std::list<std::string>* list, const char* str)
         }
     list->push_front(str);
 }
+
 
 void
 XeTeXFontMgr::addToMaps(PlatformFontRef platformFont, const NameCollection* names)
@@ -646,6 +650,106 @@ XeTeXFontMgr::addToMaps(PlatformFontRef platformFont, const NameCollection* name
 */
     }
 }
+#else
+void XeTeXFontMgr::getOpSizeRecAndStyleFlags(Font* theFont) {
+
+}
+
+void
+XeTeXFontMgr::addToMaps(PlatformFontRef platformFont, const NameCollection* names)
+{
+    if (m_platformRefToFont.find(platformFont) != m_platformRefToFont.end())
+        return; // this font has already been cached
+
+    if (names->m_psName.length() == 0)
+        return; // can't use a font that lacks a PostScript name
+
+    if (m_psNameToFont.find(names->m_psName) != m_psNameToFont.end())
+        return; // duplicates an earlier PS name, so skip
+
+    Font* thisFont = new Font(platformFont);
+    thisFont->m_psName = new std::string(names->m_psName);
+
+    // Replace getopsizeandstyle
+    thisFont->opSizeInfo.designSize = names->opSizeInfo.designSize;
+    thisFont->opSizeInfo.subFamilyID = names->opSizeInfo.subFamilyID;
+    thisFont->opSizeInfo.nameCode = names->opSizeInfo.nameCode;
+    thisFont->opSizeInfo.minSize = names->opSizeInfo.minSize;
+    thisFont->opSizeInfo.maxSize = names->opSizeInfo.maxSize;
+    
+    thisFont->weight = names->weight;
+    thisFont->width = names->width;
+    thisFont->slant = names->slant;
+    thisFont->isReg = names->isReg;
+    thisFont->isBold = names->isBold;
+    thisFont->isItalic = names->isItalic;
+    // Replace End
+
+    m_psNameToFont[names->m_psName] = thisFont;
+    m_platformRefToFont[platformFont] = thisFont;
+
+    if (names->m_fullNames.size() > 0)
+        thisFont->m_fullName = new std::string(*(names->m_fullNames.begin()));
+
+    if (names->m_familyNames.size() > 0)
+        thisFont->m_familyName = new std::string(*(names->m_familyNames.begin()));
+    else
+        thisFont->m_familyName = new std::string(names->m_psName);
+
+    if (names->m_styleNames.size() > 0)
+        thisFont->m_styleName = new std::string(*(names->m_styleNames.begin()));
+    else
+        thisFont->m_styleName = new std::string;
+
+    std::list<std::string>::const_iterator i;
+    for (i = names->m_familyNames.begin(); i != names->m_familyNames.end(); ++i) {
+        std::map<std::string,Family*>::iterator iFam = m_nameToFamily.find(*i);
+        Family* family;
+        if (iFam == m_nameToFamily.end()) {
+            family = new Family;
+            m_nameToFamily[*i] = family;
+            family->minWeight = thisFont->weight;
+            family->maxWeight = thisFont->weight;
+            family->minWidth = thisFont->width;
+            family->maxWidth = thisFont->width;
+            family->minSlant = thisFont->slant;
+            family->maxSlant = thisFont->slant;
+        } else {
+            family = iFam->second;
+            if (thisFont->weight < family->minWeight)
+                family->minWeight = thisFont->weight;
+            if (thisFont->weight > family->maxWeight)
+                family->maxWeight = thisFont->weight;
+            if (thisFont->width < family->minWidth)
+                family->minWidth = thisFont->width;
+            if (thisFont->width > family->maxWidth)
+                family->maxWidth = thisFont->width;
+            if (thisFont->slant < family->minSlant)
+                family->minSlant = thisFont->slant;
+            if (thisFont->slant > family->maxSlant)
+                family->maxSlant = thisFont->slant;
+        }
+
+        if (thisFont->parent == NULL)
+            thisFont->parent = family;
+
+        // ensure all style names in the family point to thisFont
+        for (std::list<std::string>::const_iterator j = names->m_styleNames.begin(); j != names->m_styleNames.end(); ++j) {
+            std::map<std::string,Font*>::iterator iFont = family->styles->find(*j);
+            if (iFont == family->styles->end())
+                (*family->styles)[*j] = thisFont;
+        }
+    }
+
+    for (i = names->m_fullNames.begin(); i != names->m_fullNames.end(); ++i) {
+        std::map<std::string,Font*>::iterator iFont = m_nameToFont.find(*i);
+        if (iFont == m_nameToFont.end())
+            m_nameToFont[*i] = thisFont;
+
+    }
+}
+
+#endif
 
 void
 XeTeXFontMgr::die(const char*s, int i) const
