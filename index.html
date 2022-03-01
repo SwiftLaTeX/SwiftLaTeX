@@ -198,7 +198,7 @@ let r = await engine.compileLaTeX(); // r contains PDF binray and compilation lo
 
     async function checkTexlive() {
       const ran = Math.random();
-      const req = await fetch(`https://texlive.swiftlatex.com/texlive_version?v=${ran}`);
+      const req = await fetch(`https://texlive2.swiftlatex.com/xetex/26/artcile.cls?v=${ran}`);
       if (req.status == 200) {
         await req.text();
       }
