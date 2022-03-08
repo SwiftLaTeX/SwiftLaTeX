@@ -234,7 +234,6 @@ var XeTeXEngine = /** @class */ (function () {
     XeTeXEngine.prototype.setTexliveEndpoint = function (url) {
         if (this.latexWorker !== undefined) {
             this.latexWorker.postMessage({ 'cmd': 'settexliveurl', 'url': url });
-            this.latexWorker = undefined;
         }
     };
     XeTeXEngine.prototype.closeWorker = function () {
