@@ -170,7 +170,6 @@ export class XeTeXEngine {
 	public setTexliveEndpoint(url: string): void {
 		if (this.latexWorker !== undefined) {
 			this.latexWorker.postMessage({ 'cmd': 'settexliveurl', 'url': url });
-			this.latexWorker = undefined;
 		}
 	}
 
