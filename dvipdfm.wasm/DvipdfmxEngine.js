@@ -188,7 +188,6 @@ var DvipdfmxEngine = /** @class */ (function () {
     DvipdfmxEngine.prototype.setTexliveEndpoint = function (url) {
         if (this.latexWorker !== undefined) {
             this.latexWorker.postMessage({ 'cmd': 'settexliveurl', 'url': url });
-            this.latexWorker = undefined;
         }
     };
     DvipdfmxEngine.prototype.closeWorker = function () {
