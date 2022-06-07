@@ -13,8 +13,8 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
  ********************************************************************************/
-
-
+import {Worker} from 'node:worker_threads';
+import {performance} from 'node:perf_hooks';
 export enum EngineStatus {
 	Init = 1,
 	Ready,
@@ -22,7 +22,7 @@ export enum EngineStatus {
 	Error
 }
 
-const ENGINE_PATH = 'swiftlatexpdftex.js';
+const ENGINE_PATH = './swiftlatexpdftex.js';
 
 export class CompileResult {
 	pdf: Uint8Array | undefined = undefined;
@@ -44,22 +44,18 @@ export class PdfTeXEngine {
 		this.latexWorkerStatus = EngineStatus.Init;
 		await new Promise((resolve, reject) => {
 			this.latexWorker = new Worker(ENGINE_PATH);
-			this.latexWorker.onmessage = (ev: any) => {
-				const data: any = ev['data'];
+			this.latexWorker.once('message', (data: any) => {
+				
 				const cmd: string = data['result'] as string;
 				if (cmd === 'ok') {
 					this.latexWorkerStatus = EngineStatus.Ready;
-					resolve();
+					resolve(this.latexWorkerStatus);
 				} else {
 					this.latexWorkerStatus = EngineStatus.Error;
 					reject();
 				}
-			};
+			});
 		});
-		this.latexWorker!.onmessage = (_: any) => {
-		};
-		this.latexWorker!.onerror = (_: any) => {
-		};
 	}
 
 	public isReady(): boolean {
@@ -77,8 +73,8 @@ export class PdfTeXEngine {
 		this.latexWorkerStatus = EngineStatus.Busy;
 		const start_compile_time = performance.now();
 		const res: CompileResult = await new Promise((resolve, _) => {
-			this.latexWorker!.onmessage = (ev: any) => {
-				const data: any = ev['data'];
+			this.latexWorker!.once('message', (data: any) => {
+				
 				const cmd: string = data['cmd'] as string;
 				if (cmd !== "compile") return;
 				const result: string = data['result'] as string;
@@ -94,13 +90,11 @@ export class PdfTeXEngine {
 					nice_report.pdf = pdf;
 				}
 				resolve(nice_report);
-			};
+			});
 			this.latexWorker!.postMessage({ 'cmd': 'compilelatex' });
 			console.log('Engine compilation start');
 		});
-		this.latexWorker!.onmessage = (_: any) => {
-		};
-
+		
 		return res;
 	}
 
@@ -109,29 +103,30 @@ export class PdfTeXEngine {
 		this.checkEngineStatus();
 		this.latexWorkerStatus = EngineStatus.Busy;
 		await new Promise((resolve, reject) => {
-			this.latexWorker!.onmessage = (ev: any) => {
-				const data: any = ev['data'];
+			this.latexWorker!.once('message', (data: any) => {
+				
 				const cmd: string =  data['cmd'] as string;
 				if (cmd !== "compile") return;
 				const result: string = data['result'] as string;
 				const log: string =  data['log'] as string;
-				// const status: number = data['status'] as number;
+				const status: number = data['status'] as number;
 				this.latexWorkerStatus = EngineStatus.Ready;
 				if (result === 'ok') {
 					const formatArray = data['pdf']; /* PDF for result */
-					const formatBlob = new Blob([formatArray], { type: 'application/octet-stream' });
-					const formatURL = URL.createObjectURL(formatBlob);
-					setTimeout(() => { URL.revokeObjectURL(formatURL); }, 30000);
-					console.log('Download format file via ' + formatURL);
-					resolve();
+					const nice_report = new CompileResult();
+					nice_report.status = status;
+					nice_report.log = log;
+					if (result === 'ok') {
+						const pdf: Uint8Array = new Uint8Array(data['pdf']);
+						nice_report.pdf = pdf;
+					}
+					resolve(nice_report);
 				} else {
 					reject(log);
 				}
-			};
+			});
 			this.latexWorker!.postMessage({ 'cmd': 'compileformat' });
 		});
-		this.latexWorker!.onmessage = (_: any) => {
-		};
 	}
 
 	public setEngineMainFile(filename: string): void {
@@ -175,7 +170,7 @@ export class PdfTeXEngine {
 
 	public closeWorker(): void {
 		if (this.latexWorker !== undefined) {
-			this.latexWorker.postMessage({ 'cmd': 'grace' });
+			this.latexWorker.terminate();
 			this.latexWorker = undefined;
 		}
 	}

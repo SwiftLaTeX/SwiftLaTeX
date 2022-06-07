@@ -1,23 +1,14 @@
+const {parentPort} = require('node:worker_threads');
+const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+
 const TEXCACHEROOT = "/tex";
 const WORKROOT = "/work";
 var Module = {};
-self.memlog = "";
-self.initmem = undefined;
-self.mainfile = "main.tex";
-self.texlive_endpoint = "https://texlive2.swiftlatex.com/";
-Module['print'] = function(a) {
-    self.memlog += (a + "\n");
-};
-
-Module['printErr'] = function(a) {
-    self.memlog += (a + "\n");
-    console.log(a);
-};
-
-Module['preRun'] = function() {
-    FS.mkdir(TEXCACHEROOT);
-    FS.mkdir(WORKROOT);
-};
+const global_ctx = {};
+global_ctx.memlog = "";
+global_ctx.initmem = undefined;
+global_ctx.mainfile = "main.tex"
+global_ctx.texlive_endpoint = "https://texlive2.swiftlatex.com/";
 
 function dumpHeapMemory() {
     var src = wasmMemory.buffer;
@@ -28,9 +19,9 @@ function dumpHeapMemory() {
 }
 
 function restoreHeapMemory() {
-    if (self.initmem) {
+    if (global_ctx.initmem) {
         var dst = new Uint8Array(wasmMemory.buffer);
-        dst.set(self.initmem);
+        dst.set(global_ctx.initmem);
     }
 }
 
@@ -45,17 +36,31 @@ function closeFSStreams() {
 }
 
 function prepareExecutionContext() {
-    self.memlog = '';
+    global_ctx.memlog = '';
     restoreHeapMemory();
     closeFSStreams();
     FS.chdir(WORKROOT);
 }
 
+Module['print'] = function(a) {
+    global_ctx.memlog += (a + "\n");
+};
+
+Module['printErr'] = function(a) {
+    global_ctx.memlog += (a + "\n");
+    console.log(a);
+};
+
+Module['preRun'] = function() {
+    FS.mkdir(TEXCACHEROOT);
+    FS.mkdir(WORKROOT);
+};
+
 Module['postRun'] = function() {
-    self.postMessage({
+    parentPort.postMessage({
         'result': 'ok',
     });
-    self.initmem = dumpHeapMemory();
+    global_ctx.initmem = dumpHeapMemory();
 };
 
 function cleanDir(dir) {
@@ -70,7 +75,7 @@ function cleanDir(dir) {
         try {
             fsStat = FS.stat(item);
         } catch (err) {
-            console.error("Not able to fsstat " + item);
+            console.log("Not able to fsstat " + item);
             continue;
         }
         if (FS.isDir(fsStat.mode)) {
@@ -79,7 +84,7 @@ function cleanDir(dir) {
             try {
                 FS.unlink(item);
             } catch (err) {
-                console.error("Not able to unlink " + item);
+                console.log("Not able to unlink " + item);
             }
         }
     }
@@ -88,7 +93,7 @@ function cleanDir(dir) {
         try {
             FS.rmdir(dir);
         } catch (err) {
-            console.error("Not able to top level " + dir);
+            console.log("Not able to top level " + dir);
         }
     }
 }
@@ -96,11 +101,11 @@ function cleanDir(dir) {
 
 
 Module['onAbort'] = function() {
-    self.memlog += 'Engine crashed';
-    self.postMessage({
+    global_ctx.memlog += 'Engine crashed';
+    parentPort.postMessage({
         'result': 'failed',
         'status': -254,
-        'log': self.memlog,
+        'log': global_ctx.memlog,
         'cmd': 'compile'
     });
     return;
@@ -109,40 +114,40 @@ Module['onAbort'] = function() {
 function compileLaTeXRoutine() {
     prepareExecutionContext();
     const setMainFunction = cwrap('setMainEntry', 'number', ['string']);
-    setMainFunction(self.mainfile);
+    setMainFunction(global_ctx.mainfile);
     let status = _compileLaTeX();
     if (status === 0) {
         let pdfArrayBuffer = null;
         _compileBibtex();
         try {
-            let pdfurl = WORKROOT + "/" + self.mainfile.substr(0, self.mainfile.length - 4) + ".pdf";
+            let pdfurl = WORKROOT + "/" + global_ctx.mainfile.substr(0, global_ctx.mainfile.length - 4) + ".pdf";
             pdfArrayBuffer = FS.readFile(pdfurl, {
                 encoding: 'binary'
             });
         } catch (err) {
-            console.error("Fetch content failed.");
+            console.log("Fetch content failed.");
             status = -253;
-            self.postMessage({
+            parentPort.postMessage({
                 'result': 'failed',
                 'status': status,
-                'log': self.memlog,
+                'log': global_ctx.memlog,
                 'cmd': 'compile'
             });
             return;
         }
-        self.postMessage({
+        parentPort.postMessage({
             'result': 'ok',
             'status': status,
-            'log': self.memlog,
+            'log': global_ctx.memlog,
             'pdf': pdfArrayBuffer.buffer,
             'cmd': 'compile'
         }, [pdfArrayBuffer.buffer]);
     } else {
-        console.error("Compilation failed, with status code " + status);
-        self.postMessage({
+        console.log("Compilation failed, with status code " + status);
+        parentPort.postMessage({
             'result': 'failed',
             'status': status,
-            'log': self.memlog,
+            'log': global_ctx.memlog,
             'cmd': 'compile'
         });
     }
@@ -159,29 +164,29 @@ function compileFormatRoutine() {
                 encoding: 'binary'
             });
         } catch (err) {
-            console.error("Fetch content failed.");
+            console.log("Fetch content failed.");
             status = -253;
-            self.postMessage({
+            parentPort.postMessage({
                 'result': 'failed',
                 'status': status,
-                'log': self.memlog,
+                'log': global_ctx.memlog,
                 'cmd': 'compile'
             });
             return;
         }
-        self.postMessage({
+        parentPort.postMessage({
             'result': 'ok',
             'status': status,
-            'log': self.memlog,
+            'log': global_ctx.memlog,
             'pdf': pdfArrayBuffer.buffer,
             'cmd': 'compile'
         }, [pdfArrayBuffer.buffer]);
     } else {
-        console.error("Compilation format failed, with status code " + status);
-        self.postMessage({
+        console.log("Compilation format failed, with status code " + status);
+        parentPort.postMessage({
             'result': 'failed',
             'status': status,
-            'log': self.memlog,
+            'log': global_ctx.memlog,
             'cmd': 'compile'
         });
     }
@@ -191,13 +196,13 @@ function mkdirRoutine(dirname) {
     try {
         //console.log("removing " + item);
         FS.mkdir(WORKROOT + "/" + dirname);
-        self.postMessage({
+        parentPort.postMessage({
             'result': 'ok',
             'cmd': 'mkdir'
         });
     } catch (err) {
-        console.error("Not able to mkdir " + dirname);
-        self.postMessage({
+        console.log("Not able to mkdir " + dirname);
+        parentPort.postMessage({
             'result': 'failed',
             'cmd': 'mkdir'
         });
@@ -207,13 +212,13 @@ function mkdirRoutine(dirname) {
 function writeFileRoutine(filename, content) {
     try {
         FS.writeFile(WORKROOT + "/" + filename, content);
-        self.postMessage({
+        parentPort.postMessage({
             'result': 'ok',
             'cmd': 'writefile'
         });
     } catch (err) {
-        console.error("Unable to write mem file");
-        self.postMessage({
+        console.log("Unable to write mem file");
+        parentPort.postMessage({
             'result': 'failed',
             'cmd': 'writefile'
         });
@@ -225,12 +230,11 @@ function setTexliveEndpoint(url) {
         if (!url.endsWith("/")) {
             url += '/';
         }
-        self.texlive_endpoint = url;
+        global_ctx.texlive_endpoint = url;
     }
 }
 
-self['onmessage'] = function(ev) {
-    let data = ev['data'];
+parentPort.on('message', data => {
     let cmd = data['cmd'];
     if (cmd === 'compilelatex') {
         compileLaTeXRoutine();
@@ -243,19 +247,14 @@ self['onmessage'] = function(ev) {
     } else if (cmd === "writefile") {
         writeFileRoutine(data['url'], data['src']);
     } else if (cmd === "setmainfile") {
-        self.mainfile = data['url'];
-    } else if (cmd === "grace") {
-        console.error("Gracefully Close");
-        self.close();
+        global_ctx.mainfile = data['url'];
     } else if (cmd === "flushcache") {
         cleanDir(WORKROOT);
     } else {
         console.error("Unknown command " + cmd);
     }
-};
+});
 
-let texlive404_cache = {};
-let texlive200_cache = {};
 
 function kpse_find_file_impl(nameptr, format, _mustexist) {
 
@@ -266,18 +265,8 @@ function kpse_find_file_impl(nameptr, format, _mustexist) {
     }
 
     const cacheKey = format + "/" + reqname ;
-
-    if (cacheKey in texlive404_cache) {
-        return 0;
-    }
-
-    if (cacheKey in texlive200_cache) {
-        const savepath = texlive200_cache[cacheKey];
-        return allocate(intArrayFromString(savepath), 'i8', ALLOC_NORMAL);
-    }
-
     
-    const remote_url = self.texlive_endpoint + 'pdftex/' + cacheKey;
+    const remote_url = global_ctx.texlive_endpoint + 'pdftex/' + cacheKey;
     let xhr = new XMLHttpRequest();
     xhr.open("GET", remote_url, false);
     xhr.timeout = 150000;
@@ -291,24 +280,21 @@ function kpse_find_file_impl(nameptr, format, _mustexist) {
     }
 
     if (xhr.status === 200) {
+        console.log("TexLive File downloaded " + remote_url);
+
         let arraybuffer = xhr.response;
         const fileid = xhr.getResponseHeader('fileid');
         const savepath = TEXCACHEROOT + "/" + fileid;
         FS.writeFile(savepath, new Uint8Array(arraybuffer));
-        texlive200_cache[cacheKey] = savepath;
         return allocate(intArrayFromString(savepath), 'i8', ALLOC_NORMAL);
 
     } else if (xhr.status === 301) {
         console.log("TexLive File not exists " + remote_url);
-        texlive404_cache[cacheKey] = 1;
         return 0;
     } 
     return 0;
 }
 
-
-let pk404_cache = {};
-let pk200_cache = {};
 
 function kpse_find_pk_impl(nameptr, dpi) {
     const reqname = UTF8ToString(nameptr);
@@ -319,16 +305,7 @@ function kpse_find_pk_impl(nameptr, dpi) {
 
     const cacheKey = dpi + "/" + reqname ;
 
-    if (cacheKey in pk404_cache) {
-        return 0;
-    }
-
-    if (cacheKey in pk200_cache) {
-        const savepath = pk200_cache[cacheKey];
-        return allocate(intArrayFromString(savepath), 'i8', ALLOC_NORMAL);
-    }
-
-    const remote_url = self.texlive_endpoint + 'pdftex/pk/' + cacheKey;
+    const remote_url = global_ctx.texlive_endpoint + 'pdftex/pk/' + cacheKey;
     let xhr = new XMLHttpRequest();
     xhr.open("GET", remote_url, false);
     xhr.timeout = 150000;
@@ -346,12 +323,10 @@ function kpse_find_pk_impl(nameptr, dpi) {
         const pkid = xhr.getResponseHeader('pkid');
         const savepath = TEXCACHEROOT + "/" + pkid;
         FS.writeFile(savepath, new Uint8Array(arraybuffer));
-        pk200_cache[cacheKey] = savepath;
         return allocate(intArrayFromString(savepath), 'i8', ALLOC_NORMAL);
 
     } else if (xhr.status === 301) {
         console.log("TexLive File not exists " + remote_url);
-        pk404_cache[cacheKey] = 1;
         return 0;
     } 
     return 0;

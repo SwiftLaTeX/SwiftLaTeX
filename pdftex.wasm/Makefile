@@ -1,6 +1,6 @@
 CC=emcc
 CXX=em++
-DEBUGFLAGS = -O3 -s USE_ZLIB=1 -s USE_LIBPNG=1 -Wno-parentheses-equality -Wno-pointer-sign  -DWEBASSEMBLY_BUILD -fno-rtti -fno-exceptions
+DEBUGFLAGS = -s USE_ZLIB=1 -s USE_LIBPNG=1 -Wno-parentheses-equality -Wno-pointer-sign  -DWEBASSEMBLY_BUILD -fno-rtti -fno-exceptions
 
 CFLAGS = $(DEBUGFLAGS) 
 LDFLAGS =  $(DEBUGFLAGS) 
