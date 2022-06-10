@@ -274,7 +274,7 @@ function kpse_find_file_impl(nameptr, format, _mustexist) {
 
     if (cacheKey in texlive200_cache) {
         const savepath = texlive200_cache[cacheKey];
-        return allocate(intArrayFromString(savepath), 'i8', ALLOC_NORMAL);
+        return allocate(intArrayFromString(savepath), ALLOC_NORMAL);
     }
 
     
@@ -297,7 +297,7 @@ function kpse_find_file_impl(nameptr, format, _mustexist) {
         const savepath = TEXCACHEROOT + "/" + fileid;
         FS.writeFile(savepath, new Uint8Array(arraybuffer));
         texlive200_cache[cacheKey] = savepath;
-        return allocate(intArrayFromString(savepath), 'i8', ALLOC_NORMAL);
+        return allocate(intArrayFromString(savepath), ALLOC_NORMAL);
 
     } else if (xhr.status === 301) {
         console.log("TexLive File not exists " + remote_url);
@@ -321,7 +321,7 @@ function fontconfig_search_font_impl(fontnamePtr, varStringPtr) {
     
     if (cacheKey in font200_cache) {
         const savepath = font200_cache[cacheKey];
-        return allocate(intArrayFromString(savepath), 'i8', ALLOC_NORMAL);
+        return allocate(intArrayFromString(savepath), ALLOC_NORMAL);
     }
     
     if (cacheKey in font404_cache) {
@@ -347,7 +347,7 @@ function fontconfig_search_font_impl(fontnamePtr, varStringPtr) {
 
         FS.writeFile(savepath, new Uint8Array(arraybuffer));
         font200_cache[cacheKey] = savepath;
-        return allocate(intArrayFromString(savepath), 'i8', ALLOC_NORMAL);
+        return allocate(intArrayFromString(savepath), ALLOC_NORMAL);
 
     } else if (xhr.status === 301 || xhr.status === 404) {
         console.log("Font File not exists " + remote_url);

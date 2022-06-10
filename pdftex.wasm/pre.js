@@ -273,7 +273,7 @@ function kpse_find_file_impl(nameptr, format, _mustexist) {
 
     if (cacheKey in texlive200_cache) {
         const savepath = texlive200_cache[cacheKey];
-        return allocate(intArrayFromString(savepath), 'i8', ALLOC_NORMAL);
+        return allocate(intArrayFromString(savepath), ALLOC_NORMAL);
     }
 
     
@@ -296,7 +296,7 @@ function kpse_find_file_impl(nameptr, format, _mustexist) {
         const savepath = TEXCACHEROOT + "/" + fileid;
         FS.writeFile(savepath, new Uint8Array(arraybuffer));
         texlive200_cache[cacheKey] = savepath;
-        return allocate(intArrayFromString(savepath), 'i8', ALLOC_NORMAL);
+        return allocate(intArrayFromString(savepath), ALLOC_NORMAL);
 
     } else if (xhr.status === 301) {
         console.log("TexLive File not exists " + remote_url);
@@ -325,7 +325,7 @@ function kpse_find_pk_impl(nameptr, dpi) {
 
     if (cacheKey in pk200_cache) {
         const savepath = pk200_cache[cacheKey];
-        return allocate(intArrayFromString(savepath), 'i8', ALLOC_NORMAL);
+        return allocate(intArrayFromString(savepath), ALLOC_NORMAL);
     }
 
     const remote_url = self.texlive_endpoint + 'pdftex/pk/' + cacheKey;
@@ -347,7 +347,7 @@ function kpse_find_pk_impl(nameptr, dpi) {
         const savepath = TEXCACHEROOT + "/" + pkid;
         FS.writeFile(savepath, new Uint8Array(arraybuffer));
         pk200_cache[cacheKey] = savepath;
-        return allocate(intArrayFromString(savepath), 'i8', ALLOC_NORMAL);
+        return allocate(intArrayFromString(savepath), ALLOC_NORMAL);
 
     } else if (xhr.status === 301) {
         console.log("TexLive File not exists " + remote_url);
