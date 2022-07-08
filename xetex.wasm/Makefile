@@ -6,6 +6,7 @@ CFLAGS = $(DEBUGFLAGS) -Wno-parentheses-equality -Wno-pointer-sign -DWEBASSEMBLY
  -s USE_FREETYPE=1 -s USE_ICU=1 -s USE_LIBPNG=1 -fno-rtti -fno-exceptions
 
 LDFLAGS =  $(DEBUGFLAGS) --js-library library.js \
+ -s ENVIRONMENT="web" \
  -s USE_FREETYPE=1 \
  -s USE_ICU=1 \
  -s USE_LIBPNG=1 \
