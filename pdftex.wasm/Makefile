@@ -24,7 +24,8 @@ epdfobjects = $(epdfsources:.cc=.o)
 
 swiftlatexpdftex.js: $(headers) $(texobjects) $(pdfobjects) $(epdfobjects)
 	$(CXX_LINK) $(texobjects) $(pdfobjects) $(epdfobjects) xpdf/xpdf.a  --js-library library.js  --pre-js pre.js \
-	 -s EXPORTED_FUNCTIONS='["_compileBibtex", "_compileLaTeX", "_compileFormat", "_main", "_setMainEntry"]' -s NO_EXIT_RUNTIME=1 -s ALLOW_MEMORY_GROWTH=1
+	 -s EXPORTED_FUNCTIONS='["_compileBibtex", "_compileLaTeX", "_compileFormat", "_main", "_setMainEntry"]' \
+	 -s EXPORTED_RUNTIME_METHODS=["cwrap"] -s NO_EXIT_RUNTIME=1 -s ALLOW_MEMORY_GROWTH=1
 
 $(texobjects): %.o: %.c
 	$(CC) -c $(CFLAGS) -I. -I tex/ $< -o $@
