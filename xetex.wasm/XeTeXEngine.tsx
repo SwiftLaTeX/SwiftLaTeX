@@ -22,7 +22,7 @@ export enum EngineStatus {
 	Error
 }
 
-const ENGINE_PATH = 'swiftlatexxetex.js';
+const ENGINE_PATH = new URL('./swiftlatexxetex.js', import.meta.url).toString();
 
 export class CompileResult {
 	pdf: Uint8Array | undefined = undefined;
@@ -42,7 +42,7 @@ export class XeTeXEngine {
 			throw new Error('Other instance is running, abort()');
 		}
 		this.latexWorkerStatus = EngineStatus.Init;
-		await new Promise((resolve, reject) => {
+		await new Promise<void>((resolve, reject) => {
 			this.latexWorker = new Worker(ENGINE_PATH);
 			this.latexWorker.onmessage = (ev: any) => {
 				const data: any = ev['data'];
@@ -108,7 +108,7 @@ export class XeTeXEngine {
 	public async compileFormat(): Promise<void> {
 		this.checkEngineStatus();
 		this.latexWorkerStatus = EngineStatus.Busy;
-		await new Promise((resolve, reject) => {
+		await new Promise<void>((resolve, reject) => {
 			this.latexWorker!.onmessage = (ev: any) => {
 				const data: any = ev['data'];
 				const cmd: string =  data['cmd'] as string;

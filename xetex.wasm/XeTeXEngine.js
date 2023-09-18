@@ -1,4 +1,3 @@
-"use strict";
 /********************************************************************************
  * Copyright (C) 2019 Elliott Wen.
  *
@@ -14,7 +13,6 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
  ********************************************************************************/
-var exports = {};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -51,16 +49,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-exports.__esModule = true;
-exports.XeTeXEngine = exports.CompileResult = exports.EngineStatus = void 0;
-var EngineStatus;
+export var EngineStatus;
 (function (EngineStatus) {
     EngineStatus[EngineStatus["Init"] = 1] = "Init";
     EngineStatus[EngineStatus["Ready"] = 2] = "Ready";
     EngineStatus[EngineStatus["Busy"] = 3] = "Busy";
     EngineStatus[EngineStatus["Error"] = 4] = "Error";
-})(EngineStatus = exports.EngineStatus || (exports.EngineStatus = {}));
-var ENGINE_PATH = 'swiftlatexxetex.js';
+})(EngineStatus || (EngineStatus = {}));
+var ENGINE_PATH = new URL('./swiftlatexxetex.js', import.meta.url).toString();
 var CompileResult = /** @class */ (function () {
     function CompileResult() {
         this.pdf = undefined;
@@ -69,7 +65,7 @@ var CompileResult = /** @class */ (function () {
     }
     return CompileResult;
 }());
-exports.CompileResult = CompileResult;
+export { CompileResult };
 var XeTeXEngine = /** @class */ (function () {
     function XeTeXEngine() {
         this.latexWorker = undefined;
@@ -244,4 +240,4 @@ var XeTeXEngine = /** @class */ (function () {
     };
     return XeTeXEngine;
 }());
-exports.XeTeXEngine = XeTeXEngine;
+export { XeTeXEngine };
