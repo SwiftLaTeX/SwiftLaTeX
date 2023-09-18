@@ -14,6 +14,12 @@ Module['printErr'] = function(a) {
     console.log(a);
 };
 
+function _allocate(content) {
+    let res = _malloc(content.length);
+    HEAPU8.set(new Uint8Array(content), res);
+    return res; 
+}
+
 Module['preRun'] = function() {
     FS.mkdir(TEXCACHEROOT);
     FS.mkdir(WORKROOT);
@@ -274,7 +280,7 @@ function kpse_find_file_impl(nameptr, format, _mustexist) {
 
     if (cacheKey in texlive200_cache) {
         const savepath = texlive200_cache[cacheKey];
-        return allocate(intArrayFromString(savepath), ALLOC_NORMAL);
+        return _allocate(intArrayFromString(savepath));
     }
 
     
@@ -297,7 +303,7 @@ function kpse_find_file_impl(nameptr, format, _mustexist) {
         const savepath = TEXCACHEROOT + "/" + fileid;
         FS.writeFile(savepath, new Uint8Array(arraybuffer));
         texlive200_cache[cacheKey] = savepath;
-        return allocate(intArrayFromString(savepath), ALLOC_NORMAL);
+        return _allocate(intArrayFromString(savepath));
 
     } else if (xhr.status === 301) {
         console.log("TexLive File not exists " + remote_url);
@@ -321,7 +327,7 @@ function fontconfig_search_font_impl(fontnamePtr, varStringPtr) {
     
     if (cacheKey in font200_cache) {
         const savepath = font200_cache[cacheKey];
-        return allocate(intArrayFromString(savepath), ALLOC_NORMAL);
+        return _allocate(intArrayFromString(savepath));
     }
     
     if (cacheKey in font404_cache) {
@@ -347,7 +353,7 @@ function fontconfig_search_font_impl(fontnamePtr, varStringPtr) {
 
         FS.writeFile(savepath, new Uint8Array(arraybuffer));
         font200_cache[cacheKey] = savepath;
-        return allocate(intArrayFromString(savepath), ALLOC_NORMAL);
+        return _allocate(intArrayFromString(savepath));
 
     } else if (xhr.status === 301 || xhr.status === 404) {
         console.log("Font File not exists " + remote_url);
