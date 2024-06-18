@@ -19,6 +19,12 @@ Module['preRun'] = function() {
     FS.mkdir(WORKROOT);
 };
 
+function _allocate(content) {
+    let res = _malloc(content.length);
+    HEAPU8.set(new Uint8Array(content), res);
+    return res; 
+}
+
 function prepareExecutionContext() {
     self.memlog = '';
     FS.chdir(WORKROOT);
@@ -211,7 +217,7 @@ function kpse_find_file_impl(nameptr, format, _mustexist) {
 
     if (cacheKey in texlive200_cache) {
         const savepath = texlive200_cache[cacheKey];
-        return allocate(intArrayFromString(savepath), ALLOC_NORMAL);
+        return _allocate(intArrayFromString(savepath));
     }
 
     
@@ -234,7 +240,7 @@ function kpse_find_file_impl(nameptr, format, _mustexist) {
         const savepath = TEXCACHEROOT + "/" + fileid;
         FS.writeFile(savepath, new Uint8Array(arraybuffer));
         texlive200_cache[cacheKey] = savepath;
-        return allocate(intArrayFromString(savepath), ALLOC_NORMAL);
+        return _allocate(intArrayFromString(savepath));
 
     } else if (xhr.status === 301) {
         console.log("TexLive File not exists " + remote_url);

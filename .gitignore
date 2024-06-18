@@ -7,3 +7,4 @@ swiftlatexdvipdfm.js
 swiftlatexdvipdfm.wasm
 *.Identifier
 .texlive_tmp
+.DS_Store
