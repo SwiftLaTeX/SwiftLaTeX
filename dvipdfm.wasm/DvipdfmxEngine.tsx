@@ -20,7 +20,7 @@ export enum EngineStatus {
     Error,
 }
 
-const XDVPDFMX_ENGINE_PATH = 'swiftlatexdvipdfm.js';
+const XDVPDFMX_ENGINE_PATH = new URL('./swiftlatexdvipdfm.js', import.meta.url).toString();
 
 export class CompileResult {
     pdf: Uint8Array | undefined = undefined;
@@ -38,7 +38,7 @@ export class DvipdfmxEngine {
             throw new Error('Other instance is running, abort()');
         }
         this.latexWorkerStatus = EngineStatus.Init;
-        await new Promise((resolve, reject) => {
+        await new Promise<void>((resolve, reject) => {
             this.latexWorker = new Worker(XDVPDFMX_ENGINE_PATH);
             this.latexWorker.onmessage = (ev: any) => {
                 const data: any = ev.data;
