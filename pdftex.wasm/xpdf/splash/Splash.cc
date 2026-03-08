@@ -4579,6 +4579,12 @@ void Splash::scaleMaskYdXu(SplashImageMaskSource src, void *srcData,
   int yp, yq, xp, xq, yt, y, yStep, xt, x, xStep, d;
   int i, j;
 
+  destPtr = dest->data;
+  if (destPtr == NULL) {
+    error(errInternal, -1, "dest->data is NULL in Splash::scaleMaskYdXu");
+    return;
+  }
+
   // Bresenham parameters for y scale
   yp = srcHeight / scaledHeight;
   yq = srcHeight % scaledHeight;
@@ -4594,7 +4600,6 @@ void Splash::scaleMaskYdXu(SplashImageMaskSource src, void *srcData,
   // init y scale Bresenham
   yt = 0;
 
-  destPtr = dest->data;
   for (y = 0; y < scaledHeight; ++y) {
 
     // y scale Bresenham
@@ -4654,6 +4659,12 @@ void Splash::scaleMaskYuXd(SplashImageMaskSource src, void *srcData,
   int yp, yq, xp, xq, yt, y, yStep, xt, x, xStep, xx, d, d0, d1;
   int i;
 
+  destPtr0 = dest->data;
+  if (destPtr0 == NULL) {
+    error(errInternal, -1, "dest->data is NULL in Splash::scaleMaskYuXd");
+    return;
+  }
+
   // Bresenham parameters for y scale
   yp = scaledHeight / srcHeight;
   yq = scaledHeight % srcHeight;
@@ -4668,7 +4679,6 @@ void Splash::scaleMaskYuXd(SplashImageMaskSource src, void *srcData,
   // init y scale Bresenham
   yt = 0;
 
-  destPtr0 = dest->data;
   for (y = 0; y < srcHeight; ++y) {
 
     // y scale Bresenham
@@ -6464,6 +6474,11 @@ void Splash::vertFlipImage(SplashBitmap *img, int width, int height,
   Guchar *lineBuf;
   Guchar *p0, *p1;
   int w;
+
+  if (unlikely(img->data == NULL)) {
+    error(errInternal, -1, "img->data is NULL in Splash::vertFlipImage");
+    return;
+  }
 
   w = width * nComps;
   lineBuf = (Guchar *)gmalloc(w);
